@@ -59,61 +59,70 @@
 - 상태 관리 구조 설계
 - 상태 전이 규칙 정의
 
-## 2-2. Figma MCP ⇒ Code 초안 작성
+## 2-2. Figma MCP ⇒ Code 초안 작성 (Phase 1: 공통 컴포넌트 한정)
 
 ### Context 관리 전략
 
 - **Phase**: Phase 1 (전체 설계)
-- **Context 제한**: 전체 도메인 (context 길지만 설계 단계라 괜찮음)
+- **Context 제한**: "공통 컴포넌트"에 한정 (도메인별 컴포넌트 제외)
 - **필수 참조**: @memory.md, 2-1 단계 결과물
 - **선택적 참조**: 공통 디자인 모듈, 기존 컴포넌트 라이브러리 (memory.md에서 자동 참조)
-- **사람이 입력해야 하는 것**: Figma 디자인 URL
+- **사람이 입력해야 하는 것(필수)**: 공통 컴포넌트의 Figma 디자인 URL만 (미제공 시 즉시 요청, 제공 전에는 진행 금지)
 
-### Figma MCP 활용
-
-```
-사용자가 제공한 Figma URL을 사용하여 다음 작업을 수행해주세요:
-
-1. Figma MCP를 사용하여 디자인 파일에 접근
-2. 사용자 플로우 분석
-3. 컴포넌트 구조 분석
-4. 상태별 UI 변화 (로딩, 에러, 성공 등)
-5. 반응형 브레이크포인트
-6. 디자인 토큰 (색상, 폰트, 간격 등)
-7. 인터랙션 플로우
-8. 접근성 고려사항
-
-사용자에게 요청할 내용:
-- Figma 디자인 URL을 입력해주세요
-- 분석할 특정 컴포넌트나 페이지가 있다면 명시해주세요
-```
-
-### AI에게 요청할 내용
+### Figma MCP 활용 (공통 컴포넌트 스코프)
 
 ```
-사용자가 제공한 Figma URL을 사용하여 다음 작업을 수행해주세요:
+사용자가 제공한 "공통 컴포넌트" Figma URL만 사용하여 다음 작업을 수행해주세요. URL이 제공되지 않았다면 먼저 URL을 요청하고, 제공될 때까지 이후 단계를 진행하지 마세요. 도메인별(페이지/기능 특화) 컴포넌트는 이 단계에서 제외합니다.
 
-1. 먼저 사용자에게 Figma 디자인 URL을 요청하세요
-2. Figma MCP를 사용하여 해당 URL의 디자인을 분석하세요
-3. 분석 결과를 바탕으로 React 컴포넌트 구조를 설계하세요
+[요청 대상: 공통 컴포넌트 예시]
+- Dialog (확인/취소, 알림 등 변형 포함)
+- Toast (success | error | info)
+- BottomSheet (선택/입력 패턴)
+  - 필요 시: Button, Icon, Badge 등 공통 원자 컴포넌트
+
+1. Figma MCP로 공통 컴포넌트 디자인에 접근
+2. 변형/상태별(로딩/에러/정보) UI 변화 분석
+3. 반응형 브레이크포인트 및 최소/최대 폭 정책 확인
+4. 디자인 토큰(색상/폰트/간격/반경/섀도우) 추출
+5. 접근성 고려사항(a11y) 점검
+
+사용자에게 요청할 내용(필수):
+- 공통 컴포넌트별 Figma 디자인 URL을 입력해주세요 (예: `https://www.figma.com/design/<fileKey>`)
+- 대상 컴포넌트: Dialog, Toast, BottomSheet (추가 공통 컴포넌트가 있다면 함께 명시)
+
+검증 규칙:
+- URL 도메인이 `figma.com`인지 확인
+- `<fileKey>` 형식 유효성(영숫자/`-` 허용) 확인
+- 항목별 URL 누락 여부 확인 후 누락 시 개별 재요청
+- 유효하지 않은 경우 올바른 URL 형식 예시와 함께 재요청
+```
+
+### AI에게 요청할 내용 (공통 컴포넌트 한정)
+
+```
+사용자가 제공한 "공통 컴포넌트" Figma URL을 사용하여 다음 작업을 수행해주세요:
+
+1. 먼저 사용자에게 공통 컴포넌트 Figma URL만 요청하세요. 제공 전에는 진행하지 마세요.
+2. Figma MCP로 공통 컴포넌트(Toast, Dialog, BottomSheet)의 디자인을 분석하세요.
+3. 분석 결과를 바탕으로 공통 컴포넌트의 React 구조/Props/변형/상태를 설계하세요.
 
 [2-1 단계 결과물 - UI 상태 인터페이스]
+참고: `src/shared/interfaces/ui/CommonUI.ts`의 `DialogState`, `ToastState`와 정합성 유지
 
-설계할 내용:
-1. 컴포넌트 계층 구조
-2. Props 인터페이스 설계
-3. 상태 관리 구조 (useState, useReducer 등)
-4. 이벤트 핸들러 시그니처
-5. 스타일링 방식 (CSS-in-JS, SCSS 등)
-6. 접근성(a11y) 고려사항
-7. 성능 최적화 고려사항
+설계할 내용(공통 컴포넌트 한정):
+1. 컴포넌트 계층 구조(원자/분자 수준)
+2. Props 인터페이스 설계(상태/변형/접근성 프로퍼티 포함)
+3. 상태 관리 구조(열림/닫힘, 큐잉, 자동 닫힘 타이머 등)
+4. 이벤트 핸들러 시그니처(onOpenChange, onAction 등)
+5. 스타일링 방식(디자인 토큰 기반)
+6. 접근성(a11y) 고려사항(ARIA, 포커스 트랩, 스크린리더 텍스트)
+7. 성능 최적화 고려사항(포털/지연 마운트/배치 업데이트)
 
-출력:
-- Figma 디자인 분석 결과
-- 컴포넌트 트리 다이어그램
-- 각 컴포넌트의 Props 타입 (memory.md의 결과물 경로에 저장)
-- 상태 관리 구조
-- 스타일 가이드
+출력(공통 컴포넌트):
+- Figma 디자인 분석 결과(Toast, Dialog, BottomSheet)
+- 컴포넌트 트리 다이어그램(공통 범위)
+- Props 타입 정의(공통 범위, memory.md의 결과물 경로에 저장)
+- 상태 관리 구조/스타일 가이드(공통 범위)
 
 완료 후 memory.md 업데이트:
 - 현재 단계 완료 체크
@@ -121,25 +130,150 @@
 - 다음 단계 안내
 ```
 
-### 체크리스트
+### 체크리스트 (공통 컴포넌트 전용)
 
-- [ ] 사용자로부터 Figma URL을 받음
-- [ ] Figma MCP를 사용하여 디자인에 접근함
-- [ ] Figma 디자인이 완전히 분석됨
-- [ ] 사용자 플로우가 파악됨
-- [ ] 컴포넌트 구조가 분석됨
-- [ ] 상태별 UI 변화가 식별됨
-- [ ] 반응형 브레이크포인트가 정의됨
+- [ ] 사용자로부터 공통 컴포넌트 Figma URL을 수신함 (없으면 요청 후 대기)
+- [ ] Figma MCP로 공통 컴포넌트 디자인에 접근함
+- [ ] 공통 컴포넌트(Toast, Dialog, BottomSheet)의 변형/상태가 분석됨
+- [ ] 반응형/최소·최대 폭 정책이 정의됨
 - [ ] 디자인 토큰이 추출됨
-- [ ] 인터랙션 플로우가 설계됨
-- [ ] 접근성 요구사항이 파악됨
-- [ ] 초안 코드가 작성됨
+- [ ] 접근성 요구사항이 파악됨(ARIA/포커스 트랩 등)
+- [ ] 공통 컴포넌트 초안 코드/설계가 준비됨
+- [ ] 공통 컴포넌트 TSX 파일 생성 및 Props/기본 JSX 구현
 
-### 결과물
+### 결과물 (공통 컴포넌트 범위)
 
-- Figma 디자인 분석 결과
-- 컴포넌트 초안 코드
-- 디자인 토큰 정의
+- 공통 컴포넌트(Figma) 분석 결과
+- 공통 컴포넌트 초안 코드/설계
+- 디자인 토큰 정의(공통 범위)
+
+### 입력 수집 템플릿 (Phase 1 전용: 공통 컴포넌트)
+
+다음 템플릿을 사용자에게 제시하고 값을 채워달라고 요청합니다. 값이 하나라도 비어있으면 진행하지 않습니다.
+
+```
+공통 컴포넌트 Figma URL 수집
+- Dialog: https://www.figma.com/design/<fileKey>[?node-id=<id>]
+- Toast: https://www.figma.com/design/<fileKey>[?node-id=<id>]
+- BottomSheet: https://www.figma.com/design/<fileKey>[?node-id=<id>]
+```
+
+### URL 유효성 검증 규칙
+
+- 도메인: `figma.com`
+- 경로: `/file/<fileKey>` 또는 `/design/<fileKey>` 허용
+- `<fileKey>`: `^[A-Za-z0-9-]+$`
+- 선택 쿼리: `node-id`가 있을 경우 `^I?\d+:\d+(;\d+:\d+)*$` 형식 권장
+- 유효하지 않으면 예시와 함께 재요청하고, 모든 URL이 유효할 때까지 진행 금지
+
+### 산출물 파일 경로 표준
+
+- 분석 노트: `docs/ui/common/2-2-analysis.md`
+- Props 타입 정의(초안): `src/shared/components/common/types.ts`
+- 설계 다이어그램(텍스트/머메이드): `docs/ui/common/2-2-diagrams.md`
+- 디자인 토큰 매핑(초안): `src/shared/styles/tokens/derived-tokens.md`
+
+### 코드 생성 (TSX) 지침
+
+- 생성 경로: `src/shared/components/common/`
+- 대상 파일: `Dialog.tsx`, `Toast.tsx`, `BottomSheet.tsx`
+- 각 파일 내에 해당 컴포넌트의 Props 인터페이스를 정의하고, Figma MCP 분석 결과를 반영한 기본 `return` JSX를 구현합니다.
+- 네이밍/TypeScript 규칙:
+  - 컴포넌트 파일은 PascalCase, 인터페이스 접미사 금지, 명시적 타입 필수, `any` 금지
+  - 불리언 접두사: `is/has/can`, 이벤트 핸들러 접두사: `handle`
+- 접근성(a11y):
+  - Dialog/BottomSheet: `role="dialog"`, `aria-modal`, `aria-labelledby/aria-describedby` 또는 `aria-label` 적용
+  - Toast: `role="status"`, `aria-live="polite"`
+- 스타일 가이드(초안): Figma MCP로 추출한 토큰을 우선 적용
+  - 색상 예: `Base/White(#FFFFFF)`, `Gray/800(#333333)`, `Gray/700(#7D7D7D)`, `Orange/500(#FF7949)`
+  - 타이포 예: `Title/H2-Extrabold(22/800)`, `Body/B2-Regular(14/400)`, `Body/B1-Bold(16/700)`
+  - 레이아웃/치수 예: Dialog `width:343`, `gap:28`, `padding:28/16/16`; Toast `width:343`, `height:52`, padding `12/12/12/16`; BottomSheet `width:375`, `height:569`, top radius `24`
+- 동작 규칙(초안):
+  - Dialog: ESC/Overlay dismiss 옵션, 확인/취소 핸들러 노출
+  - Toast: `hasIcon` 토글, `durationMs`에 따른 자동 닫힘(구현 시 고려)
+  - BottomSheet: Overlay 클릭 닫힘, 스와이프 닫기 옵션(향후 구현)
+
+### 네이밍/TypeScript 규칙 적용
+
+- 파일/폴더: kebab-case 폴더, PascalCase 컴포넌트, `*Page` 접미사 금지(공통 컴포넌트는 Page 아님)
+- 불리언 접두사: `is/has/can`
+- 이벤트 핸들러 접두사: `handle`
+- 인터페이스 접미사 금지, `any` 금지, 명시적 타입 필수
+- `CommonUI.ts`의 `DialogState`, `ToastState`와 시그니처 정합성 유지
+
+### 실패/부족 데이터 대응 루브릭
+
+- 일부 컴포넌트 URL 미제공: 제공된 항목만 분석, 누락 항목은 개별 컴포넌트명을 명시하여 재요청하고 진행 일시 중단
+- 노드 불명확: `node-id` 요청. 대안으로 스크린샷/섹션명 제공 요청
+- 토큰 불명확: 색상/타이포/간격의 표준 참조 위치를 사용자에게 확인 요청
+
+### Phase 2 적용 지침 (도메인별 2-2 수행)
+
+#### 목적
+
+- Phase 2에서는 각 도메인별로 2-2 단계를 수행합니다. 이때 스코프는 "해당 도메인 컴포넌트"로 한정되며, Phase 1에서 처리된 공통 컴포넌트는 제외합니다.
+
+#### 입력 요구사항 (도메인별)
+
+- 사용자에게 다음 정보를 요청합니다:
+  - 해당 도메인의 Figma 파일 URL(`figma.com/design/<fileKey>`) 또는 도메인 페이지/컴포넌트의 노드 URL(`?node-id=...` 포함)
+  - 분석 대상 도메인 컴포넌트 목록(페이지/컨테이너/위젯)
+
+#### 범위
+
+- 포함: 도메인 전용 페이지/컨테이너/위젯/상태별 변형
+- 제외: 공통 컴포넌트(Toast, Dialog, BottomSheet 등) — Phase 1에서 이미 처리됨
+
+#### 절차
+
+1. Figma MCP로 해당 도메인의 디자인 접근
+2. 사용자 플로우/화면 전환/반응형 브레이크포인트 확인
+3. 도메인 컴포넌트 구조, Props, 상태(로딩/에러/성공/비즈니스 상태) 분석
+4. 도메인 전용 디자인 토큰(있다면) 및 레이아웃 규칙 추출
+5. a11y/성능 고려사항 반영
+
+#### 출력(도메인별)
+
+- 도메인 컴포넌트 트리 다이어그램
+- 각 컴포넌트의 Props 타입 정의(메모리 경로에 저장)
+- 상태 관리 구조/이벤트 시그니처/스타일 가이드(도메인 범위)
+
+#### 체크리스트(도메인별)
+
+- [ ] 도메인별 Figma URL 수신 및 유효성 확인
+- [ ] 도메인 컴포넌트 구조/상태/변형 분석 완료
+- [ ] 반응형 및 레이아웃 규칙 식별
+- [ ] 도메인 전용 디자인 토큰/스타일 가이드 초안 도출
+- [ ] 접근성/성능 고려사항 반영
+- [ ] 산출물 저장 및 memory.md 업데이트
+
+#### 워크플로우 연계
+
+- `/workflow phase2 [domain]` 실행 시, 본 섹션의 지침에 따라 해당 도메인의 2-2 작업을 수행합니다.
+
+### 입력 수집 템플릿 (Phase 2 전용: 도메인별)
+
+다음 템플릿을 사용자에게 제시하고 값을 채워달라고 요청합니다. 최소 1개 이상의 유효한 URL이 필요합니다.
+
+```
+[domain] 도메인 2-2 입력
+- Figma 파일: https://www.figma.com/design/<fileKey>
+- 주요 페이지/컴포넌트 노드 URL:
+  - Page/Component A: https://www.figma.com/design/<fileKey>?node-id=<id>
+  - Page/Component B: https://www.figma.com/design/<fileKey>?node-id=<id>
+```
+
+### 산출물 파일 경로 표준 (Phase 2: 도메인별)
+
+- 분석 노트: `docs/ui/[domain]/2-2-analysis.md`
+- Props 타입 정의(초안): `src/features/[domain]/types/ui.ts`
+- 컴포넌트 트리/다이어그램: `docs/ui/[domain]/2-2-diagrams.md`
+- 도메인 전용 토큰 매핑(있으면): `src/features/[domain]/design-tokens.md`
+
+### 게이트 규칙
+
+- 유효한 Figma URL(파일/노드) 없이는 2-2 단계 진행 금지
+- 공통 컴포넌트 요청 금지(Phase 2) — 중복 정의 방지
 
 ## 2-3. 컴포넌트 계층 구조 설계 및 군집화
 
