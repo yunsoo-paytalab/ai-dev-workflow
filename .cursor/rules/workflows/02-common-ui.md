@@ -287,7 +287,11 @@ interface CommonUIDesignOutput {
 
 ## 결과물 파일 경로
 
-- 공통 컴포넌트: `src/shared/components/`
-- 레이아웃 컴포넌트: `src/shared/components/layout/`
-- 디자인 토큰 (새로 생성 시): `src/shared/styles/tokens.ts`
-- 문서: `docs/common-components.md`
+> 📌 **컴포넌트 및 디자인 시스템 경로는 `@00-memory.md` 참조**:
+>
+> - **폴더 구조** 섹션: 공통 컴포넌트, 레이아웃, 스타일 경로
+> - **디자인 시스템** 섹션: 토큰, 테마, 스타일 가이드 경로
+
+**문서 경로**:
+
+- `docs/common-components.md` - 공통 컴포넌트 목록 및 사용법
