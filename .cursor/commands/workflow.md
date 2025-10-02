@@ -27,7 +27,7 @@
 ```
 다음 단계를 수행해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
 2. **요구사항 명세서 등 필수 입력 파일 존재 여부를 확인해주세요**
 3. **입력 파일이 없거나 비어있다면, 사용자에게 다음을 요청해주세요:**
 
@@ -80,7 +80,7 @@
 ```
 다음 단계를 수행해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
 2. 완료된 단계를 체크해주세요
 3. 다음 단계를 식별하고 실행해주세요
 4. 필요한 파일들을 자동으로 참조해주세요
@@ -118,7 +118,7 @@
 ```
 다음 정보를 표시해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 전체 진행 상황을 파악해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 전체 진행 상황을 파악해주세요
 2. 현재 Phase, 도메인, 단계 정보를 표시해주세요
 3. 완료된 작업과 남은 작업 목록을 표시해주세요
 4. 다음에 수행해야 할 단계를 안내해주세요
@@ -151,7 +151,7 @@
 ```
 Phase 1 (전체 설계) 작업을 수행해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 Phase 1의 현재 Chat을 식별해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 Phase 1의 현재 Chat을 식별해주세요
 2. Chat 1: 전체 도메인 정의 또는 Chat 2: 전체 UI 설계를 실행해주세요
 3. 필요한 파일들을 자동으로 참조해주세요
 4. AI 작업을 실행해주세요
@@ -185,7 +185,7 @@ Phase 1 (전체 설계) 작업을 수행해주세요:
 ```
 Phase 2 (도메인별 상세 작업) - [domain] 작업을 수행해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 [domain]의 현재 단계를 식별해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 [domain]의 현재 단계를 식별해주세요
 2. 해당 도메인의 다음 단계를 실행해주세요
 3. 필요한 파일들을 자동으로 참조해주세요
 4. AI 작업을 실행해주세요
@@ -220,7 +220,7 @@ Phase 2 (도메인별 상세 작업) - [domain] 작업을 수행해주세요:
 ```
 Phase 3 (통합 및 구현) - [domain] 작업을 수행해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 [domain]의 현재 구현 단계를 식별해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 [domain]의 현재 구현 단계를 식별해주세요
 2. 해당 도메인의 다음 구현 단계를 실행해주세요
 3. 필요한 파일들을 자동으로 참조해주세요
 4. AI 작업을 실행해주세요
@@ -257,7 +257,7 @@ Phase 3 (통합 및 구현) - [domain] 작업을 수행해주세요:
 ```
 도메인 정의 [step] 단계를 수행해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
 2. [step] 단계의 워크플로우 프롬프트를 로드해주세요
 3. 필요한 파일들을 자동으로 참조해주세요
 4. AI 작업을 실행해주세요
@@ -292,7 +292,7 @@ Phase 3 (통합 및 구현) - [domain] 작업을 수행해주세요:
 ```
 UI 설계 [step] 단계를 수행해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
 2. [step] 단계의 워크플로우 프롬프트를 로드해주세요
 3. 필요한 파일들을 자동으로 참조해주세요
 4. AI 작업을 실행해주세요
@@ -327,7 +327,7 @@ UI 설계 [step] 단계를 수행해주세요:
 ```
 테스트 작성 [step] 단계를 수행해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
 2. [step] 단계의 워크플로우 프롬프트를 로드해주세요
 3. 필요한 파일들을 자동으로 참조해주세요
 4. AI 작업을 실행해주세요
@@ -362,7 +362,7 @@ UI 설계 [step] 단계를 수행해주세요:
 ```
 구현 [step] 단계를 수행해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
 2. [step] 단계의 워크플로우 프롬프트를 로드해주세요
 3. 필요한 파일들을 자동으로 참조해주세요
 4. AI 작업을 실행해주세요
@@ -529,7 +529,7 @@ memory.md 업데이트
 ### 1. Memory.md 읽기
 
 ```
-.cursor/rules/workflows/memory.md 파일을 읽어서 다음 정보를 파악해주세요:
+.cursor/rules/workflows/00-memory.md 파일을 읽어서 다음 정보를 파악해주세요:
 - 현재 Phase
 - 현재 Chat
 - 현재 도메인
@@ -570,10 +570,7 @@ memory.md의 파일 경로 정보를 참조하여 필요한 파일들을 자동�
 
 ```
 결과물을 memory.md의 결과물 경로에 저장해주세요:
-- 도메인 정의 결과물: src/entities/[domain]/
-- UI 설계 결과물: src/features/[domain]/
-- 테스트 결과물: __tests__/[domain]/
-- 구현 결과물: src/[domain]/
+ - 워크플로우별 결과물 경로는 각 워크플로우의 프롬프트를 참고
 ```
 
 ### 6. Memory.md 업데이트
