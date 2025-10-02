@@ -397,9 +397,10 @@ UI 설계 [step] 단계를 수행해주세요:
 ```
 프로젝트를 초기화해주세요:
 
-1. .cursor/rules/workflows/memory.md 파일을 초기화해주세요
-2. 모든 진행 상황을 리셋해주세요
-3. 처음부터 시작할 수 있도록 설정해주세요
+1. .cursor/rules/workflows/00-memory-template.md 파일을 읽어주세요
+2. .cursor/rules/workflows/00-memory.md 파일을 템플릿으로 덮어써주세요
+3. 모든 진행 상황을 리셋해주세요
+4. 처음부터 시작할 수 있도록 설정해주세요
 
 초기화 완료 후:
 - Phase: Phase 1
