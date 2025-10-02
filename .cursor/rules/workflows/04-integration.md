@@ -57,9 +57,9 @@
 ```typescript
 interface Duplication {
   type: "utility" | "component" | "type" | "hook";
-  pattern: string; // '날짜 포맷팅'
-  locations: string[]; // 파일 경로들
-  suggestion: string; // 'src/shared/utils/formatDate.ts로 통합'
+  pattern: string; // '{중복 패턴 설명}'
+  locations: string[]; // ['{파일경로1}', '{파일경로2}']
+  suggestion: string; // '{통합 제안}'
   impact: "high" | "medium" | "low";
 }
 ```
@@ -211,9 +211,9 @@ interface Duplication {
 
 중복 코드 제거:
 
-- ✅ 공통 유틸리티 15개 추출
-- ✅ 공통 훅 5개 추출
-- ✅ 공통 타입 10개 통합
+- ✅ 공통 유틸리티 N개 추출
+- ✅ 공통 훅 N개 추출
+- ✅ 공통 타입 N개 통합
 
 구조 개선:
 
@@ -223,9 +223,9 @@ interface Duplication {
 
 성능 최적화:
 
-- ✅ 번들 크기 30% 감소
-- ✅ 초기 로딩 2.3초 (목표: <3초)
-- ✅ 페이지 전환 0.8초 (목표: <1초)
+- ✅ 번들 크기 X% 감소
+- ✅ 초기 로딩 X.X초 (목표: <3초)
+- ✅ 페이지 전환 X.X초 (목표: <1초)
 
 접근성 개선:
 
@@ -235,9 +235,9 @@ interface Duplication {
 
 테스트:
 
-- ✅ 통합 테스트 15개 추가
+- ✅ 통합 테스트 N개 추가
 - ✅ 전체 테스트 통과율 100%
-- ✅ 커버리지 92%
+- ✅ 커버리지 X% (목표: 90% 이상)
 
 #### ✅ 검수 항목
 
@@ -269,14 +269,14 @@ interface Duplication {
 
 ```typescript
 interface E2EFlow {
-  id: string; // 'E2E-001'
-  name: string; // '상품 구매 전체 플로우'
+  id: string; // 'E2E-XXX'
+  name: string; // '{플로우명}'
   priority: "critical" | "high" | "medium" | "low";
   description: string;
-  steps: string[]; // ['1. 로그인', '2. 상품 선택', ...]
-  estimatedTime: string; // '2분'
-  relatedFeatures: string[]; // ['F001', 'F002', ...]
-  alternativeScenarios?: string[]; // ['비회원 구매', '쿠폰 적용']
+  steps: string[]; // ['{단계1}', '{단계2}', ...]
+  estimatedTime: string; // '{예상시간}'
+  relatedFeatures: string[]; // ['{기능ID1}', '{기능ID2}', ...]
+  alternativeScenarios?: string[]; // ['{대체시나리오1}', '{대체시나리오2}']
 }
 ```
 
@@ -310,15 +310,15 @@ interface E2EFlow {
 **테스트 구조**:
 
 ```typescript
-// e2e/purchase-flow.spec.ts
+// e2e/{flow-name}.spec.ts
 
-test.describe("상품 구매 전체 플로우", () => {
-  test("로그인부터 주문 완료까지", async ({ page }) => {
-    // 1. 로그인 → 2. 상품 선택 → 3. 장바구니 → 4. 주문 → 5. 결제 → 6. 완료
+test.describe("{플로우명}", () => {
+  test("{테스트 케이스명}", async ({ page }) => {
+    // {단계별 플로우 설명}
   });
 
-  test("결제 실패 시 에러 처리", async ({ page }) => {
-    // 에러 시나리오 검증
+  test("{에러 시나리오명}", async ({ page }) => {
+    // {에러 시나리오 검증}
   });
 });
 ```
@@ -350,14 +350,14 @@ test.describe("상품 구매 전체 플로우", () => {
 
 "E2E 테스트 결과:"
 
-- ✅ 통과: 8개
-- ❌ 실패: 2개
+- ✅ 통과: N개
+- ❌ 실패: N개
 
 **실패한 테스트**:
 
-- E2E-002: 회원가입 및 첫 구매
-  - 실패 단계: 5. 이메일 인증
-  - 에러: Timeout
+- E2E-XXX: {테스트명}
+  - 실패 단계: {단계명}
+  - 에러: {에러 타입}
   - 스크린샷: [첨부]
 
 "다음 중 선택해주세요:"
@@ -418,10 +418,10 @@ test.describe("상품 구매 전체 플로우", () => {
 
 **최종 상태**:
 
-- ✅ 기능: 15개 (100%)
+- ✅ 기능: N개 (100%)
 - ✅ 테스트 통과율: 100%
-- ✅ E2E 통과: 10/10
-- ✅ 커버리지: 93%
+- ✅ E2E 통과: N/N
+- ✅ 커버리지: X% (목표: 90% 이상)
 - ✅ 성능 목표: 달성
 - ✅ 접근성: WCAG AA
 - ✅ 문서화: 완료
