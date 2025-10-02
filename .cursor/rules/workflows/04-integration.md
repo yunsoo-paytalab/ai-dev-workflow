@@ -72,22 +72,22 @@ interface Duplication {
 
 1. **공통 유틸리티**
 
-   - formatPrice, formatDate, formatPhoneNumber 등
    - 경로: `src/shared/utils/`
+   - 📘 예시: formatPrice, formatDate, formatPhoneNumber 등
 
 2. **공통 훅**
 
-   - usePagination, useDebounce, useLocalStorage 등
    - 경로: `src/shared/hooks/`
+   - 📘 예시: usePagination, useDebounce, useLocalStorage 등
 
 3. **공통 타입**
 
-   - PaginationParams, ErrorResponse, ApiResponse<T> 등
    - 경로: `src/shared/types/common.ts`
+   - 📘 예시: PaginationParams, ErrorResponse, ApiResponse<T> 등
 
 4. **공통 상수**
-   - ITEMS_PER_PAGE, API_TIMEOUT, MAX_FILE_SIZE 등
    - 경로: `src/shared/constants/app.ts`
+   - 📘 예시: ITEMS_PER_PAGE, API_TIMEOUT, MAX_FILE_SIZE 등
 
 ---
 
@@ -113,7 +113,30 @@ interface Duplication {
 
 ---
 
-### 1-4. 성능 최적화
+### 1-4. 성능 최적화 (선택사항)
+
+**최적화 필요 여부**:
+
+- [ ] 성능 최적화 수행
+- [ ] 추후 개선으로 보류
+
+**최적화 수행 선택 시**:
+
+#### 🔔 사용자 입력 필요
+
+**성능 목표 설정**:
+
+- 초기 로딩 시간 목표: `_________________`초 (기본값: 3초)
+- 페이지 전환 시간 목표: `_________________`초 (기본값: 1초)
+- 번들 크기 목표: `_________________`MB (기본값: 1MB)
+
+**최적화 항목** (필요한 것만 선택):
+
+- [ ] React 최적화 (memo, callback, useMemo)
+- [ ] 코드 스플리팅
+- [ ] 번들 크기 최적화
+- [ ] API 호출 최적화
+- [ ] 이미지 최적화
 
 **최적화 항목**:
 
@@ -165,15 +188,12 @@ interface Duplication {
 
 1. **도메인 간 연동 테스트**
 
-   - 장바구니 → 주문 플로우
-   - 로그인 → 마이페이지 플로우
    - 경로: `__tests__/integration/cross-domain/`
+   - 📘 예시: 장바구니 → 주문 플로우, 로그인 → 마이페이지 플로우
 
 2. **에러 복구 테스트**
 
-   - API 실패 후 재시도
-   - 네트워크 에러 처리
-   - 타임아웃 처리
+   - 📘 예시: API 실패 후 재시도, 네트워크 에러 처리, 타임아웃 처리
 
 3. **성능 테스트**
    - 초기 로딩 시간 (목표: <3초)

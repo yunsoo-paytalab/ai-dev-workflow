@@ -145,7 +145,9 @@ Phase 1 Turn 1에서 정의했지만 아직 개발 안된 것만 입력해주세
 - 이벤트: `on*` 접두사
 - `any` 타입 금지
 
-**예시** (Dialog):
+### 📘 Props 정의 예시 (참고용)
+
+Dialog 컴포넌트의 경우:
 
 ```typescript
 interface DialogProps {
@@ -158,7 +160,7 @@ interface DialogProps {
 }
 ```
 
-다른 컴포넌트도 동일한 원칙 적용
+다른 컴포넌트도 동일한 원칙을 적용하여 정의합니다.
 
 ---
 
@@ -172,7 +174,9 @@ interface DialogProps {
 - ✅ ARIA 속성
 - ❌ 상세 스타일
 
-**예시**:
+### 📘 스켈레톤 코드 예시 (참고용)
+
+Dialog 컴포넌트의 경우:
 
 ```typescript
 // src/shared/components/Dialog.tsx
@@ -275,6 +279,14 @@ interface CommonUIDesignOutput {
 ---
 
 ## Memory 업데이트
+
+**AI 자동 수행** (사용자 개입 불필요):
+
+**Step 2-6 완료 시**:
+
+- `@00-memory.md`의 "테스트 환경" 섹션 업데이트
+- 선택된 테스트 도구 및 설정 기록
+- Phase 1 Turn 2 준비 상태 표시
 
 **완료 후 작업**:
 

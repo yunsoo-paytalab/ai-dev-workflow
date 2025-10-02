@@ -32,9 +32,69 @@
 
 비즈니스 요구사항을 분석하여 이 기능에 필요한 API를 설계합니다.
 
-⚠️ **Phase 1 Step 8에서 확인한 API 가이드를 따릅니다** (있는 경우)
+### API 가이드 확인
 
-**API 가이드가 없는 경우**: 첫 기능에서 공통 패턴(네이밍, 에러 포맷 등)을 정의하고, 이후 기능에서 재사용합니다.
+**AI 작업**: `@00-memory.md`의 "주요 결정 사항 > 아키텍처" 섹션 확인
+
+**API 가이드가 있는 경우**:
+
+- 기존 가이드 (`docs/api-guidelines.md`) 참조
+- 정의된 패턴 준수 (네이밍, 에러 포맷, 페이지네이션 등)
+
+**API 가이드가 없는 경우** (첫 기능):
+
+#### 🔔 첫 기능 API 설계 시 자동 작업
+
+"API 가이드가 없습니다. 기본 API 패턴을 정의하고 `docs/api-guidelines.md`를 생성하겠습니다."
+
+**자동 생성 작업**:
+
+1. **기본 API 패턴 정의**:
+
+   - 엔드포인트 네이밍: `/api/v1/{resource}`
+   - HTTP 메서드 규칙: GET (조회), POST (생성), PUT (수정), DELETE (삭제)
+   - 에러 응답 포맷:
+     ```typescript
+     interface ErrorResponse {
+       code: string;
+       message: string;
+       details?: Record<string, string>;
+     }
+     ```
+   - 페이지네이션 패턴:
+     ```typescript
+     interface PaginationParams {
+       page: number;
+       limit: number;
+     }
+     interface PaginationResponse<T> {
+       data: T[];
+       page: number;
+       limit: number;
+       total: number;
+       totalPages: number;
+     }
+     ```
+   - 공통 헤더: `Authorization: Bearer {token}`, `Content-Type: application/json`
+
+2. **`docs/api-guidelines.md` 생성**:
+
+   - 위 패턴 문서화
+   - 예시 코드 포함
+   - 타입 정의 포함
+
+3. **Memory 파일 업데이트**:
+
+   - "주요 결정 사항 > 아키텍처" 섹션에 경로 기록
+   - "API 가이드: `docs/api-guidelines.md` (자동 생성)"
+
+4. **현재 기능에서 즉시 적용**:
+   - 생성한 패턴으로 API 설계 진행
+
+**이후 기능에서는**:
+
+- 자동 생성된 `docs/api-guidelines.md` 참조
+- 기존 패턴 재사용
 
 ---
 
@@ -42,7 +102,9 @@
 
 **질문**: 이 기능이 무엇을 해야 하는가?
 
-예시 (상품 목록 조회):
+### 📘 요구사항 분석 예시 (참고용)
+
+상품 목록 조회 기능의 경우:
 
 - 상품 목록 표시 (필터링, 정렬, 페이지네이션)
 - 찜하기 기능
@@ -52,7 +114,11 @@
 
 ### 3-2. 필요한 데이터 파악
 
-각 요구사항에 필요한 데이터:
+각 요구사항에 필요한 데이터를 파악합니다.
+
+### 📘 데이터 분석 예시 (참고용)
+
+상품 목록 조회 기능의 경우:
 
 - 상품 목록 표시 → 상품 배열, 총 개수, 페이지 정보
 - 카테고리 필터 → 카테고리 목록
@@ -62,9 +128,11 @@
 
 ### 3-3. API 엔드포인트 설계
 
-**기존 API 가이드 참조** (Phase 1 Step 8에서 확인한 경로)
+**기존 API 가이드 참조** (있는 경우 `docs/api-guidelines.md` 또는 Memory 파일 확인)
 
-예시:
+### 📘 API 엔드포인트 설계 예시 (참고용)
+
+상품 목록 조회 기능의 경우:
 
 **GET /products** - 상품 목록 조회
 
@@ -120,7 +188,11 @@ interface AddToWishlistResponse {
 
 ### 3-4. 컴포넌트-API 매핑
 
-어느 컴포넌트가 어느 API를 사용하는가:
+어느 컴포넌트가 어느 API를 사용하는지 매핑합니다.
+
+### 📘 컴포넌트-API 매핑 예시 (참고용)
+
+상품 목록 조회 기능의 경우:
 
 | 컴포넌트        | API             | 용도           |
 | --------------- | --------------- | -------------- |
@@ -132,7 +204,11 @@ interface AddToWishlistResponse {
 
 ### 3-5. 에러 처리 시나리오
 
-각 API의 에러 케이스:
+각 API의 에러 케이스를 정의합니다.
+
+### 📘 에러 처리 예시 (참고용)
+
+상품 목록 조회 기능의 경우:
 
 - GET /products 실패 → "상품을 불러올 수 없습니다" 표시
 - POST /wishlist 실패 → "찜하기 실패" 토스트 표시

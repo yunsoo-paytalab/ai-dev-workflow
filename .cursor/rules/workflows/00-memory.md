@@ -11,12 +11,15 @@
 ## 🚀 초기 설정 (프로젝트 시작 시 필수)
 
 > ⚠️ **Phase 1 시작 전 반드시 완료하세요**
+>
+> 📌 **AI 가이드**: 다음 항목이 모두 입력되어야 Phase 1 진행 가능합니다.
+> 미입력 항목이 있으면 사용자에게 입력을 요청하고, 모든 필수 항목이 채워질 때까지 Phase 1을 시작하지 마세요.
 
 ### 프로젝트 기본 정보
 
-**프로젝트명**: (입력 필요)
+**프로젝트명**: (입력 필요) ← **필수**
 
-**프로젝트 루트 경로**: `/path/to/project`
+**프로젝트 루트 경로**: `/path/to/project` ← **필수**
 
 **시작일** (선택): YYYY-MM-DD
 
@@ -24,13 +27,13 @@
 
 ### 폴더 구조
 
-**소스 코드 루트**: `src/`
+**소스 코드 루트**: `src/` ← **필수** (기본값: `src/`)
 
-**페이지**: `src/pages/`
+**페이지**: `src/pages/` ← **필수**
 
-**기능별 컴포넌트**: `src/features/`
+**기능별 컴포넌트**: `src/features/` ← **필수**
 
-**공통 컴포넌트**: `src/shared/components/`
+**공통 컴포넌트**: `src/shared/components/` ← **필수**
 
 **공통 레이아웃**: `src/shared/components/layout/`
 
@@ -38,7 +41,7 @@
 
 **API 레이어**: `src/api/`
 
-**테스트**: `__tests__/` 또는 `src/__tests__/`
+**테스트**: `__tests__/` 또는 `src/__tests__/` ← **필수**
 
 **E2E 테스트**: `e2e/`
 
@@ -46,21 +49,21 @@
 
 ### 기술 스택
 
-**Frontend 프레임워크**: (예: React, Vue, Next.js)
+**Frontend 프레임워크**: (예: React, Vue, Next.js) ← **필수**
 
-**TypeScript**: Yes / No
+**TypeScript**: Yes / No ← **필수**
 
-**스타일링 방식**: (예: Tailwind CSS, CSS Modules, Styled Components)
+**스타일링 방식**: (예: Tailwind CSS, CSS Modules, Styled Components) ← **필수**
 
-**상태 관리**: (예: Zustand, Redux, Jotai)
+**상태 관리**: (예: Zustand, Redux, Jotai) ← **선택**
 
-**데이터 페칭**: (예: React Query, SWR)
+**데이터 페칭**: (예: React Query, SWR) ← **선택**
 
-**테스트 프레임워크**:
+**테스트 프레임워크**: ← **필수**
 
-- 단위: (예: Vitest, Jest)
-- 컴포넌트: (예: React Testing Library)
-- E2E: (예: Playwright, Cypress)
+- 단위: (예: Vitest, Jest) ← **필수**
+- 컴포넌트: (예: React Testing Library) ← **필수**
+- E2E: (예: Playwright, Cypress) ← **필수**
 
 ### 디자인 시스템
 
@@ -322,3 +325,90 @@
 **피드백**: 도메인 경계 재검토, "/cart" 페이지 추가
 
 **조치**: [ ] 경계 문서 업데이트, [ ] CartPage 추가
+
+---
+
+## 🤖 Memory 자동 업데이트 규칙
+
+> 📌 **AI는 다음 시점에 반드시 이 Memory 파일을 업데이트해야 합니다.**
+
+### 자동 업데이트 트리거
+
+#### 1. 각 Step 완료 시
+
+**업데이트 대상**:
+
+- "현재 작업 상태" 섹션
+- "진행 중인 검수" 섹션 (검수 시작 시)
+
+**업데이트 형식**:
+
+```
+[YYYY-MM-DD HH:mm] Phase X Step Y 완료
+- 작업: 상품 목록 UI 설계
+- 결과물: ProductCard, ProductList 컴포넌트
+- 다음: Phase 2-3 API 설계
+```
+
+#### 2. 사용자 승인 시
+
+**업데이트 대상**:
+
+- "전체 진행 상황" 체크박스 (해당 단계 체크)
+- "다음 단계 안내" 섹션
+- "진행 중인 검수" 섹션 (검수 완료 시 제거)
+
+#### 3. 파일 생성 시
+
+**업데이트 대상**:
+
+- "결과물 파일 경로" 섹션
+- 생성된 파일 경로와 설명 추가
+
+**예시**:
+
+```
+### Phase 2 결과물 (기능별)
+
+**F001 - 상품 목록 조회**:
+- UI: src/pages/ProductListPage.tsx, src/features/product/components/ (5개)
+- API: src/api/product/productApi.ts
+- 테스트: __tests__/unit/product/, __tests__/components/product/
+```
+
+#### 4. 테스트 실행 시
+
+**업데이트 대상**:
+
+- "테스트 환경 및 현황" 섹션
+- 테스트 통계, 커버리지, 실패 정보
+
+**예시**:
+
+```
+**테스트 통계**:
+- F001: 23/23 통과 (커버리지 94%)
+- F002: 18/20 통과 (커버리지 88%)
+
+**실패한 테스트**:
+- F002: ProductFilter.test.tsx - "가격 범위 필터링" (타입 에러)
+```
+
+#### 5. 중요한 결정 발생 시
+
+**업데이트 대상**:
+
+- "주요 결정 사항" 섹션
+- 도메인 분리, 기술 스택 변경, 아키텍처 결정 등
+
+### 업데이트 빈도
+
+- **필수**: 각 Phase/Step 완료 시
+- **권장**: 컴포넌트 개발 완료 시 (Phase 2-2)
+- **선택**: 사소한 수정 시
+
+### 업데이트 시 주의사항
+
+1. **간결하게 작성**: 각 항목 1-2줄
+2. **예시는 유지**: 📘 작성 예시 섹션은 삭제하지 않음
+3. **체크박스 정확히**: `[ ]` → `[x]` 형식 준수
