@@ -22,47 +22,47 @@
 ### 1. 프로젝트 시작
 
 ```
-@workflow start
+/workflow start
 ```
 
 ### 2. 현재 상태 확인
 
 ```
-@workflow status
+/workflow status
 ```
 
 ### 3. 다음 단계 진행
 
 ```
-@workflow next
+/workflow next
 ```
 
 ## 주요 커맨드
 
 ### 메인 커맨드
 
-- `@workflow start`: 프로젝트 시작
-- `@workflow next`: 다음 단계 진행
-- `@workflow status`: 현재 상태 확인
+- `/workflow start`: 프로젝트 시작
+- `/workflow next`: 다음 단계 진행
+- `/workflow status`: 현재 상태 확인
 
 ### Phase별 커맨드
 
-- `@workflow phase1`: Phase 1 (전체 설계) 작업
-- `@workflow phase2 [domain]`: Phase 2 (도메인별 상세 작업)
-- `@workflow phase3 [domain]`: Phase 3 (통합 및 구현)
+- `/workflow phase1`: Phase 1 (전체 설계) 작업
+- `/workflow phase2 [domain]`: Phase 2 (도메인별 상세 작업)
+- `/workflow phase3 [domain]`: Phase 3 (통합 및 구현)
 
 ### 단계별 커맨드
 
-- `@workflow domain [step]`: 도메인 정의 단계
-- `@workflow ui [step]`: UI 설계 단계
-- `@workflow test [step]`: 테스트 작성 단계
-- `@workflow implement [step]`: 구현 단계
+- `/workflow domain [step]`: 도메인 정의 단계
+- `/workflow ui [step]`: UI 설계 단계
+- `/workflow test [step]`: 테스트 작성 단계
+- `/workflow implement [step]`: 구현 단계
 
 ### 도메인별 커맨드
 
-- `@workflow domainA`: 도메인 A 작업
-- `@workflow domainB`: 도메인 B 작업
-- `@workflow domainC`: 도메인 C 작업
+- `/workflow domainA`: 도메인 A 작업
+- `/workflow domainB`: 도메인 B 작업
+- `/workflow domainC`: 도메인 C 작업
 
 ## 파일 구조
 
@@ -134,39 +134,39 @@
 ### 시나리오 1: 처음부터 시작
 
 ```
-1. @workflow start
+1. /workflow start
    → Phase 1, Chat 1, 전체 도메인 정의 시작
 
-2. @workflow next
+2. /workflow next
    → Phase 1, Chat 2, 전체 UI 설계 시작
 
-3. @workflow next
+3. /workflow next
    → Phase 2, Chat 3, 도메인 A 상세 작업 시작
 ```
 
 ### 시나리오 2: 특정 단계 실행
 
 ```
-1. @workflow domain 1-1
+1. /workflow domain 1-1
    → 도메인 모델 정의 실행
 
-2. @workflow ui 2-2
+2. /workflow ui 2-2
    → Figma MCP ⇒ Code 초안 작성 실행
 
-3. @workflow test 3-1
+3. /workflow test 3-1
    → 단위 테스트 작성 실행
 ```
 
 ### 시나리오 3: 도메인별 작업
 
 ```
-1. @workflow domainA
+1. /workflow domainA
    → 도메인 A의 다음 단계 실행
 
-2. @workflow phase2 domainB
+2. /workflow phase2 domainB
    → Phase 2에서 도메인 B 작업
 
-3. @workflow phase3 domainC
+3. /workflow phase3 domainC
    → Phase 3에서 도메인 C 구현
 ```
 
@@ -205,13 +205,13 @@
 ### 사용 가능한 모든 커맨드 확인
 
 ```
-@workflow help
+/workflow help
 ```
 
 ### 프로젝트 초기화
 
 ```
-@workflow reset
+/workflow reset
 ```
 
 ## 핵심 원칙
@@ -231,7 +231,7 @@
 ### 진행 상황 파악이 어려울 때
 
 ```
-@workflow status
+/workflow status
 ```
 
 ### 특정 단계에서 문제 발생 시
