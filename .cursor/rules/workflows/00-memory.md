@@ -127,17 +127,17 @@
 
 - [ ] Step 2: UI 설계 (각 기능마다)
 
-**Phase 2-3: API 설계** (`@03-3-api-design.md`)
+**Phase 2-3: 구현** (`@03-3-implementation.md`)
 
-- [ ] Step 3: API 설계 (각 기능마다)
+- [ ] Step 3: 테스트 작성 (각 기능마다)
+- [ ] Step 4: 구현 (Mock API 우선, 각 기능마다)
+- [ ] Step 5: 리팩토링 (각 기능마다)
+- [ ] Step 6: 기능 검수 (각 기능마다)
+- [ ] Step 7: 다음 기능으로 (각 기능마다)
 
-**Phase 2-4: 구현** (`@03-4-implementation.md`)
+**Phase 2-4: API 연동** (`@03-4-api-integration.md`)
 
-- [ ] Step 4: 테스트 작성 (각 기능마다)
-- [ ] Step 5: 구현 (각 기능마다)
-- [ ] Step 6: 리팩토링 (각 기능마다)
-- [ ] Step 7: 기능 검수 (각 기능마다)
-- [ ] Step 8: 다음 기능으로 (각 기능마다)
+- [ ] Step 8: API 연동 (선택적, API 준비된 기능만)
 
 ### Phase 3: 통합 및 검증
 
@@ -193,7 +193,7 @@
 **워크플로우**:
 
 - Phase 1: `01-domain-definition` / `02-common-ui`
-- Phase 2: `03-1-preparation` / `03-2-ui-design` / `03-3-api-design` / `03-4-implementation`
+- Phase 2: `03-1-preparation` / `03-2-ui-design` / `03-3-implementation` / `03-4-api-integration`
 - Phase 3: `04-integration`
 
 **현재 워크플로우**: (작업 시작 후 기록)
