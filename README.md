@@ -44,25 +44,34 @@
 - `/workflow start`: 프로젝트 시작
 - `/workflow next`: 다음 단계 진행
 - `/workflow status`: 현재 상태 확인
+- `/workflow update`: 현재 상태를 memory 파일에 수동 업데이트
 
-### Phase별 커맨드
+### 설계 단계 커맨드
 
-- `/workflow phase1`: Phase 1 (전체 설계) 작업
-- `/workflow phase2 [domain]`: Phase 2 (도메인별 상세 작업)
-- `/workflow phase3 [domain]`: Phase 3 (통합 및 구현)
+- `/workflow domain-design`: 도메인 설계 작업
+- `/workflow ui-design`: 공통 UI 설계 작업
 
-### 단계별 커맨드
+### 도메인별 개발 커맨드
 
-- `/workflow domain [step]`: 도메인 정의 단계
-- `/workflow ui [step]`: UI 설계 단계
-- `/workflow test [step]`: 테스트 작성 단계
-- `/workflow implement [step]`: 구현 단계
+- `/workflow domain [domain]`: 도메인별 개발 작업
+  - 예: `/workflow domain user`, `/workflow domain product`
 
-### 도메인별 커맨드
+### 통합 테스트 커맨드
 
-- `/workflow domainA`: 도메인 A 작업
-- `/workflow domainB`: 도메인 B 작업
-- `/workflow domainC`: 도메인 C 작업
+- `/workflow test [domain]`: 통합 테스트 및 최종 검증
+  - 예: `/workflow test user`, `/workflow test product`
+
+### 세부 작업 커맨드
+
+- `/workflow domain [step]`: 도메인 정의 세부 단계
+- `/workflow ui [step]`: UI 설계 세부 단계
+- `/workflow test [step]`: 테스트 작성 세부 단계
+- `/workflow code [step]`: 코드 구현 세부 단계
+
+### 특수 커맨드
+
+- `/workflow reset`: 프로젝트 초기화
+- `/workflow help`: 사용 가능한 모든 커맨드 확인
 
 ## 파일 구조
 
@@ -71,9 +80,7 @@
 ├── README.md                          # 📖 전체 워크플로우 사용법 및 가이드
 ├── main-workflow.md                   # 🎯 메인 워크플로우 가이드 (4단계 프로세스)
 ├── memory.md                          # 🧠 진행 상황 및 파일 경로 관리 (중앙 관리)
-│
-├── commands.md                        # ⌨️ 커맨드 가이드 (사용자 명령어)
-├── command-templates.md               # 📝 커맨드 실행 프롬프트 템플릿
+├── memory-template.md                 # 📋 메모리 템플릿 파일
 │
 ├── domain-definition.md               # 🏗️ 도메인 정의 워크플로우 (1단계)
 │   ├── 1-1. 도메인 모델 정의
@@ -81,28 +88,32 @@
 │   ├── 1-3. 유틸리티 및 설정 인터페이스 정의
 │   └── 1-4. 도메인 이벤트 정의
 │
-├── ui-design.md                       # 🎨 UI 컴포넌트 설계 워크플로우 (2단계)
+├── common-ui.md                       # 🎨 공통 UI 설계 워크플로우 (2단계)
 │   ├── 2-1. UI 상태 인터페이스 정의
 │   ├── 2-2. Figma MCP ⇒ Code 초안 작성
 │   ├── 2-3. 컴포넌트 계층 구조 설계 및 군집화
 │   └── 2-4. 디자인 시스템 적용 및 컴포넌트 최적화
 │
-├── test-writing.md                    # 🧪 테스트 케이스 작성 워크플로우 (3단계)
-│   ├── 3-1. 단위 테스트 작성
-│   ├── 3-2. 컴포넌트 테스트 작성
-│   ├── 3-3. 통합 테스트 작성
-│   └── 3-4. E2E 테스트 작성
+├── preparation.md                     # 🔧 기능 구현 준비 워크플로우
+│   ├── Step 0: 기능 구현 순서 정리
+│   └── Step 1: 기능 선택 및 승인
 │
-├── implementation.md                  # ⚙️ 비즈니스 로직 구현 워크플로우 (4단계)
-│   ├── 4-1. 유틸리티 함수 구현
-│   ├── 4-2. API 함수 구현
-│   ├── 4-3. 컴포넌트 로직 구현
-│   └── 4-4. 통합 및 최종 검증
+├── ui-design.md                       # 🎨 UI 설계 워크플로우
+│   └── Step 2: UI 설계
 │
-└── multi-chat.md                      # 💬 Multi-Chat 작업 방식 (Phase별 가이드)
-    ├── Phase 1: 전체 설계 (Chat 1-2)
-    ├── Phase 2: 도메인별 상세 작업 (Chat 3-5)
-    └── Phase 3: 통합 및 구현 (Chat 6-9)
+├── implementation.md                  # ⚙️ 구현 워크플로우
+│   ├── Step 3: 테스트 작성
+│   ├── Step 4: 구현 (Mock API 우선)
+│   ├── Step 5: 리팩토링
+│   ├── Step 6: 기능 검수
+│   └── Step 7: 다음 기능으로
+│
+├── api-integration.md                 # 🔌 API 연동 워크플로우
+│   └── Step 8: API 연동
+│
+└── integration.md                     # 🔗 통합 및 검증 워크플로우
+    ├── Step 1: 통합 및 리팩토링
+    └── Step 2: E2E 테스트 및 최종 검증
 ```
 
 ### 파일 역할 설명
@@ -120,14 +131,13 @@
 
 #### 🔄 워크플로우 파일들
 
-- **domain-definition.md**: 비즈니스 도메인을 정의하는 1단계 워크플로우
-- **ui-design.md**: UI 컴포넌트를 설계하는 2단계 워크플로우
-- **test-writing.md**: 테스트 케이스를 작성하는 3단계 워크플로우
-- **implementation.md**: 비즈니스 로직을 구현하는 4단계 워크플로우
-
-#### 💬 Multi-Chat 가이드
-
-- **multi-chat.md**: 9개의 Chat으로 나누어진 작업 방식과 각 Chat별 상세 가이드
+- **domain-definition.md**: 비즈니스 도메인을 정의하는 워크플로우
+- **common-ui.md**: 공통 UI 컴포넌트를 설계하는 워크플로우
+- **preparation.md**: 기능 구현 준비 워크플로우
+- **ui-design.md**: UI 설계 워크플로우
+- **implementation.md**: 구현 워크플로우
+- **api-integration.md**: API 연동 워크플로우
+- **integration.md**: 통합 및 검증 워크플로우
 
 ## 사용 예시
 
@@ -135,16 +145,39 @@
 
 ```
 1. /workflow start
-   → Phase 1, Chat 1, 전체 도메인 정의 시작
+   → 도메인 설계 시작
 
 2. /workflow next
-   → Phase 1, Chat 2, 전체 UI 설계 시작
+   → 공통 UI 설계 시작
 
 3. /workflow next
-   → Phase 2, Chat 3, 도메인 A 상세 작업 시작
+   → 도메인별 개발 시작
 ```
 
-### 시나리오 2: 특정 단계 실행
+### 시나리오 2: 설계 단계 작업
+
+```
+1. /workflow domain-design
+   → 도메인 설계 실행
+
+2. /workflow ui-design
+   → 공통 UI 설계 실행
+```
+
+### 시나리오 3: 도메인별 개발
+
+```
+1. /workflow domain user
+   → 사용자 도메인 개발
+
+2. /workflow domain product
+   → 상품 도메인 개발
+
+3. /workflow test user
+   → 사용자 도메인 통합 테스트
+```
+
+### 시나리오 4: 세부 단계 실행
 
 ```
 1. /workflow domain 1-1
@@ -155,34 +188,24 @@
 
 3. /workflow test 3-1
    → 단위 테스트 작성 실행
-```
 
-### 시나리오 3: 도메인별 작업
-
-```
-1. /workflow domainA
-   → 도메인 A의 다음 단계 실행
-
-2. /workflow phase2 domainB
-   → Phase 2에서 도메인 B 작업
-
-3. /workflow phase3 domainC
-   → Phase 3에서 도메인 C 구현
+4. /workflow code 4-1
+   → 유틸리티 함수 구현 실행
 ```
 
 ## Context 관리 전략
 
-### Phase별 Context 제한
+### 작업 단계별 Context 제한
 
-- **Phase 1**: 전체 도메인 (context 길지만 설계 단계라 괜찮음)
-- **Phase 2**: 도메인별 작업 (context 길이 제한 내에서 작업)
-- **Phase 3**: 구현 단계 (이미 설계가 완료되어 context 부담 적음)
+- **설계 단계**: 전체 도메인 (context 길지만 설계 단계라 괜찮음)
+- **도메인별 개발**: 도메인별 작업 (context 길이 제한 내에서 작업)
+- **통합 테스트**: 구현 단계 (이미 설계가 완료되어 context 부담 적음)
 
 ### 파일 경로 자동 참조
 
 - **입력 파일**: memory.md의 "입력 파일 경로"에서 자동 참조
 - **결과물 파일**: memory.md의 "결과물 파일 경로"에 자동 저장
-- **참조 파일**: memory.md의 "참조 파일 경로"에서 Phase별 자동 참조
+- **참조 파일**: memory.md의 "참조 파일 경로"에서 작업 단계별 자동 참조
 
 ## 품질 보장
 
@@ -225,7 +248,7 @@
 
 ### Context 길이 초과 시
 
-- Phase별로 작업을 나누어 진행
+- 작업 단계별로 작업을 나누어 진행
 - memory.md의 파일 경로를 활용하여 필요한 파일만 참조
 
 ### 진행 상황 파악이 어려울 때
