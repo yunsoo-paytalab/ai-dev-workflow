@@ -32,279 +32,264 @@
 
 ---
 
-## Step 2-1: AI Vision 페이지 분석
+## Step 2-1: 컴포넌트 단위 정의 (개발자 주도)
 
-### 1-1. 페이지 스크린샷 요청
+### 1-1. 컴포넌트 단위 정의 요청
 
 #### 🔔 사용자 입력 필요
 
 "현재 작업 중인 기능: **[F001 - 상품 목록 조회]**"
 
-"이 기능의 **페이지 스크린샷**을 제공해주세요:"
+"이 기능을 개발하기 위해 **컴포넌트 단위**를 정의해주세요:"
 
-**요청 사항**:
+**컴포넌트 계층 가이드라인**:
 
-- 📱 모바일 또는 🖥️ 데스크톱 전체 페이지 스크린샷
-- 실제 기기/브라우저 촬영 또는 Figma 캡처
+- **기능 단위**: 완전한 기능을 수행하는 독립적인 UI 블록
+- **기능적 그룹**: 특정 기능을 수행하는 UI 그룹 (2-3개 기본 요소 조합)
+- **기본 요소**: 더 이상 분해할 수 없는 기본 UI 요소
 
-⚠️ **스크린샷을 받을 때까지 다음 단계 진행 금지**
+**개발 우선순위**:
 
----
+- [ ] 기능 단위부터 개발 (전체 기능)
+- [ ] 필요시 기능적 그룹으로 분해
+- [ ] 필요시 기본 요소로 분해
 
-### 1-2. AI Vision으로 전체 구조 분석
-
-**분석 항목**:
-
-1. 전체 레이아웃 구조 (Header/Main/Footer, 고정/스크롤 영역)
-2. 컴포넌트 계층 구조 (페이지→섹션→컴포넌트 분해)
-3. UI 요소 상세 (버튼, 입력, 카드, 리스트 등)
-4. 레이아웃 패턴 (Grid/Flex, 반응형)
-
-**분석 결과 템플릿**:
+**템플릿**:
 
 ```
-📐 전체 레이아웃 구조
-┌─────────────────┐
-│ Header (고정)    │
-├─────────────────┤
-│ Filter          │
-├─────────────────┤
-│ List (스크롤)    │
-├─────────────────┤
-│ Pagination      │
-└─────────────────┘
+### 기능 단위
+1. [컴포넌트 단위명]
+   - Figma URL: https://www.figma.com/design/...?node-id=...
+   - 설명: [기능적 역할과 포함 요소]
+   - 포함 요소: [하위 컴포넌트 목록]
 
-🏗️ 컴포넌트 계층 구조
-ProductListPage
-├─ PageHeader
-├─ ProductFilter
-│  ├─ CategoryFilter
-│  └─ PriceRangeFilter
-├─ ProductList
-│  └─ ProductCard ×N
-└─ Pagination
+### 기능적 그룹 - 선택사항
+2. [컴포넌트 단위명]
+   - Figma URL: https://www.figma.com/design/...?node-id=...
+   - 설명: [기능적 역할과 포함 요소]
+   - 포함 요소: [하위 컴포넌트 목록]
 
-🎯 주요 인터랙션
-- 검색, 필터, 정렬, 장바구니 추가
-
-📱 레이아웃 패턴
-- 모바일: 1열, 데스크톱: Grid 2-4열
+### 기본 요소 - 선택사항
+3. [컴포넌트 단위명]
+   - Figma URL: https://www.figma.com/design/...?node-id=...
+   - 설명: [기능적 역할과 포함 요소]
+   - 포함 요소: 없음 (최소 단위)
 ```
 
+**예시**:
+
+```
+### 기능 단위
+1. ProductListSection
+   - Figma URL: https://www.figma.com/design/abc123?node-id=1-2
+   - 설명: 상품 목록 전체 기능 (필터 + 리스트 + 페이지네이션)
+   - 포함 요소: ProductFilter, ProductList, Pagination
+
+### 기능적 그룹
+2. ProductFilter
+   - Figma URL: https://www.figma.com/design/abc123?node-id=3-4
+   - 설명: 상품 필터링 기능
+   - 포함 요소: CategoryFilter, PriceRangeFilter
+
+3. ProductList
+   - Figma URL: https://www.figma.com/design/abc123?node-id=5-6
+   - 설명: 상품 목록 표시 기능
+   - 포함 요소: ProductCard (반복)
+
+### 기본 요소
+4. ProductCard
+   - Figma URL: https://www.figma.com/design/abc123?node-id=7-8
+   - 설명: 개별 상품 카드
+   - 포함 요소: 없음 (최소 단위)
+```
+
+⚠️ **컴포넌트 단위를 정의할 때까지 다음 단계 진행 금지**
+
 ---
 
-## Step 2-2: 개발 컴포넌트 목록 확정
-
-### 2-1. 컴포넌트 목록 제안
-
-"Step 2-1 분석 결과를 바탕으로 **개발이 필요한 컴포넌트 목록**을 제안합니다:"
-
-**제안 목록**:
-
-- [ ] ProductListPage (페이지)
-- [ ] PageHeader
-- [ ] ProductFilter
-- [ ] ProductList
-- [ ] ProductCard
-- [ ] Pagination
-
-**총 N개 컴포넌트**
-
----
-
-### 2-2. 사용자 컨펌
+### 1-2. 컴포넌트 단위 승인
 
 #### 🔔 사용자 입력 필요
 
-"위 컴포넌트 목록을 확인해주세요:"
+"정의된 컴포넌트 단위를 확인해주세요:"
 
 **가능한 액션**:
 
-- ✅ 승인 (그대로 진행)
-- ➕ 추가 (누락 컴포넌트)
-- ➖ 제거 (불필요 컴포넌트)
-- 🔀 병합 (컴포넌트 합치기)
+- ✅ 승인 (Step 2-2 진행)
+- ➕ 추가 (누락 컴포넌트 단위)
+- ➖ 제거 (불필요 컴포넌트 단위)
+- 🔀 병합 (컴포넌트 단위 합치기)
 - 📝 수정 (이름 변경)
 
 ⚠️ **승인받을 때까지 다음 단계 절대 진행 금지**
 
 ---
 
-## Step 2-3: 컴포넌트별 순차 개발
+## Step 2-2: 컴포넌트 단위별 개발 (순차 처리)
 
-> 💡 **중요**: 한 번에 **1개 컴포넌트씩** 순차 처리
+> 💡 **중요**: 한 번에 **1개 컴포넌트 단위씩** 순차 처리
 >
 > 이유: Figma Dev Mode 정확도 향상, 할루시네이션 방지
 
 ### 개발 순서
 
-**권장**: 작은 컴포넌트 → 큰 컴포넌트 → 페이지
+**권장**: 기능 단위 → 기능적 그룹 → 기본 요소 순서
 
-예시: ProductCard → CategoryFilter → ProductFilter → PageHeader → ProductListPage
+예시: ProductListSection → ProductFilter → ProductCard
 
 ---
 
-### 3-1. Props 인터페이스 정의
+### 2-1. 현재 작업 단위 표시
 
-**현재 컴포넌트**: `ProductCard`
+"현재 작업: **[ProductListSection]** 컴포넌트 단위"
+
+---
+
+### 2-2. Figma 분석 (해당 단위만)
+
+**Figma MCP 활용**:
+
+- 현재 컴포넌트 단위만 분석
+- 하위 요소들의 구조 파악
+- 인터랙션 및 상태 정의
+
+**분석 항목**:
+
+1. 전체 레이아웃 구조
+2. 하위 컴포넌트 식별
+3. UI 요소 상세 (버튼, 입력, 카드, 리스트 등)
+4. 레이아웃 패턴 (Grid/Flex, 반응형)
+
+---
+
+### 2-3. 전체 단위 코드 변환
+
+**Figma Dev Mode 또는 Plugin 활용**:
+
+- 전체 컴포넌트 단위를 하나의 컴포넌트로 변환
+- 기본 JSX 구조 생성
+- 스타일 정보 추출
+
+---
+
+### 2-4. 스켈레톤 코드 생성 (개선된 방식)
+
+**포함 내용**:
+
+- ✅ JSX 구조 (Figma 디자인 기반)
+- ✅ 최소한의 데이터 변수 (표출용)
+- ✅ 기본 CSS 클래스명
+- ✅ 시맨틱 HTML 구조
+- ✅ ARIA 속성 (접근성)
+
+**포함하지 않는 내용**:
+
+- ❌ Props 인터페이스 (개발자가 필요시 정의)
+- ❌ 이벤트 핸들러 (개발자 요청시 생성)
+- ❌ 상태 관리 로직 (개발자 요청시 생성)
+- ❌ 비즈니스 로직 (개발자 요청시 생성)
+
+**스켈레톤 코드 템플릿**:
 
 ```typescript
-// src/features/product/components/ProductCard.tsx
-interface ProductCardProps {
-  product: Product;
-  onAddToCart: (productId: string) => void;
-  onToggleFavorite?: (productId: string) => void;
-  isFavorite?: boolean;
-}
-```
+// src/features/product/components/ProductListSection.tsx
 
-**정의 기준**: Step 2-1 분석 + 요구사항 명세서 + 인터랙션
-
----
-
-### 3-2. 스켈레톤 코드 생성
-
-```typescript
-interface ProductCardProps {
-  product: Product;
-  onAddToCart: (productId: string) => void;
-}
-
-export default function ProductCard({
-  product,
-  onAddToCart,
-}: ProductCardProps) {
-  const handleAddToCart = () => {
-    onAddToCart(product.id);
-  };
-
-  // ⚠️ return은 빈 Fragment
-  return <></>;
-}
-```
-
-**포함**: Props + 이벤트 핸들러 + 빈 JSX  
-**미포함**: JSX 구조, 스타일 (다음 단계)
-
-**파일 자동 생성**
-
----
-
-### 3-3. Figma 상세 정보 수집
-
-#### 🔔 사용자 입력 필요 (2가지 방법 중 선택)
-
-"**ProductCard** 컴포넌트의 상세 디자인 정보를 제공해주세요:"
-
-**방법 A: Figma Dev Mode URL**
-
-```
-URL: https://www.figma.com/design/<fileKey>?node-id=<id>
-⚠️ ProductCard 컴포넌트 1개만 선택
-```
-
-**방법 B: Figma Plugin 코드 붙여넣기** ⭐ 권장
-
-```
-Figma에서 "HTML to Code" 또는 "Anima" 플러그인으로
-ProductCard JSX 생성 후 붙여넣기
-
-완료 후 "완료" 입력
-```
-
-⚠️ **정보를 받을 때까지 다음 단계 절대 진행 금지**
-
----
-
-### 3-4. 컴포넌트 완성
-
-"Figma 정보와 **프로젝트 디자인 시스템**을 바탕으로 컴포넌트를 완성합니다:"
-
-> 📌 **디자인 시스템 정보**: `@00-memory.md`의 "디자인 시스템" 섹션 참조
->
-> - 디자인 토큰 경로
-> - 스타일링 방식 (Tailwind, CSS Modules 등)
-> - 기본 스타일 파일
-
-**작업 체크리스트**:
-
-**JSX 구조**:
-
-- [ ] Figma 레이아웃 반영
-- [ ] 시맨틱 HTML 사용 (article, section 등)
-- [ ] 프로젝트 디자인 시스템 적용
-
-**스타일**:
-
-- [ ] Figma 색상/간격/폰트 추출 적용
-- [ ] Tailwind/CSS Modules/Styled Components
-- [ ] 반응형 스타일
-
-**UI/UX 동작**:
-
-- [ ] 로딩/에러/빈 상태 처리
-- [ ] 호버/포커스 효과
-- [ ] 접근성 (aria-label, alt 등)
-
----
-
-### 📘 컴포넌트 구현 참고 예시
-
-> ⚠️ **주의**: 이 예시는 참고용이며, 실제 Figma 디자인에 맞게 수정해야 합니다.
-
-```typescript
-// 예시: ProductCard 컴포넌트 기본 구조
-export default function ProductCard({
-  product,
-  onAddToCart,
-}: ProductCardProps) {
-  const handleAddToCart = () => {
-    onAddToCart(product.id);
-  };
+export default function ProductListSection() {
+  // 데이터 표출에 필요한 최소한의 값들만 변수로 정의
+  const sectionTitle = "상품 목록";
+  const productCount = "24개 상품";
+  const currentPage = 1;
+  const totalPages = 5;
 
   return (
-    <article className="product-card">
-      {/* 이미지 영역 */}
-      <div className="image-wrapper">
-        <img src={product.imageUrl} alt={product.name} />
-        {product.badge && <span className="badge">{product.badge}</span>}
+    <section className="product-list-section">
+      {/* 전체 기능의 JSX 구조 */}
+      <div className="section-header">
+        <h2>{sectionTitle}</h2>
+        <span className="product-count">{productCount}</span>
       </div>
 
-      {/* 정보 영역 */}
-      <div className="info">
-        <h3>{product.name}</h3>
-        <p className="price">{formatPrice(product.price)}</p>
-      </div>
+      {/* 필터 영역 */}
+      <div className="filter-section">{/* 필터 관련 JSX */}</div>
 
-      {/* 버튼 영역 */}
-      <div className="actions">
-        <button onClick={handleAddToCart}>장바구니</button>
-        {onToggleFavorite && (
-          <button onClick={() => onToggleFavorite(product.id)}>❤️</button>
-        )}
-      </div>
-    </article>
+      {/* 상품 리스트 영역 */}
+      <div className="product-list">{/* 상품 리스트 관련 JSX */}</div>
+
+      {/* 페이지네이션 영역 */}
+      <div className="pagination">{/* 페이지네이션 관련 JSX */}</div>
+    </section>
   );
 }
 ```
 
-**⚠️ 실제 구현 시 주의사항**:
+**개발자 추가 작업 안내**:
 
-- 실제 구조는 Figma 디자인에 따라 달라집니다
-- className, 요소 구조, 이벤트 핸들러는 프로젝트에 맞게 조정하세요
-- 위 코드를 그대로 복사하지 말고, Figma 정보를 바탕으로 작성하세요
+"스켈레톤 코드가 생성되었습니다. 필요시 다음 작업을 진행하세요:"
+
+- [ ] Props 인터페이스 정의 (필요시)
+- [ ] 이벤트 핸들러 추가 (필요시)
+- [ ] 상태 관리 로직 추가 (필요시)
+- [ ] 비즈니스 로직 추가 (필요시)
+- [ ] 스타일 세부 조정 (필요시)
+
+**UX 로직 추가 요청 방법**:
+
+"UX 로직이 필요한 경우 다음과 같이 요청해주세요:"
+
+- "장바구니 버튼 클릭 이벤트 추가해줘"
+- "좋아요 토글 기능 추가해줘"
+- "상품 데이터를 props로 받도록 수정해줘"
 
 ---
 
-**포함되지 않는 것**:
+### 2-5. 컴포넌트 리팩토링 (개발자 요청시)
 
-- ❌ 비즈니스 로직 (Phase 2-4)
-- ❌ API 호출 (Phase 2-3, 2-4)
-- ❌ 전역 상태 관리 (Phase 2-4)
+#### 분해 요청 확인
+
+#### 🔔 사용자 입력 필요
+
+"**ProductListSection** 컴포넌트를 세부 컴포넌트로 분해할까요?"
+
+**분해 옵션**:
+
+- [ ] 기능적 그룹으로 분해 (ProductFilter, ProductList, Pagination)
+- [ ] 기본 요소로 분해 (ProductCard, FilterButton 등)
+- [ ] 현재 상태 유지 (분해하지 않음)
+
+**분해 선택 시**: Step 2-6으로 이동
+**분해 안함 선택 시**: Step 2-7로 이동
 
 ---
 
-### 3-5. 컴포넌트 검수 (조건부)
+### 2-6. 컴포넌트 분해 (선택사항)
+
+**분해 규칙**:
+
+- **기능 단위**: 전체 기능 단위 (현재 작업 중인 단위)
+- **기능적 그룹**: 특정 기능을 수행하는 UI 그룹 (필터, 리스트 등)
+- **기본 요소**: 기본 UI 요소 (버튼, 입력, 카드 등)
+
+**분해 예시**:
+
+```
+ProductListSection (기능 단위)
+├─ ProductFilter (기능적 그룹)
+│  ├─ CategoryFilter (기본 요소)
+│  └─ PriceRangeFilter (기본 요소)
+├─ ProductList (기능적 그룹)
+│  └─ ProductCard (기본 요소)
+└─ Pagination (기능적 그룹)
+```
+
+**각 분해된 컴포넌트마다**:
+
+1. Figma 분석 (해당 컴포넌트만)
+2. 스켈레톤 코드 생성
+3. Props 인터페이스 정의 (개발자 요청시)
+
+---
+
+### 2-7. 컴포넌트 검수 (조건부)
 
 #### 검수 필요 여부 판단
 
@@ -312,21 +297,12 @@ export default function ProductCard({
 
 **검수 필요 기준**:
 
-1. **Props 복잡도**:
-
-   - [ ] Props가 5개 이상
-
-2. **구조 복잡도**:
+1. **구조 복잡도**:
 
    - [ ] JSX 중첩 레벨이 3단계 이상
    - [ ] 조건부 렌더링이 3개 이상
 
-3. **인터랙션 복잡도**:
-
-   - [ ] 이벤트 핸들러가 3개 이상
-   - [ ] 상태 관리 (`useState`)가 3개 이상
-
-4. **외부 의존성**:
+2. **외부 의존성**:
    - [ ] API 호출 포함 (React Query 등)
    - [ ] 전역 상태 사용 (Zustand, Context 등)
    - [ ] 라우팅 관련 로직 (useNavigate 등)
@@ -334,7 +310,6 @@ export default function ProductCard({
 **검수 불필요 (자동 진행)**:
 
 - 위 기준에 모두 해당하지 않는 단순 컴포넌트
-- 예: 간단한 버튼, 카드, 아이콘 등
 
 ---
 
@@ -342,16 +317,15 @@ export default function ProductCard({
 
 #### 🔔 사용자 입력 필요
 
-"**ProductFilter** 컴포넌트 검수가 필요합니다."
+"**ProductListSection** 컴포넌트 검수가 필요합니다."
 
-**검수 이유**: Props 5개 이상, 조건부 렌더링 3개 이상
+**검수 이유**: JSX 중첩 레벨 3단계 이상
 
 **검수 체크리스트**:
 
 - [ ] UI가 Figma와 유사한가?
-- [ ] Props 정의가 적절한가?
-- [ ] 이벤트 핸들러가 정상인가?
 - [ ] 구조가 과도하게 복잡하지 않은가?
+- [ ] 스타일이 적절한가?
 
 **피드백**:
 
@@ -360,17 +334,17 @@ export default function ProductCard({
 
 ---
 
-### 3-6. 다음 컴포넌트 반복
+### 2-8. 다음 컴포넌트 단위로 이동
 
-"다음 컴포넌트: **CategoryFilter**"
+"다음 컴포넌트 단위: **ProductFilter**"
 
-→ Step 3-1로 돌아가서 반복
+→ Step 2-1로 돌아가서 반복
 
-**모든 컴포넌트 완료 시**: Step 2-4로 이동
+**모든 컴포넌트 단위 완료 시**: Step 2-3으로 이동
 
 ---
 
-## Step 2-4: 공통 컴포넌트 추가 (필요 시)
+## Step 2-3: 공통 컴포넌트 추가 (필요 시)
 
 ### 재사용 가능 컴포넌트 발견 시
 
@@ -383,28 +357,27 @@ export default function ProductCard({
 - 이름: `Pagination`
 - 용도: 페이지 네비게이션
 - 재사용 가능성: 높음
+- 현재 위치: `src/features/product/components/Pagination.tsx`
 
-```typescript
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
-```
+**추출 제안**:
 
-"공통 컴포넌트로 추출할까요?"
+"이 컴포넌트를 공통 컴포넌트로 추출할까요?"
 
-- [ ] 승인 → `src/shared/components/`
-- [ ] 거부 → 현재 기능에만
+- [ ] 승인 → `src/shared/components/Pagination.tsx`로 이동
+- [ ] 거부 → 현재 기능에만 유지
 - [ ] 보류 → 나중에 결정
 
-**승인 시**: 공통 컴포넌트 생성 + 현재 기능에서 사용 + Memory 기록
+**승인 시**:
+
+1. 공통 컴포넌트 생성
+2. 현재 기능에서 공통 컴포넌트 사용
+3. Memory 기록
 
 ---
 
-## Step 2-5: 전체 UI 설계 검수 및 승인
+## Step 2-4: 전체 UI 설계 검수 및 승인
 
-### 5-1. 검수 요청
+### 4-1. 검수 요청
 
 #### 🛑 사용자 검수 필수
 
@@ -415,43 +388,46 @@ interface PaginationProps {
 컴포넌트 구조:
 
 ```
-ProductListPage
-├─ PageHeader
-├─ ProductFilter
-│  ├─ CategoryFilter
-│  └─ PriceRangeFilter
-├─ ProductList
-│  └─ ProductCard ×N
-└─ Pagination (공통)
+ProductListSection (기능 단위)
+├─ ProductFilter (기능적 그룹)
+│  ├─ CategoryFilter (기본 요소)
+│  └─ PriceRangeFilter (기본 요소)
+├─ ProductList (기능적 그룹)
+│  └─ ProductCard (기본 요소)
+└─ Pagination (기능적 그룹) → 공통 컴포넌트로 추출
 ```
 
 생성된 파일:
 
-- `src/pages/ProductListPage.tsx`
-- `src/features/product/components/` (7개)
+- `src/features/product/components/ProductListSection.tsx`
+- `src/features/product/components/ProductFilter.tsx`
+- `src/features/product/components/ProductList.tsx`
+- `src/features/product/components/ProductCard.tsx`
 - `src/shared/components/Pagination.tsx` (공통)
 
-**총 9개 파일**
+**총 5개 파일**
 
 ---
 
-### 5-2. 검수 체크리스트
+### 4-2. 검수 체크리스트
 
-- [ ] 컴포넌트 분리가 적절한가?
-- [ ] Props 정의가 명확한가?
+- [ ] 컴포넌트 단위 분리가 적절한가?
+- [ ] 컴포넌트 계층 구조가 잘 적용되었는가?
 - [ ] UI가 Figma와 일치하는가?
 - [ ] 반응형이 고려되었는가?
 - [ ] 접근성이 고려되었는가?
 - [ ] 공통 컴포넌트 추출이 적절한가?
+- [ ] 스켈레톤 코드가 개발자 친화적인가?
 
 ---
 
-### 5-3. 변경 요청 가능
+### 4-3. 변경 요청 가능
 
-- 컴포넌트 추가/제거/병합
-- Props 수정
+- 컴포넌트 단위 추가/제거/병합
+- 컴포넌트 계층 조정
 - 스타일 수정
 - 파일 구조 변경
+- Props 인터페이스 추가 (개발자 요청시)
 
 ⚠️ **승인 전까지 API 설계 단계 진행 금지**
 
@@ -459,17 +435,18 @@ ProductListPage
 
 ## Memory 업데이트
 
-**Step 2-5 완료 시**:
+**Step 2-4 완료 시**:
 
 - `@00-memory.md` 업데이트
   - 현재 워크플로우: `03-3-api-design`
   - 현재 Step: Step 3 (API 설계)
   - 진행률: 40%
 - UI 설계 파일 경로 기록
-- 컴포넌트 목록 기록
+- 컴포넌트 단위 목록 기록
+- 컴포넌트 계층 구조 기록
 
 ---
 
 ## 다음 단계
 
-**Step 2-5 승인 후**: `@03-3-api-design.md` (Phase 2-3 - API 설계)
+**Step 2-4 승인 후**: `@03-3-api-design.md` (Phase 2-3 - API 설계)

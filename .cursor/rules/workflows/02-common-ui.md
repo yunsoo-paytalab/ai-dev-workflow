@@ -192,44 +192,78 @@ interface DialogProps {
 
 ---
 
-#### 2-4. 스켈레톤 코드 생성 (개별)
+#### 2-4. 스켈레톤 코드 생성 (개선된 방식)
 
 **포함 내용**:
 
-- ✅ Props 인터페이스
-- ✅ 컴포넌트 시그니처
-- ✅ 기본 JSX 구조
-- ✅ ARIA 속성
-- ❌ 상세 스타일
+- ✅ JSX 구조 (Figma 디자인 기반)
+- ✅ 최소한의 데이터 변수 (표출용)
+- ✅ 기본 CSS 클래스명
+- ✅ 시맨틱 HTML 구조
+- ✅ ARIA 속성 (접근성)
 
-### 📘 스켈레톤 코드 예시 (참고용)
+**포함하지 않는 내용**:
+
+- ❌ Props 인터페이스 (개발자가 필요시 정의)
+- ❌ 이벤트 핸들러 (개발자 요청시 생성)
+- ❌ 상태 관리 로직 (개발자 요청시 생성)
+- ❌ 비즈니스 로직 (개발자 요청시 생성)
+
+### 📘 스켈레톤 코드 예시 (개선된 방식)
 
 Dialog 컴포넌트의 경우:
 
 ```typescript
 // src/shared/components/Dialog.tsx
 
-interface DialogProps {
-  isOpen: boolean;
-  title: string;
-  content: React.ReactNode;
-  variant?: "confirm" | "alert";
-  onClose: () => void;
-  onConfirm?: () => void;
-}
-
-export default function Dialog(props: DialogProps) {
-  if (!props.isOpen) return null;
+export default function Dialog() {
+  // 데이터 표출에 필요한 최소한의 값들만 변수로 정의
+  const dialogTitle = "확인";
+  const dialogContent = "정말로 삭제하시겠습니까?";
+  const confirmText = "확인";
+  const cancelText = "취소";
 
   return (
-    <div role="dialog" aria-modal="true">
-      <h2>{props.title}</h2>
-      <div>{props.content}</div>
-      {/* TODO: Phase 2에서 상세 구현 */}
+    <div role="dialog" aria-modal="true" className="dialog-overlay">
+      <div className="dialog-container">
+        <div className="dialog-header">
+          <h2 className="dialog-title">{dialogTitle}</h2>
+          <button className="dialog-close-btn" aria-label="닫기">
+            ×
+          </button>
+        </div>
+
+        <div className="dialog-content">
+          <p className="dialog-message">{dialogContent}</p>
+        </div>
+
+        <div className="dialog-actions">
+          <button className="dialog-cancel-btn">{cancelText}</button>
+          <button className="dialog-confirm-btn">{confirmText}</button>
+        </div>
+      </div>
     </div>
   );
 }
 ```
+
+**개발자 추가 작업 안내**:
+
+"스켈레톤 코드가 생성되었습니다. 필요시 다음 작업을 진행하세요:"
+
+- [ ] Props 인터페이스 정의 (필요시)
+- [ ] 이벤트 핸들러 추가 (필요시)
+- [ ] 상태 관리 로직 추가 (필요시)
+- [ ] 비즈니스 로직 추가 (필요시)
+- [ ] 스타일 세부 조정 (필요시)
+
+**UX 로직 추가 요청 방법**:
+
+"UX 로직이 필요한 경우 다음과 같이 요청해주세요:"
+
+- "Dialog 열기/닫기 기능 추가해줘"
+- "확인 버튼 클릭 이벤트 추가해줘"
+- "Dialog props로 제어하도록 수정해줘"
 
 **완료 후 다음 컴포넌트로 이동**
 
