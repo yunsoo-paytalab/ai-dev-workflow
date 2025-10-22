@@ -136,64 +136,96 @@
 - 단계: [memory.md에서 읽어온 값]
 ```
 
-## Phase별 커맨드
+## 설계 단계 커맨드
 
-### `/workflow phase1`
+### `/workflow domain-design`
 
-**사용 시점**: Phase 1 (전체 설계) 작업 시
+**사용 시점**: 도메인 설계 작업 시
 **기능**:
 
-- Phase 1의 현재 Chat 식별
-- Chat 1: 전체 도메인 정의 또는 Chat 2: 전체 UI 설계 실행
+- 도메인 정의 작업 실행
+- 도메인 모델, 페이지, 기능 정의
 - 필요한 파일들 자동 참조
 
 **사용법**:
 
 ```
-/workflow phase1
+/workflow domain-design
 ```
 
 **AI 실행 프롬프트**:
 
 ```
-Phase 1 (전체 설계) 작업을 수행해주세요:
+도메인 설계 작업을 수행해주세요:
 
-1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 Phase 1의 현재 Chat을 식별해주세요
-2. Chat 1: 전체 도메인 정의 또는 Chat 2: 전체 UI 설계를 실행해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 현재 도메인 설계 단계를 식별해주세요
+2. 도메인 정의 작업을 실행해주세요
 3. 필요한 파일들을 자동으로 참조해주세요
 4. AI 작업을 실행해주세요
 5. 결과물을 memory.md의 경로에 저장해주세요
 6. memory.md를 업데이트해주세요
 
-현재 Phase 1 상태:
+현재 도메인 설계 상태:
 - 도메인: [memory.md에서 읽어온 값]
 - 단계: [memory.md에서 읽어온 값]
 ```
 
-### `/workflow phase2 [domain]`
+### `/workflow ui-design`
 
-**사용 시점**: Phase 2 (도메인별 상세 작업) 작업 시
+**사용 시점**: 공통 UI 설계 작업 시
 **기능**:
 
-- 지정된 도메인의 현재 단계 식별
-- 해당 도메인의 다음 단계 실행
+- 공통 UI 컴포넌트 설계 실행
+- 디자인 시스템 구축
 - 필요한 파일들 자동 참조
 
 **사용법**:
 
 ```
-/workflow phase2 domainA
-/workflow phase2 domainB
-/workflow phase2 domainC
+/workflow ui-design
 ```
 
 **AI 실행 프롬프트**:
 
 ```
-Phase 2 (도메인별 상세 작업) - [domain] 작업을 수행해주세요:
+공통 UI 설계 작업을 수행해주세요:
 
-1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 [domain]의 현재 단계를 식별해주세요
-2. 해당 도메인의 다음 단계를 실행해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 현재 UI 설계 단계를 식별해주세요
+2. 공통 UI 설계 작업을 실행해주세요
+3. 필요한 파일들을 자동으로 참조해주세요
+4. AI 작업을 실행해주세요
+5. 결과물을 memory.md의 경로에 저장해주세요
+6. memory.md를 업데이트해주세요
+
+현재 UI 설계 상태:
+- 도메인: [memory.md에서 읽어온 값]
+- 단계: [memory.md에서 읽어온 값]
+```
+
+### `/workflow domain [domain]`
+
+**사용 시점**: 도메인별 개발 작업 시
+**기능**:
+
+- 지정된 도메인의 현재 개발 단계 식별
+- 해당 도메인의 다음 개발 단계 실행
+- 필요한 파일들 자동 참조
+
+**사용법**:
+
+```
+/workflow domain user
+/workflow domain product
+/workflow domain order
+```
+
+**AI 실행 프롬프트**:
+
+```
+도메인별 개발 - [domain] 작업을 수행해주세요:
+
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 [domain]의 현재 개발 단계를 식별해주세요
+2. 해당 도메인의 다음 개발 단계를 실행해주세요
 3. 필요한 파일들을 자동으로 참조해주세요
 4. AI 작업을 실행해주세요
 5. 결과물을 memory.md의 경로에 저장해주세요
@@ -205,34 +237,36 @@ Phase 2 (도메인별 상세 작업) - [domain] 작업을 수행해주세요:
 - 단계: [memory.md에서 읽어온 값]
 ```
 
-### `/workflow phase3 [domain]`
+### `/workflow test [domain]`
 
-**사용 시점**: Phase 3 (통합 및 구현) 작업 시
+**사용 시점**: 통합 테스트 및 최종 검증 작업 시
 **기능**:
 
-- 지정된 도메인의 현재 구현 단계 식별
-- 해당 도메인의 다음 구현 단계 실행
+- 지정된 도메인의 현재 테스트 단계 식별
+- E2E 테스트 및 최종 검증 실행
+- 통합 및 리팩토링 작업 포함
 - 필요한 파일들 자동 참조
 
 **사용법**:
 
 ```
-/workflow phase3 domainA
-/workflow phase3 domainB
-/workflow phase3 domainC
+/workflow test user
+/workflow test product
+/workflow test order
 ```
 
 **AI 실행 프롬프트**:
 
 ```
-Phase 3 (통합 및 구현) - [domain] 작업을 수행해주세요:
+통합 테스트 및 최종 검증 - [domain] 작업을 수행해주세요:
 
-1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 [domain]의 현재 구현 단계를 식별해주세요
-2. 해당 도메인의 다음 구현 단계를 실행해주세요
-3. 필요한 파일들을 자동으로 참조해주세요
-4. AI 작업을 실행해주세요
-5. 결과물을 memory.md의 경로에 저장해주세요
-6. memory.md를 업데이트해주세요
+1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 [domain]의 현재 테스트 단계를 식별해주세요
+2. E2E 테스트 및 최종 검증을 실행해주세요
+3. 통합 및 리팩토링 작업을 포함해주세요
+4. 필요한 파일들을 자동으로 참조해주세요
+5. AI 작업을 실행해주세요
+6. 결과물을 memory.md의 경로에 저장해주세요
+7. memory.md를 업데이트해주세요
 
 현재 [domain] 상태:
 - Phase: Phase 3
@@ -240,11 +274,11 @@ Phase 3 (통합 및 구현) - [domain] 작업을 수행해주세요:
 - 단계: [memory.md에서 읽어온 값]
 ```
 
-## 단계별 커맨드
+## 세부 작업 커맨드
 
 ### `/workflow domain [step]`
 
-**사용 시점**: 도메인 정의 단계 작업 시
+**사용 시점**: 도메인 정의 작업 시
 **기능**:
 
 - 지정된 도메인 정의 단계 실행
@@ -279,7 +313,7 @@ Phase 3 (통합 및 구현) - [domain] 작업을 수행해주세요:
 
 ### `/workflow ui [step]`
 
-**사용 시점**: UI 설계 단계 작업 시
+**사용 시점**: UI 설계 작업 시
 **기능**:
 
 - 지정된 UI 설계 단계 실행
@@ -314,7 +348,7 @@ UI 설계 [step] 단계를 수행해주세요:
 
 ### `/workflow test [step]`
 
-**사용 시점**: 테스트 작성 단계 작업 시
+**사용 시점**: 테스트 작성 작업 시
 **기능**:
 
 - 지정된 테스트 작성 단계 실행
@@ -347,27 +381,27 @@ UI 설계 [step] 단계를 수행해주세요:
 - 단계: [step]
 ```
 
-### `/workflow implement [step]`
+### `/workflow code [step]`
 
-**사용 시점**: 구현 단계 작업 시
+**사용 시점**: 코드 구현 작업 시
 **기능**:
 
-- 지정된 구현 단계 실행
+- 지정된 코드 구현 단계 실행
 - 4-1, 4-2, 4-3, 4-4 중 선택
 
 **사용법**:
 
 ```
-/workflow implement 4-1
-/workflow implement 4-2
-/workflow implement 4-3
-/workflow implement 4-4
+/workflow code 4-1
+/workflow code 4-2
+/workflow code 4-3
+/workflow code 4-4
 ```
 
 **AI 실행 프롬프트**:
 
 ```
-구현 [step] 단계를 수행해주세요:
+코드 구현 [step] 단계를 수행해주세요:
 
 1. .cursor/rules/workflows/00-memory.md 파일을 읽어서 현재 진행 상황을 파악해주세요
 2. [step] 단계의 워크플로우 프롬프트를 로드해주세요
@@ -497,11 +531,10 @@ UI 설계 [step] 단계를 수행해주세요:
 사용 가능한 모든 커맨드를 표시해주세요:
 
 1. 메인 커맨드 목록
-2. Phase별 커맨드 목록
-3. 단계별 커맨드 목록
-4. 도메인별 커맨드 목록
-5. 특수 커맨드 목록
-6. 각 커맨드의 사용법 설명
+2. 설계 단계 커맨드 목록
+3. 세부 작업 커맨드 목록
+4. 특수 커맨드 목록
+5. 각 커맨드의 사용법 설명
 ```
 
 ## 커맨드 실행 흐름
@@ -576,14 +609,14 @@ memory.md 업데이트
 /workflow domain 1-1
 /workflow ui 2-2
 /workflow test 3-1
-/workflow implement 4-1
+/workflow code 4-1
 ```
 
 ### 특정 도메인 작업
 
 ```
-/workflow phase2 domainA
-/workflow phase3 domainB
+/workflow domain user
+/workflow test product
 ```
 
 ### 현재 상태 업데이트
