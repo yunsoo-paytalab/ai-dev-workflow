@@ -26,8 +26,8 @@
 ```
 Please perform domain definition work:
 
-1. Read `.cursor/rules/workflows/memory.md` to check current status
-2. Read `.cursor/rules/workflows/domain-definition.md` to check work guide
+1. Read `docs/workflows/memory.md` to check current status
+2. Read `docs/workflows/domain-definition.md` to check work guide
 3. Check recommendations:
    - Check requirements specification
 

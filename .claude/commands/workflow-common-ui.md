@@ -25,8 +25,8 @@
 ```
 Please perform common component development work:
 
-1. Read `.cursor/rules/workflows/memory.md` to check current status
-2. Read `.cursor/rules/workflows/ui-design.md` to check work guide
+1. Read `docs/workflows/memory.md` to check current status
+2. Read `docs/workflows/ui-design.md` to check work guide
 3. Check command parameters:
    - No parameters: **Common component** (Type 1)
 

@@ -28,8 +28,8 @@
 ```
 Please perform feature implementation work:
 
-1. Read `.cursor/rules/workflows/memory.md` to check current status
-2. Read `.cursor/rules/workflows/feature-implementation.md` to check work guide
+1. Read `docs/workflows/memory.md` to check current status
+2. Read `docs/workflows/feature-implementation.md` to check work guide
 3. Check command parameters:
    - Feature name: [feature-name]
 

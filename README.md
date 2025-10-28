@@ -101,7 +101,7 @@
 
 ### 파일 역할 설명
 
-#### 📋 커맨드 파일 (.cursor/commands/)
+#### 📋 커맨드 파일 (.claude/commands/)
 
 - **workflow.md**: 메인 커맨드 정의 (start, status, update, help, reset)
 - **workflow-domain-definition.md**: 도메인 정의 커맨드
@@ -111,7 +111,7 @@
 - **workflow-integrate.md**: 시스템 통합 커맨드
 - **workflow-e2e.md**: E2E 테스트 커맨드
 
-#### 🔄 워크플로우 가이드 파일 (.cursor/rules/workflows/)
+#### 🔄 워크플로우 가이드 파일 (docs/workflows/)
 
 - **memory.md**: 진행 상황 및 파일 경로 중앙 관리
 - **domain-definition.md**: 도메인 및 기능 정의 작업 가이드
@@ -267,8 +267,8 @@
 
 ### 특정 작업 가이드 확인
 
-- 각 커맨드 파일 (.cursor/commands/) 확인
-- 워크플로우 가이드 파일 (.cursor/rules/workflows/) 확인
+- 각 커맨드 파일 (.claude/commands/) 확인
+- 워크플로우 가이드 파일 (docs/workflows/) 확인
 
 ## 핵심 원칙
 

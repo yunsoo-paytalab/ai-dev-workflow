@@ -41,7 +41,7 @@
 ```
 Please perform the following steps:
 
-1. Read `.cursor/rules/workflows/memory.md` to understand the current progress
+1. Read `docs/workflows/memory.md` to understand the current progress
 2. Check if basic project information has been entered
 3. If not entered: "Basic information is required to start the project. Would you like to start with `/workflow-domain-definition` command?"
 4. If completed: Guide current state and recommended next steps
@@ -78,7 +78,7 @@ Recommended work order (for reference):
 ```
 Please display the following information:
 
-1. Read `.cursor/rules/workflows/memory.md` to understand the overall progress
+1. Read `docs/workflows/memory.md` to understand the overall progress
 2. Display the following information:
 
 **Project Information**:
@@ -121,7 +121,7 @@ Please display the following information:
 ```
 Please update the current state to memory file:
 
-1. Read `.cursor/rules/workflows/memory.md` to understand the current progress
+1. Read `docs/workflows/memory.md` to understand the current progress
 2. Analyze the current state of the project:
    - Check completed tasks
    - Identify currently in-progress tasks
@@ -227,8 +227,8 @@ Display detailed description for each command.
 ```
 Please reset the project:
 
-1. Read `.cursor/rules/workflows/memory-template.md` file
-2. Overwrite `.cursor/rules/workflows/memory.md` file with the template
+1. Read `docs/workflows/memory-template.md` file
+2. Overwrite `docs/workflows/memory.md` file with the template
 3. Display message: "Project has been reset. Please start with `/workflow start` command."
 ```
 
@@ -351,7 +351,7 @@ Would you like to continue? (y/n)
 ### 1. Read Memory.md
 
 ```
-Read .cursor/rules/workflows/memory.md file to understand:
+Read docs/workflows/memory.md file to understand:
 - Basic project information
 - Tech stack
 - Domain list
@@ -427,7 +427,7 @@ Update memory.md:
 
 **Main File**:
 
-- `.cursor/commands/workflow.md` - Main commands and complete guide
+- `.claude/commands/workflow.md` - Main commands and complete guide
   - `/workflow start` - Start project
   - `/workflow status` - Check current status
   - `/workflow update` - Manual memory update
@@ -436,18 +436,18 @@ Update memory.md:
 
 **Task Command Files**:
 
-- `.cursor/commands/workflow-domain-definition.md` - `/workflow-domain-definition`
-- `.cursor/commands/workflow-common-ui.md` - `/workflow-common-ui`
-- `.cursor/commands/workflow-ui.md` - `/workflow-ui [feature-name]`
-- `.cursor/commands/workflow-implement.md` - `/workflow-implement [feature-name]`
-- `.cursor/commands/workflow-integrate.md` - `/workflow-integrate`
-- `.cursor/commands/workflow-e2e.md` - `/workflow-e2e`
+- `.claude/commands/workflow-domain-definition.md` - `/workflow-domain-definition`
+- `.claude/commands/workflow-common-ui.md` - `/workflow-common-ui`
+- `.claude/commands/workflow-ui.md` - `/workflow-ui [feature-name]`
+- `.claude/commands/workflow-implement.md` - `/workflow-implement [feature-name]`
+- `.claude/commands/workflow-integrate.md` - `/workflow-integrate`
+- `.claude/commands/workflow-e2e.md` - `/workflow-e2e`
 
 ### Workflow Guide Files
 
-- `.cursor/rules/workflows/memory.md` - Progress tracking
-- `.cursor/rules/workflows/memory-template.md` - Memory template
-- `.cursor/rules/workflows/domain-definition.md` - Domain definition workflow
-- `.cursor/rules/workflows/ui-design.md` - UI design workflow
-- `.cursor/rules/workflows/feature-implementation.md` - Feature implementation workflow
-- `.cursor/rules/workflows/system-integration.md` - Integration and E2E testing workflow
+- `docs/workflows/memory.md` - Progress tracking
+- `docs/workflows/memory-template.md` - Memory template
+- `docs/workflows/domain-definition.md` - Domain definition workflow
+- `docs/workflows/ui-design.md` - UI design workflow
+- `docs/workflows/feature-implementation.md` - Feature implementation workflow
+- `docs/workflows/system-integration.md` - Integration and E2E testing workflow

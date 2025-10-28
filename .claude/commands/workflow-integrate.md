@@ -27,8 +27,8 @@
 ```
 Please perform system integration work:
 
-1. Read `.cursor/rules/workflows/memory.md` to check current status
-2. Read `.cursor/rules/workflows/system-integration.md` to check work guide
+1. Read `docs/workflows/memory.md` to check current status
+2. Read `docs/workflows/system-integration.md` to check work guide
 3. Check recommendations:
    - All features implemented (or most core features completed)
 
