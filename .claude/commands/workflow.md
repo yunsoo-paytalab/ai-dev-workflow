@@ -8,13 +8,10 @@
 - Shows warnings if dependencies are not met
 - Continues after user confirmation
 
-**7 Workflow Files**:
+**Workflow Structure**:
 
-- `memory.md` - Progress tracking
-- `domain-definition.md` - Domain and feature definition
-- `ui-design.md` - UI design (common + features)
-- `feature-implementation.md` - Feature implementation and API integration
-- `system-integration.md` - Integration and E2E testing
+- `memory.md` - Progress tracking (in `docs/workflows/`)
+- Command files in `.claude/commands/` - Each contains full workflow details
 
 ---
 
@@ -434,20 +431,16 @@ Update memory.md:
   - `/workflow help` - Help
   - `/workflow reset` - Reset project
 
-**Task Command Files**:
+**Task Command Files** (Each contains full workflow details):
 
-- `.claude/commands/workflow-domain-definition.md` - `/workflow-domain-definition`
-- `.claude/commands/workflow-common-ui.md` - `/workflow-common-ui`
-- `.claude/commands/workflow-ui.md` - `/workflow-ui [feature-name]`
-- `.claude/commands/workflow-implement.md` - `/workflow-implement [feature-name]`
-- `.claude/commands/workflow-integrate.md` - `/workflow-integrate`
-- `.claude/commands/workflow-e2e.md` - `/workflow-e2e`
+- `.claude/commands/workflow-domain-definition.md` - Domain definition with detailed steps
+- `.claude/commands/workflow-common-ui.md` - Common UI component development
+- `.claude/commands/workflow-ui.md` - Feature UI component development
+- `.claude/commands/workflow-implement.md` - Feature implementation (Test-First)
+- `.claude/commands/workflow-integrate.md` - System integration and refactoring
+- `.claude/commands/workflow-e2e.md` - E2E testing and deployment preparation
 
-### Workflow Guide Files
+### Memory Files
 
-- `docs/workflows/memory.md` - Progress tracking
-- `docs/workflows/memory-template.md` - Memory template
-- `docs/workflows/domain-definition.md` - Domain definition workflow
-- `docs/workflows/ui-design.md` - UI design workflow
-- `docs/workflows/feature-implementation.md` - Feature implementation workflow
-- `docs/workflows/system-integration.md` - Integration and E2E testing workflow
+- `docs/workflows/memory.md` - Current project progress tracking
+- `docs/workflows/memory-template.md` - Memory template for new projects

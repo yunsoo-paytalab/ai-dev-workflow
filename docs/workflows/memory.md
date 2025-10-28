@@ -15,11 +15,11 @@
 | -           | -           | -              |
 
 **Examples**:
-| Domain Name | Description           | Main Resources |
+| Domain Name | Description | Main Resources |
 | ----------- | --------------------- | -------------- |
-| User        | User management       | User           |
-| Product     | Product management    | Product        |
-| Cart        | Shopping cart         | Cart, Item     |
+| User | User management | User |
+| Product | Product management | Product |
+| Cart | Shopping cart | Cart, Item |
 
 ---
 
@@ -27,16 +27,16 @@
 
 **(Update during domain definition phase)**
 
-| URL Path | Page Name    | Related Domains | Auth Required |
-| -------- | ------------ | --------------- | ------------- |
-| -        | -            | -               | -             |
+| URL Path | Page Name | Related Domains | Auth Required |
+| -------- | --------- | --------------- | ------------- |
+| -        | -         | -               | -             |
 
 **Examples**:
-| URL Path | Page Name   | Related Domain  | Auth Required |
+| URL Path | Page Name | Related Domain | Auth Required |
 | -------- | ----------- | --------------- | ------------- |
-| /        | Home        | Product         | X             |
-| /login   | Login       | User            | X             |
-| /cart    | Cart        | Cart, Product   | O             |
+| / | Home | Product | X |
+| /login | Login | User | X |
+| /cart | Cart | Cart, Product | O |
 
 ---
 
@@ -85,8 +85,8 @@
 **(Start updating during domain definition phase)**
 
 | Feature ID | Feature Name | Domain | Status | UI Design | Implementation | API Integration | Notes |
-| ---------- | ------------ | ------ | ------ | --------- | ------------- | --------------- | ----- |
-| -          | -            | -      | -      | -         | -             | -               | -     |
+| ---------- | ------------ | ------ | ------ | --------- | -------------- | --------------- | ----- |
+| -          | -            | -      | -      | -         | -              | -               | -     |
 
 **Status Description**:
 
@@ -96,11 +96,11 @@
 - - : Not applicable
 
 **Examples**:
-| Feature ID | Feature Name         | Domain   | Status     | UI Design | Implementation | API Integration | Notes       |
+| Feature ID | Feature Name | Domain | Status | UI Design | Implementation | API Integration | Notes |
 | ---------- | -------------------- | -------- | ---------- | --------- | -------------- | --------------- | ----------- |
-| F001       | Product List        | Product  | ✅ Complete | ✅         | ✅              | ✅               |             |
-| F002       | Cart Management     | Cart     | 🔄 In Progress | ✅         | 🔄              | ⏳               | Implementing |
-| F003       | User Login          | User     | ⏳ Pending  | ⏳         | ⏳              | -                |             |
+| F001 | Product List | Product | ✅ Complete | ✅ | ✅ | ✅ | |
+| F002 | Cart Management | Cart | 🔄 In Progress | ✅ | 🔄 | ⏳ | Implementing |
+| F003 | User Login | User | ⏳ Pending | ⏳ | ⏳ | - | |
 
 ## 💡 Recommended Order (Reference)
 
@@ -148,15 +148,17 @@
 
 **Phase 1 (Initial Design)**:
 
-- Domain definition (`@domain-definition.md`)
-- Common UI design (`@ui-design.md`)
+- Domain definition
+- Common UI design
 
 **Phase 2 (Feature Development)**:
 
-- Feature UI design (`@ui-design.md`)
-- Feature implementation (`@feature-implementation.md`)
+- Feature UI design
+- Feature implementation
 
 **Phase 3 (Integration)**:
 
-- Integration and refactoring (`@system-integration.md`)
-- E2E testing (`@system-integration.md`)
+- Integration and refactoring
+- E2E testing
+
+> 📝 **Note**: Detailed workflow for each phase is in `.claude/commands/workflow-*.md` files.

@@ -148,15 +148,17 @@
 
 **Phase 1 (Initial Design)**:
 
-- Domain definition (`@domain-definition.md`)
-- Common UI design (`@ui-design.md`)
+- Domain definition
+- Common UI design
 
 **Phase 2 (Feature Development)**:
 
-- Feature UI design (`@ui-design.md`)
-- Feature implementation (`@feature-implementation.md`)
+- Feature UI design
+- Feature implementation
 
 **Phase 3 (Integration)**:
 
-- Integration and refactoring (`@system-integration.md`)
-- E2E testing (`@system-integration.md`)
+- Integration and refactoring
+- E2E testing
+
+> 📝 **Note**: Detailed workflow for each phase is in `.claude/commands/workflow-*.md` files.
