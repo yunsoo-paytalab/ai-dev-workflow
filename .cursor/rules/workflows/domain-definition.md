@@ -1,366 +1,366 @@
-# 도메인 정의 및 기능 계획
+# Domain Definition and Feature Planning
 
-> ⚠️ **이 파일을 읽기 전에 먼저 읽어야 할 파일**:
+> ⚠️ **Read these files first before reading this file**:
 >
-> 1. `@main-workflow.md` - 전체 프로세스 이해
-> 2. `@memory.md` - 현재 진행 상황 확인
+> 1. `@main-workflow.md` - Understand overall process
+> 2. `@memory.md` - Check current progress
 
-## 목표
+## Goal
 
-요구사항 명세서를 분석하여 도메인 경계를 설정하고, 페이지 단위 구조를 정의합니다.
-선택적으로 기능 간 의존성을 분석하여 최적의 구현 순서를 도출할 수 있습니다.
-
----
-
-### Step 1: 요구사항 명세서 확인
-
-1. `@memory.md` 읽기 - 현재 진행 상황 파악
-2. 요구사항 명세서 존재 여부 확인
-
-**요구사항 명세서가 없다면**:
-
-- 📄 요구사항 명세서 파일 첨부 요청 (`docs/requirements.md`)
-- 📋 기존 시스템 문서 첨부 요청
-- 💬 채팅에서 직접 요구사항 설명 요청
-
-⚠️ 요구사항이 제공될 때까지 대기 권장 (진행은 가능)
+Analyze requirements specification to set domain boundaries and define page-level structure.
+Optionally, analyze dependencies between features to derive optimal implementation order.
 
 ---
 
-### Step 2: 요구사항 분석
+### Step 1: Check Requirements Specification
 
-**작업 내용**:
+1. Read `@memory.md` - Understand current progress
+2. Check if requirements specification exists
 
-1. 요구사항 명세서 분석
-2. 핵심 기능 추출
-3. 주요 액터(사용자 유형) 식별
-4. 데이터 흐름 파악
+**If requirements specification is not available**:
 
----
+- 📄 Request requirements specification file attachment (`docs/requirements.md`)
+- 📋 Request existing system documentation attachment
+- 💬 Request direct requirements explanation in chat
 
-### Step 3: 도메인 경계 식별
-
-#### 도메인 경계 결정 가이드
-
-**기본 원칙**:
-
-1. **액터 중심**: 주 액터가 명확하면 해당 도메인에 포함
-2. **단순함 우선**: 복잡하지 않으면 분리하지 않음
-3. **변경 격리**: 자주 변경되는 로직은 분리 검토
-4. **응집도**: 관련 기능은 같은 도메인에
-
-#### 판단 기준 (순서대로 체크)
-
-각 기능에 대해:
-
-**1. 주 액터가 명확한가?**
-
-- YES → 해당 도메인에 포함 검토
-- NO → 다음 단계
-
-**2. 비즈니스 규칙이 복잡한가?**
-
-- YES → 별도 도메인 분리 검토
-- NO → 주 도메인에 포함
-
-**3. 3개 이상의 도메인과 연동되는가?**
-
-- YES → 별도 도메인 분리
-- NO → 주 도메인에 포함
-
-**4. 자주 변경되는가?** (월 1회 이상)
-
-- YES → 별도 도메인 분리 검토
-- NO → 주 도메인에 포함
-
-#### 판단 예시
-
-**예시 1 - 주 도메인에 포함**:
-
-- 케이스: 사용자 알림 설정
-- 주 액터: User ✓
-- 복잡도: 낮음 (boolean 플래그)
-- 관련 도메인: 1개
-- **결론**: User 도메인에 포함
-
-**예시 2 - 별도 도메인 분리**:
-
-- 케이스: 포인트/리워드 시스템
-- 주 액터: 불명확 (User, Order, Review 모두 관련)
-- 복잡도: 높음 (적립/사용/만료 규칙)
-- 관련 도메인: 4개 이상
-- 변경 빈도: 높음
-- **결론**: Reward 도메인으로 분리
+⚠️ Wait for requirements to be provided before proceeding (proceeding is possible)
 
 ---
 
-### Step 4: 페이지 구조 정의
+### Step 2: Analyze Requirements
 
-**작업 내용**:
+**Work content**:
 
-1. 필요한 모든 페이지 식별
-2. 페이지별 URL 경로 설계
-3. 페이지별 관련 도메인 표시
-4. 라우팅 구조 정의 (인증 필요 여부 등)
-
-**주의사항**:
-
-- ✅ 페이지 단위만 정의
-- ✅ URL 구조와 라우팅만 설계
-- ❌ 페이지 내부의 세부 컴포넌트는 UI 설계 단계에서 정의
+1. Analyze requirements specification
+2. Extract core features
+3. Identify main actors (user types)
+4. Understand data flow
 
 ---
 
-### Step 5: 기능 목록 도출
+### Step 3: Identify Domain Boundaries
 
-각 기능에 대해 다음 정보 도출:
+#### Domain Boundary Decision Guide
 
-- **기능명**: 명확하고 구체적으로
-- **주도 도메인** (primaryDomain): 이 기능의 주인
-- **관련 도메인들** (relatedDomains): 연동되는 도메인
-- **복잡도**: low / moderate / high
-- **설명**: 간단한 설명
+**Basic principles**:
 
-**배치 논의가 필요한 경우**:
+1. **Actor-centric**: If main actor is clear, include in that domain
+2. **Simplicity first**: Don't separate if not complex
+3. **Change isolation**: Consider separating frequently changing logic
+4. **Cohesion**: Related features belong in the same domain
 
-- 주 도메인이 불명확한 경우
-- 여러 도메인 배치 옵션이 있는 경우
-- 별도 도메인 분리 여부가 애매한 경우
+#### Decision Criteria (Check in order)
 
-이 경우 `needsDiscussion: true`로 표시하고 배치 옵션 제시
+For each feature:
 
----
+**1. Is the main actor clear?**
 
-### Step 6: 리소스 식별
+- YES → Consider including in that domain
+- NO → Next step
 
-주요 데이터 리소스만 식별:
+**2. Are business rules complex?**
 
-- 예: User, Product, Order, Review, Payment
+- YES → Consider separating into separate domain
+- NO → Include in main domain
 
-**주의사항**:
+**3. Does it integrate with 3 or more domains?**
 
-- ✅ 리소스 이름만 나열
-- ❌ API 엔드포인트는 구현 단계에서 정의
+- YES → Separate into different domain
+- NO → Include in main domain
 
----
+**4. Is it frequently changed?** (Monthly or more)
 
-## Step 7: 기능 계획 (선택사항)
+- YES → Consider separating into separate domain
+- NO → Include in main domain
 
-> 💡 **선택적 단계**: 복잡한 프로젝트에서만 사용
+#### Decision Examples
 
-> **간단한 프로젝트**: 이 섹션 건너뛰기 가능
+**Example 1 - Include in main domain**:
 
-### 7-1. 기능 구현 순서 필요 여부 확인
+- Case: User notification settings
+- Main actor: User ✓
+- Complexity: Low (boolean flag)
+- Related domains: 1
+- **Conclusion**: Include in User domain
 
-#### 🔔 사용자 입력 필요
+**Example 2 - Separate into different domain**:
 
-"기능 간 의존성 분석 및 구현 순서를 정리할까요?"
-
-- [ ] **예** - 의존성 분석 진행
-- [ ] **아니오** - 개발자가 직접 순서 결정 (Step 11로)
-
-**"아니오" 선택 시**: Step 11로 바로 이동
-
-**"예" 선택 시**: 아래 진행
-
----
-
-### 7-2. 의존성 그래프 생성
-
-**AI 작업**: 기능 간 의존 관계 분석
-
-**의존성 유형**:
-
-- 직접 의존성: A 기능이 B 기능을 명시적으로 사용
-- 데이터 의존성: A 기능의 결과가 B 기능의 입력
-- UI 의존성: A 컴포넌트가 B 컴포넌트를 포함
-
-**예시**:
-
-- F001 (상품 목록) → F002 (장바구니 추가)
-- F002 (장바구니 추가) → F005 (주문하기)
-- F003 (로그인) → F004 (마이페이지)
+- Case: Points/reward system
+- Main actor: Unclear (User, Order, Review all involved)
+- Complexity: High (accumulation/usage/expiration rules)
+- Related domains: 4 or more
+- Change frequency: High
+- **Conclusion**: Separate as Reward domain
 
 ---
 
-### 7-3. 위상 정렬 (Topological Sort)
+### Step 4: Define Page Structure
 
-의존성 순서대로 정렬:
+**Work content**:
 
-1. 의존성 없는 기능 먼저
-2. 의존성 해결된 순서대로
-3. 병렬 가능한 기능 그룹화
+1. Identify all necessary pages
+2. Design URL paths for each page
+3. Display related domain for each page
+4. Define routing structure (authentication requirements, etc.)
 
-**예시 결과**:
+**Notes**:
 
-- 그룹 1 (병렬 가능): F001, F003
-- 그룹 2 (F001 완료 후): F002, F006
-- 그룹 3 (F003 완료 후): F004
-- 그룹 4 (F002 완료 후): F005
+- ✅ Define only at page level
+- ✅ Design only URL structure and routing
+- ❌ Define detailed components within pages during UI design phase
 
 ---
 
-### 7-4. 순환 의존성 탐지 및 해결
+### Step 5: Derive Feature List
 
-**순환 의존성 발견 시**:
+For each feature, derive the following information:
 
-#### 🔔 사용자 확인 필요
+- **Feature name**: Clear and specific
+- **Primary domain** (primaryDomain): Owner of this feature
+- **Related domains** (relatedDomains): Domains it integrates with
+- **Complexity**: low / moderate / high
+- **Description**: Brief description
 
-"⚠️ 순환 의존성이 발견되었습니다:"
+**Cases requiring discussion**:
 
-**순환 경로 표시**:
+- When primary domain is unclear
+- When multiple domain placement options exist
+- When it's ambiguous whether to separate into different domain
+
+In these cases, mark as `needsDiscussion: true` and suggest placement options
+
+---
+
+### Step 6: Identify Resources
+
+Identify only major data resources:
+
+- Examples: User, Product, Order, Review, Payment
+
+**Notes**:
+
+- ✅ List only resource names
+- ❌ Define API endpoints during implementation phase
+
+---
+
+## Step 7: Feature Planning (Optional)
+
+> 💡 **Optional step**: Use only in complex projects
+
+> **Simple projects**: Can skip this section
+
+### 7-1. Check if Feature Implementation Order is Needed
+
+#### 🔔 User input required
+
+"Would you like to analyze dependencies between features and organize the implementation order?"
+
+- [ ] **Yes** - Proceed with dependency analysis
+- [ ] **No** - Developer decides order directly (go to Step 11)
+
+**If "No" is selected**: Skip directly to Step 11
+
+**If "Yes" is selected**: Proceed below
+
+---
+
+### 7-2. Generate Dependency Graph
+
+**AI work**: Analyze dependencies between features
+
+**Dependency types**:
+
+- Direct dependency: Feature A explicitly uses Feature B
+- Data dependency: Result of Feature A is input to Feature B
+- UI dependency: Component A includes Component B
+
+**Examples**:
+
+- F001 (Product list) → F002 (Add to cart)
+- F002 (Add to cart) → F005 (Place order)
+- F003 (Login) → F004 (My page)
+
+---
+
+### 7-3. Topological Sort
+
+Sort in dependency order:
+
+1. Features with no dependencies first
+2. In order of resolved dependencies
+3. Group features that can be parallelized
+
+**Example result**:
+
+- Group 1 (can be parallelized): F001, F003
+- Group 2 (after F001 completed): F002, F006
+- Group 3 (after F003 completed): F004
+- Group 4 (after F002 completed): F005
+
+---
+
+### 7-4. Detect and Resolve Circular Dependencies
+
+**When circular dependencies are found**:
+
+#### 🔔 User confirmation needed
+
+"⚠️ Circular dependency detected:"
+
+**Display circular path**:
 
 ```
-F002 (장바구니 추가) → F005 (주문하기) → F002 (장바구니 수정)
+F002 (Add to cart) → F005 (Place order) → F002 (Modify cart)
 ```
 
-**해결 옵션 제시**:
+**Present resolution options**:
 
-1. **공통 모듈 분리** (추천):
+1. **Extract common module** (Recommended):
 
-   - 순환 의존하는 기능들의 공통 로직을 별도 모듈로 분리
-   - 예: F002와 F005의 공통 로직 → `CartService` 공통 모듈 생성
+   - Extract common logic of circularly dependent features into separate module
+   - Example: Common logic of F002 and F005 → Create `CartService` common module
 
-2. **기능 병합**:
+2. **Merge features**:
 
-   - 순환 의존하는 기능들을 하나의 큰 기능으로 병합
-   - 예: F002 + F005 → "장바구니 및 주문 관리" 기능
+   - Merge circularly dependent features into one large feature
+   - Example: F002 + F005 → "Cart and Order Management" feature
 
-3. **의존성 제거**:
+3. **Remove dependency**:
 
-   - 순환 의존하는 기능 중 일부 기능 제거/수정
+   - Remove/modify some features in circular dependency
 
-4. **재설계 필요**:
-   - 도메인 경계 재설정 필요
+4. **Redesign needed**:
+   - Domain boundaries need to be reset
 
-"어떤 옵션을 선택하시겠습니까?"
+"Which option would you choose?"
 
-**사용자 선택 후**:
+**After user selection**:
 
-- 기능 목록 재구성
-- 의존성 그래프 재생성
-- 위상 정렬 재실행
-- Memory 파일에 결정 사항 기록
-
----
-
-### 7-5. 구현 순서 제안 및 승인
-
-#### 🔔 사용자 검수 필요
-
-"다음 순서로 기능을 구현하려고 합니다:"
-
-**구현 순서**:
-
-- 그룹 1 (병렬 가능): F001, F003
-- 그룹 2 (F001 완료 후): F002, F006
-- 그룹 3 (F003 완료 후): F004
-- ...
-
-**검수 권장**:
-
-- 의존성이 올바르게 파악되었는가?
-- 순서가 논리적인가?
-- 병렬 처리 가능한 기능이 올바르게 그룹화되었는가?
-
-**피드백**: (수정 필요 시 즉시 반영)
+- Reorganize feature list
+- Regenerate dependency graph
+- Re-run topological sort
+- Record decision in Memory file
 
 ---
 
-## Step 8: 전체 검수
+### 7-5. Propose and Approve Implementation Order
 
-### 검수 가이드 (AI용)
+#### 🔔 User review needed
 
-**기본 원칙**: 프로젝트 복잡도에 따라 유동적으로 질문
+"I plan to implement features in the following order:"
 
-**항상 질문할 항목**:
+**Implementation order**:
 
-- 도메인 구조가 요구사항과 일치하는가?
-- 기능 목록이 완전한가?
-
-**조건부 질문 항목**:
-
-- 도메인이 많은 경우 (5개 이상): 도메인 경계가 명확한가?
-- 페이지가 많은 경우 (10개 이상): 라우팅 구조가 직관적인가?
-- 기능 계획을 수행한 경우: 의존성 분석이 적절한가?
-- 기술 스택을 제안한 경우: 선택이 합리적인가?
-
-**질문 방식**:
-
-- Open-ended 질문 권장
-- 문제점 발견 시 구체적으로 지적
-- 대안 제시
-
-#### 🔔 사용자 검수
-
-"도메인 정의 및 기능 계획이 완료되었습니다."
-
-**결과 요약**:
-
-**도메인 목록**:
-
-- [도메인1]: [설명]
-- [도메인2]: [설명]
+- Group 1 (can be parallelized): F001, F003
+- Group 2 (after F001 completed): F002, F006
+- Group 3 (after F003 completed): F004
 - ...
 
-**페이지 목록**:
+**Review recommended**:
 
-- [URL]: [페이지명] - [관련 도메인]
-- ...
+- Are dependencies correctly understood?
+- Is the order logical?
+- Are parallelizable features correctly grouped?
 
-**기능 목록**:
-
-- [기능1]: [주도 도메인] - [복잡도]
-- [기능2]: [주도 도메인] - [복잡도]
-- ...
-
-**기능 구현 순서** (계획한 경우):
-
-- 그룹 1: [기능들]
-- 그룹 2: [기능들]
-- ...
-
-**기술 스택** (제안한 경우):
-
-- 상태 관리: [라이브러리들]
-- 라우팅: [라이브러리]
-- ...
-
-**검수를 권장합니다**:
-
-- 도메인 구조가 적절한가?
-- 페이지 목록이 완전한가?
-- 기능 목록이 완전한가?
-- (계획한 경우) 구현 순서가 적절한가?
-
-**피드백**: (수정 필요 시 즉시 반영)
+**Feedback**: (Implement immediately if modification needed)
 
 ---
 
-## Memory 업데이트
+## Step 8: Overall Review
 
-**Step 8 완료 시**: `memory.md`에서 해당 항목 체크
+### Review Guide (For AI)
+
+**Basic principle**: Ask questions flexibly according to project complexity
+
+**Always ask**:
+
+- Does the domain structure match requirements?
+- Is the feature list complete?
+
+**Conditional questions**:
+
+- Many domains (5 or more): Are domain boundaries clear?
+- Many pages (10 or more): Is routing structure intuitive?
+- If feature planning was performed: Is dependency analysis appropriate?
+- If tech stack was suggested: Is the choice reasonable?
+
+**Question style**:
+
+- Prefer open-ended questions
+- Specifically point out issues when found
+- Present alternatives
+
+#### 🔔 User review
+
+"Domain definition and feature planning have been completed."
+
+**Result summary**:
+
+**Domain list**:
+
+- [Domain1]: [Description]
+- [Domain2]: [Description]
+- ...
+
+**Page list**:
+
+- [URL]: [Page name] - [Related domain]
+- ...
+
+**Feature list**:
+
+- [Feature1]: [Primary domain] - [Complexity]
+- [Feature2]: [Primary domain] - [Complexity]
+- ...
+
+**Feature implementation order** (if planned):
+
+- Group 1: [Features]
+- Group 2: [Features]
+- ...
+
+**Tech stack** (if suggested):
+
+- State management: [Libraries]
+- Routing: [Library]
+- ...
+
+**Review is recommended**:
+
+- Is domain structure appropriate?
+- Is page list complete?
+- Is feature list complete?
+- (If planned) Is implementation order appropriate?
+
+**Feedback**: (Implement immediately if modification needed)
+
+---
+
+## Memory Update
+
+**When Step 8 is completed**: Check corresponding item in `memory.md`
 
 ```markdown
-- [x] 도메인 정의 (@domain-definition.md)
+- [x] Domain definition (@domain-definition.md)
 ```
 
 ---
 
-## 다음 단계
+## Next Steps
 
-**도메인 정의 완료 후**:
+**After domain definition is completed**:
 
-- 권장: `@ui-design.md` (공통 UI 설계)
-- 또는: `@ui-design.md` (기능 UI 설계)
-- 또는: `@feature-implementation.md` (기능 구현)
+- Recommended: `@ui-design.md` (Common UI design)
+- Or: `@ui-design.md` (Feature UI design)
+- Or: `@feature-implementation.md` (Feature implementation)
 
 ---
 
-## 결과물 파일 경로
+## Output File Paths
 
-- `docs/domain-definition.md` - 도메인 정의 및 구조
-- `docs/page-structure.md` - 페이지 및 라우팅 구조
-- `docs/feature-list.md` - 기능 목록 및 도메인 배치
-- `docs/tech-stack.md` - 기술 스택 제안서 (제안한 경우)
-- `docs/implementation-order.md` - 기능 구현 순서 (계획한 경우)
+- `docs/domain-definition.md` - Domain definition and structure
+- `docs/page-structure.md` - Page and routing structure
+- `docs/feature-list.md` - Feature list and domain placement
+- `docs/tech-stack.md` - Tech stack proposal (if suggested)
+- `docs/implementation-order.md` - Feature implementation order (if planned)

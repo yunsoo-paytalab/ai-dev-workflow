@@ -1,162 +1,162 @@
-# Memory 파일
+# Memory File
 
-> 📌 **이 파일의 역할**:
+> 📌 **Purpose of this file**:
 >
-> - 프로젝트의 현재 진행 상황을 추적합니다
-> - 모든 작업 시작 전 이 파일을 먼저 읽어 상태를 파악하세요
-> - 작업 완료 시 이 파일을 업데이트하여 진행 상황을 기록하세요
+> - Tracks the current progress of the project
+> - Read this file first before all tasks to understand the state
+> - Update this file when tasks are completed to record progress
 
-## 도메인 목록
+## Domain List
 
-**(도메인 정의 단계에서 업데이트)**
+**(Update during domain definition phase)**
 
-| 도메인명 | 설명 | 주요 리소스 |
-| -------- | ---- | ----------- |
-| -        | -    | -           |
+| Domain Name | Description | Main Resources |
+| ----------- | ----------- | -------------- |
+| -           | -           | -              |
 
-**예시**:
-| 도메인명 | 설명 | 주요 리소스 |
-| -------- | -------------- | ----------- |
-| User | 사용자 관리 | User |
-| Product | 상품 관리 | Product |
-| Cart | 장바구니 | Cart, Item |
-
----
-
-## 페이지 구조
-
-**(도메인 정의 단계에서 업데이트)**
-
-| URL 경로 | 페이지명 | 관련 도메인 | 인증 필요 |
-| -------- | -------- | ----------- | --------- |
-| -        | -        | -           | -         |
-
-**예시**:
-| URL 경로 | 페이지명 | 관련 도메인 | 인증 필요 |
-| -------- | ------------ | ---------------- | --------- |
-| / | 홈 | Product | X |
-| /login | 로그인 | User | X |
-| /cart | 장바구니 | Cart, Product | O |
+**Examples**:
+| Domain Name | Description           | Main Resources |
+| ----------- | --------------------- | -------------- |
+| User        | User management       | User           |
+| Product     | Product management    | Product        |
+| Cart        | Shopping cart         | Cart, Item     |
 
 ---
 
-## 전체 진행 체크리스트
+## Page Structure
 
-- 아래의 예시를 참고하여 해당 부분에 동적으로 추가 (내용 추가 시, 예시 제거)
+**(Update during domain definition phase)**
 
-## 전체 진행 체크리스트 (예시)
+| URL Path | Page Name    | Related Domains | Auth Required |
+| -------- | ------------ | --------------- | ------------- |
+| -        | -            | -               | -             |
 
-### 초기 설계
-
-- [ ] **도메인 정의** (`@domain-definition.md`)
-  - 도메인 목록 및 경계
-  - 페이지 구조
-  - 기능 목록
-  - (선택) 기능 의존성 분석
-
-### UI 설계
-
-- [ ] **공통 UI** (`@ui-design.md`)
-
-### 기능별 작업
-
-**(기능마다 아래 패턴 반복)**
-
-- [ ] **기능 UI - [기능명]** (`@ui-design.md`)
-- [ ] **기능 구현 - [기능명]** (`@feature-implementation.md`)
-
-### 시스템 통합
-
-- [ ] **통합 및 리팩토링** (`@system-integration.md`)
-
-  - 중복 코드 제거
-  - 공통 모듈 추출
-  - 성능 최적화 (선택)
-  - 접근성 개선
-
-- [ ] **E2E 테스트** (`@system-integration.md`)
-  - E2E 플로우 작성
-  - 최종 품질 검증
+**Examples**:
+| URL Path | Page Name   | Related Domain  | Auth Required |
+| -------- | ----------- | --------------- | ------------- |
+| /        | Home        | Product         | X             |
+| /login   | Login       | User            | X             |
+| /cart    | Cart        | Cart, Product   | O             |
 
 ---
 
-## 기능 진행상황
+## Overall Progress Checklist
 
-**(도메인 정의 단계에서 업데이트 시작)**
+- Dynamically add to this section based on the examples below (remove examples when adding content)
 
-| 기능ID | 기능명 | 도메인 | 상태 | UI 설계 | 구현 | API 연동 | 비고 |
-| ------ | ------ | ------ | ---- | ------- | ---- | -------- | ---- |
-| -      | -      | -      | -    | -       | -    | -        | -    |
+## Overall Progress Checklist (Example)
 
-**상태 설명**:
+### Initial Design
 
-- ✅ 완료: 해당 단계 완료
-- 🔄 진행중: 현재 작업 중
-- ⏳ 대기: 시작 전
-- - : 해당 없음
+- [ ] **Domain Definition** (`@domain-definition.md`)
+  - Domain list and boundaries
+  - Page structure
+  - Feature list
+  - (Optional) Feature dependency analysis
 
-**예시**:
-| 기능ID | 기능명 | 도메인 | 상태 | UI 설계 | 구현 | API 연동 | 비고 |
-| ------ | -------------- | ------- | --------- | ------- | ---- | -------- | ------------ |
-| F001 | 상품 목록 조회 | Product | ✅ 완료 | ✅ | ✅ | ✅ | |
-| F002 | 장바구니 관리 | Cart | 🔄 진행중 | ✅ | 🔄 | ⏳ | 구현 중 |
-| F003 | 사용자 로그인 | User | ⏳ 대기 | ⏳ | ⏳ | - | |
+### UI Design
 
-## 💡 권장 순서 (참고)
+- [ ] **Common UI** (`@ui-design.md`)
 
-> 💡 **참고용**: 아래 순서를 따르지 않아도 됩니다. 원하는 순서로 진행하세요.
+### Feature Tasks
 
-1. **도메인 정의** - 전체 구조 파악
-2. **공통 UI** - 재사용 컴포넌트 먼저
-3. **기능별 반복**:
-   - 기능 UI 설계
-   - 기능 구현 (+ 선택적 API 연동)
-4. **시스템 통합** - 중복 제거 및 품질 개선
-5. **E2E 테스트** - 최종 검증
+**(Repeat the following pattern for each feature)**
 
----
+- [ ] **Feature UI - [feature-name]** (`@ui-design.md`)
+- [ ] **Feature Implementation - [feature-name]** (`@feature-implementation.md`)
 
-## 🤖 Memory 업데이트 규칙 (AI용)
+### System Integration
 
-> 📌 **AI는 다음 시점에만 이 Memory 파일을 업데이트해야 합니다.**
+- [ ] **Integration and Refactoring** (`@system-integration.md`)
 
-### 업데이트 시점
+  - Remove duplicate code
+  - Extract common modules
+  - Performance optimization (optional)
+  - Improve accessibility
 
-- **초기 설정 완료 시**: 프로젝트 정보, 기술 스택, 폴더 구조
-- **도메인 정의 완료 시**: 도메인 목록, 페이지 구조, 기능 진행상황 표 초기화
-- **각 작업 완료 시**: 해당 체크박스 체크 (`[ ]` → `[x]`)
-- **기능 진행 시**: 기능 진행상황 표 업데이트
-- **사용자 요청 시**: `/workflow update` 커맨드
-
-### 업데이트 내용
-
-- **체크리스트**: 완료된 항목 체크
-- **기능 진행상황 표**: 상태, UI 설계, 구현, API 연동, 비고
-
-### 업데이트 시 주의사항
-
-1. **체크박스 정확히**: `[ ]` → `[x]` 형식 준수
-2. **표 형식 유지**: 기능 진행상황은 반드시 표로 관리
-3. **간결하게 작성**: 각 항목 1-2줄
-4. **불필요한 섹션 제거 금지**: 미입력 상태로 유지
+- [ ] **E2E Testing** (`@system-integration.md`)
+  - Write E2E flows
+  - Final quality verification
 
 ---
 
-## 💡 3-Phase 프로세스 (참고)
+## Feature Progress
 
-> 💡 **참고용**: 전통적인 3-Phase 프로세스입니다. 이 순서를 따르지 않아도 됩니다.
+**(Start updating during domain definition phase)**
 
-**Phase 1 (초기 설계)**:
+| Feature ID | Feature Name | Domain | Status | UI Design | Implementation | API Integration | Notes |
+| ---------- | ------------ | ------ | ------ | --------- | ------------- | --------------- | ----- |
+| -          | -            | -      | -      | -         | -             | -               | -     |
 
-- 도메인 정의 (`@domain-definition.md`)
-- 공통 UI 설계 (`@ui-design.md`)
+**Status Description**:
 
-**Phase 2 (기능 개발)**:
+- ✅ Completed: Step completed
+- 🔄 In Progress: Currently working
+- ⏳ Pending: Not started
+- - : Not applicable
 
-- 기능별 UI 설계 (`@ui-design.md`)
-- 기능별 구현 (`@feature-implementation.md`)
+**Examples**:
+| Feature ID | Feature Name         | Domain   | Status     | UI Design | Implementation | API Integration | Notes       |
+| ---------- | -------------------- | -------- | ---------- | --------- | -------------- | --------------- | ----------- |
+| F001       | Product List        | Product  | ✅ Complete | ✅         | ✅              | ✅               |             |
+| F002       | Cart Management     | Cart     | 🔄 In Progress | ✅         | 🔄              | ⏳               | Implementing |
+| F003       | User Login          | User     | ⏳ Pending  | ⏳         | ⏳              | -                |             |
 
-**Phase 3 (통합)**:
+## 💡 Recommended Order (Reference)
 
-- 통합 및 리팩토링 (`@system-integration.md`)
-- E2E 테스트 (`@system-integration.md`)
+> 💡 **For reference**: You don't need to follow this order. Proceed in any desired order.
+
+1. **Domain Definition** - Understand overall structure
+2. **Common UI** - Reusable components first
+3. **Repeat for each feature**:
+   - Feature UI design
+   - Feature implementation (+ optional API integration)
+4. **System Integration** - Remove duplicates and improve quality
+5. **E2E Testing** - Final verification
+
+---
+
+## 🤖 Memory Update Rules (For AI)
+
+> 📌 **AI should only update this Memory file at the following times.**
+
+### Update Timing
+
+- **Initial setup completion**: Project info, tech stack, folder structure
+- **Domain definition completion**: Domain list, page structure, initialize feature progress table
+- **Each task completion**: Check corresponding checkbox (`[ ]` → `[x]`)
+- **Feature progress**: Update feature progress table
+- **User request**: `/workflow update` command
+
+### Update Content
+
+- **Checklist**: Check completed items
+- **Feature progress table**: Status, UI design, implementation, API integration, notes
+
+### Precautions When Updating
+
+1. **Check checkboxes accurately**: Follow `[ ]` → `[x]` format
+2. **Maintain table format**: Feature progress must be managed as a table
+3. **Write concisely**: Keep each item to 1-2 lines
+4. **Do not remove unnecessary sections**: Keep them in unentered state
+
+---
+
+## 💡 3-Phase Process (Reference)
+
+> 💡 **For reference**: This is the traditional 3-Phase process. You don't need to follow this order.
+
+**Phase 1 (Initial Design)**:
+
+- Domain definition (`@domain-definition.md`)
+- Common UI design (`@ui-design.md`)
+
+**Phase 2 (Feature Development)**:
+
+- Feature UI design (`@ui-design.md`)
+- Feature implementation (`@feature-implementation.md`)
+
+**Phase 3 (Integration)**:
+
+- Integration and refactoring (`@system-integration.md`)
+- E2E testing (`@system-integration.md`)

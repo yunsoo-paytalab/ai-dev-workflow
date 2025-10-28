@@ -1,63 +1,62 @@
-# `/workflow-domain-definition` 커맨드
+# `/workflow-domain-definition` Command
 
-**사용 시점**: 도메인 및 기능 정의 작업 시
+**When to use**: When defining domain and features
 
-**참조 파일**: `@domain-definition.md`
+**Reference File**: `@domain-definition.md`
 
-**기능**:
+**Features**:
 
-- 도메인 목록 및 경계 설정
-- 페이지 구조 정의
-- 기능 목록 도출
-- (선택) 기능 의존성 분석
+- Set domain list and boundaries
+- Define page structure
+- Derive feature list
+- (Optional) Analyze feature dependencies
 
-**권장 사항**:
+**Recommendations**:
 
-- 프로젝트 시작 시 가장 먼저 수행
+- Perform first at project start
 
-**사용법**:
+**Usage**:
 
 ```
 /workflow-domain-definition
 ```
 
-**AI 실행 프롬프트**:
+**AI Execution Prompt**:
 
 ```
-도메인 정의 작업을 수행해주세요:
+Please perform domain definition work:
 
-1. `.cursor/rules/workflows/memory.md` 파일을 읽어 현재 상태를 확인해주세요
-2. `.cursor/rules/workflows/domain-definition.md` 파일을 읽어 작업 가이드를 확인해주세요
-3. 권장 사항 확인:
-   - 요구사항 명세서 확인
+1. Read `.cursor/rules/workflows/memory.md` to check current status
+2. Read `.cursor/rules/workflows/domain-definition.md` to check work guide
+3. Check recommendations:
+   - Check requirements specification
 
-   미충족 시 다음을 표시:
+   If not met, display:
 ```
 
-💡 권장 사항
+💡 Recommendation
 
-요구사항 명세서가 제공되지 않았습니다.
+Requirements specification has not been provided.
 
-미완료 시 발생 가능한 문제:
+Potential issues if not completed:
 
-- 도메인 정의가 불완전할 수 있습니다
-- 기능 목록이 누락될 수 있습니다
+- Domain definition may be incomplete
+- Feature list may be missing
 
-요구사항 명세서를 제공하시겠습니까? (y/n)
-또는 계속 진행하시겠습니까? (continue)
+Would you provide the requirements specification? (y/n)
+Or would you like to continue? (continue)
 
 ```
-
-4. 사용자 확인 후 작업 진행
-5. `domain-definition.md`의 프로세스를 따라 작업 수행
-6. 결과물을 경로에 저장:
+4. Proceed after user confirmation
+5. Follow `domain-definition.md` process to perform work
+6. Save output to path:
 - `docs/domain-definition.md`
 - `docs/page-structure.md`
 - `docs/feature-list.md`
-- (선택) `docs/implementation-order.md`
-7. `memory.md` 업데이트:
-- 도메인 목록 추가
-- 페이지 구조 추가
-- 기능 진행상황 표 초기화
-- 체크박스 체크: `[x] 도메인 정의`
+- (Optional) `docs/implementation-order.md`
+7. Update `memory.md`:
+- Add domain list
+- Add page structure
+- Initialize feature progress table
+- Check checkbox: `[x] Domain definition`
 ```

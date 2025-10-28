@@ -1,65 +1,64 @@
-# `/workflow-e2e` 커맨드
+# `/workflow-e2e` Command
 
-**사용 시점**: E2E 테스트 작업 시
+**When to use**: During E2E testing work
 
-**참조 파일**: `@system-integration.md` (Part B)
+**Reference File**: `@system-integration.md` (Part B)
 
-**기능**:
+**Features**:
 
-- E2E 테스트 플로우 제안
-- E2E 테스트 작성 및 실행
-- 최종 품질 검증
-- 프로덕션 배포 준비
+- Propose E2E test flows
+- Write and run E2E tests
+- Final quality verification
+- Production deployment preparation
 
-**권장 사항**:
+**Recommendations**:
 
-- 시스템 통합 완료
+- System integration completed
 
-**사용법**:
+**Usage**:
 
 ```
 /workflow-e2e
 ```
 
-**AI 실행 프롬프트**:
+**AI Execution Prompt**:
 
 ```
-E2E 테스트 작업을 수행해주세요:
+Please perform E2E testing work:
 
-1. `.cursor/rules/workflows/memory.md` 파일을 읽어 현재 상태를 확인해주세요
-2. `.cursor/rules/workflows/system-integration.md` 파일을 읽어 작업 가이드를 확인해주세요
-3. 권장 사항 확인:
-   - 시스템 통합 완료
+1. Read `.cursor/rules/workflows/memory.md` to check current status
+2. Read `.cursor/rules/workflows/system-integration.md` to check work guide
+3. Check recommendations:
+   - System integration completed
 
-   미충족 시 다음을 표시:
+   If not met, display:
 ```
 
-💡 권장 사항
+💡 Recommendation
 
-다음 단계가 완료되지 않았습니다:
+The following steps are not completed:
 
-- 시스템 통합
+- System integration
 
-미완료 시 발생 가능한 문제:
+Potential issues if not completed:
 
-- E2E 테스트 결과가 불안정할 수 있습니다
-- 통합 이슈가 발견될 수 있습니다
+- E2E test results may be unstable
+- Integration issues may be found
 
-계속 진행하시겠습니까? (y/n)
+Would you like to continue? (y/n)
 
 ```
-
-4. 사용자 확인 후 작업 진행
-5. `system-integration.md` Part B의 프로세스를 따라 작업 수행:
-- Step 1: E2E 테스트 플로우 제안
-- Step 2: E2E 테스트 작성
-- Step 3: E2E 테스트 실행
-- Step 4: 실패 테스트 처리
-- Step 5: 최종 품질 검증
-- Step 6: 최종 승인
-6. 결과물을 경로에 저장:
-- E2E 테스트: `e2e/`
-- 문서: `docs/deployment.md`
-7. `memory.md` 업데이트:
-- 체크박스 체크: `[x] E2E 테스트`
+4. Proceed after user confirmation
+5. Follow `system-integration.md` Part B process to perform work:
+- Step 1: Propose E2E test flows
+- Step 2: Write E2E tests
+- Step 3: Run E2E tests
+- Step 4: Handle failed tests
+- Step 5: Final quality verification
+- Step 6: Final approval
+6. Save output to path:
+- E2E tests: `e2e/`
+- Documentation: `docs/deployment.md`
+7. Update `memory.md`:
+- Check checkbox: `[x] E2E testing`
 ```

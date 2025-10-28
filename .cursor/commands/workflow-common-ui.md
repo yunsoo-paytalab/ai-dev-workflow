@@ -1,64 +1,63 @@
-# `/workflow-common-ui` 커맨드
+# `/workflow-common-ui` Command
 
-**사용 시점**: 공통 컴포넌트 개발 시
+**When to use**: When developing common components
 
-**참조 파일**: `@ui-design.md`
+**Reference File**: `@ui-design.md`
 
-**기능**: Figma 디자인을 분석하여 하나의 공통 컴포넌트 스켈레톤 코드 생성
+**Feature**: Analyze Figma design and generate skeleton code for one common component
 
-**권장 사항**:
+**Recommendations**:
 
-- 도메인 정의 완료 후
+- Domain definition completed
 
-**사용법**:
-
-```
-/workflow-common-ui    # Dialog 컴포넌트
-/workflow-common-ui    # Toast 컴포넌트 - 별도 실행
-/workflow-common-ui    # Header 컴포넌트 - 별도 실행
-```
-
-> 💡 **여러 컴포넌트 개발**: 컴포넌트마다 커맨드를 반복 실행하세요.
-
-**AI 실행 프롬프트**:
+**Usage**:
 
 ```
-공통 컴포넌트 개발 작업을 수행해주세요:
-
-1. `.cursor/rules/workflows/memory.md` 파일을 읽어 현재 상태를 확인해주세요
-2. `.cursor/rules/workflows/ui-design.md` 파일을 읽어 작업 가이드를 확인해주세요
-3. 커맨드 파라미터 확인:
-   - 파라미터 없음: **공통 컴포넌트** (타입 1)
-
-4. 권장 사항 확인:
-   - 도메인 정의 완료 (폴더 구조 정보)
-
-   미충족 시 다음을 표시:
+/workflow-common-ui    # Dialog component
+/workflow-common-ui    # Toast component - run separately
+/workflow-common-ui    # Header component - run separately
 ```
 
-💡 권장 사항
+> 💡 **Developing multiple components**: Repeat the command for each component.
 
-다음 단계가 완료되지 않았습니다:
-
-- 도메인 정의
-
-미완료 시 발생 가능한 문제:
-
-- 컴포넌트 파일 경로가 정의되지 않을 수 있습니다
-
-계속 진행하시겠습니까? (y/n)
+**AI Execution Prompt**:
 
 ```
+Please perform common component development work:
 
-5. 사용자 확인 후 작업 진행
-6. `ui-design.md`의 프로세스를 따라 **하나의 컴포넌트**만 개발:
-   - Step 1: 컴포넌트 정보 수집 (이름, Figma URL)
-   - Step 2: Figma 분석
-   - Step 3: 스켈레톤 코드 생성
-   - Step 4: 컴포넌트 검수
-   - Step 5: 추가 컴포넌트 개발 여부 확인
-7. 결과물을 경로에 저장:
-   - 공통: `src/shared/components/[컴포넌트명].tsx`
-8. `memory.md` 업데이트:
-   - 개발한 컴포넌트 기록
+1. Read `.cursor/rules/workflows/memory.md` to check current status
+2. Read `.cursor/rules/workflows/ui-design.md` to check work guide
+3. Check command parameters:
+   - No parameters: **Common component** (Type 1)
+
+4. Check recommendations:
+   - Domain definition completed (folder structure info)
+
+   If not met, display:
+```
+
+💡 Recommendation
+
+The following steps are not completed:
+
+- Domain definition
+
+Potential issues if not completed:
+
+- Component file paths may not be defined
+
+Would you like to continue? (y/n)
+
+```
+5. Proceed after user confirmation
+6. Follow `ui-design.md` process to develop **only one component**:
+   - Step 1: Collect component information (name, Figma URL)
+   - Step 2: Analyze Figma
+   - Step 3: Generate skeleton code
+   - Step 4: Review component
+   - Step 5: Check if additional component development is needed
+7. Save output to path:
+   - Common: `src/shared/components/[ComponentName].tsx`
+8. Update `memory.md`:
+   - Record developed component
 ```

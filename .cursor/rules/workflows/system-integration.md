@@ -1,569 +1,573 @@
-# 시스템 통합 및 E2E 테스트
+# System Integration and E2E Testing
 
-> 💡 참고: 기존 3-Phase 프로세스의 Phase 3 (통합 및 최종 검증) 단계
+> 💡 Note: Phase 3 (Integration and Final Verification) of traditional 3-Phase process
 
-> ⚠️ **이 파일을 읽기 전에 먼저 읽어야 할 파일**:
+> ⚠️ **Read these files first before reading this file**:
 >
-> 1. `@main-workflow.md` - 전체 프로세스 이해
-> 2. `@memory.md` - 현재 진행 상황 확인
+> 1. `@main-workflow.md` - Understand overall process
+> 2. `@memory.md` - Check current progress
 
-## 목표 및 범위
+## Goal and Scope
 
-**목표**: 완성된 기능들을 통합하고 전체 시스템의 품질을 보증합니다.
+**Goal**: Integrate completed features and ensure overall system quality.
 
-**구성**:
+**Structure**:
 
-- `/workflow integrate` - 통합 및 리팩토링
-- `/workflow e2e` - E2E 테스트 및 최종 검증
-
----
-
-## 권장 사항
-
-💡 **권장**: 다음 단계 완료 후 진행을 권장합니다.
-
-- 모든 기능 구현 완료 (또는 대부분의 핵심 기능 완료)
-- 기능별 단위/통합 테스트 통과
-
-미완료 시 발생 가능한 문제:
-
-- 통합 리팩토링의 효과가 제한적일 수 있습니다
-- E2E 테스트 시 일부 기능이 누락될 수 있습니다
-- 전체 품질 검증이 불완전할 수 있습니다
-
-계속 진행하시겠습니까?
+- `/workflow integrate` - Integration and refactoring
+- `/workflow e2e` - E2E testing and final verification
 
 ---
 
-## Part A: 통합 및 리팩토링
+## Recommendations
 
-**커맨드**: `/workflow integrate`
+💡 **Recommended**: Proceed after the following steps are completed.
 
-**목표**: 기능 간 중복을 제거하고 전체 코드 구조를 개선합니다.
+- All features implemented (or most core features completed)
+- Feature unit/integration tests passing
 
----
+Potential issues if not completed:
 
-### Step 1: API 연동 상태 확인 (시작 전)
+- Integration refactoring effectiveness may be limited
+- Some features may be missing during E2E testing
+- Overall quality verification may be incomplete
 
-**AI 작업**: `@memory.md`에서 API 연동 상태 확인
-
-#### 🔔 API 연동 여부 재확인
-
-"통합 작업을 시작하기 전에 API 연동 상태를 확인하겠습니다."
-
-**현재 API 연동 상태**:
-
-- ✅ **연동 완료**: [기능명1], [기능명2], ...
-- ⏳ **더미 데이터 유지**: [기능명3], [기능명4], ...
-
-**아직 연동되지 않은 API들**:
-
-- [기능명3]: API 준비 상태 확인 필요
-- [기능명4]: API 준비 상태 확인 필요
-
-**다음 중 선택해주세요**:
-
-- [ ] **지금 연동하기** (준비된 API만 선별적으로 연동)
-- [ ] **나중에 연동하기** (더미 데이터 유지, 통합 작업 진행)
-- [ ] **부분 연동하기** (일부만 연동, 나머지는 더미 유지)
-
-**선택 사항**:
-
-- 연동할 기능: [기능명1], [기능명2], ...
-- 연동하지 않을 기능: [기능명3], [기능명4], ...
-
-⚠️ **선택 완료 후 통합 작업 진행**
+Would you like to continue?
 
 ---
 
-### Step 2: 중복 코드 분석
+## Part A: Integration and Refactoring
 
-**AI 작업**:
+**Command**: `/workflow integrate`
 
-1. 전체 코드베이스 스캔
-2. 중복 패턴 식별
+**Goal**: Remove duplicates between features and improve overall code structure.
 
-**중복 대상**:
+---
 
-- 유사한 유틸리티 함수
-- 반복되는 로직
-- 중복된 타입 정의
-- 유사한 컴포넌트
-- 중복된 API 호출 패턴
+### Step 1: Check API Integration Status (Before Starting)
 
-**출력 형식**:
+**AI work**: Check API integration status from `@memory.md`
+
+#### 🔔 Reconfirm API Integration Status
+
+"Before starting integration work, I will check the API integration status."
+
+**Current API integration status**:
+
+- ✅ **Integration completed**: [Feature1], [Feature2], ...
+- ⏳ **Keep dummy data**: [Feature3], [Feature4], ...
+
+**APIs not yet integrated**:
+
+- [Feature3]: Need to check API readiness status
+- [Feature4]: Need to check API readiness status
+
+**Please select one**:
+
+- [ ] **Integrate now** (Selectively integrate only ready APIs)
+- [ ] **Integrate later** (Keep dummy data, proceed with integration work)
+- [ ] **Partial integration** (Integrate some, keep others as dummy)
+
+**Selection options**:
+
+- Features to integrate: [Feature1], [Feature2], ...
+- Features not to integrate: [Feature3], [Feature4], ...
+
+⚠️ **Proceed with integration work after selection is completed**
+
+---
+
+### Step 2: Analyze Duplicate Code
+
+**AI work**:
+
+1. Scan entire codebase
+2. Identify duplicate patterns
+
+**Duplicate targets**:
+
+- Similar utility functions
+- Repeated logic
+- Duplicate type definitions
+- Similar components
+- Duplicate API call patterns
+
+**Output format**:
 
 ```typescript
 interface Duplication {
   type: "utility" | "component" | "type" | "hook" | "constant";
-  pattern: string; // '{중복 패턴 설명}'
-  locations: string[]; // ['{파일경로1}', '{파일경로2}']
-  suggestion: string; // '{통합 제안}'
+  pattern: string; // '{Duplicate pattern description}'
+  locations: string[]; // ['{File path 1}', '{File path 2}']
+  suggestion: string; // '{Integration suggestion}'
   impact: "high" | "medium" | "low";
 }
 ```
 
 ---
 
-### Step 3: 공통 모듈 추출
+### Step 3: Extract Common Modules
 
-**추출 대상**:
+**Extraction targets**:
 
-1. **공통 유틸리티**
+1. **Common utilities**
 
-   - 경로: `src/shared/utils/`
-   - 📘 예시: formatPrice, formatDate, formatPhoneNumber 등
+   - Path: `src/shared/utils/`
+   - 📘 Examples: formatPrice, formatDate, formatPhoneNumber, etc.
 
-2. **공통 훅**
+2. **Common hooks**
 
-   - 경로: `src/shared/hooks/`
-   - 📘 예시: usePagination, useDebounce, useLocalStorage 등
+   - Path: `src/shared/hooks/`
+   - 📘 Examples: usePagination, useDebounce, useLocalStorage, etc.
 
-3. **공통 타입**
+3. **Common types**
 
-   - 경로: `src/shared/types/common.ts`
-   - 📘 예시: PaginationParams, ErrorResponse, ApiResponse<T> 등
+   - Path: `src/shared/types/common.ts`
+   - 📘 Examples: PaginationParams, ErrorResponse, ApiResponse<T>, etc.
 
-4. **공통 상수**
-   - 경로: `src/shared/constants/app.ts`
-   - 📘 예시: ITEMS_PER_PAGE, API_TIMEOUT, MAX_FILE_SIZE 등
+4. **Common constants**
 
----
-
-### Step 4: 전체 구조 개선
-
-**개선 항목**:
-
-1. **폴더 구조 정리**
-
-   - 일관되지 않은 폴더 구조 통일
-   - 파일 위치 재조정
-   - 네이밍 규칙 통일
-
-2. **Import 경로 최적화**
-
-   - tsconfig.json에 절대 경로 설정
-   - `@/components`, `@/utils` 등 alias 활용
-
-3. **순환 의존성 제거**
-   - 공통 모듈로 추출
-   - 인터페이스 분리
-   - 의존성 역전
+   - Path: `src/shared/constants/app.ts`
+   - 📘 Examples: ITEMS_PER_PAGE, API_TIMEOUT, MAX_FILE_SIZE, etc.
 
 ---
 
-### Step 5: 성능 최적화 (선택사항)
+### Step 4: Improve Overall Structure
 
-#### 🔔 사용자 입력 필요
+**Improvement items**:
 
-"성능 최적화를 수행할까요?"
+1. **Organize folder structure**
 
-**최적화 필요 여부**:
+   - Unify inconsistent folder structures
+   - Reorganize file locations
+   - Unify naming conventions
 
-- [ ] **예** - 성능 최적화 수행
-- [ ] **아니오** - 추후 개선으로 보류
+2. **Optimize import paths**
 
-**"예" 선택 시**:
+   - Set absolute paths in tsconfig.json
+   - Use aliases like `@/components`, `@/utils`
 
-#### 🔔 성능 목표 설정
+3. **Remove circular dependencies**
 
-**성능 목표 설정**:
-
-- 초기 로딩 시간 목표: `_________________`초 (기본값: 3초)
-- 페이지 전환 시간 목표: `_________________`초 (기본값: 1초)
-- 번들 크기 목표: `_________________`MB (기본값: 1MB)
-
-**최적화 항목** (필요한 것만 선택):
-
-- [ ] React 최적화 (memo, callback, useMemo)
-- [ ] 코드 스플리팅
-- [ ] 번들 크기 최적화
-- [ ] API 호출 최적화
-- [ ] 이미지 최적화
-
-**최적화 항목 상세**:
-
-1. **React 최적화**
-
-   - React.memo로 불필요한 리렌더링 방지
-   - useCallback, useMemo 활용
-   - 컴포넌트 분리
-
-2. **코드 스플리팅**
-
-   - React.lazy로 페이지별 분리
-   - Suspense로 로딩 처리
-   - 라우트 기반 스플리팅
-
-3. **번들 크기 최적화**
-
-   - 사용하지 않는 코드 제거
-   - 무거운 라이브러리 대체
-   - Tree shaking 최적화
-
-4. **API 호출 최적화**
-
-   - React Query 캐싱 설정
-   - staleTime, cacheTime 조정
-   - 불필요한 refetch 방지
-
-5. **이미지 최적화**
-   - Lazy loading 적용
-   - WebP 포맷 사용
-   - 크기 최적화
+   - Extract to common modules
+   - Separate interfaces
+   - Dependency inversion
 
 ---
 
-### Step 6: 접근성 개선
+### Step 5: Performance Optimization (Optional)
 
-**체크리스트**:
+#### 🔔 User input required
 
-- [ ] **키보드 네비게이션**: Tab 순서, 포커스 표시, Enter/Space 동작, ESC 닫기
-- [ ] **스크린리더 지원**: alt 텍스트, ARIA 속성, 랜드마크 역할, 폼 레이블
-- [ ] **색상 대비**: WCAG AA 기준 충족 (4.5:1)
-- [ ] **반응형 접근성**: 터치 타겟 44x44px 이상, 확대 시 레이아웃 유지
+"Would you like to perform performance optimization?"
 
----
+**Whether optimization is needed**:
 
-### Step 7: 통합 테스트 보완
+- [ ] **Yes** - Perform performance optimization
+- [ ] **No** - Defer for later improvement
 
-**테스트 항목**:
+**When "Yes" is selected**:
 
-1. **도메인 간 연동 테스트**
+#### 🔔 Set Performance Goals
 
-   - 경로: `__tests__/integration/cross-domain/`
-   - 📘 예시: 장바구니 → 주문 플로우, 로그인 → 마이페이지 플로우
+**Performance goal settings**:
 
-2. **에러 복구 테스트**
+- Initial loading time goal: `_________________`sec (default: 3sec)
+- Page transition time goal: `_________________`sec (default: 1sec)
+- Bundle size goal: `_________________`MB (default: 1MB)
 
-   - 📘 예시: API 실패 후 재시도, 네트워크 에러 처리, 타임아웃 처리
+**Optimization items** (Select only what's needed):
 
-3. **성능 테스트**
-   - 초기 로딩 시간 (목표: <3초)
-   - 페이지 전환 시간 (목표: <1초)
+- [ ] React optimization (memo, callback, useMemo)
+- [ ] Code splitting
+- [ ] Bundle size optimization
+- [ ] API call optimization
+- [ ] Image optimization
 
----
+**Optimization item details**:
 
-### Step 8: 통합 검수
+1. **React Optimization**
 
-### 검수 가이드 (AI용)
+   - Prevent unnecessary re-renders with React.memo
+   - Utilize useCallback, useMemo
+   - Component separation
 
-**기본 원칙**: 프로젝트 규모와 복잡도에 따라 유동적으로 질문
+2. **Code Splitting**
 
-**항상 질문할 항목**:
+   - Separate by page with React.lazy
+   - Handle loading with Suspense
+   - Route-based splitting
 
-- 통합 작업이 완료되었는가?
+3. **Bundle Size Optimization**
 
-**조건부 질문 항목**:
+   - Remove unused code
+   - Replace heavy libraries
+   - Tree shaking optimization
 
-- 중복 코드가 많았던 경우: 공통 모듈 추출이 적절한가?
-- 성능 최적화를 수행한 경우: 성능 목표를 달성했는가?
-- 접근성 개선을 수행한 경우: 접근성 기준을 충족하는가?
+4. **API Call Optimization**
 
-**질문 방식**:
+   - React Query caching settings
+   - Adjust staleTime, cacheTime
+   - Prevent unnecessary refetch
 
-- Open-ended 질문 권장
-- 문제점 발견 시 구체적으로 지적
-- 개선 제안 제시
+5. **Image Optimization**
 
-#### 🔔 사용자 검수
-
-"전체 시스템 통합 및 리팩토링이 완료되었습니다."
-
-**작업 결과**:
-
-중복 코드 제거:
-
-- ✅ 공통 유틸리티 N개 추출
-- ✅ 공통 훅 N개 추출
-- ✅ 공통 타입 N개 통합
-
-구조 개선:
-
-- ✅ Import 경로 최적화 (절대 경로)
-- ✅ 순환 의존성 0개
-- ✅ 폴더 구조 통일
-
-성능 최적화 (선택 시):
-
-- ✅ 번들 크기 X% 감소
-- ✅ 초기 로딩 X.X초 (목표: <3초)
-- ✅ 페이지 전환 X.X초 (목표: <1초)
-
-접근성 개선:
-
-- ✅ 키보드 네비게이션 완료
-- ✅ ARIA 속성 추가
-- ✅ 색상 대비 개선
-
-테스트:
-
-- ✅ 통합 테스트 N개 추가
-- ✅ 전체 테스트 통과율 100%
-- ✅ 커버리지 X% (목표: 90% 이상)
-
-**검수를 권장합니다**:
-
-- 코드 구조가 깔끔한가?
-- 성능이 목표치를 충족하는가? (최적화 수행 시)
-- 접근성이 개선되었는가?
-- 테스트가 안정적인가?
-
-**피드백**: (수정 필요 시 즉시 반영)
+   - Apply lazy loading
+   - Use WebP format
+   - Size optimization
 
 ---
 
-## Part B: E2E 테스트 및 최종 검증
+### Step 6: Improve Accessibility
 
-**커맨드**: `/workflow e2e`
+**Checklist**:
 
-**목표**: 전체 사용자 플로우를 E2E 테스트로 검증하고 프로덕션 배포를 준비합니다.
+- [ ] **Keyboard navigation**: Tab order, focus indicators, Enter/Space behavior, ESC close
+- [ ] **Screen reader support**: Alt text, ARIA attributes, landmark roles, form labels
+- [ ] **Color contrast**: Meet WCAG AA standard (4.5:1)
+- [ ] **Responsive accessibility**: Touch target 44x44px or larger, maintain layout when zoomed
 
 ---
 
-### Step 1: E2E 테스트 플로우 제안
+### Step 7: Supplement Integration Tests
 
-**AI 작업**: 요구사항 명세서와 구현된 기능을 분석하여 E2E 테스트할 사용자 플로우 제안
+**Test items**:
 
-**출력 형식**:
+1. **Cross-domain integration tests**
+
+   - Path: `__tests__/integration/cross-domain/`
+   - 📘 Examples: Cart → Order flow, Login → My Page flow
+
+2. **Error recovery tests**
+
+   - 📘 Examples: Retry after API failure, network error handling, timeout handling
+
+3. **Performance tests**
+
+   - Initial loading time (goal: <3sec)
+   - Page transition time (goal: <1sec)
+
+---
+
+### Step 8: Integration Review
+
+### Review Guide (For AI)
+
+**Basic principle**: Ask questions flexibly according to project scale and complexity
+
+**Always ask**:
+
+- Has integration work been completed?
+
+**Conditional questions**:
+
+- If there was much duplicate code: Is common module extraction appropriate?
+- If performance optimization was performed: Were performance goals achieved?
+- If accessibility improvements were performed: Do they meet accessibility criteria?
+
+**Question style**:
+
+- Prefer open-ended questions
+- Specifically point out issues when found
+- Provide improvement suggestions
+
+#### 🔔 User Review
+
+"Overall system integration and refactoring has been completed."
+
+**Work results**:
+
+Duplicate code removal:
+
+- ✅ Extracted N common utilities
+- ✅ Extracted N common hooks
+- ✅ Integrated N common types
+
+Structure improvements:
+
+- ✅ Import path optimization (absolute paths)
+- ✅ 0 circular dependencies
+- ✅ Unified folder structure
+
+Performance optimization (if performed):
+
+- ✅ X% bundle size reduction
+- ✅ X.Xsec initial loading (goal: <3sec)
+- ✅ X.Xsec page transition (goal: <1sec)
+
+Accessibility improvements:
+
+- ✅ Keyboard navigation completed
+- ✅ ARIA attributes added
+- ✅ Color contrast improved
+
+Tests:
+
+- ✅ Added N integration tests
+- ✅ 100% test pass rate
+- ✅ X% coverage (goal: 90% or higher)
+
+**Review is recommended**:
+
+- Is code structure clean?
+- Does performance meet targets? (if optimization performed)
+- Is accessibility improved?
+- Are tests stable?
+
+**Feedback**: (Implement immediately if modification needed)
+
+---
+
+## Part B: E2E Testing and Final Verification
+
+**Command**: `/workflow e2e`
+
+**Goal**: Verify entire user flows with E2E tests and prepare for production deployment.
+
+---
+
+### Step 1: Propose E2E Test Flows
+
+**AI work**: Analyze requirements specification and implemented features to propose E2E test user flows
+
+**Output format**:
 
 ```typescript
 interface E2EFlow {
   id: string; // 'E2E-XXX'
-  name: string; // '{플로우명}'
+  name: string; // '{Flow name}'
   priority: "critical" | "high" | "medium" | "low";
   description: string;
-  steps: string[]; // ['{단계1}', '{단계2}', ...]
-  estimatedTime: string; // '{예상시간}'
-  relatedFeatures: string[]; // ['{기능ID1}', '{기능ID2}', ...]
-  alternativeScenarios?: string[]; // ['{대체시나리오1}', '{대체시나리오2}']
+  steps: string[]; // ['{Step 1}', '{Step 2}', ...]
+  estimatedTime: string; // '{Estimated time}'
+  relatedFeatures: string[]; // ['{Feature ID 1}', '{Feature ID 2}', ...]
+  alternativeScenarios?: string[]; // ['{Alternative scenario 1}', '{Alternative scenario 2}']
 }
 ```
 
-#### 🔔 사용자 검수
+#### 🔔 User Review
 
-"다음 E2E 테스트 플로우를 작성하려고 합니다:"
+"I plan to write the following E2E test flows:"
 
-**제안된 플로우 목록 표시** (우선순위별)
+**Display proposed flow list** (by priority)
 
-"어떤 플로우를 테스트할까요?"
+"Which flows would you like to test?"
 
-각 플로우별로:
+For each flow:
 
-- [ ] 작성 (critical 우선 추천)
-- [ ] 수정 (단계 조정)
-- [ ] 제외 (불필요)
+- [ ] Write (recommend critical first)
+- [ ] Modify (adjust steps)
+- [ ] Exclude (unnecessary)
 
-**선택 사항**:
+**Selection options**:
 
-- 대체 시나리오 포함 여부
-- 에러 시나리오 포함 여부
+- Include alternative scenarios
+- Include error scenarios
 
-⚠️ **승인된 플로우만 작성**
+⚠️ **Write only approved flows**
 
 ---
 
-### Step 2: E2E 테스트 작성
+### Step 2: Write E2E Tests
 
-승인된 플로우에 대해 E2E 테스트 작성:
+Write E2E tests for approved flows:
 
-**테스트 구조**:
+**Test structure**:
 
 ```typescript
 // e2e/{flow-name}.spec.ts
 
-test.describe("{플로우명}", () => {
-  test("{테스트 케이스명}", async ({ page }) => {
-    // {단계별 플로우 설명}
+test.describe("{Flow name}", () => {
+  test("{Test case name}", async ({ page }) => {
+    // {Step-by-step flow description}
   });
 
-  test("{에러 시나리오명}", async ({ page }) => {
-    // {에러 시나리오 검증}
+  test("{Error scenario name}", async ({ page }) => {
+    // {Error scenario verification}
   });
 });
 ```
 
-**포함 사항**:
+**Includes**:
 
-- 각 단계별 페이지 이동 확인
-- 사용자 인터랙션 (클릭, 입력)
-- 결과 검증 (URL, 텍스트, 상태)
-- 에러 시나리오
-- 스크린샷/비디오 캡처 (실패 시)
-
----
-
-### Step 3: E2E 테스트 실행
-
-**테스트 실행**:
-
-1. 모든 E2E 테스트 실행
-2. 실패 시 스크린샷/비디오 확인
-3. 에러 로그 분석
-4. 재현 단계 문서화
+- Verify page transitions at each step
+- User interactions (click, input)
+- Verify results (URL, text, state)
+- Error scenarios
+- Screenshot/video capture (on failure)
 
 ---
 
-### Step 4: 실패 테스트 처리
+### Step 3: Run E2E Tests
 
-#### 🔔 사용자 확인
+**Test execution**:
 
-"E2E 테스트 결과:"
-
-- ✅ 통과: N개
-- ❌ 실패: N개
-
-**실패한 테스트**:
-
-- E2E-XXX: {테스트명}
-  - 실패 단계: {단계명}
-  - 에러: {에러 타입}
-  - 스크린샷: [첨부]
-
-"다음 중 선택해주세요:"
-
-- [ ] 기능 수정 후 재실행
-- [ ] 테스트 코드 수정 필요
-- [ ] 환경 문제 (재실행)
+1. Run all E2E tests
+2. Check screenshots/videos on failure
+3. Analyze error logs
+4. Document reproduction steps
 
 ---
 
-### Step 5: 최종 품질 검증
+### Step 4: Handle Failed Tests
 
-#### ✅ 기능 완성도
+#### 🔔 User Confirmation
 
-- [ ] 모든 요구사항 기능 구현
-- [ ] 모든 기능 테스트 통과
-- [ ] E2E 테스트 통과
+"E2E test results:"
 
-#### ✅ 코드 품질
+- ✅ Passed: N tests
+- ❌ Failed: N tests
 
-- [ ] 타입 에러 0개
-- [ ] Linter 경고 0개
-- [ ] 테스트 커버리지 90% 이상
-- [ ] 중복 코드 최소화
+**Failed tests**:
 
-#### ✅ 성능 (최적화 수행 시)
+- E2E-XXX: {Test name}
+  - Failed step: {Step name}
+  - Error: {Error type}
+  - Screenshot: [Attach]
 
-- [ ] 초기 로딩 < 3초
-- [ ] 페이지 전환 < 1초
-- [ ] 번들 크기 목표 달성
+"Please select one of the following:"
 
-#### ✅ 접근성
-
-- [ ] 키보드 네비게이션 가능
-- [ ] 스크린리더 호환
-- [ ] 색상 대비 WCAG AA 충족
-
-#### ✅ 보안
-
-- [ ] 인증/인가 검증
-- [ ] XSS 방어
-- [ ] CSRF 방어
-- [ ] 민감 정보 보호
-
-#### ✅ 문서화
-
-- [ ] README 업데이트
-- [ ] API 문서 작성
-- [ ] 배포 가이드 작성
+- [ ] Fix feature and rerun
+- [ ] Test code modification needed
+- [ ] Environment issue (rerun)
 
 ---
 
-### Step 6: 최종 승인
+### Step 5: Final Quality Verification
 
-### 검수 가이드 (AI용)
+#### ✅ Feature Completeness
 
-**기본 원칙**: 전체 프로젝트 완성도를 평가
+- [ ] All requirement features implemented
+- [ ] All feature tests passing
+- [ ] E2E tests passing
 
-**항상 질문할 항목**:
+#### ✅ Code Quality
 
-- 프로덕션 배포 준비가 완료되었는가?
+- [ ] 0 type errors
+- [ ] 0 linter warnings
+- [ ] 90% or higher test coverage
+- [ ] Minimized duplicate code
 
-**조건부 질문 항목**:
+#### ✅ Performance (if optimization performed)
 
-- E2E 테스트 실패가 있었던 경우: 모든 문제가 해결되었는가?
-- 성능 최적화를 수행한 경우: 최종 성능 지표가 만족스러운가?
-- 문서화: 배포 가이드가 충분한가?
+- [ ] Initial loading < 3sec
+- [ ] Page transition < 1sec
+- [ ] Achieved bundle size goal
 
-**질문 방식**:
+#### ✅ Accessibility
 
-- 전체 프로젝트 완성도 평가
-- 개선 가능한 부분 제안
-- 배포 전 최종 체크리스트 확인
+- [ ] Keyboard navigation possible
+- [ ] Screen reader compatible
+- [ ] Color contrast meets WCAG AA
 
-#### 🔔 최종 승인
+#### ✅ Security
 
-"프로젝트가 프로덕션 배포 준비가 완료되었습니다."
+- [ ] Authentication/authorization verified
+- [ ] XSS protection
+- [ ] CSRF protection
+- [ ] Sensitive information protected
 
-**최종 상태**:
+#### ✅ Documentation
 
-- ✅ 기능: N개 (100%)
-- ✅ 테스트 통과율: 100%
-- ✅ E2E 통과: N/N
-- ✅ 커버리지: X% (목표: 90% 이상)
-- ✅ 성능 목표: 달성 (최적화 수행 시)
-- ✅ 접근성: WCAG AA
-- ✅ 문서화: 완료
-
-**배포 준비**:
-
-- 환경 변수 설정 가이드
-- 빌드 스크립트
-- CI/CD 파이프라인
-- 모니터링 설정
-
-**최종 확인**:
-
-- [ ] 승인 (배포 가능)
-- [ ] 추가 작업 필요
-
-**승인 시**: 🎉 프로젝트 완료!
+- [ ] README updated
+- [ ] API documentation written
+- [ ] Deployment guide written
 
 ---
 
-## Memory 업데이트
+### Step 6: Final Approval
 
-**통합 작업 완료 시**:
+### Review Guide (For AI)
+
+**Basic principle**: Evaluate overall project completion
+
+**Always ask**:
+
+- Is the project ready for production deployment?
+
+**Conditional questions**:
+
+- If there were E2E test failures: Have all issues been resolved?
+- If performance optimization was performed: Are final performance metrics satisfactory?
+- Documentation: Is deployment guide sufficient?
+
+**Question style**:
+
+- Evaluate overall project completion
+- Suggest improvable areas
+- Check final deployment checklist
+
+#### 🔔 Final Approval
+
+"The project is ready for production deployment."
+
+**Final status**:
+
+- ✅ Features: N (100%)
+- ✅ Test pass rate: 100%
+- ✅ E2E passed: N/N
+- ✅ Coverage: X% (goal: 90% or higher)
+- ✅ Performance goal: Achieved (if optimization performed)
+- ✅ Accessibility: WCAG AA
+- ✅ Documentation: Completed
+
+**Deployment preparation**:
+
+- Environment variable setup guide
+- Build scripts
+- CI/CD pipeline
+- Monitoring setup
+
+**Final confirmation**:
+
+- [ ] Approve (ready to deploy)
+- [ ] Additional work needed
+
+**Upon approval**: 🎉 Project completed!
+
+---
+
+## Memory Update
+
+**When integration work is completed**:
 
 ```markdown
-- [x] 통합 및 리팩토링 (@system-integration.md)
+- [x] Integration and refactoring (@system-integration.md)
 ```
 
-**E2E 테스트 완료 시**:
+**When E2E testing is completed**:
 
 ```markdown
-- [x] E2E 테스트 (@system-integration.md)
+- [x] E2E testing (@system-integration.md)
 ```
 
 ---
 
-## 다음 단계
+## Next Steps
 
-**모두 완료 후**:
+**After all are completed**:
 
-- 🎉 프로덕션 배포
-- 사용자 피드백 수집
-- 지속적인 개선
+- 🎉 Production deployment
+- Collect user feedback
+- Continuous improvement
 
 ---
 
-## 결과물 파일 경로
+## Output File Paths
 
-**통합 산출물**:
+**Integration outputs**:
 
-- `src/shared/utils/` - 공통 유틸리티
-- `src/shared/hooks/` - 공통 훅
-- `src/shared/types/` - 공통 타입
-- `src/shared/constants/` - 공통 상수
+- `src/shared/utils/` - Common utilities
+- `src/shared/hooks/` - Common hooks
+- `src/shared/types/` - Common types
+- `src/shared/constants/` - Common constants
 
-**테스트**:
+**Tests**:
 
-- `__tests__/integration/cross-domain/` - 도메인 간 통합 테스트
-- `e2e/` - E2E 테스트
+- `__tests__/integration/cross-domain/` - Cross-domain integration tests
+- `e2e/` - E2E tests
 
-**문서**:
+**Documentation**:
 
-- `docs/architecture.md` - 최종 아키텍처
-- `docs/deployment.md` - 배포 가이드
-- `docs/performance.md` - 성능 최적화 결과 (최적화 수행 시)
+- `docs/architecture.md` - Final architecture
+- `docs/deployment.md` - Deployment guide
+- `docs/performance.md` - Performance optimization results (if optimization performed)

@@ -1,68 +1,67 @@
-# `/workflow-integrate` 커맨드
+# `/workflow-integrate` Command
 
-**사용 시점**: 시스템 통합 작업 시
+**When to use**: During system integration work
 
-**참조 파일**: `@system-integration.md` (Part A)
+**Reference File**: `@system-integration.md` (Part A)
 
-**기능**:
+**Features**:
 
-- 중복 코드 제거
-- 공통 모듈 추출
-- 전체 구조 개선
-- (선택) 성능 최적화
-- 접근성 개선
+- Remove duplicate code
+- Extract common modules
+- Improve overall structure
+- (Optional) Performance optimization
+- Improve accessibility
 
-**권장 사항**:
+**Recommendations**:
 
-- 모든 기능 구현 완료 (또는 대부분의 핵심 기능 완료)
+- All features implemented (or most core features completed)
 
-**사용법**:
+**Usage**:
 
 ```
 /workflow-integrate
 ```
 
-**AI 실행 프롬프트**:
+**AI Execution Prompt**:
 
 ```
-시스템 통합 작업을 수행해주세요:
+Please perform system integration work:
 
-1. `.cursor/rules/workflows/memory.md` 파일을 읽어 현재 상태를 확인해주세요
-2. `.cursor/rules/workflows/system-integration.md` 파일을 읽어 작업 가이드를 확인해주세요
-3. 권장 사항 확인:
-   - 모든 기능 구현 완료 (또는 대부분의 핵심 기능 완료)
+1. Read `.cursor/rules/workflows/memory.md` to check current status
+2. Read `.cursor/rules/workflows/system-integration.md` to check work guide
+3. Check recommendations:
+   - All features implemented (or most core features completed)
 
-   미충족 시 다음을 표시:
+   If not met, display:
 ```
 
-💡 권장 사항
+💡 Recommendation
 
-다음 단계가 완료되지 않았습니다:
+The following steps are not completed:
 
-- 기능 구현 (일부 미완료)
+- Feature implementation (some incomplete)
 
-미완료 시 발생 가능한 문제:
+Potential issues if not completed:
 
-- 통합 리팩토링의 효과가 제한적일 수 있습니다
-- 일부 중복 코드를 놓칠 수 있습니다
+- Integration refactoring effectiveness may be limited
+- May miss some duplicate code
 
-계속 진행하시겠습니까? (y/n)
+Would you like to continue? (y/n)
 
 ```
-
-4. 사용자 확인 후 작업 진행
-5. `system-integration.md` Part A의 프로세스를 따라 작업 수행:
-- Step 1: API 연동 상태 확인
-- Step 2: 중복 코드 분석
-- Step 3: 공통 모듈 추출
-- Step 4: 전체 구조 개선
-- Step 5: 성능 최적화 (선택)
-- Step 6: 접근성 개선
-- Step 7: 통합 테스트 보완
-- Step 8: 통합 검수
-6. 결과물을 경로에 저장:
-- 공통 모듈: `src/shared/utils/`, `src/shared/hooks/`, `src/shared/types/`
-- 통합 테스트: `__tests__/integration/cross-domain/`
-7. `memory.md` 업데이트:
-- 체크박스 체크: `[x] 통합 및 리팩토링`
+4. Proceed after user confirmation
+5. Follow `system-integration.md` Part A process to perform work:
+- Step 1: Check API integration status
+- Step 2: Analyze duplicate code
+- Step 3: Extract common modules
+- Step 4: Improve overall structure
+- Step 5: Optimize performance (optional)
+- Step 6: Improve accessibility
+- Step 7: Supplement integration tests
+- Step 8: Review integration
+6. Save output to path:
+- Common modules: `src/shared/utils/`, `src/shared/hooks/`, `src/shared/types/`
+- Integration tests: `__tests__/integration/cross-domain/`
+7. Update `memory.md`:
+- Check checkbox: `[x] Integration and refactoring`
 ```
