@@ -3,14 +3,12 @@
 **When to use**: When defining domain and features
 
 **Features**:
-
 - Set domain list and boundaries
 - Define page structure
 - Derive feature list
 - (Optional) Analyze feature dependencies
 
 **Recommendations**:
-
 - Perform first at project start
 
 **Usage**:
@@ -28,22 +26,24 @@ Optionally, analyze dependencies between features to derive optimal implementati
 
 ---
 
-### Step 1: Check Requirements Specification
-
-1. Read `docs/workflows/memory.md` - Understand current progress
-2. Check if requirements specification exists
-
-**If requirements specification is not available**:
-
-- 📄 Request requirements specification file attachment (`docs/requirements.md`)
-- 📋 Request existing system documentation attachment
-- 💬 Request direct requirements explanation in chat
-
-⚠️ Wait for requirements to be provided before proceeding (proceeding is possible)
+{{LOAD_CONTEXT: project-info}}
 
 ---
 
-### Step 2: Analyze Requirements
+## Step 1: Check Requirements Specification
+
+{{TEMPLATE: snippets/user-input-pattern
+  QUESTION: "Please provide requirements specification"
+  INPUT_OPTIONS: |
+    - 📄 Attach requirements specification file (`docs/requirements.md`)
+    - 📋 Attach existing system documentation
+    - 💬 Provide direct requirements explanation in chat
+  CONDITION: requirements provided (proceeding is possible)
+}}
+
+---
+
+## Step 2: Analyze Requirements
 
 **Work content**:
 
@@ -54,9 +54,9 @@ Optionally, analyze dependencies between features to derive optimal implementati
 
 ---
 
-### Step 3: Identify Domain Boundaries
+## Step 3: Identify Domain Boundaries
 
-#### Domain Boundary Decision Guide
+### Domain Boundary Decision Guide
 
 **Basic principles**:
 
@@ -65,34 +65,29 @@ Optionally, analyze dependencies between features to derive optimal implementati
 3. **Change isolation**: Consider separating frequently changing logic
 4. **Cohesion**: Related features belong in the same domain
 
-#### Decision Criteria (Check in order)
+### Decision Criteria (Check in order)
 
 For each feature:
 
 **1. Is the main actor clear?**
-
 - YES → Consider including in that domain
 - NO → Next step
 
 **2. Are business rules complex?**
-
 - YES → Consider separating into separate domain
 - NO → Include in main domain
 
 **3. Does it integrate with 3 or more domains?**
-
 - YES → Separate into different domain
 - NO → Include in main domain
 
 **4. Is it frequently changed?** (Monthly or more)
-
 - YES → Consider separating into separate domain
 - NO → Include in main domain
 
-#### Decision Examples
+### Decision Examples
 
 **Example 1 - Include in main domain**:
-
 - Case: User notification settings
 - Main actor: User ✓
 - Complexity: Low (boolean flag)
@@ -100,7 +95,6 @@ For each feature:
 - **Conclusion**: Include in User domain
 
 **Example 2 - Separate into different domain**:
-
 - Case: Points/reward system
 - Main actor: Unclear (User, Order, Review all involved)
 - Complexity: High (accumulation/usage/expiration rules)
@@ -110,7 +104,7 @@ For each feature:
 
 ---
 
-### Step 4: Define Page Structure
+## Step 4: Define Page Structure
 
 **Work content**:
 
@@ -127,7 +121,7 @@ For each feature:
 
 ---
 
-### Step 5: Derive Feature List
+## Step 5: Derive Feature List
 
 For each feature, derive the following information:
 
@@ -147,7 +141,7 @@ In these cases, mark as `needsDiscussion: true` and suggest placement options
 
 ---
 
-### Step 6: Identify Resources
+## Step 6: Identify Resources
 
 Identify only major data resources:
 
@@ -163,20 +157,19 @@ Identify only major data resources:
 ## Step 7: Feature Planning (Optional)
 
 > 💡 **Optional step**: Use only in complex projects
-
 > **Simple projects**: Can skip this section
 
 ### 7-1. Check if Feature Implementation Order is Needed
 
-#### 🔔 User input required
+{{TEMPLATE: snippets/user-input-pattern
+  QUESTION: "Would you like to analyze dependencies between features and organize the implementation order?"
+  INPUT_OPTIONS: |
+    - [ ] **Yes** - Proceed with dependency analysis
+    - [ ] **No** - Developer decides order directly (go to Step 8)
+  CONDITION: N/A
+}}
 
-"Would you like to analyze dependencies between features and organize the implementation order?"
-
-- [ ] **Yes** - Proceed with dependency analysis
-- [ ] **No** - Developer decides order directly (go to Step 11)
-
-**If "No" is selected**: Skip directly to Step 11
-
+**If "No" is selected**: Skip directly to Step 8
 **If "Yes" is selected**: Proceed below
 
 ---
@@ -220,24 +213,15 @@ Sort in dependency order:
 
 **When circular dependencies are found**:
 
-#### 🔔 User confirmation needed
-
-"⚠️ Circular dependency detected:"
-
-**Display circular path**:
-
-```
-F002 (Add to cart) → F005 (Place order) → F002 (Modify cart)
-```
-
-**Present resolution options**:
-
-1. **Extract common module** (Recommended): Extract common logic of circularly dependent features into separate module
-2. **Merge features**: Merge circularly dependent features into one large feature
-3. **Remove dependency**: Remove/modify some features in circular dependency
-4. **Redesign needed**: Domain boundaries need to be reset
-
-"Which option would you choose?"
+{{TEMPLATE: snippets/user-input-pattern
+  QUESTION: "⚠️ Circular dependency detected: F002 → F005 → F002. Which option would you choose?"
+  INPUT_OPTIONS: |
+    1. **Extract common module** (Recommended): Extract common logic
+    2. **Merge features**: Merge into one large feature
+    3. **Remove dependency**: Remove/modify some features
+    4. **Redesign needed**: Domain boundaries need to be reset
+  CONDITION: option selected
+}}
 
 **After user selection**:
 
@@ -250,104 +234,77 @@ F002 (Add to cart) → F005 (Place order) → F002 (Modify cart)
 
 ### 7-5. Propose and Approve Implementation Order
 
-#### 🔔 User review needed
-
-"I plan to implement features in the following order:"
-
-**Implementation order**:
-
-- Group 1 (can be parallelized): F001, F003
-- Group 2 (after F001 completed): F002, F006
-- Group 3 (after F003 completed): F004
-- ...
-
-**Review recommended**:
-
-- Are dependencies correctly understood?
-- Is the order logical?
-- Are parallelizable features correctly grouped?
-
-**Feedback**: (Implement immediately if modification needed)
+{{TEMPLATE: sections/user-review
+  COMPLETION_MESSAGE: I plan to implement features in the following order:
+  REVIEW_CONTENT: |
+    **Implementation order**:
+    - Group 1 (can be parallelized): F001, F003
+    - Group 2 (after F001 completed): F002, F006
+    - Group 3 (after F003 completed): F004
+    - ...
+  REVIEW_CHECKLIST: |
+    - Are dependencies correctly understood?
+    - Is the order logical?
+    - Are parallelizable features correctly grouped?
+}}
 
 ---
 
 ## Step 8: Overall Review
 
-### Review Guide (For AI)
+{{TEMPLATE: sections/review-guide
+  REVIEW_PRINCIPLE: Ask questions flexibly according to project complexity
+  ALWAYS_ASK: |
+    - Does the domain structure match requirements?
+    - Is the feature list complete?
+  CONDITIONAL_QUESTIONS: |
+    - Many domains (5 or more): Are domain boundaries clear?
+    - Many pages (10 or more): Is routing structure intuitive?
+    - If feature planning was performed: Is dependency analysis appropriate?
+    - If tech stack was suggested: Is the choice reasonable?
+}}
 
-**Basic principle**: Ask questions flexibly according to project complexity
+{{TEMPLATE: sections/user-review
+  COMPLETION_MESSAGE: Domain definition and feature planning have been completed.
+  REVIEW_CONTENT: |
+    **Domain list**:
+    - [Domain1]: [Description]
+    - ...
 
-**Always ask**:
+    **Page list**:
+    - [URL]: [Page name] - [Related domain]
+    - ...
 
-- Does the domain structure match requirements?
-- Is the feature list complete?
+    **Feature list**:
+    - [Feature1]: [Primary domain] - [Complexity]
+    - ...
 
-**Conditional questions**:
+    **Feature implementation order** (if planned):
+    - Group 1: [Features]
+    - ...
 
-- Many domains (5 or more): Are domain boundaries clear?
-- Many pages (10 or more): Is routing structure intuitive?
-- If feature planning was performed: Is dependency analysis appropriate?
-- If tech stack was suggested: Is the choice reasonable?
-
-**Question style**:
-
-- Prefer open-ended questions
-- Specifically point out issues when found
-- Present alternatives
-
-#### 🔔 User review
-
-"Domain definition and feature planning have been completed."
-
-**Result summary**:
-
-**Domain list**:
-
-- [Domain1]: [Description]
-- [Domain2]: [Description]
-- ...
-
-**Page list**:
-
-- [URL]: [Page name] - [Related domain]
-- ...
-
-**Feature list**:
-
-- [Feature1]: [Primary domain] - [Complexity]
-- [Feature2]: [Primary domain] - [Complexity]
-- ...
-
-**Feature implementation order** (if planned):
-
-- Group 1: [Features]
-- Group 2: [Features]
-- ...
-
-**Tech stack** (if suggested):
-
-- State management: [Libraries]
-- Routing: [Library]
-- ...
-
-**Review is recommended**:
-
-- Is domain structure appropriate?
-- Is page list complete?
-- Is feature list complete?
-- (If planned) Is implementation order appropriate?
-
-**Feedback**: (Implement immediately if modification needed)
+    **Tech stack** (if suggested):
+    - State management: [Libraries]
+    - Routing: [Library]
+    - ...
+  REVIEW_CHECKLIST: |
+    - Is domain structure appropriate?
+    - Is page list complete?
+    - Is feature list complete?
+    - (If planned) Is implementation order appropriate?
+}}
 
 ---
 
-## Memory Update
-
-**When Step 8 is completed**: Check corresponding item in `memory.md`
-
-```markdown
-- [x] Domain definition (@domain-definition.md)
-```
+{{TEMPLATE: sections/memory-update
+  TASK_NAME: Step 8
+  MEMORY_CHECKBOX: |
+    Update `memory/domains.md` with domain list
+    Update `memory/pages.md` with page structure
+    Update `memory/features.md` with feature list
+    Update `memory/progress.md`:
+    - [x] Domain definition
+}}
 
 ---
 
@@ -355,16 +312,17 @@ F002 (Add to cart) → F005 (Place order) → F002 (Modify cart)
 
 **After domain definition is completed**:
 
-- Recommended: `/workflow-common-ui` (Common UI design)
-- Or: `/workflow-ui [feature-name]` (Feature UI design)
+- Recommended: `/workflow-ui [name] --type=common` (Common UI design)
+- Or: `/workflow-ui [name] --type=feature` (Feature UI design)
 - Or: `/workflow-implement [feature-name]` (Feature implementation)
 
 ---
 
-## Output File Paths
-
-- `docs/domain-definition.md` - Domain definition and structure
-- `docs/page-structure.md` - Page and routing structure
-- `docs/feature-list.md` - Feature list and domain placement
-- `docs/tech-stack.md` - Tech stack proposal (if suggested)
-- `docs/implementation-order.md` - Feature implementation order (if planned)
+{{TEMPLATE: snippets/output-paths
+  FILE_PATHS: |
+    - `docs/domain-definition.md` - Domain definition and structure
+    - `docs/page-structure.md` - Page and routing structure
+    - `docs/feature-list.md` - Feature list and domain placement
+    - `docs/tech-stack.md` - Tech stack proposal (if suggested)
+    - `docs/implementation-order.md` - Feature implementation order (if planned)
+}}

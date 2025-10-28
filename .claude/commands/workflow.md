@@ -3,14 +3,12 @@
 ## Overview
 
 **Flexible Workflow System**:
-
 - Tasks can be performed in any desired order
 - Shows warnings if dependencies are not met
 - Continues after user confirmation
 
 **Workflow Structure**:
-
-- `memory.md` - Progress tracking (in `docs/workflows/`)
+- `memory/` - Modular progress tracking (in `docs/workflows/memory/`)
 - Command files in `.claude/commands/` - Each contains full workflow details
 
 ---
@@ -21,36 +19,17 @@
 
 **When to use**: At project start
 
-**Features**:
+{{LOAD_CONTEXT: progress, project-info}}
 
-- Read `memory.md` to understand current state
-- Check requirements specification
-- Guide first task
+**Execution**:
 
-**Usage**:
-
-```
-/workflow start
-```
-
-**AI Execution Prompt**:
-
-```
-Please perform the following steps:
-
-1. Read `docs/workflows/memory.md` to understand the current progress
+1. Read memory modules to understand current progress
 2. Check if basic project information has been entered
-3. If not entered: "Basic information is required to start the project. Would you like to start with `/workflow-domain-definition` command?"
+3. If not: Suggest starting with `/workflow-domain-definition`
 4. If completed: Guide current state and recommended next steps
 
-Recommended work order (for reference):
-1. Domain definition (`/workflow-domain-definition`)
-2. Common UI design (`/workflow-common-ui`)
-3. Feature UI design (`/workflow-ui [feature-name]`)
-4. Feature implementation (`/workflow-implement [feature-name]`)
-5. System integration (`/workflow-integrate`)
-6. E2E testing (`/workflow-e2e`)
-```
+**Recommended work order** (for reference):
+1. Domain definition → 2. Common UI → 3. Feature UI → 4. Feature implementation → 5. System integration → 6. E2E testing
 
 ---
 
@@ -58,42 +37,22 @@ Recommended work order (for reference):
 
 **When to use**: Anytime
 
-**Features**:
+{{LOAD_CONTEXT: *}}
 
-- Display overall progress
-- List completed/incomplete tasks
-- Guide next recommended steps
-
-**Usage**:
-
-```
-/workflow status
-```
-
-**AI Execution Prompt**:
-
-```
-Please display the following information:
-
-1. Read `docs/workflows/memory.md` to understand the overall progress
-2. Display the following information:
+**Display**:
 
 **Project Information**:
-- Project name: [value]
-- Path: [value]
-- Tech stack: [value]
+- Project name, path, tech stack
 
 **Progress Status**:
-- ✅ Completed tasks: [list]
-- 🔄 In progress: [list]
-- ⏳ Pending: [list]
+- ✅ Completed tasks
+- 🔄 In progress
+- ⏳ Pending
 
 **Feature Progress**:
-- [Feature status display]
+- Feature status display
 
-**Recommended Next Steps**:
-- [Next step guidance]
-```
+**Recommended Next Steps**
 
 ---
 
@@ -101,33 +60,17 @@ Please display the following information:
 
 **When to use**: When manual memory file update is needed
 
-**Features**:
+{{LOAD_CONTEXT: *}}
 
-- Analyze current progress
-- Update `memory.md` file
-- Check completed tasks
+**Execution**:
 
-**Usage**:
-
-```
-/workflow update
-```
-
-**AI Execution Prompt**:
-
-```
-Please update the current state to memory file:
-
-1. Read `docs/workflows/memory.md` to understand the current progress
-2. Analyze the current state of the project:
+1. Read current memory modules
+2. Analyze project state:
    - Check completed tasks
-   - Identify currently in-progress tasks
+   - Identify in-progress tasks
    - Check file system
-3. Update `memory.md` file:
-   - Update checklist
-   - Update feature progress table
-4. Report the updated content to the user
-```
+3. Update memory modules
+4. Report updated content
 
 ---
 
@@ -135,69 +78,23 @@ Please update the current state to memory file:
 
 **When to use**: Anytime
 
-**Features**:
-
-- Display all available commands
-- Explain usage of each command
-
-**Usage**:
-
-```
-/workflow help
-```
-
-**AI Execution Prompt**:
-
-```
-Please display all available commands:
+Display all available commands and usage:
 
 **Main Commands**:
-- /workflow start - Start project
-- /workflow status - Check current status
-- /workflow update - Manual memory update
-- /workflow help - Help
+- `/workflow start` - Start project
+- `/workflow status` - Check current status
+- `/workflow update` - Manual memory update
+- `/workflow help` - Help
 
 **Task Commands**:
-- /workflow-domain-definition - Domain definition
-- /workflow-common-ui - Common UI design
-- /workflow-ui [feature-name] - Feature UI design
-- /workflow-implement [feature-name] - Feature implementation
-- /workflow-integrate - Integration and refactoring
-- /workflow-e2e - E2E testing
+- `/workflow-domain-definition` - Domain definition
+- `/workflow-ui [name] [--type=common|feature]` - UI development
+- `/workflow-implement [feature-name]` - Feature implementation
+- `/workflow-integrate` - Integration and refactoring
+- `/workflow-e2e` - E2E testing
 
 **Special Commands**:
-- /workflow reset - Reset project
-
-Display detailed description for each command.
-```
-
----
-
-## Task Commands
-
-### `/workflow-domain-definition` - Domain Definition
-
-📄 Detailed docs: `@domain-definition-cmd.md`
-
-### `/workflow-common-ui` - Common UI Design
-
-📄 Detailed docs: `@common-ui-cmd.md`
-
-### `/workflow-ui [feature-name]` - Feature UI Design
-
-📄 Detailed docs: `@ui-cmd.md`
-
-### `/workflow-implement [feature-name]` - Feature Implementation
-
-📄 Detailed docs: `@implement-cmd.md`
-
-### `/workflow-integrate` - Integration and Refactoring
-
-📄 Detailed docs: `@integrate-cmd.md`
-
-### `/workflow-e2e` - E2E Testing
-
-📄 Detailed docs: `@e2e-cmd.md`
+- `/workflow reset` - Reset project
 
 ---
 
@@ -207,102 +104,46 @@ Display detailed description for each command.
 
 **When to use**: When resetting project
 
-**Features**:
-
-- Reset `memory.md`
-- Reset all progress
-- Start from scratch
-
-**Usage**:
-
-```
-/workflow reset
-```
-
-**AI Execution Prompt**:
-
-```
-Please reset the project:
+**Execution**:
 
 1. Read `docs/workflows/memory-template.md` file
-2. Overwrite `docs/workflows/memory.md` file with the template
-3. Display message: "Project has been reset. Please start with `/workflow start` command."
-```
+2. Reset all memory modules to template state
+3. Display: "Project has been reset. Please start with `/workflow start` command."
 
 ---
 
-## Usage Examples
+## Memory System
 
-### Start Project
+### Modular Memory Files
 
-```
-/workflow start
-```
+Located in `docs/workflows/memory/`:
 
-### Check Current Status
+- **project-info.md**: Project name, tech stack, folder structure
+- **domains.md**: Domain list and descriptions
+- **pages.md**: Page structure and routing
+- **progress.md**: Overall progress checklist
+- **features.md**: Feature-level progress tracking
+- **decisions.md**: Key decisions
 
-```
-/workflow status
-```
+### Context Loading
 
-### Domain Definition
+Commands automatically load only required memory modules:
 
-```
-/workflow-domain-definition
-```
-
-### Common Component Development
-
-```
-/workflow-common-ui    # Dialog component
-/workflow-common-ui    # Toast component
-/workflow-common-ui    # Header component
-```
-
-### Feature Component Development
-
-```
-/workflow-ui product-list    # ProductList component
-/workflow-ui product-list    # ProductCard component
-/workflow-ui cart            # CartPage component
-```
-
-### Feature Implementation
-
-```
-/workflow-implement product-list
-/workflow-implement cart
-```
-
-### System Integration
-
-```
-/workflow-integrate
-```
-
-### E2E Testing
-
-```
-/workflow-e2e
-```
-
-### Memory Update
-
-```
-/workflow update
-```
-
-### Help
-
-```
-/workflow help
-```
+| Command | Loads |
+|---------|-------|
+| `/workflow-domain-definition` | project-info, domains, pages |
+| `/workflow-ui` | domains, progress |
+| `/workflow-implement` | features, domains |
+| `/workflow-integrate` | progress, features |
+| `/workflow-e2e` | progress, features |
+| `/workflow status` | All modules |
+| `/workflow update` | All modules |
 
 ---
 
-## Dependency Warning System
+## Dependency System
 
-### Warning Display Format
+### Warning Format
 
 ```
 💡 Recommendation
@@ -317,130 +158,132 @@ Potential issues if not completed:
 Would you like to continue? (y/n)
 ```
 
-### Dependency Check Items
+### Dependencies
 
-**Common UI Design**:
-
-- Domain definition completed (folder structure info)
-
-**Feature UI Design**:
-
-- Domain definition completed
-- Common UI design completed (reuse common components)
-
-**Feature Implementation**:
-
-- Domain definition completed (feature list needed)
-- Feature UI design completed (recommended)
-
-**System Integration**:
-
-- All (or most core) features implemented
-
-**E2E Testing**:
-
-- System integration completed
+- **Common UI**: Domain definition completed
+- **Feature UI**: Domain definition + Common UI (recommended)
+- **Feature Implementation**: Domain definition (required), Feature UI (recommended)
+- **System Integration**: All/most features implemented
+- **E2E Testing**: System integration completed
 
 ---
 
-## Automatic Tasks on Command Execution
+## Automatic Tasks
 
-### 1. Read Memory.md
+On command execution:
 
+1. **Load Context**: Read required memory modules
+2. **Check Dependencies**: Display warnings if prerequisites not met
+3. **Execute Work**: Follow workflow steps
+4. **Save Output**: To specified paths
+5. **Update Memory**: Update relevant memory modules
+
+---
+
+## Usage Examples
+
+### Start Project
 ```
-Read docs/workflows/memory.md file to understand:
-- Basic project information
-- Tech stack
-- Domain list
-- Page structure
-- Progress checklist
-- Feature progress
-- Key decisions
-```
-
-### 2. Check Recommendations
-
-```
-Check recommendations before starting work:
-- Check if required previous steps are completed
-- Display warning message if not completed
-- Wait for user confirmation
+/workflow start
 ```
 
-### 3. Reference Workflow Files
-
+### Check Status
 ```
-Reference workflow files for the task:
-- domain-definition.md
-- ui-design.md
-- feature-implementation.md
-- system-integration.md
+/workflow status
 ```
 
-### 4. Execute Work
-
+### Domain Definition
 ```
-Follow the workflow file process to perform work:
-- Check step-by-step checklist
-- Request user input when needed
-- Execute AI tasks
-- Proceed with user review
+/workflow-domain-definition
 ```
 
-### 5. Save Output
-
+### UI Development
 ```
-Save output to specified path:
-- Reference "Output File Path" section of each workflow file
+/workflow-ui Dialog --type=common
+/workflow-ui ProductCard --type=feature
 ```
 
-### 6. Update Memory.md
-
+### Feature Implementation
 ```
-Update memory.md:
-- Check completed task checkboxes
-- Update feature progress table
+/workflow-implement product-list
+/workflow-implement cart
+```
+
+### System Integration
+```
+/workflow-integrate
+```
+
+### E2E Testing
+```
+/workflow-e2e
 ```
 
 ---
 
-## Recommended Work Order (For Reference)
+## Recommended Work Order (Reference Only)
 
-> 💡 **For reference**: You don't need to follow this order.
+> 💡 You don't need to follow this order.
 
 1. **Domain Definition** (`/workflow-domain-definition`)
-2. **Common UI** (`/workflow-common-ui`)
+2. **Common UI** (`/workflow-ui [name] --type=common`)
 3. **Repeat for each feature**:
-   - Feature UI (`/workflow-ui [feature-name]`)
+   - Feature UI (`/workflow-ui [name] --type=feature`)
    - Feature Implementation (`/workflow-implement [feature-name]`)
 4. **System Integration** (`/workflow-integrate`)
 5. **E2E Testing** (`/workflow-e2e`)
 
 ---
 
+## Template System
+
+Commands use reusable templates from `.claude/templates/`:
+
+**Sections**:
+- `recommendations.md` - Prerequisite warnings
+- `review-guide.md` - AI review guidelines
+- `user-review.md` - User review prompts
+- `memory-update.md` - Memory update instructions
+
+**Snippets**:
+- `user-input-pattern.md` - User input prompts
+- `output-paths.md` - File path specifications
+
+---
+
 ## File Structure
 
-### Command Files
+```
+.claude/
+├── templates/
+│   ├── sections/          # Reusable section templates
+│   └── snippets/          # Small pattern templates
+└── commands/
+    ├── workflow.md        # Main commands
+    ├── workflow-domain-definition.md
+    ├── workflow-ui.md     # Unified UI command
+    ├── workflow-implement.md
+    ├── workflow-integrate.md
+    └── workflow-e2e.md
 
-**Main File**:
+docs/workflows/
+├── memory/                # Modular memory files
+│   ├── project-info.md
+│   ├── domains.md
+│   ├── pages.md
+│   ├── progress.md
+│   ├── features.md
+│   └── decisions.md
+└── memory.md             # Consolidated view (read-only)
+```
 
-- `.claude/commands/workflow.md` - Main commands and complete guide
-  - `/workflow start` - Start project
-  - `/workflow status` - Check current status
-  - `/workflow update` - Manual memory update
-  - `/workflow help` - Help
-  - `/workflow reset` - Reset project
+---
 
-**Task Command Files** (Each contains full workflow details):
+## Core Principles
 
-- `.claude/commands/workflow-domain-definition.md` - Domain definition with detailed steps
-- `.claude/commands/workflow-common-ui.md` - Common UI component development
-- `.claude/commands/workflow-ui.md` - Feature UI component development
-- `.claude/commands/workflow-implement.md` - Feature implementation (Test-First)
-- `.claude/commands/workflow-integrate.md` - System integration and refactoring
-- `.claude/commands/workflow-e2e.md` - E2E testing and deployment preparation
-
-### Memory Files
-
-- `docs/workflows/memory.md` - Current project progress tracking
-- `docs/workflows/memory-template.md` - Memory template for new projects
+1. **Test-First Development**: Test → Implement → Refactor
+2. **Dummy Data First**: API integration is optional
+3. **Step-by-Step Review**: User approval at each stage
+4. **Flexible Workflow**: Work in any order
+5. **Modular Memory**: Load only what's needed
+6. **Type Safety**: Full TypeScript type safety

@@ -3,14 +3,12 @@
 **When to use**: When implementing features
 
 **Features**:
-
 - Write tests (Test-First)
 - Implementation (dummy data first)
 - Refactoring
 - (Optional) API integration
 
 **Recommendations**:
-
 - Domain definition completed
 - Feature UI design completed (recommended)
 
@@ -27,52 +25,39 @@
 
 Implement selected features using Test-First approach, and optionally integrate with actual APIs.
 
-**Steps**:
+---
 
-- Step 1: Confirm feature information
-- Step 2: Write tests (Test-First)
-- Step 3: Implementation (dummy data first, Green Phase)
-- Step 4: Refactoring (Refactor Phase)
-- Step 5: Feature review
-- Step 6: API integration (optional)
+{{LOAD_CONTEXT: features, domains}}
 
 ---
 
-## Recommendations
-
-💡 **Recommended**: Proceed after the following steps are completed.
-
-- Domain definition completed (feature list needed)
-- UI design completed (for the feature) - recommended
-
-Potential issues if not completed:
-
-- Feature information may be unclear
-- May be difficult to implement without knowing UI component structure
-- File paths may not be defined
-
-Would you like to continue?
+{{TEMPLATE: sections/recommendations
+  PREREQUISITES: |
+    - Domain definition completed (feature list needed)
+    - UI design completed (for the feature) - recommended
+  POTENTIAL_ISSUES: |
+    - Feature information may be unclear
+    - May be difficult to implement without knowing UI component structure
+    - File paths may not be defined
+}}
 
 ---
 
 ## Step 1: Confirm Feature Information
 
-#### 🔔 User input required
+{{TEMPLATE: snippets/user-input-pattern
+  QUESTION: "Please select the feature to implement:"
+  INPUT_OPTIONS: |
+    **Feature information**:
+    - ID: `_________________`
+    - Name: `_________________`
+    - Domain: `_________________`
 
-"Please select the feature to implement:"
-
-**Feature information**:
-
-- ID: `_________________`
-- Name: `_________________`
-- Domain: `_________________`
-
-**Would you like to implement this feature?**
-
-- [ ] Approve (proceed)
-- [ ] Modification needed (adjust scope)
-
-⚠️ **Do not proceed to next step until approved**
+    **Would you like to implement this feature?**
+    - [ ] Approve (proceed)
+    - [ ] Modification needed (adjust scope)
+  CONDITION: approved
+}}
 
 ---
 
@@ -95,7 +80,6 @@ Would you like to continue?
 **Writing order**:
 
 1. **Analyze API endpoints**:
-
    - Identify necessary APIs from UI design results
    - Define request/response schemas
 
@@ -104,34 +88,23 @@ Would you like to continue?
    ```typescript
    // src/mocks/data/{domain}.ts
    export const dummyProducts = [
-     {
-       id: "1",
-       name: "Dummy Product 1",
-       price: 10000,
-       category: "electronics",
-     },
-     { id: "2", name: "Dummy Product 2", price: 20000, category: "clothing" },
+     { id: "1", name: "Dummy Product 1", price: 10000 },
+     { id: "2", name: "Dummy Product 2", price: 20000 },
    ];
    ```
 
 3. **Write dummy data functions**:
 
    ```typescript
-   // src/mocks/data/{domain}.ts (add to same file)
-
    export const getDummyProducts = (params: any) => {
-     // Filtering logic
      let filtered = dummyProducts;
      if (params.category) {
        filtered = dummyProducts.filter((p) => p.category === params.category);
      }
 
-     // Pagination logic
      const page = params.page || 1;
      const limit = params.limit || 10;
-     const startIndex = (page - 1) * limit;
-     const endIndex = startIndex + limit;
-     const paginated = filtered.slice(startIndex, endIndex);
+     const paginated = filtered.slice((page - 1) * limit, page * limit);
 
      return Promise.resolve({
        products: paginated,
@@ -263,64 +236,41 @@ Would you like to continue?
 
 ## Step 5: Feature Review
 
-### Review Guide (For AI)
+{{TEMPLATE: sections/review-guide
+  REVIEW_PRINCIPLE: Ask questions flexibly according to feature complexity and work step
+  ALWAYS_ASK: |
+    - Does implementation result match requirements?
+  CONDITIONAL_QUESTIONS: |
+    - UI-related work: Design match
+    - Complex logic: Test coverage
+    - Performance critical: Performance metrics
+}}
 
-**Basic principle**: Ask questions flexibly according to feature complexity and work step
+{{TEMPLATE: sections/user-review
+  COMPLETION_MESSAGE: Feature **[Feature Name]** implementation is completed.
+  REVIEW_CONTENT: |
+    **Implementation result**:
 
-**Always ask**:
+    Tests:
+    - ✅ Written: N tests
+    - ✅ Passed: N/N
+    - ✅ Coverage: X%
 
-- Does implementation result match requirements?
+    Implementation files:
+    - Business logic: `src/features/{domain}/utils/` (N files)
+    - API services: `src/api/{domain}/` (N files)
+    - Components: `src/pages/`, `src/features/{domain}/components/` (N files)
 
-**Conditional questions**:
-
-- UI-related work: Design match
-- Complex logic: Test coverage
-- Performance critical: Performance metrics
-
-**Question style**:
-
-- Prefer open-ended questions (avoid Yes/No)
-- Specifically point out issues when found
-- Provide improvement suggestions
-
-### 🔔 User Review
-
-"Feature **[Feature Name]** implementation is completed."
-
-**Implementation result**:
-
-Tests:
-
-- ✅ Written: N tests
-- ✅ Passed: N/N
-- ✅ Coverage: X%
-
-Implementation files:
-
-- Business logic: `src/features/{domain}/utils/` (N files)
-- API services: `src/api/{domain}/` (N files)
-- Components: `src/pages/`, `src/features/{domain}/components/` (N files)
-
-Dummy data:
-
-- ✅ Dummy data: `src/mocks/data/{domain}.ts`
-- ✅ Tests passed: Dummy data integration working
-
-Test files:
-
-- Unit: `__tests__/unit/{domain}/` (N files)
-- Component: `__tests__/components/{domain}/` (N files)
-- Integration: `__tests__/integration/` (N files)
-
-**Review is recommended**:
-
-- Does the feature work as per requirements?
-- Is UI implemented according to design?
-- Is dummy data working properly?
-- Are tests sufficient?
-- Is code quality satisfactory?
-
-**Feedback**: (Implement immediately if modification needed)
+    Dummy data:
+    - ✅ Dummy data: `src/mocks/data/{domain}.ts`
+    - ✅ Tests passed: Dummy data integration working
+  REVIEW_CHECKLIST: |
+    - Does the feature work as per requirements?
+    - Is UI implemented according to design?
+    - Is dummy data working properly?
+    - Are tests sufficient?
+    - Is code quality satisfactory?
+}}
 
 ---
 
@@ -330,36 +280,36 @@ Test files:
 
 ### 6-1. Check API Readiness Status
 
-#### 🔔 User input required
-
-"Would you like to proceed with API integration for current feature **[Feature Name]**?"
-
-**Please select API readiness status:**
-
-- [ ] **Real API ready** (proceed with integration)
-- [ ] **API not ready yet** (keep dummy data)
-- [ ] **Partially ready** (integrate only ready APIs)
-- [ ] **Integrate later** (during system integration phase)
+{{TEMPLATE: snippets/user-input-pattern
+  QUESTION: "Would you like to proceed with API integration for current feature **[Feature Name]**?"
+  INPUT_OPTIONS: |
+    **Please select API readiness status:**
+    - [ ] **Real API ready** (proceed with integration)
+    - [ ] **API not ready yet** (keep dummy data)
+    - [ ] **Partially ready** (integrate only ready APIs)
+    - [ ] **Integrate later** (during system integration phase)
+  CONDITION: N/A
+}}
 
 **If "API not ready yet" or "Integrate later" is selected**:
-
 - Proceed to Step 7 (next feature)
 - Keep dummy data
 
 **If "Real API ready" or "Partially ready" is selected**:
-
 - Proceed with API integration work
 
 ---
 
 ## Step 7: Memory Update and Next Feature
 
-```markdown
-- [x] Implementation - [Feature Name]
-  - Write tests
-  - Implementation (dummy data)
-  - Refactoring
-```
+{{TEMPLATE: sections/memory-update
+  TASK_NAME: implementation - [Feature Name]
+  MEMORY_CHECKBOX: |
+    Update `memory/features.md`:
+    - Mark feature [Feature Name] as completed
+    Update `memory/progress.md`:
+    - [x] Implementation - [Feature Name]
+}}
 
 **Next steps**:
 
@@ -394,27 +344,24 @@ VITE_DUMMY_DATA_DELAY = 300; // ms
 
 ---
 
-## Output File Paths
+{{TEMPLATE: snippets/output-paths
+  FILE_PATHS: |
+    **Implementation files**:
+    - `src/features/{domain}/utils/` - Business logic
+    - `src/api/{domain}/` - API services
+    - `src/features/{domain}/hooks/` - React Query hooks
+    - `src/features/{domain}/components/` - Components
+    - `src/pages/` - Pages
 
-**Implementation files**:
+    **Dummy data**:
+    - `src/mocks/data/{domain}.ts` - Dummy data and functions
 
-- `src/features/{domain}/utils/` - Business logic
-- `src/api/{domain}/` - API services
-- `src/features/{domain}/hooks/` - React Query hooks
-- `src/features/{domain}/components/` - Components
-- `src/pages/` - Pages
+    **Test files**:
+    - `__tests__/unit/{domain}/` - Business logic tests
+    - `__tests__/unit/api/` - API service tests
+    - `__tests__/components/{domain}/` - Component tests
+    - `__tests__/integration/` - Integration tests
 
-**Dummy data**:
-
-- `src/mocks/data/{domain}.ts` - Dummy data and functions
-
-**Test files**:
-
-- `__tests__/unit/{domain}/` - Business logic tests
-- `__tests__/unit/api/` - API service tests
-- `__tests__/components/{domain}/` - Component tests
-- `__tests__/integration/` - Integration tests
-
-**API guide** (Created during first integration):
-
-- `docs/api-guidelines.md` - API patterns and rules
+    **API guide** (Created during first integration):
+    - `docs/api-guidelines.md` - API patterns and rules
+}}

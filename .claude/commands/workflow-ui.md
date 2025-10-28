@@ -1,20 +1,30 @@
-# `/workflow-ui [feature-name]` Command
+# `/workflow-ui [component-name] [--type=common|feature]` Command
 
-**When to use**: When developing feature components
+**When to use**: When developing UI components
 
-**Features**: Analyze Figma design and generate skeleton code for **one feature component** at a time
+**Features**: Analyze Figma design and generate skeleton code for **one component** at a time
+
+**Component Types**:
+- `--type=common` (or no feature name): Common reusable components (Dialog, Toast, Header, etc.)
+- `--type=feature` (or with feature name): Feature-specific components (ProductCard, CartPage, etc.)
 
 **Recommendations**:
-
 - Domain definition completed
-- Common UI completed before feature implementation
+- For feature components: Common UI completed first (recommended)
 
 **Usage**:
 
-```
-/workflow-ui product-list    # ProductList component
-/workflow-ui product-list    # ProductCard component - run separately
-/workflow-ui cart            # CartPage component
+```bash
+# Common components
+/workflow-ui Dialog --type=common
+/workflow-ui Toast --type=common
+
+# Feature components
+/workflow-ui ProductCard --type=feature
+/workflow-ui product-list              # Same as --type=feature
+
+# Auto-detect based on context
+/workflow-ui Dialog                    # Detects as common
 ```
 
 > 💡 **Developing multiple components**: Repeat the command for each component.
@@ -23,52 +33,33 @@
 
 ## Goal
 
-Analyze Figma design and generate component skeleton code for **feature components** (Type 2).
+Analyze Figma design and generate component skeleton code.
 
 ---
 
-## Recommendations
-
-💡 **Recommended**: Proceed after the following steps are completed.
-
-**For feature component development**:
-
-- Domain definition completed
-- Common UI design completed (reuse common components)
-
-Potential issues if not completed:
-
-- Component file paths may not be defined
-- May not be able to reuse common components
-- Design system information may be insufficient
-
-Would you like to continue?
+{{LOAD_CONTEXT: domains, progress}}
 
 ---
 
-## Development Process
+## Step 1: Collect Component Information
 
-### Step 1: Collect Component Information
+{{TEMPLATE: snippets/user-input-pattern
+  QUESTION: "Please provide information about the component to develop."
+  INPUT_OPTIONS: |
+    **Required Information**:
+    - Component name: `_________________`
+    - Component type: [ ] Common  [ ] Feature
+    - Figma URL: `_________________`
 
-#### 🔔 User Input Required
-
-**Question**: "Please provide information about the component to develop."
-
-**Required Information**:
-
-- Component name: `_________________`
-- Figma URL: `_________________`
-
-**Optional Information**:
-
-- Purpose/role: `_________________`
-- Notes: `_________________`
-
-⚠️ **Do not proceed to next step until component information is received**
+    **Optional Information**:
+    - Purpose/role: `_________________`
+    - Notes: `_________________`
+  CONDITION: component information is received
+}}
 
 ---
 
-### Step 2: Analyze Figma
+## Step 2: Analyze Figma
 
 **Analysis Items**:
 
@@ -80,7 +71,7 @@ Would you like to continue?
 
 ---
 
-### Step 3: Generate Skeleton Code
+## Step 3: Generate Skeleton Code
 
 **What to Include**:
 
@@ -97,127 +88,131 @@ Would you like to continue?
 - ❌ State management logic (generate when developer requests)
 - ❌ Business logic (generate when developer requests)
 
-#### Skeleton Code Example
+### Skeleton Code Examples
 
-**ProductCard Component**:
+**Common Component (Dialog)**:
 
 ```typescript
-// src/features/product/components/ProductCard.tsx
+// src/shared/components/Dialog.tsx
 
-export default function ProductCard() {
-  // Define only minimal values needed for data display as variables
-  const productName = "Sample Product";
-  const productPrice = 10000;
-  const productImage = "/images/product.jpg";
-  const isInStock = true;
+export default function Dialog() {
+  const dialogTitle = "Confirm";
+  const dialogContent = "Are you sure?";
 
   return (
-    <div className="product-card">
-      <img src={productImage} alt={productName} className="product-image" />
-      <div className="product-info">
-        <h3 className="product-name">{productName}</h3>
-        <p className="product-price">{productPrice.toLocaleString()}원</p>
-        {isInStock ? (
-          <button className="add-to-cart-btn">장바구니 추가</button>
-        ) : (
-          <span className="out-of-stock">품절</span>
-        )}
+    <div role="dialog" aria-modal="true" className="dialog-overlay">
+      <div className="dialog-container">
+        <h2 className="dialog-title">{dialogTitle}</h2>
+        <p>{dialogContent}</p>
+        <button>OK</button>
       </div>
     </div>
   );
 }
 ```
 
-**Guidance for Developer's Additional Work**:
+**Feature Component (ProductCard)**:
 
-"Skeleton code has been generated. Please proceed with the following tasks if needed:"
+```typescript
+// src/features/product/components/ProductCard.tsx
 
-- [ ] Define Props interface (if needed)
-- [ ] Add event handlers (if needed)
-- [ ] Add state management logic (if needed)
-- [ ] Add business logic (if needed)
-- [ ] Adjust styles in detail (if needed)
+export default function ProductCard() {
+  const productName = "Sample Product";
+  const productPrice = 10000;
 
-**How to Request UX Logic Addition**:
+  return (
+    <div className="product-card">
+      <h3>{productName}</h3>
+      <p>{productPrice.toLocaleString()}원</p>
+      <button>Add to Cart</button>
+    </div>
+  );
+}
+```
 
-"If UX logic is needed, please request as follows:"
+**Guidance for Developer**:
 
+"Skeleton code generated. Additional work you can request:"
+
+- Define Props interface
+- Add event handlers
+- Add state management logic
+- Add business logic
+- Adjust styles
+
+**How to Request**:
 - "Add Dialog open/close functionality"
-- "Add cart button click event"
-- "Modify ProductCard to be controlled via props"
+- "Add click event to cart button"
+- "Convert ProductCard to use props"
 
 ---
 
-### Step 4: Review Component
+## Step 4: Review Component
 
-#### Review Guide (For AI)
+{{TEMPLATE: sections/review-guide
+  REVIEW_PRINCIPLE: Ask questions flexibly according to component complexity
+  ALWAYS_ASK: |
+    - Does the generated component match requirements?
+  CONDITIONAL_QUESTIONS: |
+    - If different from Figma: Is this intentional?
+    - If accessibility important: Are ARIA attributes appropriate?
+    - If common component: Is reusability considered?
+    - If complex component: Should it be separated?
+}}
 
-**Basic Principle**: Ask questions flexibly according to component complexity
-
-**Always Ask**:
-
-- Does the generated component match the requirements?
-
-**Conditional Questions**:
-
-- If different from Figma: Is this an intentional change?
-- If accessibility is important: Are ARIA attributes appropriate?
-- If common component: Has reusability been considered?
-- If complex component: Is separation needed?
-
-**Question Style**:
-
-- Prefer open-ended questions (avoid Yes/No)
-- Specifically point out issues when found
-- Provide improvement suggestions
-
-#### 🔔 User Review
-
-"**[Component Name]** component has been created."
-
-**Component Information**:
-
-- Name: `[Component Name]`
-- File path: `[File Path]`
-- Type: Feature
-
-**Review is recommended**:
-
-- Does UI match Figma?
-- Is component structure appropriate?
-- Has accessibility been considered?
-- (For feature components) Is integration with common components working?
-
-**Feedback**: (Implement immediately if modification is needed)
+{{TEMPLATE: sections/user-review
+  COMPLETION_MESSAGE: **[Component Name]** component has been created.
+  REVIEW_CONTENT: |
+    **Component Information**:
+    - Name: `[Component Name]`
+    - File path: `[File Path]`
+    - Type: [Common/Feature]
+  REVIEW_CHECKLIST: |
+    - Does UI match Figma?
+    - Is component structure appropriate?
+    - Has accessibility been considered?
+    - (Common) Is reusability sufficient?
+    - (Feature) Integration with common components working?
+}}
 
 ---
 
-### Step 5: Check if Additional Component Development is Needed
+## Step 5: Check Additional Component Development
 
-#### 🔔 User Confirmation
-
-"Is there an additional component to develop?"
-
-- [ ] **Yes** → Run `/workflow-ui [feature-name]` again
-- [ ] **No** → Update Memory and proceed to next step
+{{TEMPLATE: snippets/user-input-pattern
+  QUESTION: "Is there an additional component to develop?"
+  INPUT_OPTIONS: |
+    - [ ] **Yes** → Run `/workflow-ui [component-name]` again
+    - [ ] **No** → Update Memory and proceed to next step
+  CONDITION: approved
+}}
 
 ---
 
-## Memory Update
-
-**When work is completed**: Update progress to `memory.md`
+{{TEMPLATE: sections/memory-update
+  TASK_NAME: UI component development
+  MEMORY_CHECKBOX: |
+    Update `memory/progress.md`:
+    - [x] **Feature UI - [component-name]** (for feature components)
+    - [x] **Common UI** (mark as completed when all common components done)
+}}
 
 ---
 
 ## Next Steps
 
-**After component development is completed**:
+**After component development**:
 
-- If there are additional components: Run `/workflow-ui [feature-name]` again
-- When all components are completed: `/workflow-implement [feature-name]` (Feature Implementation)
+- Additional components: Run `/workflow-ui [name]` again
+- All components done: `/workflow-implement [feature-name]`
 
 ---
 
-## Output File Paths
+{{TEMPLATE: snippets/output-paths
+  FILE_PATHS: |
+    **Common components**:
+    - `src/shared/components/[ComponentName].tsx`
 
-- `src/features/{domain}/components/[ComponentName].tsx` - Feature component file
+    **Feature components**:
+    - `src/features/{domain}/components/[ComponentName].tsx`
+}}

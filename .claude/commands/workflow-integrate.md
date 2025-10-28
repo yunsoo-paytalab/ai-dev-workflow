@@ -3,7 +3,6 @@
 **When to use**: During system integration work
 
 **Features**:
-
 - Remove duplicate code
 - Extract common modules
 - Improve overall structure
@@ -11,7 +10,6 @@
 - Improve accessibility
 
 **Recommendations**:
-
 - All features implemented (or most core features completed)
 
 **Usage**:
@@ -28,56 +26,40 @@ Remove duplicates between features and improve overall code structure.
 
 ---
 
-## Recommendations
-
-💡 **Recommended**: Proceed after the following steps are completed.
-
-- All features implemented (or most core features completed)
-
-Potential issues if not completed:
-
-- Integration refactoring effectiveness may be limited
-- Some features may be missing during E2E testing
-- Overall quality verification may be incomplete
-
-Would you like to continue?
+{{LOAD_CONTEXT: progress, features}}
 
 ---
 
-### Step 1: Check API Integration Status (Before Starting)
-
-**AI work**: Check API integration status from `docs/workflows/memory.md`
-
-#### 🔔 Reconfirm API Integration Status
-
-"Before starting integration work, I will check the API integration status."
-
-**Current API integration status**:
-
-- ✅ **Integration completed**: [Feature1], [Feature2], ...
-- ⏳ **Keep dummy data**: [Feature3], [Feature4], ...
-
-**APIs not yet integrated**:
-
-- [Feature3]: Need to check API readiness status
-- [Feature4]: Need to check API readiness status
-
-**Please select one**:
-
-- [ ] **Integrate now** (Selectively integrate only ready APIs)
-- [ ] **Integrate later** (Keep dummy data, proceed with integration work)
-- [ ] **Partial integration** (Integrate some, keep others as dummy)
-
-**Selection options**:
-
-- Features to integrate: [Feature1], [Feature2], ...
-- Features not to integrate: [Feature3], [Feature4], ...
-
-⚠️ **Proceed with integration work after selection is completed**
+{{TEMPLATE: sections/recommendations
+  PREREQUISITES: |
+    - All features implemented (or most core features completed)
+  POTENTIAL_ISSUES: |
+    - Integration refactoring effectiveness may be limited
+    - Some features may be missing during E2E testing
+    - Overall quality verification may be incomplete
+}}
 
 ---
 
-### Step 2: Analyze Duplicate Code
+## Step 1: Check API Integration Status
+
+{{TEMPLATE: snippets/user-input-pattern
+  QUESTION: "Before starting integration work, let's check API integration status. Please select:"
+  INPUT_OPTIONS: |
+    **Current API integration status**:
+    - ✅ Integration completed: [List]
+    - ⏳ Keep dummy data: [List]
+
+    **Please select one**:
+    - [ ] **Integrate now** (Integrate ready APIs)
+    - [ ] **Integrate later** (Keep dummy, proceed with integration)
+    - [ ] **Partial integration** (Integrate some, keep others)
+  CONDITION: selection completed
+}}
+
+---
+
+## Step 2: Analyze Duplicate Code
 
 **AI work**:
 
@@ -85,7 +67,6 @@ Would you like to continue?
 2. Identify duplicate patterns
 
 **Duplicate targets**:
-
 - Similar utility functions
 - Repeated logic
 - Duplicate type definitions
@@ -97,255 +78,135 @@ Would you like to continue?
 ```typescript
 interface Duplication {
   type: "utility" | "component" | "type" | "hook" | "constant";
-  pattern: string; // '{Duplicate pattern description}'
-  locations: string[]; // ['{File path 1}', '{File path 2}']
-  suggestion: string; // '{Integration suggestion}'
+  pattern: string;
+  locations: string[];
+  suggestion: string;
   impact: "high" | "medium" | "low";
 }
 ```
 
 ---
 
-### Step 3: Extract Common Modules
+## Step 3: Extract Common Modules
 
 **Extraction targets**:
 
-1. **Common utilities**
-
-   - Path: `src/shared/utils/`
-   - 📘 Examples: formatPrice, formatDate, formatPhoneNumber, etc.
-
-2. **Common hooks**
-
-   - Path: `src/shared/hooks/`
-   - 📘 Examples: usePagination, useDebounce, useLocalStorage, etc.
-
-3. **Common types**
-
-   - Path: `src/shared/types/common.ts`
-   - 📘 Examples: PaginationParams, ErrorResponse, ApiResponse<T>, etc.
-
-4. **Common constants**
-   - Path: `src/shared/constants/app.ts`
-   - 📘 Examples: ITEMS_PER_PAGE, API_TIMEOUT, MAX_FILE_SIZE, etc.
+1. **Common utilities**: `src/shared/utils/`
+2. **Common hooks**: `src/shared/hooks/`
+3. **Common types**: `src/shared/types/common.ts`
+4. **Common constants**: `src/shared/constants/app.ts`
 
 ---
 
-### Step 4: Improve Overall Structure
+## Step 4: Improve Overall Structure
 
 **Improvement items**:
 
-1. **Organize folder structure**
-
-   - Unify inconsistent folder structures
-   - Reorganize file locations
-   - Unify naming conventions
-
-2. **Optimize import paths**
-
-   - Set absolute paths in tsconfig.json
-   - Use aliases like `@/components`, `@/utils`
-
-3. **Remove circular dependencies**
-   - Extract to common modules
-   - Separate interfaces
-   - Dependency inversion
+1. Organize folder structure
+2. Optimize import paths (aliases)
+3. Remove circular dependencies
+4. Unify error handling
 
 ---
 
-### Step 5: Performance Optimization (Optional)
+## Step 5: Performance Optimization (Optional)
 
-#### 🔔 User input required
+> 💡 **Optional step**: Only if performance goals are defined
 
-"Would you like to perform performance optimization?"
+{{TEMPLATE: snippets/user-input-pattern
+  QUESTION: "Would you like to proceed with performance optimization?"
+  INPUT_OPTIONS: |
+    - [ ] **Yes** - Proceed with optimization
+    - [ ] **No** - Skip to next step
+  CONDITION: N/A
+}}
 
-**Whether optimization is needed**:
+**Optimization items**:
 
-- [ ] **Yes** - Perform performance optimization
-- [ ] **No** - Defer for later improvement
-
-**When "Yes" is selected**:
-
-#### 🔔 Set Performance Goals
-
-**Performance goal settings**:
-
-- Initial loading time goal: `_________________`sec (default: 3sec)
-- Page transition time goal: `_________________`sec (default: 1sec)
-- Bundle size goal: `_________________`MB (default: 1MB)
-
-**Optimization items** (Select only what's needed):
-
-- [ ] React optimization (memo, callback, useMemo)
-- [ ] Code splitting
-- [ ] Bundle size optimization
-- [ ] API call optimization
-- [ ] Image optimization
-
-**Optimization item details**:
-
-1. **React Optimization**
-
-   - Prevent unnecessary re-renders with React.memo
-   - Utilize useCallback, useMemo
-   - Component separation
-
-2. **Code Splitting**
-
-   - Separate by page with React.lazy
-   - Handle loading with Suspense
-   - Route-based splitting
-
-3. **Bundle Size Optimization**
-
-   - Remove unused code
-   - Replace heavy libraries
-   - Tree shaking optimization
-
-4. **API Call Optimization**
-
-   - React Query caching settings
-   - Adjust staleTime, cacheTime
-   - Prevent unnecessary refetch
-
-5. **Image Optimization**
-   - Apply lazy loading
-   - Use WebP format
-   - Size optimization
+- Code splitting & lazy loading
+- Image optimization
+- Bundle size reduction
+- Caching strategies
+- Rendering performance
 
 ---
 
-### Step 6: Improve Accessibility
+## Step 6: Improve Accessibility
 
-**Checklist**:
+**Basic accessibility**:
 
-- [ ] **Keyboard navigation**: Tab order, focus indicators, Enter/Space behavior, ESC close
-- [ ] **Screen reader support**: Alt text, ARIA attributes, landmark roles, form labels
-- [ ] **Color contrast**: Meet WCAG AA standard (4.5:1)
-- [ ] **Responsive accessibility**: Touch target 44x44px or larger, maintain layout when zoomed
-
----
-
-### Step 7: Supplement Integration Tests
-
-**Test items**:
-
-1. **Cross-domain integration tests**
-
-   - Path: `__tests__/integration/cross-domain/`
-   - 📘 Examples: Cart → Order flow, Login → My Page flow
-
-2. **Error recovery tests**
-
-   - 📘 Examples: Retry after API failure, network error handling, timeout handling
-
-3. **Performance tests**
-   - Initial loading time (goal: <3sec)
-   - Page transition time (goal: <1sec)
+- [ ] Keyboard navigation
+- [ ] Screen reader support
+- [ ] Color contrast (WCAG AA)
+- [ ] Focus management
+- [ ] Error messages
 
 ---
 
-### Step 8: Integration Review
+## Step 7: Integration Review
 
-### Review Guide (For AI)
+{{TEMPLATE: sections/review-guide
+  REVIEW_PRINCIPLE: Ask questions flexibly according to project scale and complexity
+  ALWAYS_ASK: |
+    - Has integration work been completed?
+  CONDITIONAL_QUESTIONS: |
+    - If much duplicate code existed: Is common module extraction appropriate?
+    - If performance optimization performed: Are metrics satisfactory?
+    - Accessibility: Is WCAG AA standard met?
+}}
 
-**Basic principle**: Ask questions flexibly according to project scale and complexity
+{{TEMPLATE: sections/user-review
+  COMPLETION_MESSAGE: System integration has been completed.
+  REVIEW_CONTENT: |
+    **Refactoring results**:
+    - Duplicate code removed: N instances
+    - Common modules extracted: N modules
+    - Files affected: N files
 
-**Always ask**:
+    **Quality improvements**:
+    - Type errors: 0
+    - Linter warnings: 0
+    - Test pass rate: 100%
 
-- Has integration work been completed?
-
-**Conditional questions**:
-
-- If there was much duplicate code: Is common module extraction appropriate?
-- If performance optimization was performed: Were performance goals achieved?
-- If accessibility improvements were performed: Do they meet accessibility criteria?
-
-**Question style**:
-
-- Prefer open-ended questions
-- Specifically point out issues when found
-- Provide improvement suggestions
-
-#### 🔔 User Review
-
-"Overall system integration and refactoring has been completed."
-
-**Work results**:
-
-Duplicate code removal:
-
-- ✅ Extracted N common utilities
-- ✅ Extracted N common hooks
-- ✅ Integrated N common types
-
-Structure improvements:
-
-- ✅ Import path optimization (absolute paths)
-- ✅ 0 circular dependencies
-- ✅ Unified folder structure
-
-Performance optimization (if performed):
-
-- ✅ X% bundle size reduction
-- ✅ X.Xsec initial loading (goal: <3sec)
-- ✅ X.Xsec page transition (goal: <1sec)
-
-Accessibility improvements:
-
-- ✅ Keyboard navigation completed
-- ✅ ARIA attributes added
-- ✅ Color contrast improved
-
-Tests:
-
-- ✅ Added N integration tests
-- ✅ 100% test pass rate
-- ✅ X% coverage (goal: 90% or higher)
-
-**Review is recommended**:
-
-- Is code structure clean?
-- Does performance meet targets? (if optimization performed)
-- Is accessibility improved?
-- Are tests stable?
-
-**Feedback**: (Implement immediately if modification needed)
+    **Performance** (if optimized):
+    - Bundle size: Before N KB → After M KB
+    - Initial load: Before N sec → After M sec
+  REVIEW_CHECKLIST: |
+    - Is duplicate code sufficiently removed?
+    - Are common modules well-structured?
+    - Is overall code quality improved?
+    - (If optimized) Are performance goals met?
+    - Are accessibility requirements met?
+}}
 
 ---
 
-## Memory Update
-
-**When integration work is completed**:
-
-```markdown
-- [x] Integration and refactoring
-```
+{{TEMPLATE: sections/memory-update
+  TASK_NAME: integration work
+  MEMORY_CHECKBOX: |
+    Update `memory/progress.md`:
+    - [x] Integration and Refactoring
+}}
 
 ---
 
 ## Next Steps
 
-**After integration is completed**:
+**After integration completed**:
 
-- 🎉 Proceed to E2E testing: `/workflow-e2e`
+- Recommended: `/workflow-e2e` (E2E testing)
 
 ---
 
-## Output File Paths
+{{TEMPLATE: snippets/output-paths
+  FILE_PATHS: |
+    **Common modules**:
+    - `src/shared/utils/` - Common utilities
+    - `src/shared/hooks/` - Common hooks
+    - `src/shared/types/` - Common types
+    - `src/shared/constants/` - Common constants
 
-**Integration outputs**:
-
-- `src/shared/utils/` - Common utilities
-- `src/shared/hooks/` - Common hooks
-- `src/shared/types/` - Common types
-- `src/shared/constants/` - Common constants
-
-**Tests**:
-
-- `__tests__/integration/cross-domain/` - Cross-domain integration tests
-
-**Documentation**:
-
-- `docs/architecture.md` - Final architecture
-- `docs/performance.md` - Performance optimization results (if optimization performed)
+    **Documentation**:
+    - `docs/integration-report.md` - Integration results
+    - `docs/performance-report.md` - Performance optimization results (if performed)
+}}

@@ -8,7 +8,8 @@
 
 - **유연한 순서**: 원하는 순서로 작업 가능
 - **의존성 경고**: 권장 사항 미충족 시 경고 표시 후 계속 진행 가능
-- **진행 상황 추적**: memory.md를 통한 중앙 집중식 상태 관리
+- **모듈화된 메모리**: 필요한 정보만 선택적으로 로드 (토큰 최적화)
+- **템플릿 시스템**: 공통 패턴 재사용으로 토큰 소비 28.5% 절감
 - **테스트 우선 개발**: Test-First 방식으로 안전한 구현 보장
 
 ## 주요 작업 단계
@@ -43,8 +44,8 @@
 ### 4. 컴포넌트 개발
 
 ```
-/workflow-common-ui           # 공통 컴포넌트
-/workflow-ui 상품목록          # 기능 컴포넌트
+/workflow-ui Dialog --type=common      # 공통 컴포넌트
+/workflow-ui 상품목록 --type=feature    # 기능 컴포넌트
 ```
 
 ## 주요 커맨드
@@ -65,8 +66,8 @@
 
 #### 2단계: UI 설계
 
-- `/workflow-common-ui`: 공통 컴포넌트 개발 (Dialog, Toast 등)
-- `/workflow-ui [기능명]`: 기능별 컴포넌트 개발
+- `/workflow-ui [컴포넌트명] --type=common`: 공통 컴포넌트 개발 (Dialog, Toast 등)
+- `/workflow-ui [컴포넌트명] --type=feature`: 기능별 컴포넌트 개발
 
 #### 3단계: 기능 구현
 
@@ -80,23 +81,34 @@
 ## 파일 구조
 
 ```
-.cursor/
+.claude/
+├── templates/                         # 템플릿 시스템 (토큰 최적화)
+│   ├── sections/                      # 재사용 가능한 섹션
+│   │   ├── recommendations.md
+│   │   ├── review-guide.md
+│   │   ├── user-review.md
+│   │   └── memory-update.md
+│   └── snippets/                      # 작은 패턴들
+│       ├── user-input-pattern.md
+│       └── output-paths.md
+│
 ├── commands/                          # 커맨드 정의 파일
 │   ├── workflow.md                    # 메인 커맨드 (start, status, update, help, reset)
 │   ├── workflow-domain-definition.md  # 도메인 정의 커맨드
-│   ├── workflow-common-ui.md          # 공통 UI 커맨드
-│   ├── workflow-ui.md                 # 기능 UI 커맨드
+│   ├── workflow-ui.md                 # UI 커맨드 (통합, 공통/기능 모두 지원)
 │   ├── workflow-implement.md          # 기능 구현 커맨드
 │   ├── workflow-integrate.md          # 통합 커맨드
 │   └── workflow-e2e.md                # E2E 테스트 커맨드
 │
-└── rules/workflows/                   # 워크플로우 가이드 파일
-    ├── memory.md                      # 🧠 진행 상황 추적 (중앙 관리)
-    ├── memory-template.md             # 📋 메모리 템플릿
-    ├── domain-definition.md           # 🏗️ 도메인 정의 가이드
-    ├── ui-design.md                   # 🎨 UI 설계 가이드
-    ├── feature-implementation.md      # ⚙️ 기능 구현 가이드
-    └── system-integration.md          # 🔗 통합 및 E2E 테스트 가이드
+docs/workflows/
+├── memory/                            # 모듈화된 메모리 시스템
+│   ├── project-info.md                # 프로젝트 기본 정보
+│   ├── domains.md                     # 도메인 목록
+│   ├── pages.md                       # 페이지 구조
+│   ├── progress.md                    # 진행 상황 체크리스트
+│   ├── features.md                    # 기능별 진행상황
+│   └── decisions.md                   # 주요 결정사항
+└── memory.md                          # 통합 뷰 (읽기 전용)
 ```
 
 ### 파일 역할 설명
@@ -105,19 +117,24 @@
 
 - **workflow.md**: 메인 커맨드 정의 (start, status, update, help, reset)
 - **workflow-domain-definition.md**: 도메인 정의 커맨드
-- **workflow-common-ui.md**: 공통 컴포넌트 개발 커맨드
-- **workflow-ui.md**: 기능 컴포넌트 개발 커맨드
+- **workflow-ui.md**: UI 커맨드 (공통 & 기능 컴포넌트 통합)
 - **workflow-implement.md**: 기능 구현 커맨드
 - **workflow-integrate.md**: 시스템 통합 커맨드
 - **workflow-e2e.md**: E2E 테스트 커맨드
 
-#### 🔄 워크플로우 가이드 파일 (docs/workflows/)
+#### 🔄 메모리 시스템 (docs/workflows/memory/)
 
-- **memory.md**: 진행 상황 및 파일 경로 중앙 관리
-- **domain-definition.md**: 도메인 및 기능 정의 작업 가이드
-- **ui-design.md**: UI 컴포넌트 설계 작업 가이드
-- **feature-implementation.md**: 기능 구현 작업 가이드 (테스트, 구현, API 연동)
-- **system-integration.md**: 통합 리팩토링 및 E2E 테스트 가이드
+- **project-info.md**: 프로젝트 기본 정보
+- **domains.md**: 도메인 목록 및 설명
+- **pages.md**: 페이지 구조 및 라우팅
+- **progress.md**: 전체 진행 상황 체크리스트
+- **features.md**: 기능별 진행상황 추적
+- **decisions.md**: 주요 결정사항 기록
+
+#### 🎨 템플릿 시스템 (.claude/templates/)
+
+- **sections/**: 재사용 가능한 섹션 템플릿 (토큰 최적화)
+- **snippets/**: 자주 사용하는 작은 패턴들
 
 ## 사용 예시
 
@@ -151,10 +168,10 @@
 
 ```bash
 # 디자인 시스템 구축
-/workflow-common-ui        # Button 컴포넌트
-/workflow-common-ui        # Input 컴포넌트
-/workflow-common-ui        # Dialog 컴포넌트
-/workflow-common-ui        # Toast 컴포넌트
+/workflow-ui Button --type=common
+/workflow-ui Input --type=common
+/workflow-ui Dialog --type=common
+/workflow-ui Toast --type=common
 ```
 
 ### 시나리오 3: 특정 기능만 빠르게 개발
