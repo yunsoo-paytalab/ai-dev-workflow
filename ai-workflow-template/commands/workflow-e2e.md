@@ -1,19 +1,19 @@
-# `/workflow-e2e` Command
+# `/workflow-e2e` 커맨드
 
-**When to use**: During E2E testing work
+**사용 시점**: E2E 테스트 작업 시
 
-**Features**:
+**기능**:
 
-- Propose E2E test flows
-- Write and run E2E tests
-- Final quality verification
-- Production deployment preparation
+- E2E 테스트 플로우 제안
+- E2E 테스트 작성 및 실행
+- 최종 품질 검증
+- 프로덕션 배포 준비
 
-**Recommendations**:
+**권장사항**:
 
-- System integration completed
+- 시스템 통합 완료
 
-**Usage**:
+**사용법**:
 
 ```
 /workflow-e2e
@@ -21,255 +21,255 @@
 
 ---
 
-## Goal
+## 목표
 
-Verify entire user flows with E2E tests and prepare for production deployment.
-
----
-
-## Recommendations
-
-💡 **Recommended**: Proceed after the following steps are completed.
-
-- System integration completed
-
-Potential issues if not completed:
-
-- E2E test results may be unstable
-- Integration issues may be found
-- Overall quality verification may be incomplete
-
-Would you like to continue?
+E2E 테스트로 전체 사용자 플로우를 검증하고 프로덕션 배포를 준비합니다.
 
 ---
 
-### Step 1: Propose E2E Test Flows
+## 권장사항
 
-**AI work**: Analyze requirements specification and implemented features to propose E2E test user flows
+💡 **권장**: 다음 단계가 완료된 후 진행하세요.
 
-**Output format**:
+- 시스템 통합 완료
+
+완료되지 않은 경우 발생할 수 있는 문제:
+
+- E2E 테스트 결과가 불안정할 수 있음
+- 통합 이슈가 발견될 수 있음
+- 전체 품질 검증이 불완전할 수 있음
+
+계속 진행하시겠습니까?
+
+---
+
+### 1단계: E2E 테스트 플로우 제안
+
+**AI 작업**: 요구사항 명세 및 구현된 기능을 분석하여 E2E 테스트 사용자 플로우 제안
+
+**출력 형식**:
 
 ```typescript
 interface E2EFlow {
   id: string; // 'E2E-XXX'
-  name: string; // '{Flow name}'
+  name: string; // '{플로우명}'
   priority: "critical" | "high" | "medium" | "low";
   description: string;
-  steps: string[]; // ['{Step 1}', '{Step 2}', ...]
-  estimatedTime: string; // '{Estimated time}'
-  relatedFeatures: string[]; // ['{Feature ID 1}', '{Feature ID 2}', ...]
-  alternativeScenarios?: string[]; // ['{Alternative scenario 1}', '{Alternative scenario 2}']
+  steps: string[]; // ['{단계 1}', '{단계 2}', ...]
+  estimatedTime: string; // '{예상 소요 시간}'
+  relatedFeatures: string[]; // ['{기능 ID 1}', '{기능 ID 2}', ...]
+  alternativeScenarios?: string[]; // ['{대체 시나리오 1}', '{대체 시나리오 2}']
 }
 ```
 
-#### 🔔 User Review
+#### 🔔 사용자 검수
 
-"I plan to write the following E2E test flows:"
+"다음 E2E 테스트 플로우를 작성할 계획입니다:"
 
-**Display proposed flow list** (by priority)
+**제안된 플로우 목록 표시** (우선순위별)
 
-"Which flows would you like to test?"
+"어떤 플로우를 테스트하시겠습니까?"
 
-For each flow:
+각 플로우에 대해:
 
-- [ ] Write (recommend critical first)
-- [ ] Modify (adjust steps)
-- [ ] Exclude (unnecessary)
+- [ ] 작성 (critical 우선 권장)
+- [ ] 수정 (단계 조정)
+- [ ] 제외 (불필요)
 
-**Selection options**:
+**선택 옵션**:
 
-- Include alternative scenarios
-- Include error scenarios
+- 대체 시나리오 포함
+- 에러 시나리오 포함
 
-⚠️ **Write only approved flows**
+⚠️ **승인된 플로우만 작성**
 
 ---
 
-### Step 2: Write E2E Tests
+### 2단계: E2E 테스트 작성
 
-Write E2E tests for approved flows:
+승인된 플로우에 대해 E2E 테스트 작성:
 
-**Test structure**:
+**테스트 구조**:
 
 ```typescript
 // e2e/{flow-name}.spec.ts
 
-test.describe("{Flow name}", () => {
-  test("{Test case name}", async ({ page }) => {
-    // {Step-by-step flow description}
+test.describe("{플로우명}", () => {
+  test("{테스트 케이스명}", async ({ page }) => {
+    // {단계별 플로우 설명}
   });
 
-  test("{Error scenario name}", async ({ page }) => {
-    // {Error scenario verification}
+  test("{에러 시나리오명}", async ({ page }) => {
+    // {에러 시나리오 검증}
   });
 });
 ```
 
-**Includes**:
+**포함사항**:
 
-- Verify page transitions at each step
-- User interactions (click, input)
-- Verify results (URL, text, state)
-- Error scenarios
-- Screenshot/video capture (on failure)
-
----
-
-### Step 3: Run E2E Tests
-
-**Test execution**:
-
-1. Run all E2E tests
-2. Check screenshots/videos on failure
-3. Analyze error logs
-4. Document reproduction steps
+- 각 단계별 페이지 전환 검증
+- 사용자 인터랙션 (클릭, 입력)
+- 결과 검증 (URL, 텍스트, 상태)
+- 에러 시나리오
+- 스크린샷/비디오 캡처 (실패 시)
 
 ---
 
-### Step 4: Handle Failed Tests
+### 3단계: E2E 테스트 실행
 
-#### 🔔 User Confirmation
+**테스트 실행**:
 
-"E2E test results:"
-
-- ✅ Passed: N tests
-- ❌ Failed: N tests
-
-**Failed tests**:
-
-- E2E-XXX: {Test name}
-  - Failed step: {Step name}
-  - Error: {Error type}
-  - Screenshot: [Attach]
-
-"Please select one of the following:"
-
-- [ ] Fix feature and rerun
-- [ ] Test code modification needed
-- [ ] Environment issue (rerun)
+1. 모든 E2E 테스트 실행
+2. 실패 시 스크린샷/비디오 확인
+3. 에러 로그 분석
+4. 재현 단계 문서화
 
 ---
 
-### Step 5: Final Quality Verification
+### 4단계: 실패 테스트 처리
 
-#### ✅ Feature Completeness
+#### 🔔 사용자 확인
 
-- [ ] All requirement features implemented
-- [ ] All feature tests passing
-- [ ] E2E tests passing
+"E2E 테스트 결과:"
 
-#### ✅ Code Quality
+- ✅ 통과: N개 테스트
+- ❌ 실패: N개 테스트
 
-- [ ] 0 type errors
-- [ ] 0 linter warnings
-- [ ] 90% or higher test coverage
-- [ ] Minimized duplicate code
+**실패 테스트**:
 
-#### ✅ Performance (if optimization performed)
+- E2E-XXX: {테스트명}
+  - 실패 단계: {단계명}
+  - 에러: {에러 타입}
+  - 스크린샷: [첨부]
 
-- [ ] Initial loading < 3sec
-- [ ] Page transition < 1sec
-- [ ] Achieved bundle size goal
+"다음 중 하나를 선택해주세요:"
 
-#### ✅ Accessibility
-
-- [ ] Keyboard navigation possible
-- [ ] Screen reader compatible
-- [ ] Color contrast meets WCAG AA
-
-#### ✅ Security
-
-- [ ] Authentication/authorization verified
-- [ ] XSS protection
-- [ ] CSRF protection
-- [ ] Sensitive information protected
-
-#### ✅ Documentation
-
-- [ ] README updated
-- [ ] API documentation written
-- [ ] Deployment guide written
+- [ ] 기능 수정 후 재실행
+- [ ] 테스트 코드 수정 필요
+- [ ] 환경 이슈 (재실행)
 
 ---
 
-### Step 6: Final Approval
+### 5단계: 최종 품질 검증
 
-### Review Guide (For AI)
+#### ✅ 기능 완전성
 
-**Basic principle**: Evaluate overall project completion
+- [ ] 모든 요구사항 기능 구현
+- [ ] 모든 기능 테스트 통과
+- [ ] E2E 테스트 통과
 
-**Always ask**:
+#### ✅ 코드 품질
 
-- Is the project ready for production deployment?
+- [ ] 타입 에러 0개
+- [ ] 린터 경고 0개
+- [ ] 테스트 커버리지 90% 이상
+- [ ] 중복 코드 최소화
 
-**Conditional questions**:
+#### ✅ 성능 (최적화 수행한 경우)
 
-- If there were E2E test failures: Have all issues been resolved?
-- If performance optimization was performed: Are final performance metrics satisfactory?
-- Documentation: Is deployment guide sufficient?
+- [ ] 초기 로딩 < 3초
+- [ ] 페이지 전환 < 1초
+- [ ] 번들 사이즈 목표 달성
 
-**Question style**:
+#### ✅ 접근성
 
-- Evaluate overall project completion
-- Suggest improvable areas
-- Check final deployment checklist
+- [ ] 키보드 네비게이션 가능
+- [ ] 스크린 리더 호환
+- [ ] 색상 대비 WCAG AA 충족
 
-#### 🔔 Final Approval
+#### ✅ 보안
 
-"The project is ready for production deployment."
+- [ ] 인증/권한 검증
+- [ ] XSS 방어
+- [ ] CSRF 방어
+- [ ] 민감 정보 보호
 
-**Final status**:
+#### ✅ 문서
 
-- ✅ Features: N (100%)
-- ✅ Test pass rate: 100%
-- ✅ E2E passed: N/N
-- ✅ Coverage: X% (goal: 90% or higher)
-- ✅ Performance goal: Achieved (if optimization performed)
-- ✅ Accessibility: WCAG AA
-- ✅ Documentation: Completed
-
-**Deployment preparation**:
-
-- Environment variable setup guide
-- Build scripts
-- CI/CD pipeline
-- Monitoring setup
-
-**Final confirmation**:
-
-- [ ] Approve (ready to deploy)
-- [ ] Additional work needed
-
-**Upon approval**: 🎉 Project completed!
+- [ ] README 업데이트
+- [ ] API 문서 작성
+- [ ] 배포 가이드 작성
 
 ---
 
-## Memory Update
+### 6단계: 최종 승인
 
-**When E2E testing is completed**:
+### 검수 가이드 (AI용)
+
+**기본 원칙**: 전체 프로젝트 완성도 평가
+
+**항상 물어볼 것**:
+
+- 프로젝트가 프로덕션 배포 준비가 되었는가?
+
+**조건부 질문**:
+
+- E2E 테스트 실패가 있었던 경우: 모든 이슈가 해결되었는가?
+- 성능 최적화를 수행한 경우: 최종 성능 지표가 만족스러운가?
+- 문서: 배포 가이드가 충분한가?
+
+**질문 스타일**:
+
+- 전체 프로젝트 완성도 평가
+- 개선 가능한 부분 제안
+- 최종 배포 체크리스트 확인
+
+#### 🔔 최종 승인
+
+"프로젝트가 프로덕션 배포 준비가 완료되었습니다."
+
+**최종 상태**:
+
+- ✅ 기능: N개 (100%)
+- ✅ 테스트 통과율: 100%
+- ✅ E2E 통과: N/N
+- ✅ 커버리지: X% (목표: 90% 이상)
+- ✅ 성능 목표: 달성 (최적화 수행한 경우)
+- ✅ 접근성: WCAG AA
+- ✅ 문서: 완료
+
+**배포 준비**:
+
+- 환경 변수 설정 가이드
+- 빌드 스크립트
+- CI/CD 파이프라인
+- 모니터링 설정
+
+**최종 확인**:
+
+- [ ] 승인 (배포 준비 완료)
+- [ ] 추가 작업 필요
+
+**승인 시**: 🎉 프로젝트 완료!
+
+---
+
+## 메모리 업데이트
+
+**E2E 테스트 완료 시**:
 
 ```markdown
-- [x] E2E testing
+- [x] E2E 테스트
 ```
 
 ---
 
-## Next Steps
+## 다음 단계
 
-**After all are completed**:
+**모두 완료 후**:
 
-- 🎉 Production deployment
-- Collect user feedback
-- Continuous improvement
+- 🎉 프로덕션 배포
+- 사용자 피드백 수집
+- 지속적 개선
 
 ---
 
-## Output File Paths
+## 결과물 파일 경로
 
-**E2E tests**:
+**E2E 테스트**:
 
-- `e2e/` - E2E tests
+- `e2e/` - E2E 테스트
 
-**Documentation**:
+**문서**:
 
-- `docs/deployment.md` - Deployment guide
+- `docs/deployment.md` - 배포 가이드

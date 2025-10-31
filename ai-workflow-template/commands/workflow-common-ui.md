@@ -1,109 +1,109 @@
-# `/workflow-common-ui` Command
+# `/workflow-common-ui` 커맨드
 
-**When to use**: When developing common components
+**사용 시점**: 공통 컴포넌트를 개발할 때
 
-**Features**: Analyze Figma design and generate skeleton code for **one common component** at a time
+**기능**: Figma 디자인을 분석하여 **한 번에 하나의 공통 컴포넌트**의 스켈레톤 코드 생성
 
-**Recommendations**:
+**권장사항**:
 
-- Domain definition completed
+- 도메인 정의 완료
 
-**Usage**:
+**사용법**:
 
 ```
-/workflow-common-ui    # Dialog component
-/workflow-common-ui    # Toast component - run separately
-/workflow-common-ui    # Header component - run separately
+/workflow-common-ui    # Dialog 컴포넌트
+/workflow-common-ui    # Toast 컴포넌트 - 별도 실행
+/workflow-common-ui    # Header 컴포넌트 - 별도 실행
 ```
 
-> 💡 **Developing multiple components**: Repeat the command for each component.
+> 💡 **여러 컴포넌트 개발 시**: 각 컴포넌트마다 커맨드를 반복 실행하세요.
 
 ---
 
-## Goal
+## 목표
 
-Analyze Figma design and generate component skeleton code for **common components** (Type 1).
-
----
-
-## Recommendations
-
-💡 **Recommended**: Proceed after the following steps are completed.
-
-- Domain definition completed
-
-Potential issues if not completed:
-
-- Component file paths may not be defined
-
-Would you like to continue?
+Figma 디자인을 분석하여 **공통 컴포넌트**(Type 1)의 컴포넌트 스켈레톤 코드를 생성합니다.
 
 ---
 
-## Development Process
+## 권장사항
 
-### Step 1: Collect Component Information
+💡 **권장**: 다음 단계가 완료된 후 진행하세요.
 
-#### 🔔 User Input Required
+- 도메인 정의 완료
 
-**Question**: "Please provide information about the component to develop."
+완료되지 않은 경우 발생할 수 있는 문제:
 
-**Required Information**:
+- 컴포넌트 파일 경로가 정의되지 않았을 수 있음
 
-- Component name: `_________________`
+계속 진행하시겠습니까?
+
+---
+
+## 개발 프로세스
+
+### 1단계: 컴포넌트 정보 수집
+
+#### 🔔 사용자 입력 필요
+
+**질문**: "개발할 컴포넌트 정보를 제공해주세요."
+
+**필수 정보**:
+
+- 컴포넌트명: `_________________`
 - Figma URL: `_________________`
 
-**Optional Information**:
+**선택 정보**:
 
-- Purpose/role: `_________________`
-- Notes: `_________________`
+- 용도/역할: `_________________`
+- 참고사항: `_________________`
 
-⚠️ **Do not proceed to next step until component information is received**
-
----
-
-### Step 2: Analyze Figma
-
-**Analysis Items**:
-
-- (If needed) Overall layout structure
-- Detailed UI elements (buttons, inputs, cards, etc.)
-- Identify variants, states, sizes
-- Layout patterns (Grid/Flex, responsive)
-- Interactions (click, open/close, etc.)
+⚠️ **컴포넌트 정보 수신 전까지 다음 단계로 진행하지 마세요**
 
 ---
 
-### Step 3: Generate Skeleton Code
+### 2단계: Figma 분석
 
-**What to Include**:
+**분석 항목**:
 
-- ✅ JSX structure (based on Figma design): Split into sub-components if needed
-- ✅ Minimal data variables (for display)
-- ✅ Basic CSS class names
-- ✅ Semantic HTML structure
-- ✅ ARIA attributes (accessibility)
+- (필요시) 전체 레이아웃 구조
+- 세부 UI 요소들 (버튼, 인풋, 카드 등)
+- Variant, State, Size 파악
+- 레이아웃 패턴 (Grid/Flex, 반응형)
+- 인터랙션 (클릭, 열기/닫기 등)
 
-**What NOT to Include**:
+---
 
-- ❌ Props interface (define when developer needs it)
-- ❌ Event handlers (generate when developer requests)
-- ❌ State management logic (generate when developer requests)
-- ❌ Business logic (generate when developer requests)
+### 3단계: 스켈레톤 코드 생성
 
-#### Skeleton Code Example
+**포함할 것**:
 
-**Dialog Component**:
+- ✅ JSX 구조 (Figma 디자인 기반): 필요시 하위 컴포넌트로 분리
+- ✅ 최소한의 데이터 변수 (표시용)
+- ✅ 기본 CSS 클래스명
+- ✅ 시맨틱 HTML 구조
+- ✅ ARIA 속성 (접근성)
+
+**포함하지 말 것**:
+
+- ❌ Props 인터페이스 (개발자가 필요할 때 정의)
+- ❌ 이벤트 핸들러 (개발자 요청 시 생성)
+- ❌ 상태 관리 로직 (개발자 요청 시 생성)
+- ❌ 비즈니스 로직 (개발자 요청 시 생성)
+
+#### 스켈레톤 코드 예시
+
+**Dialog 컴포넌트**:
 
 ```typescript
 // src/shared/components/Dialog.tsx
 
 export default function Dialog() {
-  // Define only minimal values needed for data display as variables
-  const dialogTitle = "Confirm";
-  const dialogContent = "Are you sure you want to delete?";
-  const confirmText = "Confirm";
-  const cancelText = "Cancel";
+  // 데이터 표시에 필요한 최소한의 값만 변수로 정의
+  const dialogTitle = "확인";
+  const dialogContent = "정말 삭제하시겠습니까?";
+  const confirmText = "확인";
+  const cancelText = "취소";
 
   return (
     <div role="dialog" aria-modal="true" className="dialog-overlay">
@@ -129,96 +129,96 @@ export default function Dialog() {
 }
 ```
 
-**Guidance for Developer's Additional Work**:
+**개발자의 추가 작업 안내**:
 
-"Skeleton code has been generated. Please proceed with the following tasks if needed:"
+"스켈레톤 코드가 생성되었습니다. 필요시 다음 작업을 진행해주세요:"
 
-- [ ] Define Props interface (if needed)
-- [ ] Add event handlers (if needed)
-- [ ] Add state management logic (if needed)
-- [ ] Add business logic (if needed)
-- [ ] Adjust styles in detail (if needed)
+- [ ] Props 인터페이스 정의 (필요시)
+- [ ] 이벤트 핸들러 추가 (필요시)
+- [ ] 상태 관리 로직 추가 (필요시)
+- [ ] 비즈니스 로직 추가 (필요시)
+- [ ] 스타일 세부 조정 (필요시)
 
-**How to Request UX Logic Addition**:
+**UX 로직 추가 요청 방법**:
 
-"If UX logic is needed, please request as follows:"
+"UX 로직이 필요한 경우 다음과 같이 요청하세요:"
 
-- "Add Dialog open/close functionality"
-- "Add cart button click event"
-- "Modify ProductCard to be controlled via props"
-
----
-
-### Step 4: Review Component
-
-#### Review Guide (For AI)
-
-**Basic Principle**: Ask questions flexibly according to component complexity
-
-**Always Ask**:
-
-- Does the generated component match the requirements?
-
-**Conditional Questions**:
-
-- If different from Figma: Is this an intentional change?
-- If accessibility is important: Are ARIA attributes appropriate?
-- If common component: Has reusability been considered?
-- If complex component: Is separation needed?
-
-**Question Style**:
-
-- Prefer open-ended questions (avoid Yes/No)
-- Specifically point out issues when found
-- Provide improvement suggestions
-
-#### 🔔 User Review
-
-"**[Component Name]** component has been created."
-
-**Component Information**:
-
-- Name: `[Component Name]`
-- File path: `[File Path]`
-- Type: Common
-
-**Review is recommended**:
-
-- Does UI match Figma?
-- Is component structure appropriate?
-- Has accessibility been considered?
-- Is reusability sufficient?
-
-**Feedback**: (Implement immediately if modification is needed)
+- "Dialog 열기/닫기 기능 추가해줘"
+- "장바구니 버튼 클릭 이벤트 추가해줘"
+- "ProductCard를 Props로 제어할 수 있게 수정해줘"
 
 ---
 
-### Step 5: Check if Additional Component Development is Needed
+### 4단계: 컴포넌트 검수
 
-#### 🔔 User Confirmation
+#### 검수 가이드 (AI용)
 
-"Is there an additional component to develop?"
+**기본 원칙**: 컴포넌트 복잡도에 따라 유연하게 질문
 
-- [ ] **Yes** → Run `/workflow-common-ui` again
-- [ ] **No** → Update Memory and proceed to next step
+**항상 물어볼 것**:
+
+- 생성된 컴포넌트가 요구사항과 일치하는가?
+
+**조건부 질문**:
+
+- Figma와 다른 경우: 의도적인 변경인가?
+- 접근성이 중요한 경우: ARIA 속성이 적절한가?
+- 공통 컴포넌트인 경우: 재사용성이 고려되었는가?
+- 복잡한 컴포넌트: 분리가 필요한가?
+
+**질문 스타일**:
+
+- 개방형 질문 선호 (Yes/No 지양)
+- 문제 발견 시 구체적으로 지적
+- 개선 방안 제시
+
+#### 🔔 사용자 검수
+
+"**[컴포넌트명]** 컴포넌트가 생성되었습니다."
+
+**컴포넌트 정보**:
+
+- 이름: `[컴포넌트명]`
+- 파일 경로: `[파일 경로]`
+- 타입: 공통
+
+**검수 권장사항**:
+
+- UI가 Figma와 일치하는가?
+- 컴포넌트 구조가 적절한가?
+- 접근성이 고려되었는가?
+- 재사용성이 충분한가?
+
+**피드백**: (수정 필요 시 즉시 반영)
 
 ---
 
-## Memory Update
+### 5단계: 추가 컴포넌트 개발 여부 확인
 
-**When work is completed**: Update progress to `memory.md`
+#### 🔔 사용자 확인
 
----
+"추가로 개발할 컴포넌트가 있습니까?"
 
-## Next Steps
-
-**After component development is completed**:
-
-- If there are additional components: Run `/workflow-common-ui` again
-- When all components are completed: `/workflow-implement [feature-name]` (Feature Implementation)
+- [ ] **예** → `/workflow-common-ui` 다시 실행
+- [ ] **아니오** → Memory 업데이트 후 다음 단계 진행
 
 ---
 
-## Output File Paths
+## 메모리 업데이트
 
-- `src/shared/components/[ComponentName].tsx` - Common component file
+**작업 완료 시**: `memory.md`에 진행 상황 업데이트
+
+---
+
+## 다음 단계
+
+**컴포넌트 개발 완료 후**:
+
+- 추가 컴포넌트가 있는 경우: `/workflow-common-ui` 다시 실행
+- 모든 컴포넌트 완료 시: `/workflow-implement [기능명]` (기능 구현)
+
+---
+
+## 결과물 파일 경로
+
+- `src/shared/components/[ComponentName].tsx` - 공통 컴포넌트 파일

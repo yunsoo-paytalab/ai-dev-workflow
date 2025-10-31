@@ -1,20 +1,20 @@
-# `/workflow-integrate` Command
+# `/workflow-integrate` 커맨드
 
-**When to use**: During system integration work
+**사용 시점**: 시스템 통합 작업 시
 
-**Features**:
+**기능**:
 
-- Remove duplicate code
-- Extract common modules
-- Improve overall structure
-- (Optional) Performance optimization
-- Improve accessibility
+- 중복 코드 제거
+- 공통 모듈 추출
+- 전체 구조 개선
+- (선택) 성능 최적화
+- 접근성 개선
 
-**Recommendations**:
+**권장사항**:
 
-- All features implemented (or most core features completed)
+- 모든 기능 구현 완료 (또는 대부분의 핵심 기능 완료)
 
-**Usage**:
+**사용법**:
 
 ```
 /workflow-integrate
@@ -22,330 +22,330 @@
 
 ---
 
-## Goal
+## 목표
 
-Remove duplicates between features and improve overall code structure.
-
----
-
-## Recommendations
-
-💡 **Recommended**: Proceed after the following steps are completed.
-
-- All features implemented (or most core features completed)
-
-Potential issues if not completed:
-
-- Integration refactoring effectiveness may be limited
-- Some features may be missing during E2E testing
-- Overall quality verification may be incomplete
-
-Would you like to continue?
+기능 간 중복을 제거하고 전체 코드 구조를 개선합니다.
 
 ---
 
-### Step 1: Check API Integration Status (Before Starting)
+## 권장사항
 
-**AI work**: Check API integration status from `docs/workflows/memory.md`
+💡 **권장**: 다음 단계가 완료된 후 진행하세요.
 
-#### 🔔 Reconfirm API Integration Status
+- 모든 기능 구현 완료 (또는 대부분의 핵심 기능 완료)
 
-"Before starting integration work, I will check the API integration status."
+완료되지 않은 경우 발생할 수 있는 문제:
 
-**Current API integration status**:
+- 통합 리팩토링 효과가 제한적일 수 있음
+- E2E 테스트 시 일부 기능이 누락될 수 있음
+- 전체 품질 검증이 불완전할 수 있음
 
-- ✅ **Integration completed**: [Feature1], [Feature2], ...
-- ⏳ **Keep dummy data**: [Feature3], [Feature4], ...
-
-**APIs not yet integrated**:
-
-- [Feature3]: Need to check API readiness status
-- [Feature4]: Need to check API readiness status
-
-**Please select one**:
-
-- [ ] **Integrate now** (Selectively integrate only ready APIs)
-- [ ] **Integrate later** (Keep dummy data, proceed with integration work)
-- [ ] **Partial integration** (Integrate some, keep others as dummy)
-
-**Selection options**:
-
-- Features to integrate: [Feature1], [Feature2], ...
-- Features not to integrate: [Feature3], [Feature4], ...
-
-⚠️ **Proceed with integration work after selection is completed**
+계속 진행하시겠습니까?
 
 ---
 
-### Step 2: Analyze Duplicate Code
+### 1단계: API 연동 상태 확인 (시작 전)
 
-**AI work**:
+**AI 작업**: `docs/workflows/memory.md`에서 API 연동 상태 확인
 
-1. Scan entire codebase
-2. Identify duplicate patterns
+#### 🔔 API 연동 상태 재확인
 
-**Duplicate targets**:
+"통합 작업을 시작하기 전에 API 연동 상태를 확인하겠습니다."
 
-- Similar utility functions
-- Repeated logic
-- Duplicate type definitions
-- Similar components
-- Duplicate API call patterns
+**현재 API 연동 상태**:
 
-**Output format**:
+- ✅ **연동 완료**: [기능1], [기능2], ...
+- ⏳ **더미 데이터 유지**: [기능3], [기능4], ...
+
+**아직 연동되지 않은 API**:
+
+- [기능3]: API 준비 상태 확인 필요
+- [기능4]: API 준비 상태 확인 필요
+
+**하나를 선택해주세요**:
+
+- [ ] **지금 연동** (준비된 API만 선택적으로 연동)
+- [ ] **나중에 연동** (더미 데이터 유지하고 통합 작업 진행)
+- [ ] **부분 연동** (일부는 연동, 일부는 더미 유지)
+
+**선택 옵션**:
+
+- 연동할 기능: [기능1], [기능2], ...
+- 연동하지 않을 기능: [기능3], [기능4], ...
+
+⚠️ **선택 완료 후 통합 작업 진행**
+
+---
+
+### 2단계: 중복 코드 분석
+
+**AI 작업**:
+
+1. 전체 코드베이스 스캔
+2. 중복 패턴 파악
+
+**중복 대상**:
+
+- 유사한 유틸리티 함수
+- 반복되는 로직
+- 중복 타입 정의
+- 유사한 컴포넌트
+- 중복 API 호출 패턴
+
+**출력 형식**:
 
 ```typescript
 interface Duplication {
   type: "utility" | "component" | "type" | "hook" | "constant";
-  pattern: string; // '{Duplicate pattern description}'
-  locations: string[]; // ['{File path 1}', '{File path 2}']
-  suggestion: string; // '{Integration suggestion}'
+  pattern: string; // '{중복 패턴 설명}'
+  locations: string[]; // ['{파일 경로 1}', '{파일 경로 2}']
+  suggestion: string; // '{통합 제안}'
   impact: "high" | "medium" | "low";
 }
 ```
 
 ---
 
-### Step 3: Extract Common Modules
+### 3단계: 공통 모듈 추출
 
-**Extraction targets**:
+**추출 대상**:
 
-1. **Common utilities**
+1. **공통 유틸리티**
 
-   - Path: `src/shared/utils/`
-   - 📘 Examples: formatPrice, formatDate, formatPhoneNumber, etc.
+   - 경로: `src/shared/utils/`
+   - 📘 예시: formatPrice, formatDate, formatPhoneNumber 등
 
-2. **Common hooks**
+2. **공통 훅**
 
-   - Path: `src/shared/hooks/`
-   - 📘 Examples: usePagination, useDebounce, useLocalStorage, etc.
+   - 경로: `src/shared/hooks/`
+   - 📘 예시: usePagination, useDebounce, useLocalStorage 등
 
-3. **Common types**
+3. **공통 타입**
 
-   - Path: `src/shared/types/common.ts`
-   - 📘 Examples: PaginationParams, ErrorResponse, ApiResponse<T>, etc.
+   - 경로: `src/shared/types/common.ts`
+   - 📘 예시: PaginationParams, ErrorResponse, ApiResponse<T> 등
 
-4. **Common constants**
-   - Path: `src/shared/constants/app.ts`
-   - 📘 Examples: ITEMS_PER_PAGE, API_TIMEOUT, MAX_FILE_SIZE, etc.
-
----
-
-### Step 4: Improve Overall Structure
-
-**Improvement items**:
-
-1. **Organize folder structure**
-
-   - Unify inconsistent folder structures
-   - Reorganize file locations
-   - Unify naming conventions
-
-2. **Optimize import paths**
-
-   - Set absolute paths in tsconfig.json
-   - Use aliases like `@/components`, `@/utils`
-
-3. **Remove circular dependencies**
-   - Extract to common modules
-   - Separate interfaces
-   - Dependency inversion
+4. **공통 상수**
+   - 경로: `src/shared/constants/app.ts`
+   - 📘 예시: ITEMS_PER_PAGE, API_TIMEOUT, MAX_FILE_SIZE 등
 
 ---
 
-### Step 5: Performance Optimization (Optional)
+### 4단계: 전체 구조 개선
 
-#### 🔔 User input required
+**개선 항목**:
 
-"Would you like to perform performance optimization?"
+1. **폴더 구조 정리**
 
-**Whether optimization is needed**:
+   - 일관성 없는 폴더 구조 통일
+   - 파일 위치 재정리
+   - 네이밍 컨벤션 통일
 
-- [ ] **Yes** - Perform performance optimization
-- [ ] **No** - Defer for later improvement
+2. **임포트 경로 최적화**
 
-**When "Yes" is selected**:
+   - tsconfig.json에서 절대 경로 설정
+   - `@/components`, `@/utils` 같은 별칭 사용
 
-#### 🔔 Set Performance Goals
-
-**Performance goal settings**:
-
-- Initial loading time goal: `_________________`sec (default: 3sec)
-- Page transition time goal: `_________________`sec (default: 1sec)
-- Bundle size goal: `_________________`MB (default: 1MB)
-
-**Optimization items** (Select only what's needed):
-
-- [ ] React optimization (memo, callback, useMemo)
-- [ ] Code splitting
-- [ ] Bundle size optimization
-- [ ] API call optimization
-- [ ] Image optimization
-
-**Optimization item details**:
-
-1. **React Optimization**
-
-   - Prevent unnecessary re-renders with React.memo
-   - Utilize useCallback, useMemo
-   - Component separation
-
-2. **Code Splitting**
-
-   - Separate by page with React.lazy
-   - Handle loading with Suspense
-   - Route-based splitting
-
-3. **Bundle Size Optimization**
-
-   - Remove unused code
-   - Replace heavy libraries
-   - Tree shaking optimization
-
-4. **API Call Optimization**
-
-   - React Query caching settings
-   - Adjust staleTime, cacheTime
-   - Prevent unnecessary refetch
-
-5. **Image Optimization**
-   - Apply lazy loading
-   - Use WebP format
-   - Size optimization
+3. **순환 의존성 제거**
+   - 공통 모듈로 추출
+   - 인터페이스 분리
+   - 의존성 역전
 
 ---
 
-### Step 6: Improve Accessibility
+### 5단계: 성능 최적화 (선택사항)
 
-**Checklist**:
+#### 🔔 사용자 입력 필요
 
-- [ ] **Keyboard navigation**: Tab order, focus indicators, Enter/Space behavior, ESC close
-- [ ] **Screen reader support**: Alt text, ARIA attributes, landmark roles, form labels
-- [ ] **Color contrast**: Meet WCAG AA standard (4.5:1)
-- [ ] **Responsive accessibility**: Touch target 44x44px or larger, maintain layout when zoomed
+"성능 최적화를 수행하시겠습니까?"
 
----
+**최적화 필요 여부**:
 
-### Step 7: Supplement Integration Tests
+- [ ] **예** - 성능 최적화 수행
+- [ ] **아니오** - 나중에 개선
 
-**Test items**:
+**"예" 선택 시**:
 
-1. **Cross-domain integration tests**
+#### 🔔 성능 목표 설정
 
-   - Path: `__tests__/integration/cross-domain/`
-   - 📘 Examples: Cart → Order flow, Login → My Page flow
+**성능 목표 설정**:
 
-2. **Error recovery tests**
+- 초기 로딩 시간 목표: `_________________`초 (기본: 3초)
+- 페이지 전환 시간 목표: `_________________`초 (기본: 1초)
+- 번들 사이즈 목표: `_________________`MB (기본: 1MB)
 
-   - 📘 Examples: Retry after API failure, network error handling, timeout handling
+**최적화 항목** (필요한 것만 선택):
 
-3. **Performance tests**
-   - Initial loading time (goal: <3sec)
-   - Page transition time (goal: <1sec)
+- [ ] React 최적화 (memo, callback, useMemo)
+- [ ] 코드 스플리팅
+- [ ] 번들 사이즈 최적화
+- [ ] API 호출 최적화
+- [ ] 이미지 최적화
 
----
+**최적화 항목 세부사항**:
 
-### Step 8: Integration Review
+1. **React 최적화**
 
-### Review Guide (For AI)
+   - React.memo로 불필요한 리렌더링 방지
+   - useCallback, useMemo 활용
+   - 컴포넌트 분리
 
-**Basic principle**: Ask questions flexibly according to project scale and complexity
+2. **코드 스플리팅**
 
-**Always ask**:
+   - React.lazy로 페이지별 분리
+   - Suspense로 로딩 처리
+   - 라우트 기반 분리
 
-- Has integration work been completed?
+3. **번들 사이즈 최적화**
 
-**Conditional questions**:
+   - 사용하지 않는 코드 제거
+   - 무거운 라이브러리 교체
+   - Tree shaking 최적화
 
-- If there was much duplicate code: Is common module extraction appropriate?
-- If performance optimization was performed: Were performance goals achieved?
-- If accessibility improvements were performed: Do they meet accessibility criteria?
+4. **API 호출 최적화**
 
-**Question style**:
+   - React Query 캐싱 설정
+   - staleTime, cacheTime 조정
+   - 불필요한 refetch 방지
 
-- Prefer open-ended questions
-- Specifically point out issues when found
-- Provide improvement suggestions
-
-#### 🔔 User Review
-
-"Overall system integration and refactoring has been completed."
-
-**Work results**:
-
-Duplicate code removal:
-
-- ✅ Extracted N common utilities
-- ✅ Extracted N common hooks
-- ✅ Integrated N common types
-
-Structure improvements:
-
-- ✅ Import path optimization (absolute paths)
-- ✅ 0 circular dependencies
-- ✅ Unified folder structure
-
-Performance optimization (if performed):
-
-- ✅ X% bundle size reduction
-- ✅ X.Xsec initial loading (goal: <3sec)
-- ✅ X.Xsec page transition (goal: <1sec)
-
-Accessibility improvements:
-
-- ✅ Keyboard navigation completed
-- ✅ ARIA attributes added
-- ✅ Color contrast improved
-
-Tests:
-
-- ✅ Added N integration tests
-- ✅ 100% test pass rate
-- ✅ X% coverage (goal: 90% or higher)
-
-**Review is recommended**:
-
-- Is code structure clean?
-- Does performance meet targets? (if optimization performed)
-- Is accessibility improved?
-- Are tests stable?
-
-**Feedback**: (Implement immediately if modification needed)
+5. **이미지 최적화**
+   - 지연 로딩 적용
+   - WebP 포맷 사용
+   - 사이즈 최적화
 
 ---
 
-## Memory Update
+### 6단계: 접근성 개선
 
-**When integration work is completed**:
+**체크리스트**:
+
+- [ ] **키보드 네비게이션**: Tab 순서, 포커스 인디케이터, Enter/Space 동작, ESC 닫기
+- [ ] **스크린 리더 지원**: Alt 텍스트, ARIA 속성, 랜드마크 역할, 폼 레이블
+- [ ] **색상 대비**: WCAG AA 기준 충족 (4.5:1)
+- [ ] **반응형 접근성**: 터치 타겟 44x44px 이상, 확대 시 레이아웃 유지
+
+---
+
+### 7단계: 통합 테스트 보완
+
+**테스트 항목**:
+
+1. **도메인 간 통합 테스트**
+
+   - 경로: `__tests__/integration/cross-domain/`
+   - 📘 예시: 장바구니 → 주문 플로우, 로그인 → 마이페이지 플로우
+
+2. **에러 복구 테스트**
+
+   - 📘 예시: API 실패 후 재시도, 네트워크 에러 처리, 타임아웃 처리
+
+3. **성능 테스트**
+   - 초기 로딩 시간 (목표: <3초)
+   - 페이지 전환 시간 (목표: <1초)
+
+---
+
+### 8단계: 통합 검수
+
+### 검수 가이드 (AI용)
+
+**기본 원칙**: 프로젝트 규모 및 복잡도에 따라 유연하게 질문
+
+**항상 물어볼 것**:
+
+- 통합 작업이 완료되었는가?
+
+**조건부 질문**:
+
+- 중복 코드가 많았던 경우: 공통 모듈 추출이 적절한가?
+- 성능 최적화를 수행한 경우: 성능 목표를 달성했는가?
+- 접근성 개선을 수행한 경우: 접근성 기준을 충족하는가?
+
+**질문 스타일**:
+
+- 개방형 질문 선호
+- 문제 발견 시 구체적으로 지적
+- 개선 방안 제시
+
+#### 🔔 사용자 검수
+
+"전체 시스템 통합 및 리팩토링이 완료되었습니다."
+
+**작업 결과**:
+
+중복 코드 제거:
+
+- ✅ 공통 유틸리티 N개 추출
+- ✅ 공통 훅 N개 추출
+- ✅ 공통 타입 N개 통합
+
+구조 개선:
+
+- ✅ 임포트 경로 최적화 (절대 경로)
+- ✅ 순환 의존성 0개
+- ✅ 폴더 구조 통일
+
+성능 최적화 (수행한 경우):
+
+- ✅ 번들 사이즈 X% 감소
+- ✅ 초기 로딩 X.X초 (목표: <3초)
+- ✅ 페이지 전환 X.X초 (목표: <1초)
+
+접근성 개선:
+
+- ✅ 키보드 네비게이션 완료
+- ✅ ARIA 속성 추가
+- ✅ 색상 대비 개선
+
+테스트:
+
+- ✅ 통합 테스트 N개 추가
+- ✅ 테스트 통과율 100%
+- ✅ 커버리지 X% (목표: 90% 이상)
+
+**검수 권장사항**:
+
+- 코드 구조가 깔끔한가?
+- 성능이 목표를 충족하는가? (최적화 수행한 경우)
+- 접근성이 개선되었는가?
+- 테스트가 안정적인가?
+
+**피드백**: (수정 필요 시 즉시 반영)
+
+---
+
+## 메모리 업데이트
+
+**통합 작업 완료 시**:
 
 ```markdown
-- [x] Integration and refactoring
+- [x] 통합 및 리팩토링
 ```
 
 ---
 
-## Next Steps
+## 다음 단계
 
-**After integration is completed**:
+**통합 완료 후**:
 
-- 🎉 Proceed to E2E testing: `/workflow-e2e`
+- 🎉 E2E 테스트로 진행: `/workflow-e2e`
 
 ---
 
-## Output File Paths
+## 결과물 파일 경로
 
-**Integration outputs**:
+**통합 결과물**:
 
-- `src/shared/utils/` - Common utilities
-- `src/shared/hooks/` - Common hooks
-- `src/shared/types/` - Common types
-- `src/shared/constants/` - Common constants
+- `src/shared/utils/` - 공통 유틸리티
+- `src/shared/hooks/` - 공통 훅
+- `src/shared/types/` - 공통 타입
+- `src/shared/constants/` - 공통 상수
 
-**Tests**:
+**테스트**:
 
-- `__tests__/integration/cross-domain/` - Cross-domain integration tests
+- `__tests__/integration/cross-domain/` - 도메인 간 통합 테스트
 
-**Documentation**:
+**문서**:
 
-- `docs/architecture.md` - Final architecture
-- `docs/performance.md` - Performance optimization results (if optimization performed)
+- `docs/architecture.md` - 최종 아키텍처
+- `docs/performance.md` - 성능 최적화 결과 (최적화 수행한 경우)

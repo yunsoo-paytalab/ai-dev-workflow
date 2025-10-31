@@ -1,298 +1,298 @@
-# AI Development Workflow Command Guide
+# AI 개발 워크플로우 커맨드 가이드
 
-## Overview
+## 개요
 
-**Flexible Workflow System**:
+**유연한 워크플로우 시스템**:
 
-- Tasks can be performed in any desired order
-- Shows warnings if dependencies are not met
-- Continues after user confirmation
+- 원하는 순서대로 작업 수행 가능
+- 의존성 미충족 시 경고 표시
+- 사용자 확인 후 계속 진행
 
-**Workflow Structure**:
+**워크플로우 구조**:
 
-- `memory.md` - Progress tracking (in `docs/workflows/`)
-- Command files in `.claude/commands/` - Each contains full workflow details
+- `memory.md` - 진행 상황 추적 (`docs/workflows/`에 위치)
+- 커맨드 파일 `.claude/commands/` - 각각 전체 워크플로우 세부사항 포함
 
 ---
 
-## Main Commands
+## 메인 커맨드
 
 ### `/workflow start`
 
-**When to use**: At project start
+**사용 시점**: 프로젝트 시작 시
 
-**Features**:
+**기능**:
 
-- Read `memory.md` to understand current state
-- Check requirements specification
-- Guide first task
+- `memory.md` 읽어 현재 상태 파악
+- 요구사항 명세 확인
+- 첫 작업 안내
 
-**Usage**:
+**사용법**:
 
 ```
 /workflow start
 ```
 
-**AI Execution Prompt**:
+**AI 실행 프롬프트**:
 
 ```
-Please perform the following steps:
+다음 단계를 수행해주세요:
 
-1. Read `docs/workflows/memory.md` to understand the current progress
-2. Check if basic project information has been entered
-3. If not entered: "Basic information is required to start the project. Would you like to start with `/workflow-domain-definition` command?"
-4. If completed: Guide current state and recommended next steps
+1. `docs/workflows/memory.md`를 읽어 현재 진행 상황 파악
+2. 기본 프로젝트 정보가 입력되어 있는지 확인
+3. 미입력 시: "프로젝트 시작을 위해 기본 정보가 필요합니다. `/workflow-domain-definition` 커맨드로 시작하시겠습니까?"
+4. 완료 시: 현재 상태와 권장 다음 단계 안내
 
-Recommended work order (for reference):
-1. Domain definition (`/workflow-domain-definition`)
-2. Common UI design (`/workflow-common-ui`)
-3. Feature UI design (`/workflow-ui [feature-name]`)
-4. Feature implementation (`/workflow-implement [feature-name]`)
-5. System integration (`/workflow-integrate`)
-6. E2E testing (`/workflow-e2e`)
+권장 작업 순서 (참고용):
+1. 도메인 정의 (`/workflow-domain-definition`)
+2. 공통 UI 설계 (`/workflow-common-ui`)
+3. 기능 UI 설계 (`/workflow-ui [기능명]`)
+4. 기능 구현 (`/workflow-implement [기능명]`)
+5. 시스템 통합 (`/workflow-integrate`)
+6. E2E 테스트 (`/workflow-e2e`)
 ```
 
 ---
 
 ### `/workflow status`
 
-**When to use**: Anytime
+**사용 시점**: 언제든지
 
-**Features**:
+**기능**:
 
-- Display overall progress
-- List completed/incomplete tasks
-- Guide next recommended steps
+- 전체 진행 상황 표시
+- 완료/미완료 작업 목록
+- 다음 권장 단계 안내
 
-**Usage**:
+**사용법**:
 
 ```
 /workflow status
 ```
 
-**AI Execution Prompt**:
+**AI 실행 프롬프트**:
 
 ```
-Please display the following information:
+다음 정보를 표시해주세요:
 
-1. Read `docs/workflows/memory.md` to understand the overall progress
-2. Display the following information:
+1. `docs/workflows/memory.md`를 읽어 전체 진행 상황 파악
+2. 다음 정보 표시:
 
-**Project Information**:
-- Project name: [value]
-- Path: [value]
-- Tech stack: [value]
+**프로젝트 정보**:
+- 프로젝트명: [값]
+- 경로: [값]
+- 기술 스택: [값]
 
-**Progress Status**:
-- ✅ Completed tasks: [list]
-- 🔄 In progress: [list]
-- ⏳ Pending: [list]
+**진행 상황**:
+- ✅ 완료된 작업: [목록]
+- 🔄 진행 중: [목록]
+- ⏳ 대기 중: [목록]
 
-**Feature Progress**:
-- [Feature status display]
+**기능 진행 상황**:
+- [기능 상태 표시]
 
-**Recommended Next Steps**:
-- [Next step guidance]
+**권장 다음 단계**:
+- [다음 단계 안내]
 ```
 
 ---
 
 ### `/workflow update`
 
-**When to use**: When manual memory file update is needed
+**사용 시점**: 메모리 파일 수동 업데이트가 필요할 때
 
-**Features**:
+**기능**:
 
-- Analyze current progress
-- Update `memory.md` file
-- Check completed tasks
+- 현재 진행 상황 분석
+- `memory.md` 파일 업데이트
+- 완료된 작업 체크
 
-**Usage**:
+**사용법**:
 
 ```
 /workflow update
 ```
 
-**AI Execution Prompt**:
+**AI 실행 프롬프트**:
 
 ```
-Please update the current state to memory file:
+현재 상태를 메모리 파일에 업데이트해주세요:
 
-1. Read `docs/workflows/memory.md` to understand the current progress
-2. Analyze the current state of the project:
-   - Check completed tasks
-   - Identify currently in-progress tasks
-   - Check file system
-3. Update `memory.md` file:
-   - Update checklist
-   - Update feature progress table
-4. Report the updated content to the user
+1. `docs/workflows/memory.md`를 읽어 현재 진행 상황 파악
+2. 프로젝트의 현재 상태 분석:
+   - 완료된 작업 확인
+   - 현재 진행 중인 작업 파악
+   - 파일 시스템 확인
+3. `memory.md` 파일 업데이트:
+   - 체크리스트 업데이트
+   - 기능 진행 상황 테이블 업데이트
+4. 업데이트된 내용을 사용자에게 보고
 ```
 
 ---
 
 ### `/workflow help`
 
-**When to use**: Anytime
+**사용 시점**: 언제든지
 
-**Features**:
+**기능**:
 
-- Display all available commands
-- Explain usage of each command
+- 사용 가능한 모든 커맨드 표시
+- 각 커맨드 사용법 설명
 
-**Usage**:
+**사용법**:
 
 ```
 /workflow help
 ```
 
-**AI Execution Prompt**:
+**AI 실행 프롬프트**:
 
 ```
-Please display all available commands:
+사용 가능한 모든 커맨드를 표시해주세요:
 
-**Main Commands**:
-- /workflow start - Start project
-- /workflow status - Check current status
-- /workflow update - Manual memory update
-- /workflow help - Help
+**메인 커맨드**:
+- /workflow start - 프로젝트 시작
+- /workflow status - 현재 상태 확인
+- /workflow update - 메모리 수동 업데이트
+- /workflow help - 도움말
 
-**Task Commands**:
-- /workflow-domain-definition - Domain definition
-- /workflow-common-ui - Common UI design
-- /workflow-ui [feature-name] - Feature UI design
-- /workflow-implement [feature-name] - Feature implementation
-- /workflow-integrate - Integration and refactoring
-- /workflow-e2e - E2E testing
+**작업 커맨드**:
+- /workflow-domain-definition - 도메인 정의
+- /workflow-common-ui - 공통 UI 설계
+- /workflow-ui [기능명] - 기능 UI 설계
+- /workflow-implement [기능명] - 기능 구현
+- /workflow-integrate - 통합 및 리팩토링
+- /workflow-e2e - E2E 테스트
 
-**Special Commands**:
-- /workflow reset - Reset project
+**특수 커맨드**:
+- /workflow reset - 프로젝트 초기화
 
-Display detailed description for each command.
+각 커맨드에 대한 상세 설명을 표시하세요.
 ```
 
 ---
 
-## Task Commands
+## 작업 커맨드
 
-### `/workflow-domain-definition` - Domain Definition
+### `/workflow-domain-definition` - 도메인 정의
 
-📄 Detailed docs: `@domain-definition-cmd.md`
+📄 상세 문서: `@domain-definition-cmd.md`
 
-### `/workflow-common-ui` - Common UI Design
+### `/workflow-common-ui` - 공통 UI 설계
 
-📄 Detailed docs: `@common-ui-cmd.md`
+📄 상세 문서: `@common-ui-cmd.md`
 
-### `/workflow-ui [feature-name]` - Feature UI Design
+### `/workflow-ui [기능명]` - 기능 UI 설계
 
-📄 Detailed docs: `@ui-cmd.md`
+📄 상세 문서: `@ui-cmd.md`
 
-### `/workflow-implement [feature-name]` - Feature Implementation
+### `/workflow-implement [기능명]` - 기능 구현
 
-📄 Detailed docs: `@implement-cmd.md`
+📄 상세 문서: `@implement-cmd.md`
 
-### `/workflow-integrate` - Integration and Refactoring
+### `/workflow-integrate` - 통합 및 리팩토링
 
-📄 Detailed docs: `@integrate-cmd.md`
+📄 상세 문서: `@integrate-cmd.md`
 
-### `/workflow-e2e` - E2E Testing
+### `/workflow-e2e` - E2E 테스트
 
-📄 Detailed docs: `@e2e-cmd.md`
+📄 상세 문서: `@e2e-cmd.md`
 
 ---
 
-## Special Commands
+## 특수 커맨드
 
 ### `/workflow reset`
 
-**When to use**: When resetting project
+**사용 시점**: 프로젝트 초기화 시
 
-**Features**:
+**기능**:
 
-- Reset `memory.md`
-- Reset all progress
-- Start from scratch
+- `memory.md` 초기화
+- 모든 진행 상황 리셋
+- 처음부터 다시 시작
 
-**Usage**:
+**사용법**:
 
 ```
 /workflow reset
 ```
 
-**AI Execution Prompt**:
+**AI 실행 프롬프트**:
 
 ```
-Please reset the project:
+프로젝트를 초기화해주세요:
 
-1. Read `docs/workflows/memory-template.md` file
-2. Overwrite `docs/workflows/memory.md` file with the template
-3. Display message: "Project has been reset. Please start with `/workflow start` command."
+1. `docs/workflows/memory-template.md` 파일 읽기
+2. `docs/workflows/memory.md` 파일을 템플릿으로 덮어쓰기
+3. 메시지 표시: "프로젝트가 초기화되었습니다. `/workflow start` 커맨드로 시작해주세요."
 ```
 
 ---
 
-## Usage Examples
+## 사용 예시
 
-### Start Project
+### 프로젝트 시작
 
 ```
 /workflow start
 ```
 
-### Check Current Status
+### 현재 상태 확인
 
 ```
 /workflow status
 ```
 
-### Domain Definition
+### 도메인 정의
 
 ```
 /workflow-domain-definition
 ```
 
-### Common Component Development
+### 공통 컴포넌트 개발
 
 ```
-/workflow-common-ui    # Dialog component
-/workflow-common-ui    # Toast component
-/workflow-common-ui    # Header component
+/workflow-common-ui    # Dialog 컴포넌트
+/workflow-common-ui    # Toast 컴포넌트
+/workflow-common-ui    # Header 컴포넌트
 ```
 
-### Feature Component Development
+### 기능 컴포넌트 개발
 
 ```
-/workflow-ui product-list    # ProductList component
-/workflow-ui product-list    # ProductCard component
-/workflow-ui cart            # CartPage component
+/workflow-ui product-list    # ProductList 컴포넌트
+/workflow-ui product-list    # ProductCard 컴포넌트
+/workflow-ui cart            # CartPage 컴포넌트
 ```
 
-### Feature Implementation
+### 기능 구현
 
 ```
 /workflow-implement product-list
 /workflow-implement cart
 ```
 
-### System Integration
+### 시스템 통합
 
 ```
 /workflow-integrate
 ```
 
-### E2E Testing
+### E2E 테스트
 
 ```
 /workflow-e2e
 ```
 
-### Memory Update
+### 메모리 업데이트
 
 ```
 /workflow update
 ```
 
-### Help
+### 도움말
 
 ```
 /workflow help
@@ -300,147 +300,147 @@ Please reset the project:
 
 ---
 
-## Dependency Warning System
+## 의존성 경고 시스템
 
-### Warning Display Format
+### 경고 표시 형식
 
 ```
-💡 Recommendation
+💡 권장 사항
 
-The following steps are not completed:
-- [Recommended step name]
+다음 단계가 완료되지 않았습니다:
+- [권장 단계명]
 
-Potential issues if not completed:
-- [Specific issue 1]
-- [Specific issue 2]
+완료되지 않은 경우 발생할 수 있는 문제:
+- [구체적인 문제 1]
+- [구체적인 문제 2]
 
-Would you like to continue? (y/n)
+계속 진행하시겠습니까? (y/n)
 ```
 
-### Dependency Check Items
+### 의존성 체크 항목
 
-**Common UI Design**:
+**공통 UI 설계**:
 
-- Domain definition completed (folder structure info)
+- 도메인 정의 완료 (폴더 구조 정보)
 
-**Feature UI Design**:
+**기능 UI 설계**:
 
-- Domain definition completed
-- Common UI design completed (reuse common components)
+- 도메인 정의 완료
+- 공통 UI 설계 완료 (공통 컴포넌트 재사용)
 
-**Feature Implementation**:
+**기능 구현**:
 
-- Domain definition completed (feature list needed)
-- Feature UI design completed (recommended)
+- 도메인 정의 완료 (기능 목록 필요)
+- 기능 UI 설계 완료 (권장)
 
-**System Integration**:
+**시스템 통합**:
 
-- All (or most core) features implemented
+- 모든 (또는 대부분의 핵심) 기능 구현 완료
 
-**E2E Testing**:
+**E2E 테스트**:
 
-- System integration completed
+- 시스템 통합 완료
 
 ---
 
-## Automatic Tasks on Command Execution
+## 커맨드 실행 시 자동 작업
 
-### 1. Read Memory.md
-
-```
-Read docs/workflows/memory.md file to understand:
-- Basic project information
-- Tech stack
-- Domain list
-- Page structure
-- Progress checklist
-- Feature progress
-- Key decisions
-```
-
-### 2. Check Recommendations
+### 1. Memory.md 읽기
 
 ```
-Check recommendations before starting work:
-- Check if required previous steps are completed
-- Display warning message if not completed
-- Wait for user confirmation
+docs/workflows/memory.md 파일을 읽어 다음을 파악:
+- 기본 프로젝트 정보
+- 기술 스택
+- 도메인 목록
+- 페이지 구조
+- 진행 상황 체크리스트
+- 기능 진행 상황
+- 주요 결정사항
 ```
 
-### 3. Reference Workflow Files
+### 2. 권장사항 체크
 
 ```
-Reference workflow files for the task:
+작업 시작 전 권장사항 체크:
+- 필요한 이전 단계가 완료되었는지 확인
+- 미완료 시 경고 메시지 표시
+- 사용자 확인 대기
+```
+
+### 3. 워크플로우 파일 참조
+
+```
+해당 작업의 워크플로우 파일 참조:
 - domain-definition.md
 - ui-design.md
 - feature-implementation.md
 - system-integration.md
 ```
 
-### 4. Execute Work
+### 4. 작업 실행
 
 ```
-Follow the workflow file process to perform work:
-- Check step-by-step checklist
-- Request user input when needed
-- Execute AI tasks
-- Proceed with user review
+워크플로우 파일의 프로세스를 따라 작업 수행:
+- 단계별 체크리스트 확인
+- 필요 시 사용자 입력 요청
+- AI 작업 실행
+- 사용자 검수 진행
 ```
 
-### 5. Save Output
+### 5. 결과물 저장
 
 ```
-Save output to specified path:
-- Reference "Output File Path" section of each workflow file
+지정된 경로에 결과물 저장:
+- 각 워크플로우 파일의 "결과물 파일 경로" 섹션 참조
 ```
 
-### 6. Update Memory.md
+### 6. Memory.md 업데이트
 
 ```
-Update memory.md:
-- Check completed task checkboxes
-- Update feature progress table
+memory.md 업데이트:
+- 완료된 작업 체크박스 체크
+- 기능 진행 상황 테이블 업데이트
 ```
 
 ---
 
-## Recommended Work Order (For Reference)
+## 권장 작업 순서 (참고용)
 
-> 💡 **For reference**: You don't need to follow this order.
+> 💡 **참고용**: 이 순서를 따르지 않아도 됩니다.
 
-1. **Domain Definition** (`/workflow-domain-definition`)
-2. **Common UI** (`/workflow-common-ui`)
-3. **Repeat for each feature**:
-   - Feature UI (`/workflow-ui [feature-name]`)
-   - Feature Implementation (`/workflow-implement [feature-name]`)
-4. **System Integration** (`/workflow-integrate`)
-5. **E2E Testing** (`/workflow-e2e`)
+1. **도메인 정의** (`/workflow-domain-definition`)
+2. **공통 UI** (`/workflow-common-ui`)
+3. **각 기능마다 반복**:
+   - 기능 UI (`/workflow-ui [기능명]`)
+   - 기능 구현 (`/workflow-implement [기능명]`)
+4. **시스템 통합** (`/workflow-integrate`)
+5. **E2E 테스트** (`/workflow-e2e`)
 
 ---
 
-## File Structure
+## 파일 구조
 
-### Command Files
+### 커맨드 파일
 
-**Main File**:
+**메인 파일**:
 
-- `.claude/commands/workflow.md` - Main commands and complete guide
-  - `/workflow start` - Start project
-  - `/workflow status` - Check current status
-  - `/workflow update` - Manual memory update
-  - `/workflow help` - Help
-  - `/workflow reset` - Reset project
+- `.claude/commands/workflow.md` - 메인 커맨드 및 전체 가이드
+  - `/workflow start` - 프로젝트 시작
+  - `/workflow status` - 현재 상태 확인
+  - `/workflow update` - 메모리 수동 업데이트
+  - `/workflow help` - 도움말
+  - `/workflow reset` - 프로젝트 초기화
 
-**Task Command Files** (Each contains full workflow details):
+**작업 커맨드 파일** (각각 전체 워크플로우 세부사항 포함):
 
-- `.claude/commands/workflow-domain-definition.md` - Domain definition with detailed steps
-- `.claude/commands/workflow-common-ui.md` - Common UI component development
-- `.claude/commands/workflow-ui.md` - Feature UI component development
-- `.claude/commands/workflow-implement.md` - Feature implementation (Test-First)
-- `.claude/commands/workflow-integrate.md` - System integration and refactoring
-- `.claude/commands/workflow-e2e.md` - E2E testing and deployment preparation
+- `.claude/commands/workflow-domain-definition.md` - 도메인 정의 상세 단계
+- `.claude/commands/workflow-common-ui.md` - 공통 UI 컴포넌트 개발
+- `.claude/commands/workflow-ui.md` - 기능 UI 컴포넌트 개발
+- `.claude/commands/workflow-implement.md` - 기능 구현 (Test-First)
+- `.claude/commands/workflow-integrate.md` - 시스템 통합 및 리팩토링
+- `.claude/commands/workflow-e2e.md` - E2E 테스트 및 배포 준비
 
-### Memory Files
+### 메모리 파일
 
-- `docs/workflows/memory.md` - Current project progress tracking
-- `docs/workflows/memory-template.md` - Memory template for new projects
+- `docs/workflows/memory.md` - 현재 프로젝트 진행 상황 추적
+- `docs/workflows/memory-template.md` - 신규 프로젝트용 메모리 템플릿

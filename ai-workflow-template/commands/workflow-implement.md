@@ -1,20 +1,20 @@
-# `/workflow-implement [feature-name]` Command
+# `/workflow-implement [기능명]` 커맨드
 
-**When to use**: When implementing features
+**사용 시점**: 기능을 구현할 때
 
-**Features**:
+**기능**:
 
-- Write tests (Test-First)
-- Implementation (dummy data first)
-- Refactoring
-- (Optional) API integration
+- 테스트 작성 (Test-First)
+- 구현 (더미 데이터 우선)
+- 리팩토링
+- (선택) API 연동
 
-**Recommendations**:
+**권장사항**:
 
-- Domain definition completed
-- Feature UI design completed (recommended)
+- 도메인 정의 완료
+- 기능 UI 설계 완료 (권장)
 
-**Usage**:
+**사용법**:
 
 ```
 /workflow-implement product-list
@@ -23,110 +23,110 @@
 
 ---
 
-## Goal
+## 목표
 
-Implement selected features using Test-First approach, and optionally integrate with actual APIs.
+선택한 기능을 Test-First 방식으로 구현하고, 선택적으로 실제 API와 연동합니다.
 
-**Steps**:
+**단계**:
 
-- Step 1: Confirm feature information
-- Step 2: Write tests (Test-First)
-- Step 3: Implementation (dummy data first, Green Phase)
-- Step 4: Refactoring (Refactor Phase)
-- Step 5: Feature review
-- Step 6: API integration (optional)
-
----
-
-## Recommendations
-
-💡 **Recommended**: Proceed after the following steps are completed.
-
-- Domain definition completed (feature list needed)
-- UI design completed (for the feature) - recommended
-
-Potential issues if not completed:
-
-- Feature information may be unclear
-- May be difficult to implement without knowing UI component structure
-- File paths may not be defined
-
-Would you like to continue?
+- 1단계: 기능 정보 확인
+- 2단계: 테스트 작성 (Test-First)
+- 3단계: 구현 (더미 데이터 우선, Green Phase)
+- 4단계: 리팩토링 (Refactor Phase)
+- 5단계: 기능 검수
+- 6단계: API 연동 (선택사항)
 
 ---
 
-## Step 1: Confirm Feature Information
+## 권장사항
 
-#### 🔔 User input required
+💡 **권장**: 다음 단계가 완료된 후 진행하세요.
 
-"Please select the feature to implement:"
+- 도메인 정의 완료 (기능 목록 필요)
+- UI 설계 완료 (해당 기능의) - 권장
 
-**Feature information**:
+완료되지 않은 경우 발생할 수 있는 문제:
+
+- 기능 정보가 불명확할 수 있음
+- UI 컴포넌트 구조를 모르면 구현이 어려울 수 있음
+- 파일 경로가 정의되지 않았을 수 있음
+
+계속 진행하시겠습니까?
+
+---
+
+## 1단계: 기능 정보 확인
+
+#### 🔔 사용자 입력 필요
+
+"구현할 기능을 선택해주세요:"
+
+**기능 정보**:
 
 - ID: `_________________`
-- Name: `_________________`
-- Domain: `_________________`
+- 이름: `_________________`
+- 도메인: `_________________`
 
-**Would you like to implement this feature?**
+**이 기능을 구현하시겠습니까?**
 
-- [ ] Approve (proceed)
-- [ ] Modification needed (adjust scope)
+- [ ] 승인 (진행)
+- [ ] 수정 필요 (범위 조정)
 
-⚠️ **Do not proceed to next step until approved**
-
----
-
-## Step 2: Write Tests (Test-First)
-
-### 2-1. Check Test Environment (First time only)
-
-**AI work**: Check if test tools are set up
-
-- Unit test tool setup completed?
-- Component test tool setup completed?
-- Test helper utilities created?
+⚠️ **승인 전까지 다음 단계로 진행하지 마세요**
 
 ---
 
-### 2-2. Write Dummy Data Functions
+## 2단계: 테스트 작성 (Test-First)
 
-**Work content**: Write dummy data functions needed for current feature
+### 2-1. 테스트 환경 확인 (최초 1회)
 
-**Writing order**:
+**AI 작업**: 테스트 도구 설정 여부 확인
 
-1. **Analyze API endpoints**:
+- 단위 테스트 도구 설정 완료?
+- 컴포넌트 테스트 도구 설정 완료?
+- 테스트 헬퍼 유틸리티 생성?
 
-   - Identify necessary APIs from UI design results
-   - Define request/response schemas
+---
 
-2. **Create dummy data**:
+### 2-2. 더미 데이터 함수 작성
+
+**작업 내용**: 현재 기능에 필요한 더미 데이터 함수 작성
+
+**작성 순서**:
+
+1. **API 엔드포인트 분석**:
+
+   - UI 설계 결과에서 필요한 API 파악
+   - 요청/응답 스키마 정의
+
+2. **더미 데이터 생성**:
 
    ```typescript
    // src/mocks/data/{domain}.ts
    export const dummyProducts = [
      {
        id: "1",
-       name: "Dummy Product 1",
+       name: "더미 상품 1",
        price: 10000,
        category: "electronics",
      },
-     { id: "2", name: "Dummy Product 2", price: 20000, category: "clothing" },
+     { id: "2", name: "더미 상품 2", price: 20000, category: "clothing" },
    ];
    ```
 
-3. **Write dummy data functions**:
+3. **더미 데이터 함수 작성**:
 
    ```typescript
-   // src/mocks/data/{domain}.ts (add to same file)
+   // src/mocks/data/{domain}.ts (같은 파일에 추가)
 
    export const getDummyProducts = (params: any) => {
-     // Filtering logic
+     // 필터링 로직
      let filtered = dummyProducts;
      if (params.category) {
        filtered = dummyProducts.filter((p) => p.category === params.category);
      }
 
-     // Pagination logic
+     // 페이지네이션 로직
      const page = params.page || 1;
      const limit = params.limit || 10;
      const startIndex = (page - 1) * limit;
@@ -144,246 +144,246 @@ Would you like to continue?
 
 ---
 
-### 2-3. Test Writing Order
+### 2-3. 테스트 작성 순서
 
-**AI work checklist**:
+**AI 작업 체크리스트**:
 
-- [ ] Write business logic tests
-- [ ] Write component tests
-- [ ] Run all tests and confirm failure (Red Phase)
+- [ ] 비즈니스 로직 테스트 작성
+- [ ] 컴포넌트 테스트 작성
+- [ ] 모든 테스트 실행 및 실패 확인 (Red Phase)
 
-#### 1) Business Logic Tests
+#### 1) 비즈니스 로직 테스트
 
-**Work content**: Test core logic of pure functions and utility functions
+**작업 내용**: 순수 함수 및 유틸리티 함수의 핵심 로직 테스트
 
-**Includes**:
+**포함사항**:
 
-- Filtering, sorting, calculation logic
-- Exception handling cases
-- Boundary value tests
+- 필터링, 정렬, 계산 로직
+- 예외 처리 케이스
+- 경계값 테스트
 
-#### 2) Component Tests
+#### 2) 컴포넌트 테스트
 
-**Work content**: Test main interactions and state changes of components
+**작업 내용**: 컴포넌트의 주요 인터랙션 및 상태 변화 테스트
 
-**Includes**:
+**포함사항**:
 
-- Rendering tests
-- User interactions (click, input)
-- State change verification
-- Conditional rendering
-
----
-
-## Step 3: Implementation (Green Phase)
-
-### AI Work Checklist
-
-- [ ] Step 2 completed (tests written)
-- [ ] Implement business logic (pure functions first)
-- [ ] Implement component logic
-- [ ] Implement page logic
-- [ ] Run tests and confirm pass (Green Phase)
-
-### Implementation Order
-
-#### 1) Business Logic Implementation
-
-**Work content**: Implement pure functions and utility functions
-
-**Includes**:
-
-- Filtering, sorting, calculation logic
-- Exception handling logic
-- Type safety assurance
-
-#### 2) Component Logic Implementation
-
-**Work content**: Add logic to components written during UI design phase
-
-**Includes**:
-
-- State management
-- Event handlers
-- Conditional rendering
-
-#### 3) Page Logic Implementation
-
-**Work content**: Implement overall logic of page components
-
-**Includes**:
-
-- Component composition
-- State management
-- Routing handling
-
-**After implementation is completed**:
-
-- [ ] Run all tests
-- [ ] Confirm test pass (Green Phase)
-- [ ] Confirm no type errors
-- [ ] Confirm linter passes
+- 렌더링 테스트
+- 사용자 인터랙션 (클릭, 입력)
+- 상태 변경 검증
+- 조건부 렌더링
 
 ---
 
-## Step 4: Refactoring (Refactor Phase)
+## 3단계: 구현 (Green Phase)
 
-### AI Work Checklist
+### AI 작업 체크리스트
 
-- [ ] Step 3 completed (implementation)
-- [ ] Remove duplicate code
-- [ ] Separate functions/components (single responsibility)
-- [ ] Improve variable/function names
-- [ ] Add comments to complex logic
-- [ ] Remove unnecessary code
-- [ ] Extract logic to custom hooks (if needed)
-- [ ] Re-run tests and confirm pass
+- [ ] 2단계 완료 (테스트 작성)
+- [ ] 비즈니스 로직 구현 (순수 함수 우선)
+- [ ] 컴포넌트 로직 구현
+- [ ] 페이지 로직 구현
+- [ ] 테스트 실행 및 통과 확인 (Green Phase)
 
-### Refactoring Checklist
+### 구현 순서
 
-- [ ] Remove duplicate code
-- [ ] Separate functions/components (single responsibility)
-- [ ] Improve variable/function names
-- [ ] Add comments to complex logic
-- [ ] Remove unnecessary code
-- [ ] Extract logic to custom hooks (if needed)
+#### 1) 비즈니스 로직 구현
 
-**Refactoring scope**:
+**작업 내용**: 순수 함수 및 유틸리티 함수 구현
 
-- ✅ Only within current feature
-- ❌ Don't touch other features
-- ❌ Avoid excessive abstraction
+**포함사항**:
 
-**After refactoring is completed**:
+- 필터링, 정렬, 계산 로직
+- 예외 처리 로직
+- 타입 안전성 보장
 
-- [ ] Re-run tests → Still pass
-- [ ] Confirm code readability improved
+#### 2) 컴포넌트 로직 구현
 
----
+**작업 내용**: UI 설계 단계에서 작성한 컴포넌트에 로직 추가
 
-## Step 5: Feature Review
+**포함사항**:
 
-### Review Guide (For AI)
+- 상태 관리
+- 이벤트 핸들러
+- 조건부 렌더링
 
-**Basic principle**: Ask questions flexibly according to feature complexity and work step
+#### 3) 페이지 로직 구현
 
-**Always ask**:
+**작업 내용**: 페이지 컴포넌트의 전체 로직 구현
 
-- Does implementation result match requirements?
+**포함사항**:
 
-**Conditional questions**:
+- 컴포넌트 조합
+- 상태 관리
+- 라우팅 처리
 
-- UI-related work: Design match
-- Complex logic: Test coverage
-- Performance critical: Performance metrics
+**구현 완료 후**:
 
-**Question style**:
-
-- Prefer open-ended questions (avoid Yes/No)
-- Specifically point out issues when found
-- Provide improvement suggestions
-
-### 🔔 User Review
-
-"Feature **[Feature Name]** implementation is completed."
-
-**Implementation result**:
-
-Tests:
-
-- ✅ Written: N tests
-- ✅ Passed: N/N
-- ✅ Coverage: X%
-
-Implementation files:
-
-- Business logic: `src/features/{domain}/utils/` (N files)
-- API services: `src/api/{domain}/` (N files)
-- Components: `src/pages/`, `src/features/{domain}/components/` (N files)
-
-Dummy data:
-
-- ✅ Dummy data: `src/mocks/data/{domain}.ts`
-- ✅ Tests passed: Dummy data integration working
-
-Test files:
-
-- Unit: `__tests__/unit/{domain}/` (N files)
-- Component: `__tests__/components/{domain}/` (N files)
-- Integration: `__tests__/integration/` (N files)
-
-**Review is recommended**:
-
-- Does the feature work as per requirements?
-- Is UI implemented according to design?
-- Is dummy data working properly?
-- Are tests sufficient?
-- Is code quality satisfactory?
-
-**Feedback**: (Implement immediately if modification needed)
+- [ ] 모든 테스트 실행
+- [ ] 테스트 통과 확인 (Green Phase)
+- [ ] 타입 에러 없음 확인
+- [ ] 린터 통과 확인
 
 ---
 
-## Step 6: API Integration (Optional)
+## 4단계: 리팩토링 (Refactor Phase)
 
-> 💡 **Optional step**: Proceed only if API is ready
+### AI 작업 체크리스트
 
-### 6-1. Check API Readiness Status
+- [ ] 3단계 완료 (구현)
+- [ ] 중복 코드 제거
+- [ ] 함수/컴포넌트 분리 (단일 책임)
+- [ ] 변수/함수명 개선
+- [ ] 복잡한 로직에 주석 추가
+- [ ] 불필요한 코드 제거
+- [ ] 커스텀 훅으로 로직 추출 (필요시)
+- [ ] 테스트 재실행 및 통과 확인
 
-#### 🔔 User input required
+### 리팩토링 체크리스트
 
-"Would you like to proceed with API integration for current feature **[Feature Name]**?"
+- [ ] 중복 코드 제거
+- [ ] 함수/컴포넌트 분리 (단일 책임)
+- [ ] 변수/함수명 개선
+- [ ] 복잡한 로직에 주석 추가
+- [ ] 불필요한 코드 제거
+- [ ] 커스텀 훅으로 로직 추출 (필요시)
 
-**Please select API readiness status:**
+**리팩토링 범위**:
 
-- [ ] **Real API ready** (proceed with integration)
-- [ ] **API not ready yet** (keep dummy data)
-- [ ] **Partially ready** (integrate only ready APIs)
-- [ ] **Integrate later** (during system integration phase)
+- ✅ 현재 기능 내에서만
+- ❌ 다른 기능은 건드리지 않음
+- ❌ 과도한 추상화 지양
 
-**If "API not ready yet" or "Integrate later" is selected**:
+**리팩토링 완료 후**:
 
-- Proceed to Step 7 (next feature)
-- Keep dummy data
-
-**If "Real API ready" or "Partially ready" is selected**:
-
-- Proceed with API integration work
+- [ ] 테스트 재실행 → 여전히 통과
+- [ ] 코드 가독성 향상 확인
 
 ---
 
-## Step 7: Memory Update and Next Feature
+## 5단계: 기능 검수
+
+### 검수 가이드 (AI용)
+
+**기본 원칙**: 기능 복잡도 및 작업 단계에 따라 유연하게 질문
+
+**항상 물어볼 것**:
+
+- 구현 결과가 요구사항과 일치하는가?
+
+**조건부 질문**:
+
+- UI 관련 작업: 디자인 일치도
+- 복잡한 로직: 테스트 커버리지
+- 성능 중요: 성능 지표
+
+**질문 스타일**:
+
+- 개방형 질문 선호 (Yes/No 지양)
+- 문제 발견 시 구체적으로 지적
+- 개선 방안 제시
+
+### 🔔 사용자 검수
+
+"기능 **[기능명]** 구현이 완료되었습니다."
+
+**구현 결과**:
+
+테스트:
+
+- ✅ 작성: N개 테스트
+- ✅ 통과: N/N
+- ✅ 커버리지: X%
+
+구현 파일:
+
+- 비즈니스 로직: `src/features/{domain}/utils/` (N개 파일)
+- API 서비스: `src/api/{domain}/` (N개 파일)
+- 컴포넌트: `src/pages/`, `src/features/{domain}/components/` (N개 파일)
+
+더미 데이터:
+
+- ✅ 더미 데이터: `src/mocks/data/{domain}.ts`
+- ✅ 테스트 통과: 더미 데이터 통합 작동 중
+
+테스트 파일:
+
+- 단위: `__tests__/unit/{domain}/` (N개 파일)
+- 컴포넌트: `__tests__/components/{domain}/` (N개 파일)
+- 통합: `__tests__/integration/` (N개 파일)
+
+**검수 권장사항**:
+
+- 기능이 요구사항대로 작동하는가?
+- UI가 디자인대로 구현되었는가?
+- 더미 데이터가 정상 작동하는가?
+- 테스트가 충분한가?
+- 코드 품질이 만족스러운가?
+
+**피드백**: (수정 필요 시 즉시 반영)
+
+---
+
+## 6단계: API 연동 (선택사항)
+
+> 💡 **선택 단계**: API 준비된 경우에만 진행
+
+### 6-1. API 준비 상태 확인
+
+#### 🔔 사용자 입력 필요
+
+"현재 기능 **[기능명]**에 대해 API 연동을 진행하시겠습니까?"
+
+**API 준비 상태를 선택해주세요:**
+
+- [ ] **실제 API 준비됨** (연동 진행)
+- [ ] **API 아직 준비 안됨** (더미 데이터 유지)
+- [ ] **부분 준비됨** (준비된 API만 연동)
+- [ ] **나중에 연동** (시스템 통합 단계에서)
+
+**"API 아직 준비 안됨" 또는 "나중에 연동" 선택 시**:
+
+- 7단계로 이동 (다음 기능)
+- 더미 데이터 유지
+
+**"실제 API 준비됨" 또는 "부분 준비됨" 선택 시**:
+
+- API 연동 작업 진행
+
+---
+
+## 7단계: 메모리 업데이트 및 다음 기능
 
 ```markdown
-- [x] Implementation - [Feature Name]
-  - Write tests
-  - Implementation (dummy data)
-  - Refactoring
+- [x] 구현 - [기능명]
+  - 테스트 작성
+  - 구현 (더미 데이터)
+  - 리팩토링
 ```
 
-**Next steps**:
+**다음 단계**:
 
-- Next feature implementation: Repeat from Step 1
-- Or system integration: `/workflow-integrate`
+- 다음 기능 구현: 1단계부터 반복
+- 또는 시스템 통합: `/workflow-integrate`
 
 ---
 
-## Dummy Data Usage Guide
+## 더미 데이터 사용 가이드
 
-### Dummy Data Usage Scenarios
+### 더미 데이터 사용 시나리오
 
-**Development phase**:
+**개발 단계**:
 
-- When API is not ready yet
-- When frontend development needs to proceed first
-- When data is needed for UI/UX testing
+- API가 아직 준비되지 않은 경우
+- 프론트엔드 개발을 먼저 진행해야 하는 경우
+- UI/UX 테스트에 데이터가 필요한 경우
 
-**Testing phase**:
+**테스트 단계**:
 
-- When consistent data is needed in E2E tests
-- When various scenario tests are needed
+- E2E 테스트에서 일관된 데이터가 필요한 경우
+- 다양한 시나리오 테스트가 필요한 경우
 
-### Dummy Data Setup Method
+### 더미 데이터 설정 방법
 
 ```typescript
 // .env.development
@@ -394,27 +394,27 @@ VITE_DUMMY_DATA_DELAY = 300; // ms
 
 ---
 
-## Output File Paths
+## 결과물 파일 경로
 
-**Implementation files**:
+**구현 파일**:
 
-- `src/features/{domain}/utils/` - Business logic
-- `src/api/{domain}/` - API services
-- `src/features/{domain}/hooks/` - React Query hooks
-- `src/features/{domain}/components/` - Components
-- `src/pages/` - Pages
+- `src/features/{domain}/utils/` - 비즈니스 로직
+- `src/api/{domain}/` - API 서비스
+- `src/features/{domain}/hooks/` - React Query 훅
+- `src/features/{domain}/components/` - 컴포넌트
+- `src/pages/` - 페이지
 
-**Dummy data**:
+**더미 데이터**:
 
-- `src/mocks/data/{domain}.ts` - Dummy data and functions
+- `src/mocks/data/{domain}.ts` - 더미 데이터 및 함수
 
-**Test files**:
+**테스트 파일**:
 
-- `__tests__/unit/{domain}/` - Business logic tests
-- `__tests__/unit/api/` - API service tests
-- `__tests__/components/{domain}/` - Component tests
-- `__tests__/integration/` - Integration tests
+- `__tests__/unit/{domain}/` - 비즈니스 로직 테스트
+- `__tests__/unit/api/` - API 서비스 테스트
+- `__tests__/components/{domain}/` - 컴포넌트 테스트
+- `__tests__/integration/` - 통합 테스트
 
-**API guide** (Created during first integration):
+**API 가이드** (최초 연동 시 생성):
 
-- `docs/api-guidelines.md` - API patterns and rules
+- `docs/api-guidelines.md` - API 패턴 및 규칙
