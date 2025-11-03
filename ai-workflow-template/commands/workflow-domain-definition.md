@@ -6,7 +6,7 @@
 
 1. **초기 확인**
 
-   - `docs/workflows/memory.md` 읽기 (현재 상태 파악)
+   - `docs/workflows/memory.md` 읽기 (현재 상태 파악) → skill:memory-manager
    - 요구사항 파일 존재 확인 (requirements.md)
 
 2. **도메인 정의**
