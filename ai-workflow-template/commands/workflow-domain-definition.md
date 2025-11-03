@@ -9,10 +9,12 @@
    - `docs/workflows/memory.md` 읽기 (현재 상태 파악)
    - 요구사항 파일 존재 확인 (requirements.md)
 
-2. **도메인 정의** → skill:domain-processor
+2. **도메인 정의**
 
-   - 요구사항 분석 및 도메인 설계
-   - 문서 생성 (domain-definition.md, page-structure.md, feature-list.md)
+   - **skill:requirements-parser** → 요구사항 파싱 (메모리 변수: `parsedData`)
+   - **skill:domain-definer** → 도메인 정의 (입력: `parsedData`, 출력: `docs/domain-definition.md`)
+   - **skill:feature-list-generator** → 기능 목록 생성 (입력: `parsedData`, 출력: `docs/feature-list.md`, 메모리: `featureList`)
+   - **skill:page-structure-designer** → 페이지 구조 설계 (입력: `parsedData`, `featureList`, 출력: `docs/page-structure.md`)
 
 3. **사용자 검토 및 최종 확정**
 

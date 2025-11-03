@@ -11,6 +11,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 Test-Driven Development의 핵심 사이클인 Red-Green-Refactor를 단계별로 안내하고 관리합니다.
 
 **전제 조건:**
+
 - **skill:test-case-generator**로 테스트 케이스 명세가 이미 생성되어 있어야 함
 - 이 skill은 생성된 테스트 케이스를 하나씩 구현하는 프로세스를 관리함
 
@@ -33,18 +34,22 @@ Test-Driven Development의 핵심 사이클인 Red-Green-Refactor를 단계별�
 #### 1.1 테스트 선택
 
 **전제 조건:**
+
 - **skill:test-case-generator**로 이미 생성된 테스트 케이스 목록 필요
 
 **입력:**
+
 - 테스트 케이스 명세 문서 (test-case-generator의 출력)
 - 현재 구현 상태
 
 **작업:**
+
 1. 테스트 케이스 목록에서 우선순위 확인
 2. 아직 구현되지 않은 테스트 중 가장 높은 우선순위 선택
 3. 현재 사이클에서 작성할 테스트 확정
 
 **출력:**
+
 ```markdown
 📝 현재 사이클 테스트: TC-001
 
