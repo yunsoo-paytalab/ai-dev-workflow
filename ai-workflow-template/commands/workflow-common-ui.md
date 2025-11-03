@@ -1,20 +1,19 @@
-# `/workflow-ui [feature-name]` Command
+# `/workflow-common-ui` Command
 
-**When to use**: When developing feature components
+**When to use**: When developing common components
 
-**Features**: Analyze Figma design and generate skeleton code for **one feature component** at a time
+**Features**: Analyze Figma design and generate skeleton code for **one common component** at a time
 
 **Recommendations**:
 
 - Domain definition completed
-- Common UI completed before feature implementation
 
 **Usage**:
 
 ```
-/workflow-ui product-list    # ProductList component
-/workflow-ui product-list    # ProductCard component - run separately
-/workflow-ui cart            # CartPage component
+/workflow-common-ui    # Dialog component
+/workflow-common-ui    # Toast component - run separately
+/workflow-common-ui    # Header component - run separately
 ```
 
 > 💡 **Developing multiple components**: Repeat the command for each component.
@@ -23,7 +22,7 @@
 
 ## Goal
 
-Analyze Figma design and generate component skeleton code for **feature components** (Type 2).
+Analyze Figma design and generate component skeleton code for **common components** (Type 1).
 
 ---
 
@@ -31,16 +30,11 @@ Analyze Figma design and generate component skeleton code for **feature componen
 
 💡 **Recommended**: Proceed after the following steps are completed.
 
-**For feature component development**:
-
 - Domain definition completed
-- Common UI design completed (reuse common components)
 
 Potential issues if not completed:
 
 - Component file paths may not be defined
-- May not be able to reuse common components
-- Design system information may be insufficient
 
 Would you like to continue?
 
@@ -99,29 +93,36 @@ Would you like to continue?
 
 #### Skeleton Code Example
 
-**ProductCard Component**:
+**Dialog Component**:
 
 ```typescript
-// src/features/product/components/ProductCard.tsx
+// src/shared/components/Dialog.tsx
 
-export default function ProductCard() {
+export default function Dialog() {
   // Define only minimal values needed for data display as variables
-  const productName = "Sample Product";
-  const productPrice = 10000;
-  const productImage = "/images/product.jpg";
-  const isInStock = true;
+  const dialogTitle = "Confirm";
+  const dialogContent = "Are you sure you want to delete?";
+  const confirmText = "Confirm";
+  const cancelText = "Cancel";
 
   return (
-    <div className="product-card">
-      <img src={productImage} alt={productName} className="product-image" />
-      <div className="product-info">
-        <h3 className="product-name">{productName}</h3>
-        <p className="product-price">{productPrice.toLocaleString()}원</p>
-        {isInStock ? (
-          <button className="add-to-cart-btn">장바구니 추가</button>
-        ) : (
-          <span className="out-of-stock">품절</span>
-        )}
+    <div role="dialog" aria-modal="true" className="dialog-overlay">
+      <div className="dialog-container">
+        <div className="dialog-header">
+          <h2 className="dialog-title">{dialogTitle}</h2>
+          <button className="dialog-close-btn" aria-label="Close">
+            ×
+          </button>
+        </div>
+
+        <div className="dialog-content">
+          <p className="dialog-message">{dialogContent}</p>
+        </div>
+
+        <div className="dialog-actions">
+          <button className="dialog-cancel-btn">{cancelText}</button>
+          <button className="dialog-confirm-btn">{confirmText}</button>
+        </div>
       </div>
     </div>
   );
@@ -179,14 +180,14 @@ export default function ProductCard() {
 
 - Name: `[Component Name]`
 - File path: `[File Path]`
-- Type: Feature
+- Type: Common
 
 **Review is recommended**:
 
 - Does UI match Figma?
 - Is component structure appropriate?
 - Has accessibility been considered?
-- (For feature components) Is integration with common components working?
+- Is reusability sufficient?
 
 **Feedback**: (Implement immediately if modification is needed)
 
@@ -198,7 +199,7 @@ export default function ProductCard() {
 
 "Is there an additional component to develop?"
 
-- [ ] **Yes** → Run `/workflow-ui [feature-name]` again
+- [ ] **Yes** → Run `/workflow-common-ui` again
 - [ ] **No** → Update Memory and proceed to next step
 
 ---
@@ -213,11 +214,11 @@ export default function ProductCard() {
 
 **After component development is completed**:
 
-- If there are additional components: Run `/workflow-ui [feature-name]` again
+- If there are additional components: Run `/workflow-common-ui` again
 - When all components are completed: `/workflow-implement [feature-name]` (Feature Implementation)
 
 ---
 
 ## Output File Paths
 
-- `src/features/{domain}/components/[ComponentName].tsx` - Feature component file
+- `src/shared/components/[ComponentName].tsx` - Common component file
