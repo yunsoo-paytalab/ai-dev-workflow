@@ -1,164 +1,54 @@
-# Memory File
+# 메모리 파일
 
-> 📌 **Purpose of this file**:
+> 📌 **이 파일의 목적**:
 >
-> - Tracks the current progress of the project
-> - Read this file first before all tasks to understand the state
-> - Update this file when tasks are completed to record progress
+> - 프로젝트의 현재 진행 상황 추적
+> - 모든 작업 전 이 파일을 먼저 읽어 상태 파악
+> - 작업 완료 시 이 파일을 업데이트하여 진행 상황 기록
 
-## Domain List
+## 도메인 목록
 
-**(Update during domain definition phase)**
+**(도메인 정의 단계에서 업데이트)**
 
-| Domain Name | Description | Main Resources |
-| ----------- | ----------- | -------------- |
-| -           | -           | -              |
-
-**Examples**:
-| Domain Name | Description | Main Resources |
-| ----------- | --------------------- | -------------- |
-| User | User management | User |
-| Product | Product management | Product |
-| Cart | Shopping cart | Cart, Item |
+| 도메인명 | 설명 | 주요 리소스 |
+| -------- | ---- | ----------- |
+| -        | -    | -           |
 
 ---
 
-## Page Structure
+## 페이지 구조
 
-**(Update during domain definition phase)**
+**(도메인 정의 단계에서 업데이트)**
 
-| URL Path | Page Name | Related Domains | Auth Required |
-| -------- | --------- | --------------- | ------------- |
-| -        | -         | -               | -             |
-
-**Examples**:
-| URL Path | Page Name | Related Domain | Auth Required |
-| -------- | ----------- | --------------- | ------------- |
-| / | Home | Product | X |
-| /login | Login | User | X |
-| /cart | Cart | Cart, Product | O |
+| URL 경로 | 페이지명 | 관련 도메인 | 인증 필요 |
+| -------- | -------- | ----------- | --------- |
+| -        | -        | -           | -         |
 
 ---
 
-## Overall Progress Checklist
+## 전체 진행 상황 체크리스트
 
-- Dynamically add to this section based on the examples below (remove examples when adding content)
+### 초기 설계
 
-## Overall Progress Checklist (Example)
+- [ ] **도메인 정의**
+- [ ] **공통 UI**
 
-### Initial Design
+### 기능별 작업
 
-- [ ] **Domain Definition** (`@domain-definition.md`)
-  - Domain list and boundaries
-  - Page structure
-  - Feature list
-  - (Optional) Feature dependency analysis
+- [ ] **기능 UI - [기능명]**
+- [ ] **기능 구현 - [기능명]**
 
-### UI Design
+### 시스템 통합
 
-- [ ] **Common UI** (`@ui-design.md`)
-
-### Feature Tasks
-
-**(Repeat the following pattern for each feature)**
-
-- [ ] **Feature UI - [feature-name]** (`@ui-design.md`)
-- [ ] **Feature Implementation - [feature-name]** (`@feature-implementation.md`)
-
-### System Integration
-
-- [ ] **Integration and Refactoring** (`@system-integration.md`)
-
-  - Remove duplicate code
-  - Extract common modules
-  - Performance optimization (optional)
-  - Improve accessibility
-
-- [ ] **E2E Testing** (`@system-integration.md`)
-  - Write E2E flows
-  - Final quality verification
+- [ ] **통합 및 리팩토링**
+- [ ] **E2E 테스트**
 
 ---
 
-## Feature Progress
+## 기능 진행 상황
 
-**(Start updating during domain definition phase)**
+**(도메인 정의 단계부터 업데이트 시작)**
 
-| Feature ID | Feature Name | Domain | Status | UI Design | Implementation | API Integration | Notes |
-| ---------- | ------------ | ------ | ------ | --------- | -------------- | --------------- | ----- |
-| -          | -            | -      | -      | -         | -              | -               | -     |
-
-**Status Description**:
-
-- ✅ Completed: Step completed
-- 🔄 In Progress: Currently working
-- ⏳ Pending: Not started
-- - : Not applicable
-
-**Examples**:
-| Feature ID | Feature Name | Domain | Status | UI Design | Implementation | API Integration | Notes |
-| ---------- | -------------------- | -------- | ---------- | --------- | -------------- | --------------- | ----------- |
-| F001 | Product List | Product | ✅ Complete | ✅ | ✅ | ✅ | |
-| F002 | Cart Management | Cart | 🔄 In Progress | ✅ | 🔄 | ⏳ | Implementing |
-| F003 | User Login | User | ⏳ Pending | ⏳ | ⏳ | - | |
-
-## 💡 Recommended Order (Reference)
-
-> 💡 **For reference**: You don't need to follow this order. Proceed in any desired order.
-
-1. **Domain Definition** - Understand overall structure
-2. **Common UI** - Reusable components first
-3. **Repeat for each feature**:
-   - Feature UI design
-   - Feature implementation (+ optional API integration)
-4. **System Integration** - Remove duplicates and improve quality
-5. **E2E Testing** - Final verification
-
----
-
-## 🤖 Memory Update Rules (For AI)
-
-> 📌 **AI should only update this Memory file at the following times.**
-
-### Update Timing
-
-- **Initial setup completion**: Project info, tech stack, folder structure
-- **Domain definition completion**: Domain list, page structure, initialize feature progress table
-- **Each task completion**: Check corresponding checkbox (`[ ]` → `[x]`)
-- **Feature progress**: Update feature progress table
-- **User request**: `/workflow update` command
-
-### Update Content
-
-- **Checklist**: Check completed items
-- **Feature progress table**: Status, UI design, implementation, API integration, notes
-
-### Precautions When Updating
-
-1. **Check checkboxes accurately**: Follow `[ ]` → `[x]` format
-2. **Maintain table format**: Feature progress must be managed as a table
-3. **Write concisely**: Keep each item to 1-2 lines
-4. **Do not remove unnecessary sections**: Keep them in unentered state
-
----
-
-## 💡 3-Phase Process (Reference)
-
-> 💡 **For reference**: This is the traditional 3-Phase process. You don't need to follow this order.
-
-**Phase 1 (Initial Design)**:
-
-- Domain definition
-- Common UI design
-
-**Phase 2 (Feature Development)**:
-
-- Feature UI design
-- Feature implementation
-
-**Phase 3 (Integration)**:
-
-- Integration and refactoring
-- E2E testing
-
-> 📝 **Note**: Detailed workflow for each phase is in `.claude/commands/workflow-*.md` files.
+| 기능 ID | 기능명 | 도메인 | 상태 | UI 설계 | 구현 | API 연동 | 비고 |
+| ------- | ------ | ------ | ---- | ------- | ---- | -------- | ---- |
+| -       | -      | -      | -    | -       | -    | -        | -    |

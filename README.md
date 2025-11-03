@@ -7,15 +7,14 @@
 ## 워크플로우 특징
 
 - **유연한 순서**: 원하는 순서로 작업 가능
-- **의존성 경고**: 권장 사항 미충족 시 경고 표시 후 계속 진행 가능
 - **진행 상황 추적**: memory.md를 통한 중앙 집중식 상태 관리
 - **테스트 우선 개발**: Test-First 방식으로 안전한 구현 보장
 
 ## 주요 작업 단계
 
 1. **도메인 정의**: 비즈니스 도메인의 핵심 개념과 기능 정의
-2. **공통 UI 설계**: 재사용 가능한 공통 컴포넌트 개발
-3. **기능 UI 설계**: 기능별 컴포넌트 개발
+2. **공통 UI**: 재사용 가능한 공통 컴포넌트 개발
+3. **기능 UI**: 기능별 UI 컴포넌트 설계
 4. **기능 구현**: 테스트 작성 후 구현 (더미 데이터 우선)
 5. **시스템 통합**: 중복 코드 제거 및 전체 구조 개선
 6. **E2E 테스트**: 최종 품질 검증 및 배포 준비
@@ -40,11 +39,11 @@
 /workflow-domain-definition
 ```
 
-### 4. 컴포넌트 개발
+### 4. UI 설계
 
 ```
-/workflow-common-ui           # 공통 컴포넌트
-/workflow-ui 상품목록          # 기능 컴포넌트
+/workflow-ui common            # 공통 컴포넌트
+/workflow-ui 상품목록          # 기능별 UI 컴포넌트
 ```
 
 ## 주요 커맨드
@@ -65,8 +64,8 @@
 
 #### 2단계: UI 설계
 
-- `/workflow-common-ui`: 공통 컴포넌트 개발 (Dialog, Toast 등)
-- `/workflow-ui [기능명]`: 기능별 컴포넌트 개발
+- `/workflow-ui common`: 공통 컴포넌트 개발 (Button, Input, Dialog 등)
+- `/workflow-ui [기능명]`: 기능별 UI 컴포넌트 설계
 
 #### 3단계: 기능 구현
 
@@ -80,23 +79,41 @@
 ## 파일 구조
 
 ```
-.cursor/
+.claude/
 ├── commands/                          # 커맨드 정의 파일
 │   ├── workflow.md                    # 메인 커맨드 (start, status, update, help, reset)
 │   ├── workflow-domain-definition.md  # 도메인 정의 커맨드
-│   ├── workflow-common-ui.md          # 공통 UI 커맨드
-│   ├── workflow-ui.md                 # 기능 UI 커맨드
+│   ├── workflow-ui.md                 # UI 설계 커맨드
 │   ├── workflow-implement.md          # 기능 구현 커맨드
 │   ├── workflow-integrate.md          # 통합 커맨드
 │   └── workflow-e2e.md                # E2E 테스트 커맨드
 │
-└── rules/workflows/                   # 워크플로우 가이드 파일
-    ├── memory.md                      # 🧠 진행 상황 추적 (중앙 관리)
-    ├── memory-template.md             # 📋 메모리 템플릿
-    ├── domain-definition.md           # 🏗️ 도메인 정의 가이드
-    ├── ui-design.md                   # 🎨 UI 설계 가이드
-    ├── feature-implementation.md      # ⚙️ 기능 구현 가이드
-    └── system-integration.md          # 🔗 통합 및 E2E 테스트 가이드
+└── skills/                            # 재사용 가능한 스킬 모듈
+    ├── requirements-parser/           # 요구사항 파싱
+    │   └── SKILL.md
+    ├── domain-definer/                # 도메인 정의
+    │   ├── SKILL.md
+    │   └── template.md
+    ├── feature-list-generator/        # 기능 목록 생성
+    │   ├── SKILL.md
+    │   └── template.md
+    ├── page-structure-designer/       # 페이지 구조 설계
+    │   ├── SKILL.md
+    │   └── template.md
+    ├── figma-ui-generator/            # Figma 기반 UI 코드 생성
+    │   └── SKILL.md
+    ├── tdd-workflow-manager/          # TDD 사이클 관리
+    │   └── SKILL.md
+    ├── test-case-generator/           # 테스트 케이스 생성
+    │   └── SKILL.md
+    ├── test-coverage-analyzer/        # 테스트 커버리지 분석
+    │   └── SKILL.md
+    └── memory-manager/                # 진행 상황 추적
+        └── SKILL.md
+
+docs/workflows/                        # 워크플로우 가이드 및 결과물
+├── memory.md                          # 🧠 진행 상황 추적 (중앙 관리)
+└── memory-template.md                 # 📋 메모리 템플릿
 ```
 
 ### 파일 역할 설명
@@ -104,20 +121,45 @@
 #### 📋 커맨드 파일 (.claude/commands/)
 
 - **workflow.md**: 메인 커맨드 정의 (start, status, update, help, reset)
-- **workflow-domain-definition.md**: 도메인 정의 커맨드
-- **workflow-common-ui.md**: 공통 컴포넌트 개발 커맨드
-- **workflow-ui.md**: 기능 컴포넌트 개발 커맨드
-- **workflow-implement.md**: 기능 구현 커맨드
+- **workflow-domain-definition.md**: 도메인 정의 커맨드 (4개 스킬 순차 실행)
+- **workflow-ui.md**: UI 설계 커맨드 (기능별 UI 컴포넌트 설계)
+- **workflow-implement.md**: 기능 구현 커맨드 (TDD 스킬 활용)
 - **workflow-integrate.md**: 시스템 통합 커맨드
 - **workflow-e2e.md**: E2E 테스트 커맨드
 
-#### 🔄 워크플로우 가이드 파일 (docs/workflows/)
+#### 🧩 스킬 모듈 (.claude/skills/)
+
+독립적이고 재사용 가능한 작업 단위:
+
+**도메인 정의 스킬**:
+
+- **requirements-parser**: 요구사항 파싱 및 구조화 (메모리 출력)
+- **domain-definer**: 도메인 경계 및 아키텍처 설계
+- **feature-list-generator**: 기능 목록 생성 및 분류
+- **page-structure-designer**: 페이지 구조 및 라우팅 설계
+
+**UI 개발 스킬**:
+
+- **figma-ui-generator**: Figma 디자인 기반 UI 코드 생성 (Figma MCP 연동)
+
+**개발 지원 스킬**:
+
+- **tdd-workflow-manager**: TDD Red-Green-Refactor 사이클 관리
+- **test-case-generator**: 체계적인 테스트 케이스 생성
+- **test-coverage-analyzer**: 테스트 커버리지 분석 및 개선 제안
+- **memory-manager**: 진행 상황 추적 및 상태 업데이트
+
+**스킬 특징**:
+
+- 메모리 기반 데이터 전달로 토큰 절약 (약 48%)
+- 각 스킬 독립 실행 가능
+- 생성 범위 명확히 제한 (과도한 생성 방지)
+- 템플릿 기반 일관성 유지
+
+#### 🔄 워크플로우 관리 (docs/workflows/)
 
 - **memory.md**: 진행 상황 및 파일 경로 중앙 관리
-- **domain-definition.md**: 도메인 및 기능 정의 작업 가이드
-- **ui-design.md**: UI 컴포넌트 설계 작업 가이드
-- **feature-implementation.md**: 기능 구현 작업 가이드 (테스트, 구현, API 연동)
-- **system-integration.md**: 통합 리팩토링 및 E2E 테스트 가이드
+- **memory-template.md**: 신규 프로젝트용 메모리 템플릿
 
 ## 사용 예시
 
@@ -131,10 +173,11 @@
 /workflow-domain-definition
 
 # 3. 공통 컴포넌트 개발
-/workflow-common-ui        # Dialog 컴포넌트
-/workflow-common-ui        # Toast 컴포넌트
+/workflow-ui common        # Button 컴포넌트
+/workflow-ui common        # Dialog 컴포넌트
+/workflow-ui common        # Toast 컴포넌트
 
-# 4. 기능 컴포넌트 개발
+# 4. 기능별 UI 설계
 /workflow-ui 상품목록      # ProductList 컴포넌트
 /workflow-ui 장바구니      # CartPage 컴포넌트
 
@@ -151,10 +194,10 @@
 
 ```bash
 # 디자인 시스템 구축
-/workflow-common-ui        # Button 컴포넌트
-/workflow-common-ui        # Input 컴포넌트
-/workflow-common-ui        # Dialog 컴포넌트
-/workflow-common-ui        # Toast 컴포넌트
+/workflow-ui common        # Button 컴포넌트
+/workflow-ui common        # Input 컴포넌트
+/workflow-ui common        # Dialog 컴포넌트
+/workflow-ui common        # Toast 컴포넌트
 ```
 
 ### 시나리오 3: 특정 기능만 빠르게 개발
@@ -179,24 +222,13 @@
 ### 1. 유연한 작업 순서
 
 - 원하는 순서대로 작업 가능
-- 의존성 미충족 시 경고만 표시
-- 사용자 확인 후 계속 진행 가능
+- 필요한 단계부터 시작 가능
 
-### 2. 의존성 경고 시스템
-
-**권장 작업 순서** (필수 아님):
+**권장 작업 순서** (참고용):
 
 1. 도메인 정의 → 2. 공통 UI → 3. 기능 UI → 4. 기능 구현 → 5. 통합 → 6. E2E
 
-**의존성 체크 예시**:
-
-- 공통 UI: 도메인 정의 완료 권장 (폴더 구조 정보)
-- 기능 UI: 도메인 정의 + 공통 UI 완료 권장
-- 기능 구현: 도메인 정의 완료 필수
-- 통합: 모든 기능 구현 완료 권장
-- E2E: 통합 완료 권장
-
-### 3. 중앙 집중식 상태 관리
+### 2. 중앙 집중식 상태 관리
 
 **memory.md 파일 역할**:
 
@@ -259,12 +291,6 @@
 /workflow update
 ```
 
-### 의존성 경고가 표시될 때
-
-- 경고 메시지를 확인하고 진행 여부 결정
-- 권장 사항이지만 필수는 아님
-- 불편함이 없다면 계속 진행 가능
-
 ### 특정 작업 가이드 확인
 
 - 각 커맨드 파일 (.claude/commands/) 확인
@@ -284,11 +310,32 @@
 ### 커맨드 실행 시 자동 작업
 
 1. `memory.md` 읽어 현재 상태 파악
-2. 의존성 체크 및 경고 표시
-3. 워크플로우 가이드 파일 참조
-4. 작업 수행 및 검수
-5. 결과물 저장
-6. `memory.md` 업데이트
+2. 필요한 스킬 순차 실행 (메모리 기반 데이터 전달)
+3. 작업 수행 및 검수
+4. 결과물 저장 (docs/ 또는 src/)
+5. `memory.md` 업데이트
+
+### 스킬 기반 워크플로우
+
+**도메인 정의 프로세스** (`/workflow-domain-definition`):
+
+```
+skill:requirements-parser (requirements.md 파싱)
+  ↓ parsedData (메모리)
+skill:domain-definer (도메인 정의)
+  ↓ docs/domain-definition.md
+skill:feature-list-generator (기능 목록 생성)
+  ↓ docs/feature-list.md + featureList (메모리)
+skill:page-structure-designer (페이지 구조 설계)
+  ↓ docs/page-structure.md
+skill:memory-manager (진행 상황 업데이트)
+```
+
+**장점**:
+
+- 메모리 기반 데이터 전달로 파일 I/O 최소화
+- 각 단계별 명확한 책임 분리
+- 필요시 개별 스킬 단독 실행 가능
 
 ### 도움이 필요하신가요?
 
