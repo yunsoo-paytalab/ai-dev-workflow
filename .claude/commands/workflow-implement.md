@@ -24,15 +24,18 @@
 - 컴포넌트 구조 설계
 - 출력: `docs/plans/[기능명]-plan.md`
 
-### Phase 3: Implementation (구현)
+### Phase 3: Review & Confirm
 
-**Agent: implementation-agent**
+**사용자 검토**
 
-- Planning 문서 기반 비즈니스 로직 구현
-- 기존 UI 컴포넌트와 연결
-- Mock 데이터로 초기 구현
+- 도메인 경계 적절성 확인
+- 기능 배치 검증
+- 누락 기능 체크
+- 페이지 구조 합리성 확인
 
-#### 3.1 TDD Cycle
+### Phase 4: Implementation (구현)
+
+#### 4.1 TDD Cycle
 
 **Agent: test-runner**
 
@@ -41,20 +44,19 @@
 - 🔵 **Refactor**: 코드 개선
 - 사이클 반복
 
-#### 3.2 필수 통합 작업
+#### 4.2 필수 통합 작업
 
 - **Mock 서비스**: 임시 데이터 처리
 - **상태 관리**: Redux/Zustand 통합
 - **이벤트 핸들링**: UI와 비즈니스 로직 연결
-- **코드 리뷰**: 품질 검토 및 최적화
 
-#### 3.3 선택적 API 연동 (--with-api 옵션)
+#### 4.3 선택적 API 연동 (--with-api 옵션)
 
 - **API 클라이언트**: Axios/Fetch 설정
 - **엔드포인트 연결**: 백엔드 API와 통합
 - **Mock → Real**: Mock 데이터를 실제 API로 전환
 
-### Phase 4: Memory Update
+### Phase 5: Memory Update
 
 **Agent: memory-manager**
 
@@ -70,48 +72,6 @@
 - Mock 데이터 구조 확인
 - API 연동 여부 결정 (백엔드 준비 시)
 
-## Agent 체이닝 & 재개
-
-### 전체 체이닝 실행
-
-```
-"research-agent로 product-list 기능을 분석한 후,
-planning-agent로 계획을 수립하고,
-implementation-agent로 구현한 다음,
-test-runner로 TDD 검증을 진행해주세요"
-```
-
-### Agent 재개
-
-```
-"Agent xyz789를 재개하여 리팩토링을 계속 진행해주세요"
-```
-
-## 예시 명령어
-
-```bash
-# 기본 실행 (Mock 데이터로 구현)
-/workflow-implement product-list
-
-# API 연동 포함 (백엔드 준비 완료 시)
-/workflow-implement cart --with-api
-
-# Mock에서 실제 API로 전환
-/workflow-implement cart --migrate-to-api
-
-# TDD만 실행
-/workflow-implement checkout --tdd-only
-
-# 비즈니스 로직만 구현
-/workflow-implement auth --logic-only
-
-# 이전 작업 재개
-/workflow-implement --resume=xyz789
-
-# 특정 단계부터 시작
-/workflow-implement cart --start-from=implementation
-```
-
 ## 결과물
 
 - `docs/research/[기능명]-analysis.md`
@@ -119,4 +79,4 @@ test-runner로 TDD 검증을 진행해주세요"
 - `src/features/[기능명]/` - 비즈니스 로직
 - `src/features/[기능명]/mocks/` - Mock 데이터 및 서비스
 - `tests/[기능명]/` - 테스트 코드
-- `src/services/[기능명]/` - API 연동 (--with-api 옵션 사용 시)
+- `src/services/[기능명]/` - API 연동
