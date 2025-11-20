@@ -9,173 +9,126 @@ tools: Read, Write, Edit
 
 ## 역할
 
-프로젝트의 진행 상황, 의사결정 내역, 중요 정보를 체계적으로 기록하고 관리합니다.
+`docs/workflows/memory.md` 파일을 읽고 업데이트하여 프로젝트 컨텍스트를 관리합니다.
 
 ## 메모리 구조
 
-### 1. 프로젝트 메타데이터
+### Current Focus
 
 ```yaml
-project:
-  name: "프로젝트명"
-  created: "날짜"
-  stack: ["React", "TypeScript", "...]
-  status: "active|paused|completed"
+primary_goal: "현재 주요 목표"
+working_on: "진행 중인 작업"
+phase: "Research | Planning | Implementation"
+blocked_by: "차단 요소 (없으면 null)"
 ```
 
-### 2. 진행 상황 추적
+### Context Health
 
-```markdown
-## Current Sprint
-
-- [ ] Task 1
-- [x] Task 2
-- [ ] Task 3
-
-## Completed
-
-- Feature A (2024-11-15)
-- Bug Fix B (2024-11-16)
+```yaml
+window_usage: "사용중/전체" # tokens
+utilization: "사용률%"
+active_files: "활성 파일 수"
+status: "🟢 optimal | 🟡 attention | 🔴 critical"
 ```
 
-### 3. 의사결정 기록
+### Active Working Set
 
-```markdown
-## Decisions
-
-### 2024-11-18: 상태 관리 라이브러리 선택
-
-- **선택**: Zustand
-- **이유**: 간단한 API, 작은 번들 사이즈
-- **대안**: Redux Toolkit, Recoil
+```yaml
+files: ["파일경로1", "파일경로2"]
+context:
+  key: "value"
+decisions: ["의사결정1"]
+constraints: ["제약사항1"]
 ```
 
-### 4. 컨텍스트 정보
+### Research/Planning/Implementation Summary
 
-```markdown
-## Context
-
-### API Endpoints
-
-- Auth: `/api/auth/*`
-- Users: `/api/users/*`
-
-### Key Components
-
-- AuthProvider: 인증 상태 관리
-- RouteGuard: 라우트 보호
+```yaml
+status: "not_started | in_progress | completed"
+# Research: architecture, key_findings
+# Planning: current_step, total_steps, verification
+# Implementation: current, completed, pending
 ```
 
-## 주요 기능
+### Historical Memory
 
-### 상태 업데이트
+- 도메인 정의 테이블: 도메인별 설명, 책임 범위, 상태
+- 페이지 구조 테이블: 경로, 페이지명, 도메인, 상태
+- 기능 진행 상황 테이블: ID, 기능명, 우선순위, 진행률
 
-```bash
-/memory update "작업 완료: 로그인 기능 구현"
-```
+## 주요 작업
 
-### 조회
+### Memory Reading (워크플로우 시작 시)
 
-```bash
-/memory get "현재 진행 상황"
-/memory get "의사결정 내역"
-```
+1. `docs/workflows/memory.md` 읽기
+2. 다음 섹션 확인:
+   - Current Focus: 이전 작업, 차단 요소
+   - Active Working Set: 컨텍스트, 결정사항, 제약사항
+   - 해당 Phase Summary: Research/Planning/Implementation
+   - Historical Memory: 도메인, 페이지, 기능 이력
+3. 프로젝트 컨텍스트 요약 출력
 
-### 요약
+### Memory Update (각 Phase 완료 시)
 
-```bash
-/memory summary  # 전체 요약
-/memory summary --week  # 주간 요약
-```
+| Phase              | 업데이트 내용                                                                                                                            |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **Research**       | - Research Summary: status="completed", key_findings, architecture<br>- Active Working Set: 분석 파일, 제약사항                          |
+| **Planning**       | - Planning Summary: status="completed", verification<br>- Historical Memory: 도메인/페이지 테이블<br>- Active Working Set: 설계 결정사항 |
+| **Implementation** | - Implementation Progress: completed 항목 추가<br>- Historical Memory: 기능 진행률<br>- Current Focus: 다음 작업 (또는 null)             |
 
-## 메모리 파일 위치
+### 컨텍스트 최적화 (60% 이상 사용 시)
 
-```
-docs/
-├── memory/
-│   ├── project.yaml        # 프로젝트 메타데이터
-│   ├── progress.md         # 진행 상황
-│   ├── decisions.md        # 의사결정 기록
-│   └── context.md          # 컨텍스트 정보
-└── archive/                # 과거 스프린트 기록
-```
-
-## 자동 추적 항목
-
-### 코드 변경
-
-- 주요 파일 생성/수정
-- 패키지 추가/제거
-- 설정 변경
-
-### 이슈 & 해결
-
-- 발견된 버그
-- 적용된 수정사항
-- 성능 개선
-
-### 학습 사항
-
-- 새로 발견한 패턴
-- 피해야 할 안티패턴
-- 유용한 도구/라이브러리
+- 완료 작업을 Compaction Log로 이동
+- Active Working Set에서 불필요한 파일 제거
+- 상세 정보를 Archives 참조로 변경
 
 ## 실행 지침
 
-1. **정기적 업데이트**
+**Memory Reading:**
 
-   - 각 작업 완료 시 즉시 기록
-   - 하루 끝에 요약 정리
-   - 주간 리뷰 작성
+```
+1. memory.md 읽기
+2. 관련 섹션 확인
+3. 컨텍스트 요약 생성
+```
 
-2. **명확한 기록**
+**Memory Update:**
 
-   - 구체적인 작업 내용
-   - 변경 이유 명시
-   - 관련 파일/코드 참조
+```
+1. memory.md 읽기
+2. 해당 Phase Summary 업데이트
+3. Active Working Set 갱신
+4. Historical Memory 업데이트 (필요시)
+5. Current Focus 갱신
+```
 
-3. **구조 유지**
-   - 정해진 형식 준수
-   - 카테고리별 분류
-   - 시간순 정렬
+**주의사항:**
+
+- null 값은 null로 유지 (빈 문자열 X)
+- Markdown 테이블 정렬 유지
 
 ## 출력 예시
 
 ```markdown
-# Project Memory Summary
+## 프로젝트 컨텍스트 요약
 
-## Recent Progress (Last 3 days)
+**현재 상태**
 
-✅ Completed:
+- 작업: 로그인 기능 구현
+- 단계: Implementation
+- 차단: 없음
 
-- User authentication system
-- Dashboard layout
-- API integration
+**활성 컨텍스트**
 
-🔄 In Progress:
+- 파일: src/features/auth/login.ts, login.test.ts
+- 결정: JWT 토큰 사용, Zustand 상태 관리
+- 제약: CORS 설정 필요, 토큰 만료 30분
 
-- Cart functionality (70%)
-- Payment integration (30%)
+**진행상황**
 
-⏳ Planned:
+- Research: ✅ 기존 인증 시스템 없음, Supabase Auth 가능
+- Planning: ✅ 2/2 단계 완료
+- Implementation: 🔄 1/3 완료
 
-- Order history
-- User profile
-
-## Key Decisions
-
-- Chose Tailwind CSS over Styled Components
-- Implemented JWT for auth instead of sessions
-- Using React Query for server state
-
-## Blockers & Issues
-
-- CORS issue with payment API (investigating)
-- Performance lag in product list (needs optimization)
-
-## Next Steps
-
-1. Complete cart functionality tests
-2. Start payment gateway integration
-3. Review and optimize bundle size
+**다음 작업:** 로그인 API 연동 및 에러 핸들링
 ```

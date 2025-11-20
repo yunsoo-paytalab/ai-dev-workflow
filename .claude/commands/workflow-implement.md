@@ -4,38 +4,66 @@
 
 ## 실행 프로세스
 
-### Phase 1: Research (조사)
+### Phase 1: Memory Reading (메모리 읽기)
+
+**Agent: memory-manager**
+
+- `docs/workflows/memory.md` 파일 읽기
+- Current Focus: 이전 작업 및 차단 요소 확인
+- Active Working Set: 현재 컨텍스트, 의사결정, 제약사항 로드
+- Implementation Progress: 진행 중인 작업 및 완료 항목 확인
+- Historical Memory: 기능 구현 이력 및 패턴 확인
+- 출력: 프로젝트 컨텍스트 요약
+  - 현재 상태 (마지막 작업, 진행 단계, 차단 요소)
+  - 활성 컨텍스트 (파일, 결정사항, 제약사항)
+  - 단계별 진행상황
+
+### Phase 2: Research (조사)
 
 **Agent: research-agent**
 
 - 기능 요구사항 분석
 - 관련 코드베이스 탐색
 - 재사용 가능 컴포넌트 확인
+- 기술 스택 및 라이브러리 조사
+- 유사 기능 구현 패턴 분석
 - 출력: `docs/research/[기능명]-analysis.md`
 - **AgentId 저장**: 재개를 위한 ID 기록
 
-### Phase 2: Planning (계획)
-
-**Agent 체이닝**: Research → Planning 자동 연결
-
-- **Agent: planning-agent**
-- 구현 계획 수립
-- 테스트 시나리오 설계
-- 컴포넌트 구조 설계
-- 출력: `docs/plans/[기능명]-plan.md`
-
-### Phase 3: Review & Confirm
+### Phase 3: Review & Confirm (검수 & 컨펌)
 
 **사용자 검토**
 
-- 도메인 경계 적절성 확인
-- 기능 배치 검증
-- 누락 기능 체크
-- 페이지 구조 합리성 확인
+- Research 결과 검토
+- 요구사항 분석의 정확성 확인
+- 재사용 컴포넌트 선택 검증
+- 기술적 접근 방식 승인
+- 추가 조사 필요 여부 결정
 
-### Phase 4: Implementation (구현)
+### Phase 4: Planning (계획)
 
-#### 4.1 TDD Cycle
+**Agent: planning-agent**
+
+- 구현 계획 수립
+- 테스트 시나리오 설계
+- 컴포넌트 구조 설계
+- API 인터페이스 정의
+- 데이터 플로우 설계
+- 출력: `docs/plans/[기능명]-plan.md`
+
+### Phase 5: Review & Confirm (검수 & 컨펌)
+
+**사용자 검토**
+
+- 구현 계획의 타당성 확인
+- 테스트 시나리오 검증
+- 컴포넌트 구조 승인
+- API 설계 검토
+- 구현 우선순위 조정
+
+### Phase 6: Implementation (구현)
+
+#### 6.1 TDD Cycle
 
 **Agent: test-runner**
 
@@ -44,39 +72,71 @@
 - 🔵 **Refactor**: 코드 개선
 - 사이클 반복
 
-#### 4.2 필수 통합 작업
+#### 6.2 필수 통합 작업
 
-- **Mock 서비스**: 임시 데이터 처리
+**Agent: implementation-agent**
+
+- **컴포넌트 구현**: UI 및 비즈니스 로직 작성
+- **Mock 서비스**: 임시 데이터 처리 계층
 - **상태 관리**: Redux/Zustand 통합
 - **이벤트 핸들링**: UI와 비즈니스 로직 연결
+- **스타일링**: CSS/Tailwind 적용
 
-#### 4.3 선택적 API 연동 (--with-api 옵션)
+#### 6.3 선택적 API 연동 (--with-api 옵션)
 
 - **API 클라이언트**: Axios/Fetch 설정
 - **엔드포인트 연결**: 백엔드 API와 통합
 - **Mock → Real**: Mock 데이터를 실제 API로 전환
+- **에러 핸들링**: API 오류 처리
 
-### Phase 5: Memory Update
+### Phase 7: Memory Update (메모리 업데이트)
 
 **Agent: memory-manager**
 
-- 진행 상황 기록
-- 의사결정 문서화
-- 체크리스트 업데이트
+- `docs/workflows/memory.md` 업데이트
+- Research Summary 업데이트
+  - status: "completed"
+  - key_findings: 주요 발견사항 추가
+- Planning Summary 업데이트
+  - status: "completed"
+  - verification: 검증 완료 항목
+- Implementation Progress 업데이트
+  - completed: 완료된 작업 항목 추가
+  - pending: 남은 작업 항목 업데이트
+  - status: 전체 완료 시 "completed"로 변경
+- Historical Memory 업데이트
+  - 기능 진행 상황 테이블에 진행률 업데이트
+- Active Working Set 갱신
+  - 구현 관련 파일 추가
+  - 기술적 결정사항 기록
+  - 제약사항 업데이트
+- Current Focus 갱신
+  - primary_goal: 다음 작업 목표
+  - working_on: 다음 작업 항목 (또는 null if 완료)
+  - phase: "Implementation" (또는 null if 완료)
 
 ## 사용자 결정 포인트
 
-🔔 **확인 필요**:
+🔔 **Phase 3 확인 사항**:
 
-- 테스트 시나리오 승인
-- Mock 데이터 구조 확인
+- 요구사항이 명확히 파악되었는가?
+- 선택한 기술 스택이 적절한가?
+- 재사용 가능한 컴포넌트가 모두 식별되었는가?
+
+🔔 **Phase 5 확인 사항**:
+
+- 테스트 시나리오가 충분한가?
+- 컴포넌트 구조가 확장 가능한가?
+- API 설계가 RESTful 원칙을 따르는가?
+- Mock 데이터 구조가 적절한가?
 - API 연동 여부 결정 (백엔드 준비 시)
 
 ## 결과물
 
-- `docs/research/[기능명]-analysis.md`
-- `docs/plans/[기능명]-plan.md`
+- `docs/research/[기능명]-analysis.md` - 기능 분석 문서
+- `docs/plans/[기능명]-plan.md` - 구현 계획서
 - `src/features/[기능명]/` - 비즈니스 로직
 - `src/features/[기능명]/mocks/` - Mock 데이터 및 서비스
 - `tests/[기능명]/` - 테스트 코드
-- `src/services/[기능명]/` - API 연동
+- `src/services/[기능명]/` - API 연동 (선택적)
+- `docs/workflows/memory.md` - 업데이트된 프로젝트 메모리
