@@ -4,6 +4,22 @@
 
 ## 실행 프로세스
 
+### Phase 0: Restricted Zones Loading (제한 영역 로드)
+
+`docs/legacy-analysis/restricted-zones.json` 확인 (있는 경우)
+
+**Danger Zones (위험도별 컨펌 필요):**
+
+- 🔴 Critical: 반드시 명시적 승인 필요
+- 🟠 High Risk: 변경 계획 + 승인 필요
+- 🟡 Medium Risk: 주의 안내 필요
+- 🟢 Safe: 자유롭게 수정 가능
+
+**No-Reference Zones (참고 금지):**
+
+- 🚫 Anti-Pattern, ⛔ Deprecated, 🔧 Hack, 🐛 Known Bug
+- 해당 영역의 코드는 읽거나 참고하지 않음
+
 ### Phase 1: Memory Reading (메모리 읽기)
 
 **Agent: memory-manager**
@@ -19,6 +35,8 @@
   - 단계별 진행상황
 
 ### Phase 2: Research (조사)
+
+> ⚠️ Phase 0에서 로드한 제한 영역 준수
 
 **Agent: research-agent**
 
