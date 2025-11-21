@@ -76,17 +76,7 @@
   - `.claude/docs/legacy-analysis/no-reference-zones.md` 🚫
   - `.claude/docs/legacy-analysis/restricted-zones.json` (머신 리더블)
 
-### Phase 3: Refactoring Strategy (리팩토링 전략)
-
-**Agent: planning-agent**
-
-- 위험도별 접근 전략 수립
-- 컨펌 프로세스 정의
-- 안전한 리팩토링 경로 제시
-- 점진적 개선 로드맵 작성
-- **출력**: `.claude/docs/legacy-analysis/refactoring-strategy.md`
-
-### Phase 4: Safety Rules Definition (안전 규칙 정의)
+### Phase 3: Safety Rules Definition (안전 규칙 정의)
 
 **사용자 검토 및 확정**
 
@@ -98,13 +88,16 @@
   - danger-zones: 개발자 컨펌 필수 (위험도별 차등)
   - no-reference-zones: 참고 금지 (읽기도 금지)
 
-### Phase 5: Memory Update
+### (Optional) Phase 4: Refactoring Strategy (리팩토링 전략)
 
-**Agent: memory-manager**
+**Agent: planning-agent**
 
-- 레거시 분석 결과 저장
-- danger-zones 및 컨펌 요구사항 등록
-- 모든 후속 워크플로우가 제한 영역 및 컨펌 프로세스 참조하도록 설정
+- 사용자에게 해당 phase 수행 여부를 질문
+- 위험도별 접근 전략 수립
+- 컨펌 프로세스 정의
+- 안전한 리팩토링 경로 제시
+- 점진적 개선 로드맵 작성
+- **출력**: `.claude/docs/legacy-analysis/refactoring-strategy.md`
 
 ## 제한 영역 처리 규칙
 
