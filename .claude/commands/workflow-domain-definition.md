@@ -58,7 +58,7 @@
 
 ### Phase 4: Domain Documentation (도메인 문서화)
 
-**Agent: planning-agent**
+**Agent: feature-documenter**
 
 - Research 결과를 바탕으로 도메인 모델 설계
 - 도메인 경계 정의
