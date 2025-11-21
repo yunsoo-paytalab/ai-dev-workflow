@@ -58,17 +58,27 @@
 
 ### Phase 4: Domain Documentation (도메인 문서화)
 
-**Agent: feature-documenter**
+⚡ **IMPORTANT: 3개의 Agent를 병렬로 동시에 실행**
 
-- Research 결과를 바탕으로 도메인 모델 설계
-- 도메인 경계 정의
-- 기능 목록 도출 및 분류
-- 페이지 구조 및 라우팅 설계
-- 엔티티 및 관계 정의
-- 출력:
-  - `.claude/docs/domain-definition.md`
-  - `.claude/docs/feature-list.md`
-  - `.claude/docs/page-structure.md`
+**한 번의 메시지에서 3개의 Task를 모두 호출하여 병렬 실행:**
+
+1. **Agent: domain-definition-writer**
+   - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 도메인 정의 문서 작성
+   - 출력: `.claude/docs/domain-definition.md`
+
+2. **Agent: feature-list-writer**
+   - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 기능 목록 문서 작성
+   - 출력: `.claude/docs/feature-list.md` + `.claude/docs/feature-list/[기능ID]-[기능명].md`
+
+3. **Agent: page-structure-writer**
+   - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 페이지 구조 문서 작성
+   - 출력: `.claude/docs/page-structure.md`
+
+**출력 파일**:
+- `.claude/docs/domain-definition.md`
+- `.claude/docs/feature-list.md`
+- `.claude/docs/feature-list/[기능ID]-[기능명].md` (각 기능별)
+- `.claude/docs/page-structure.md`
 
 ### Phase 5: Review & Confirm (검수 & 컨펌)
 
