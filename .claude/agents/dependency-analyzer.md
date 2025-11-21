@@ -31,7 +31,7 @@ npm audit --json
 
 ## 출력
 
-**파일**: `docs/legacy-analysis/dependency-graph.md`
+**파일**: `.claude/docs/legacy-analysis/dependency-graph.md`
 
 **필수 내용**:
 

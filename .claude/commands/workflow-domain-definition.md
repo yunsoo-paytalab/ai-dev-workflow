@@ -6,7 +6,7 @@
 
 ### Phase 0: Restricted Zones Loading (제한 영역 로드)
 
-`docs/legacy-analysis/restricted-zones.json` 확인 (있는 경우)
+`.claude/docs/legacy-analysis/restricted-zones.json` 확인 (있는 경우)
 
 **Danger Zones (위험도별 컨펌 필요):**
 
@@ -24,7 +24,7 @@
 
 **Agent: memory-manager**
 
-- `docs/workflows/memory.md` 파일 읽기
+- `.claude/docs/memory/memory.md` 파일 읽기
 - Current Focus: 이전 작업 및 차단 요소 확인
 - Active Working Set: 현재 컨텍스트, 의사결정, 제약사항 로드
 - Research Summary: 이전 조사 결과 확인
@@ -44,7 +44,7 @@
 - 기존 코드베이스 탐색
 - 기술 스택 및 제약사항 파악
 - 비즈니스 요구사항 이해
-- 출력: `docs/research/domain-analysis.md`
+- 출력: `.claude/docs/research/domain-analysis.md`
 - **AgentId 저장**: 추후 재개를 위해 ID 기록
 
 ### Phase 3: Review & Confirm (검수 & 컨펌)
@@ -66,9 +66,9 @@
 - 페이지 구조 및 라우팅 설계
 - 엔티티 및 관계 정의
 - 출력:
-  - `docs/domain-definition.md`
-  - `docs/feature-list.md`
-  - `docs/page-structure.md`
+  - `.claude/docs/domain-definition.md`
+  - `.claude/docs/feature-list.md`
+  - `.claude/docs/page-structure.md`
 
 ### Phase 5: Review & Confirm (검수 & 컨펌)
 
@@ -84,7 +84,7 @@
 
 **Agent: memory-manager**
 
-- `docs/workflows/memory.md` 업데이트
+- `.claude/docs/memory/memory.md` 업데이트
 - Research Summary 업데이트
   - status: "completed"
   - key_findings: 주요 발견사항 추가
@@ -120,8 +120,8 @@
 
 ## 결과물
 
-- `docs/research/domain-analysis.md` - 도메인 분석 결과
-- `docs/domain-definition.md` - 도메인 정의 문서
-- `docs/feature-list.md` - 기능 목록
-- `docs/page-structure.md` - 페이지 구조
-- `docs/workflows/memory.md` - 업데이트된 프로젝트 메모리
+- `.claude/docs/research/domain-analysis.md` - 도메인 분석 결과
+- `.claude/docs/domain-definition.md` - 도메인 정의 문서
+- `.claude/docs/feature-list.md` - 기능 목록
+- `.claude/docs/page-structure.md` - 페이지 구조
+- `.claude/docs/memory/memory.md` - 업데이트된 프로젝트 메모리

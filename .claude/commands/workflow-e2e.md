@@ -37,5 +37,5 @@ E2E 테스트를 작성하고 실행합니다.
 ## 결과물
 
 - `e2e/tests/` - E2E 테스트 코드
-- `docs/e2e-test-report.md` - 테스트 리포트
+- `.claude/docs/e2e-test-report.md` - 테스트 리포트
 - 배포 준비 완료 상태

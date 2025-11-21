@@ -6,7 +6,7 @@
 
 ### Phase 0: Restricted Zones Loading (제한 영역 로드)
 
-`docs/legacy-analysis/restricted-zones.json` 확인 (있는 경우)
+`.claude/docs/legacy-analysis/restricted-zones.json` 확인 (있는 경우)
 
 **Danger Zones (위험도별 컨펌 필요):**
 
@@ -24,7 +24,7 @@
 
 **Agent: memory-manager**
 
-- `docs/workflows/memory.md` 파일 읽기
+- `.claude/docs/memory/memory.md` 파일 읽기
 - Current Focus: 이전 작업 및 차단 요소 확인
 - Active Working Set: 현재 컨텍스트, 의사결정, 제약사항 로드
 - Implementation Progress: 진행 중인 작업 및 완료 항목 확인
@@ -45,7 +45,7 @@
 - 재사용 가능 컴포넌트 확인
 - 기술 스택 및 라이브러리 조사
 - 유사 기능 구현 패턴 분석
-- 출력: `docs/research/[기능명]-analysis.md`
+- 출력: `.claude/docs/research/[기능명]-analysis.md`
 - **AgentId 저장**: 재개를 위한 ID 기록
 
 ### Phase 3: Review & Confirm (검수 & 컨펌)
@@ -67,7 +67,7 @@
 - 컴포넌트 구조 설계
 - API 인터페이스 정의
 - 데이터 플로우 설계
-- 출력: `docs/plans/[기능명]-plan.md`
+- 출력: `.claude/docs/plans/[기능명]-plan.md`
 
 ### Phase 5: Review & Confirm (검수 & 컨펌)
 
@@ -83,7 +83,7 @@
 
 **Agent: memory-manager**
 
-- `docs/workflows/memory.md` 업데이트
+- `.claude/docs/memory/memory.md` 업데이트
 - Research Summary 업데이트
   - status: "completed"
   - key_findings: 주요 발견사항 추가
@@ -115,9 +115,9 @@
 
 ## 결과물
 
-- `docs/research/[기능명]-analysis.md` - 기능 분석 문서
-- `docs/plans/[기능명]-plan.md` - 구현 계획서
-- `docs/workflows/memory.md` - 업데이트된 프로젝트 메모리
+- `.claude/docs/research/[기능명]-analysis.md` - 기능 분석 문서
+- `.claude/docs/plans/[기능명]-plan.md` - 구현 계획서
+- `.claude/docs/memory/memory.md` - 업데이트된 프로젝트 메모리
 
 ## 다음 단계
 

@@ -33,7 +33,7 @@ cloc . --json
 
 ## 출력
 
-**파일**: `docs/legacy-analysis/structure-overview.md`
+**파일**: `.claude/docs/legacy-analysis/structure-overview.md`
 
 **필수 내용**:
 

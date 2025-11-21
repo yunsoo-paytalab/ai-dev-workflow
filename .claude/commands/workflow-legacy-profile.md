@@ -21,7 +21,7 @@
 - 폴더 구조 및 모듈 조직 분석
 - 주요 진입점(entry points) 식별
 - 파일 크기 및 통계 수집
-- **출력**: `docs/legacy-analysis/structure-overview.md`
+- **출력**: `.claude/docs/legacy-analysis/structure-overview.md`
 
 #### Agent 2: dependency-analyzer (병렬)
 
@@ -29,7 +29,7 @@
 - 순환 의존성 탐지
 - 외부 패키지 의존성 분석
 - 결합도 측정
-- **출력**: `docs/legacy-analysis/dependency-graph.md`
+- **출력**: `.claude/docs/legacy-analysis/dependency-graph.md`
 
 #### Agent 3: debt-analyzer (병렬)
 
@@ -38,7 +38,7 @@
 - 오래된 패턴 및 deprecated API 사용
 - 테스트 커버리지 부족 영역
 - 문제 주석 (TODO, FIXME, HACK) 수집
-- **출력**: `docs/legacy-analysis/technical-debt.md`
+- **출력**: `.claude/docs/legacy-analysis/technical-debt.md`
 
 #### Agent 4: business-logic-mapper (병렬)
 
@@ -46,7 +46,7 @@
 - 자주 변경되는 핫스팟
 - 핵심 도메인 로직 위치
 - 데이터 흐름 추적
-- **출력**: `docs/legacy-analysis/core-business-logic.md`
+- **출력**: `.claude/docs/legacy-analysis/core-business-logic.md`
 
 ### Phase 2: Risk Classification (위험도 분류)
 
@@ -72,9 +72,9 @@
   - 🐛 **Known Bug**: 알려진 버그
 
 - **출력**:
-  - `docs/legacy-analysis/danger-zones.md` ⚠️
-  - `docs/legacy-analysis/no-reference-zones.md` 🚫
-  - `docs/legacy-analysis/restricted-zones.json` (머신 리더블)
+  - `.claude/docs/legacy-analysis/danger-zones.md` ⚠️
+  - `.claude/docs/legacy-analysis/no-reference-zones.md` 🚫
+  - `.claude/docs/legacy-analysis/restricted-zones.json` (머신 리더블)
 
 ### Phase 3: Refactoring Strategy (리팩토링 전략)
 
@@ -84,7 +84,7 @@
 - 컨펌 프로세스 정의
 - 안전한 리팩토링 경로 제시
 - 점진적 개선 로드맵 작성
-- **출력**: `docs/legacy-analysis/refactoring-strategy.md`
+- **출력**: `.claude/docs/legacy-analysis/refactoring-strategy.md`
 
 ### Phase 4: Safety Rules Definition (안전 규칙 정의)
 
@@ -174,7 +174,7 @@
 ## 결과물
 
 ```
-docs/legacy-analysis/
+.claude/docs/legacy-analysis/
 ├── structure-overview.md       # 전체 구조 개요
 ├── dependency-graph.md        # 의존성 그래프 (mermaid)
 ├── technical-debt.md          # 기술 부채 목록

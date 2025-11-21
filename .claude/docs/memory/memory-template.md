@@ -83,6 +83,6 @@ history: []
 
 ## 💾 Archives
 
-- 도메인: `docs/domain-definition.md`
-- 기능: `docs/feature-list.md`
-- API: `docs/api-spec.md`
+- 도메인: `.claude/docs/domain-definition.md`
+- 기능: `.claude/docs/feature-list.md`
+- API: `.claude/docs/api-spec.md`

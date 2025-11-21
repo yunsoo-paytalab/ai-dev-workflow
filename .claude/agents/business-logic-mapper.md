@@ -33,7 +33,7 @@ git log --format=format: --name-only | grep -v '^$' | sort | uniq -c | sort -rn 
 
 ## 출력
 
-**파일**: `docs/legacy-analysis/core-business-logic.md`
+**파일**: `.claude/docs/legacy-analysis/core-business-logic.md`
 
 **필수 내용**:
 

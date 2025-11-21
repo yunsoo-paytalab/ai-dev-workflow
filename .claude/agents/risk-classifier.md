@@ -13,10 +13,10 @@ tools: Read, Write
 
 ## 입력 (필수)
 
-1. `docs/legacy-analysis/structure-overview.md`
-2. `docs/legacy-analysis/dependency-graph.md`
-3. `docs/legacy-analysis/technical-debt.md`
-4. `docs/legacy-analysis/core-business-logic.md`
+1. `.claude/docs/legacy-analysis/structure-overview.md`
+2. `.claude/docs/legacy-analysis/dependency-graph.md`
+3. `.claude/docs/legacy-analysis/technical-debt.md`
+4. `.claude/docs/legacy-analysis/core-business-logic.md`
 
 ## 분류 기준
 

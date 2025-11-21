@@ -10,7 +10,7 @@
 
 **워크플로우 구조**:
 
-- `memory.md` - 진행 상황 추적 (`docs/workflows/`에 위치)
+- `memory.md` - 진행 상황 추적 (`.claude/docs/memory/`에 위치)
 - 명령어 파일 `.claude/commands/` - 각각 전체 워크플로우 세부사항 포함
 
 ---
@@ -38,7 +38,7 @@
 ```
 다음 단계를 수행해주세요:
 
-1. `docs/workflows/memory.md`를 읽어 현재 진행 상황 파악
+1. `.claude/docs/memory/memory.md`를 읽어 현재 진행 상황 파악
 2. 기본 프로젝트 정보가 입력되어 있는지 확인
 3. 미입력 시: "프로젝트 시작을 위해 기본 정보가 필요합니다. `/workflow-domain-definition` 명령어로 시작하시겠습니까?"
 4. 완료 시: 현재 상태와 권장 다음 단계 안내
@@ -76,7 +76,7 @@
 ```
 다음 정보를 표시해주세요:
 
-1. `docs/workflows/memory.md`를 읽어 전체 진행 상황 파악
+1. `.claude/docs/memory/memory.md`를 읽어 전체 진행 상황 파악
 2. 다음 정보 표시:
 
 **프로젝트 정보**:
@@ -119,7 +119,7 @@
 ```
 현재 상태를 메모리 파일에 업데이트해주세요:
 
-1. `docs/workflows/memory.md`를 읽어 현재 진행 상황 파악
+1. `.claude/docs/memory/memory.md`를 읽어 현재 진행 상황 파악
 2. 프로젝트의 현재 상태 분석:
    - 완료된 작업 확인
    - 현재 진행 중인 작업 파악
@@ -235,8 +235,8 @@
 ```
 프로젝트를 초기화해주세요:
 
-1. `docs/workflows/memory-template.md` 파일 읽기
-2. `docs/workflows/memory.md` 파일을 템플릿으로 덮어쓰기
+1. `.claude/docs/memory/memory-template.md` 파일 읽기
+2. `.claude/docs/memory/memory.md` 파일을 템플릿으로 덮어쓰기
 3. 메시지 표시: "프로젝트가 초기화되었습니다. `/workflow start` 명령어로 시작해주세요."
 ```
 
@@ -315,7 +315,7 @@
 ### 1. Memory.md 읽기
 
 ```
-docs/workflows/memory.md 파일을 읽어 다음을 파악:
+.claude/docs/memory/memory.md 파일을 읽어 다음을 파악:
 - 기본 프로젝트 정보
 - 기술 스택
 - 도메인 목록
@@ -417,5 +417,5 @@ memory.md 업데이트:
 
 ### 메모리 파일
 
-- `docs/workflows/memory.md` - 현재 프로젝트 진행 상황 추적
-- `docs/workflows/memory-template.md` - 신규 프로젝트용 메모리 템플릿
+- `.claude/docs/memory/memory.md` - 현재 프로젝트 진행 상황 추적
+- `.claude/docs/memory/memory-template.md` - 신규 프로젝트용 메모리 템플릿

@@ -9,7 +9,7 @@ tools: Read, Write, Edit
 
 ## 역할
 
-`docs/workflows/memory.md` 파일을 읽고 업데이트하여 프로젝트 컨텍스트를 관리합니다.
+`.claude/docs/workflows/memory.md` 파일을 읽고 업데이트하여 프로젝트 컨텍스트를 관리합니다.
 
 ## 메모리 구조
 
@@ -60,7 +60,7 @@ status: "not_started | in_progress | completed"
 
 ### Memory Reading (워크플로우 시작 시)
 
-1. `docs/workflows/memory.md` 읽기
+1. `.claude/docs/workflows/memory.md` 읽기
 2. 다음 섹션 확인:
    - Current Focus: 이전 작업, 차단 요소
    - Active Working Set: 컨텍스트, 결정사항, 제약사항

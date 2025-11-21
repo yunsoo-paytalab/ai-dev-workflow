@@ -17,13 +17,13 @@ Research 결과를 바탕으로 **비즈니스 요구사항을 구조화된 기�
 
 ## 입력
 
-- Research 문서 (`docs/research/domain-analysis.md`)
+- Research 문서 (`.claude/docs/research/domain-analysis.md`)
 - 요구사항 문서 (있는 경우)
 - 기존 도메인 문서 (업데이트 시)
 
 ## 출력 문서 구조
 
-### 1. 도메인 정의 (`docs/domain-definition.md`)
+### 1. 도메인 정의 (`.claude/docs/domain-definition.md`)
 
 ```markdown
 # Domain Definition
@@ -91,9 +91,9 @@ Research 결과를 바탕으로 **비즈니스 요구사항을 구조화된 기�
 | [용어2] | [정의] | [사용되는 컨텍스트] |
 ```
 
-### 2. 기능 목록 (`docs/feature-list.md` + `docs/feature-list/`)
+### 2. 기능 목록 (`.claude/feature-list.md` + `.claude/docs/feature-list/`)
 
-#### `docs/feature-list.md` (기능 목록 인덱스)
+#### `.claude/docs/feature-list.md` (기능 목록 인덱스)
 
 ```markdown
 # Feature List
@@ -123,7 +123,7 @@ Research 결과를 바탕으로 **비즈니스 요구사항을 구조화된 기�
 - [003](./feature-list/003-payment-processing.md): 결제 처리
 ```
 
-#### `docs/feature-list/[번호]-[기능명].md` (개별 기능 상세)
+#### `.claude/docs/feature-list/[번호]-[기능명].md` (개별 기능 상세)
 
 ```markdown
 # 001: 사용자 인증
@@ -175,7 +175,7 @@ Research 결과를 바탕으로 **비즈니스 요구사항을 구조화된 기�
 [추가 고려사항, 제약사항 등]
 ```
 
-### 3. 페이지 구조 (`docs/page-structure.md`)
+### 3. 페이지 구조 (`.claude/docs/page-structure.md`)
 
 ```markdown
 # Page Structure
@@ -293,8 +293,8 @@ graph TD
    - 비즈니스 가치 명확히
 
 5. **상세 문서 분리**
-   - `docs/feature-list.md`: 전체 기능 목록 표
-   - `docs/feature-list/[번호]-[기능명].md`: 개별 기능 상세
+   - `.claude/docs/feature-list.md`: 전체 기능 목록 표
+   - `.claude/docs/feature-list/[번호]-[기능명].md`: 개별 기능 상세
    - 인덱스 파일에서 상세 문서로 링크
 
 ### 페이지 구조 작성 시
@@ -357,7 +357,7 @@ graph TD
 
 1. **Research 문서 분석**
 
-   - `docs/research/domain-analysis.md` 읽기
+   - `.claude/docs/research/domain-analysis.md` 읽기
    - 핵심 요구사항 추출
    - 비즈니스 도메인 파악
 
@@ -365,22 +365,22 @@ graph TD
 
    - Bounded Context 식별
    - 엔티티 및 관계 정의
-   - `docs/domain-definition.md` 작성
+   - `.claude/docs/domain-definition.md` 작성
 
 3. **기능 도출**
 
    - 요구사항에서 기능 추출
    - 기능 분류 및 ID 부여
    - 의존성 파악
-   - `docs/feature-list.md` (인덱스) 작성
-   - `docs/feature-list/[번호]-[기능명].md` (상세) 작성
+   - `.claude/docs/feature-list.md` (인덱스) 작성
+   - `.claude/docs/feature-list/[번호]-[기능명].md` (상세) 작성
 
 4. **페이지 구조 설계**
 
    - 기능을 페이지로 매핑
    - 라우팅 구조 설계
    - 네비게이션 플로우 정의
-   - `docs/page-structure.md` 작성
+   - `.claude/docs/page-structure.md` 작성
 
 5. **문서 검증**
    - 일관성 확인

@@ -10,12 +10,12 @@
 
 **Agent: memory-manager**
 
-- `docs/workflows/memory.md` 파일 읽기
+- `.claude/docs/memory/memory.md` 파일 읽기
 - Planning Summary 확인: 구현 계획서 로드
 - Active Working Set: 현재 컨텍스트, 의사결정, 제약사항 로드
 - Implementation Progress: 진행 중인 작업 및 완료 항목 확인
 - 출력: 구현 컨텍스트 요약
-  - 구현 계획 (docs/plans/[기능명]-plan.md)
+  - 구현 계획 (.claude/docs/plans/[기능명]-plan.md)
   - 활성 컨텍스트 (파일, 결정사항, 제약사항)
   - 구현 진행상황
 
@@ -51,7 +51,7 @@
 
 **Agent: memory-manager**
 
-- `docs/workflows/memory.md` 업데이트
+- `.claude/docs/memory/memory.md` 업데이트
 - Research Summary 업데이트
   - status: "completed"
   - key_findings: 주요 발견사항 추가
@@ -78,7 +78,7 @@
 🔔 **구현 전 확인 사항**:
 
 - feature-spec 워크플로우가 완료되었는가?
-- 구현 계획서 (docs/plans/[기능명]-plan.md)가 준비되었는가?
+- 구현 계획서 (.claude/docs/plans/[기능명]-plan.md)가 준비되었는가?
 - 테스트 시나리오가 명확한가?
 
 🔔 **구현 중 확인 사항**:
@@ -93,7 +93,7 @@
 - `src/features/[기능명]/mocks/` - Mock 데이터 및 서비스
 - `tests/[기능명]/` - 테스트 코드
 - `src/services/[기능명]/` - API 연동 (선택적)
-- `docs/workflows/memory.md` - 업데이트된 프로젝트 메모리
+- `.claude/docs/memory/memory.md` - 업데이트된 프로젝트 메모리
 
 ## 관련 워크플로우
 

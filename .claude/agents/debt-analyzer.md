@@ -36,7 +36,7 @@ find . -name "*.js" | xargs wc -l | sort -rn | head -20
 
 ## 출력
 
-**파일**: `docs/legacy-analysis/technical-debt.md`
+**파일**: `.claude/docs/legacy-analysis/technical-debt.md`
 
 **필수 내용**:
 
