@@ -13,9 +13,9 @@
 ## 주요 작업 단계
 
 1. **도메인 정의**: 비즈니스 도메인의 핵심 개념과 기능 정의
-2. **공통 UI**: 재사용 가능한 공통 컴포넌트 개발
-3. **기능 UI**: 기능별 UI 컴포넌트 설계
-4. **기능 구현**: 테스트 작성 후 구현 (더미 데이터 우선)
+2. **기능 명세 작성** (기능별): 요구사항 분석, 리서치, 구현 계획 수립
+3. **UI 구현** (필요시): Figma 기반 UI 컴포넌트 개발
+4. **비즈니스 로직 구현**: TDD 방식으로 구현 (Mock 데이터 우선)
 5. **시스템 통합**: 중복 코드 제거 및 전체 구조 개선
 6. **E2E 테스트**: 최종 품질 검증 및 배포 준비
 
@@ -39,11 +39,25 @@
 /workflow-domain-definition
 ```
 
-### 4. UI 설계
+### 4. 기능 명세 작성
+
+```
+/workflow-feature-spec 상품목록   # 요구사항 분석 및 계획
+/workflow-feature-spec 장바구니   # 요구사항 분석 및 계획
+```
+
+### 5. UI 구현 (필요시)
 
 ```
 /workflow-ui common            # 공통 컴포넌트
-/workflow-ui 상품목록          # 기능별 UI 컴포넌트
+/workflow-ui 상품목록          # 기능별 UI
+```
+
+### 6. 비즈니스 로직 구현
+
+```
+/workflow-implement 상품목록   # TDD 방식 구현
+/workflow-implement 장바구니   # TDD 방식 구현
 ```
 
 ## 주요 커맨드
@@ -62,16 +76,21 @@
 
 - `/workflow-domain-definition`: 도메인 목록, 페이지 구조, 기능 목록 정의
 
-#### 2단계: UI 설계
+#### 2단계: 기능 명세 작성 (기능별)
+
+- `/workflow-feature-spec [기능명]`: 요구사항 분석, 리서치, 구현 계획 수립
+
+#### 3단계: UI 구현 (필요시)
 
 - `/workflow-ui common`: 공통 컴포넌트 개발 (Button, Input, Dialog 등)
 - `/workflow-ui [기능명]`: 기능별 UI 컴포넌트 설계
 
-#### 3단계: 기능 구현
+#### 4단계: 비즈니스 로직 구현
 
-- `/workflow-implement [기능명]`: 테스트 작성 후 구현 (더미 데이터 우선)
+- `/workflow-implement [기능명]`: TDD 방식으로 구현 (Mock 데이터 우선)
+  - **필수 선행**: `/workflow-feature-spec [기능명]` 완료
 
-#### 4단계: 통합 및 검증
+#### 5단계: 통합 및 검증
 
 - `/workflow-integrate`: 시스템 통합 및 리팩토링
 - `/workflow-e2e`: E2E 테스트 및 최종 검증
@@ -80,40 +99,34 @@
 
 ```
 .claude/
-├── commands/                          # 커맨드 정의 파일
+├── commands/                          # 워크플로우 명령어 정의
 │   ├── workflow.md                    # 메인 커맨드 (start, status, update, help, reset)
-│   ├── workflow-domain-definition.md  # 도메인 정의 커맨드
-│   ├── workflow-ui.md                 # UI 설계 커맨드
-│   ├── workflow-implement.md          # 기능 구현 커맨드
-│   ├── workflow-integrate.md          # 통합 커맨드
-│   └── workflow-e2e.md                # E2E 테스트 커맨드
+│   ├── workflow-domain-definition.md  # 도메인 정의
+│   ├── workflow-feature-spec.md       # 기능 명세 작성 ⭐ NEW
+│   ├── workflow-ui.md                 # UI 구현 (선택)
+│   ├── workflow-implement.md          # 비즈니스 로직 구현 (TDD)
+│   ├── workflow-integrate.md          # 시스템 통합
+│   ├── workflow-e2e.md                # E2E 테스트
+│   └── workflow-legacy-profile.md     # 레거시 코드 분석
 │
-└── skills/                            # 재사용 가능한 스킬 모듈
-    ├── requirements-parser/           # 요구사항 파싱
-    │   └── SKILL.md
-    ├── domain-definer/                # 도메인 정의
-    │   ├── SKILL.md
-    │   └── template.md
-    ├── feature-list-generator/        # 기능 목록 생성
-    │   ├── SKILL.md
-    │   └── template.md
-    ├── page-structure-designer/       # 페이지 구조 설계
-    │   ├── SKILL.md
-    │   └── template.md
-    ├── figma-ui-generator/            # Figma 기반 UI 코드 생성
-    │   └── SKILL.md
-    ├── tdd-workflow-manager/          # TDD 사이클 관리
-    │   └── SKILL.md
-    ├── test-case-generator/           # 테스트 케이스 생성
-    │   └── SKILL.md
-    ├── test-coverage-analyzer/        # 테스트 커버리지 분석
-    │   └── SKILL.md
-    └── memory-manager/                # 진행 상황 추적
-        └── SKILL.md
-
-docs/workflows/                        # 워크플로우 가이드 및 결과물
-├── memory.md                          # 🧠 진행 상황 추적 (중앙 관리)
-└── memory-template.md                 # 📋 메모리 템플릿
+├── agents/                            # AI 에이전트 정의
+│   ├── research-agent.md              # 리서치 전문 에이전트
+│   ├── planning-agent.md              # 계획 수립 전문 에이전트
+│   ├── memory-manager.md              # 메모리 관리 에이전트
+│   ├── test-runner.md                 # TDD 사이클 관리
+│   └── ...
+│
+├── docs/                              # 워크플로우 문서 ⭐
+│   ├── memory/                        # 프로젝트 메모리
+│   │   ├── memory.md                  # 🧠 진행 상황 추적 (중앙 관리)
+│   │   └── memory-template.md         # 📋 메모리 템플릿
+│   ├── research/                      # 기능 분석 문서 (생성 예정)
+│   ├── plans/                         # 구현 계획서 (생성 예정)
+│   ├── legacy-analysis/               # 레거시 분석
+│   └── feature-list/                  # 기능 목록
+│
+└── skills/                            # Claude 스킬
+    └── figma-ui-generator/            # Figma 기반 UI 생성
 ```
 
 ### 파일 역할 설명
@@ -121,49 +134,38 @@ docs/workflows/                        # 워크플로우 가이드 및 결과물
 #### 📋 커맨드 파일 (.claude/commands/)
 
 - **workflow.md**: 메인 커맨드 정의 (start, status, update, help, reset)
-- **workflow-domain-definition.md**: 도메인 정의 커맨드 (4개 스킬 순차 실행)
-- **workflow-ui.md**: UI 설계 커맨드 (기능별 UI 컴포넌트 설계)
-- **workflow-implement.md**: 기능 구현 커맨드 (TDD 스킬 활용)
-- **workflow-integrate.md**: 시스템 통합 커맨드
-- **workflow-e2e.md**: E2E 테스트 커맨드
+- **workflow-domain-definition.md**: 도메인 정의 (전체 프로젝트 도메인 모델)
+- **workflow-feature-spec.md**: 기능 명세 작성 (요구사항 분석 및 계획) ⭐ NEW
+- **workflow-ui.md**: UI 구현 (Figma 기반, 선택적)
+- **workflow-implement.md**: 비즈니스 로직 구현 (TDD 방식)
+- **workflow-integrate.md**: 시스템 통합 및 리팩토링
+- **workflow-e2e.md**: E2E 테스트 및 최종 검증
 
-#### 🧩 스킬 모듈 (.claude/skills/)
+#### 🤖 AI 에이전트 (.claude/agents/)
 
-독립적이고 재사용 가능한 작업 단위:
+전문화된 AI 에이전트들:
 
-**도메인 정의 스킬**:
+- **research-agent**: 코드베이스 탐색 및 기능 분석
+- **planning-agent**: 구현 계획 수립 및 테스트 시나리오 설계
+- **memory-manager**: 프로젝트 메모리 관리 및 컨텍스트 유지
+- **test-runner**: TDD Red-Green-Refactor 사이클 관리
+- **feature-documenter**: 기능 문서 생성 및 관리
 
-- **requirements-parser**: 요구사항 파싱 및 구조화 (메모리 출력)
-- **domain-definer**: 도메인 경계 및 아키텍처 설계
-- **feature-list-generator**: 기능 목록 생성 및 분류
-- **page-structure-designer**: 페이지 구조 및 라우팅 설계
+#### 📚 워크플로우 문서 (.claude/docs/)
 
-**UI 개발 스킬**:
+- **memory/**: 프로젝트 진행 상황 추적 (중앙 관리)
+- **research/**: 기능별 분석 문서 (feature-spec에서 생성)
+- **plans/**: 구현 계획서 (feature-spec에서 생성)
+- **legacy-analysis/**: 레거시 코드 분석 결과
+- **feature-list/**: 기능 목록 및 분류
 
-- **figma-ui-generator**: Figma 디자인 기반 UI 코드 생성 (Figma MCP 연동)
+#### 🎨 스킬 (.claude/skills/)
 
-**개발 지원 스킬**:
-
-- **tdd-workflow-manager**: TDD Red-Green-Refactor 사이클 관리
-- **test-case-generator**: 체계적인 테스트 케이스 생성
-- **test-coverage-analyzer**: 테스트 커버리지 분석 및 개선 제안
-- **memory-manager**: 진행 상황 추적 및 상태 업데이트
-
-**스킬 특징**:
-
-- 메모리 기반 데이터 전달로 토큰 절약 (약 48%)
-- 각 스킬 독립 실행 가능
-- 생성 범위 명확히 제한 (과도한 생성 방지)
-- 템플릿 기반 일관성 유지
-
-#### 🔄 워크플로우 관리 (docs/workflows/)
-
-- **memory.md**: 진행 상황 및 파일 경로 중앙 관리
-- **memory-template.md**: 신규 프로젝트용 메모리 템플릿
+- **figma-ui-generator**: Figma 디자인을 React 컴포넌트로 변환
 
 ## 사용 예시
 
-### 시나리오 1: 처음부터 시작
+### 시나리오 1: 처음부터 시작 (권장)
 
 ```bash
 # 1. 프로젝트 시작
@@ -172,39 +174,44 @@ docs/workflows/                        # 워크플로우 가이드 및 결과물
 # 2. 도메인 정의
 /workflow-domain-definition
 
-# 3. 공통 컴포넌트 개발
-/workflow-ui common        # Button 컴포넌트
-/workflow-ui common        # Dialog 컴포넌트
-/workflow-ui common        # Toast 컴포넌트
+# 3. 각 기능마다 반복
+# 3-1. 기능 명세 작성
+/workflow-feature-spec 상품목록   # 요구사항 분석 및 계획
+/workflow-feature-spec 장바구니   # 요구사항 분석 및 계획
 
-# 4. 기능별 UI 설계
-/workflow-ui 상품목록      # ProductList 컴포넌트
-/workflow-ui 장바구니      # CartPage 컴포넌트
+# 3-2. UI 구현 (필요시)
+/workflow-ui common              # 공통 컴포넌트
+/workflow-ui 상품목록            # 기능별 UI
 
-# 5. 기능 구현
-/workflow-implement 상품목록
-/workflow-implement 장바구니
+# 3-3. 비즈니스 로직 구현
+/workflow-implement 상품목록     # TDD 방식
+/workflow-implement 장바구니     # TDD 방식
 
-# 6. 통합 및 검증
+# 4. 통합 및 검증
 /workflow-integrate
 /workflow-e2e
 ```
 
-### 시나리오 2: 공통 컴포넌트만 개발
+### 시나리오 2: 기능 명세 먼저 작성
 
 ```bash
-# 디자인 시스템 구축
-/workflow-ui common        # Button 컴포넌트
-/workflow-ui common        # Input 컴포넌트
-/workflow-ui common        # Dialog 컴포넌트
-/workflow-ui common        # Toast 컴포넌트
+# 모든 기능의 명세를 먼저 작성
+/workflow-feature-spec 상품목록
+/workflow-feature-spec 장바구니
+/workflow-feature-spec 결제
+
+# 검토 및 승인 후 구현 시작
+/workflow-implement 상품목록
+/workflow-implement 장바구니
+/workflow-implement 결제
 ```
 
-### 시나리오 3: 특정 기능만 빠르게 개발
+### 시나리오 3: UI가 필요 없는 경우
 
 ```bash
-# UI 설계 생략하고 바로 구현
-/workflow-implement 로그인    # UI 없이 바로 구현 가능
+# API 서비스나 비즈니스 로직만 필요한 경우
+/workflow-feature-spec 결제처리
+/workflow-implement 결제처리     # UI 없이 바로 구현
 ```
 
 ### 시나리오 4: 진행 상황 확인
@@ -226,7 +233,7 @@ docs/workflows/                        # 워크플로우 가이드 및 결과물
 
 **권장 작업 순서** (참고용):
 
-1. 도메인 정의 → 2. 공통 UI → 3. 기능 UI → 4. 기능 구현 → 5. 통합 → 6. E2E
+1. **도메인 정의** → 2. **각 기능마다 반복** (기능 명세 → UI 구현(필요시) → 비즈니스 로직 구현) → 3. **통합** → 4. **E2E**
 
 ### 2. 중앙 집중식 상태 관리
 
@@ -293,8 +300,9 @@ docs/workflows/                        # 워크플로우 가이드 및 결과물
 
 ### 특정 작업 가이드 확인
 
-- 각 커맨드 파일 (.claude/commands/) 확인
-- 워크플로우 가이드 파일 (docs/workflows/) 확인
+- 각 커맨드 파일 (`.claude/commands/`) 확인
+- 메모리 파일 (`.claude/docs/memory/`) 확인
+- 분석 문서 (`.claude/docs/research/`) 및 계획서 (`.claude/docs/plans/`) 확인
 
 ## 핵심 원칙
 
@@ -312,33 +320,41 @@ docs/workflows/                        # 워크플로우 가이드 및 결과물
 1. `memory.md` 읽어 현재 상태 파악
 2. 필요한 스킬 순차 실행 (메모리 기반 데이터 전달)
 3. 작업 수행 및 검수
-4. 결과물 저장 (docs/ 또는 src/)
-5. `memory.md` 업데이트
+4. 결과물 저장 (.claude/docs/ 또는 src/)
+5. `.claude/docs/memory/memory.md` 업데이트
 
-### 스킬 기반 워크플로우
+### 에이전트 기반 워크플로우
 
-**도메인 정의 프로세스** (`/workflow-domain-definition`):
+**기능 명세 작성 프로세스** (`/workflow-feature-spec`):
 
 ```
-skill:requirements-parser (requirements.md 파싱)
-  ↓ parsedData (메모리)
-skill:domain-definer (도메인 정의)
-  ↓ docs/domain-definition.md
-skill:feature-list-generator (기능 목록 생성)
-  ↓ docs/feature-list.md + featureList (메모리)
-skill:page-structure-designer (페이지 구조 설계)
-  ↓ docs/page-structure.md
-skill:memory-manager (진행 상황 업데이트)
+1. memory-manager: 프로젝트 컨텍스트 로드
+   ↓
+2. research-agent: 요구사항 분석 및 코드베이스 탐색
+   ↓ .claude/docs/research/[기능명]-analysis.md
+3. planning-agent: 구현 계획 및 테스트 시나리오 수립
+   ↓ .claude/docs/plans/[기능명]-plan.md
+4. memory-manager: 진행 상황 업데이트
+```
+
+**비즈니스 로직 구현 프로세스** (`/workflow-implement`):
+
+```
+1. memory-manager: 구현 계획 로드
+   ↓
+2. test-runner: TDD Red-Green-Refactor 사이클 관리
+   ↓ 테스트 코드 + 구현 코드
+3. memory-manager: 완료 상황 업데이트
 ```
 
 **장점**:
 
-- 메모리 기반 데이터 전달로 파일 I/O 최소화
-- 각 단계별 명확한 책임 분리
-- 필요시 개별 스킬 단독 실행 가능
+- 전문화된 AI 에이전트가 각 단계 담당
+- 메모리 기반 컨텍스트 유지
+- 체계적인 문서 생성 및 관리
 
 ### 도움이 필요하신가요?
 
-- 각 커맨드 파일에 상세한 가이드가 포함되어 있습니다
-- 워크플로우 가이드 파일에 단계별 체크리스트가 있습니다
+- 각 커맨드 파일 (`.claude/commands/`)에 상세한 가이드가 포함되어 있습니다
+- 메모리 파일 (`.claude/docs/memory/memory.md`)에 진행 상황이 추적됩니다
 - `/workflow help` 커맨드로 전체 커맨드 목록 확인 가능

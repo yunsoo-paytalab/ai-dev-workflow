@@ -4,13 +4,13 @@ E2E 테스트를 작성하고 실행합니다.
 
 ## 실행 프로세스
 
-1. **준비** → skill:memory-manager로 상태 확인
+1. **준비** → **Agent: memory-manager**로 상태 확인
 2. **시나리오 설계**
    - 주요 사용자 플로우 식별
    - Critical Path 정의
    - 테스트 시나리오 작성
    - 테스트 우선순위 결정
-3. **E2E 테스트 케이스 생성** → skill:test-case-generator
+3. **E2E 테스트 케이스 생성**
    - 사용자 시나리오 기반 테스트 케이스 생성
    - Happy path, 예외 상황 포함
    - 페이지 객체 패턴 적용 제안
@@ -23,8 +23,8 @@ E2E 테스트를 작성하고 실행합니다.
    - 실패 케이스 분석
    - 테스트 안정성 확인
    - 스크린샷 및 로그 수집
-6. **커버리지 분석** → skill:test-coverage-analyzer로 커버리지 확인
-7. **저장** → skill:memory-manager로 진행 상황 업데이트
+6. **커버리지 분석**
+7. **저장** → **Agent: memory-manager**로 진행 상황 업데이트
 
 ## 사용자 결정 포인트
 
@@ -37,5 +37,5 @@ E2E 테스트를 작성하고 실행합니다.
 ## 결과물
 
 - `e2e/tests/` - E2E 테스트 코드
-- `docs/e2e-test-report.md` - 테스트 리포트
+- `.claude/docs/e2e-test-report.md` - 테스트 리포트
 - 배포 준비 완료 상태

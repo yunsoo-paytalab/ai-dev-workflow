@@ -19,11 +19,11 @@ Figma 디자인을 기반으로 UI 컴포넌트를 생성합니다.
 
 ## 실행 프로세스
 
-1. **상태 확인** → skill:memory-manager
+1. **상태 확인** → **Agent: memory-manager**
 2. **디자인 시스템 분석** → 기존 구조 파악
-3. **Figma 연동** → skill:figma-ui-generator
+3. **Figma 연동** → Figma 디자인 코드 생성 (MCP 도구 활용)
 4. **코드 생성** → 디자인 시스템 기반 컴포넌트 생성
-5. **진행 상황 저장** → skill:memory-manager
+5. **진행 상황 저장** → **Agent: memory-manager**
 
 ## 사용자 입력 필요
 

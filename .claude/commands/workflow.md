@@ -10,7 +10,7 @@
 
 **워크플로우 구조**:
 
-- `memory.md` - 진행 상황 추적 (`docs/workflows/`에 위치)
+- `memory.md` - 진행 상황 추적 (`.claude/docs/memory/`에 위치)
 - 명령어 파일 `.claude/commands/` - 각각 전체 워크플로우 세부사항 포함
 
 ---
@@ -38,18 +38,19 @@
 ```
 다음 단계를 수행해주세요:
 
-1. `docs/workflows/memory.md`를 읽어 현재 진행 상황 파악
+1. `.claude/docs/memory/memory.md`를 읽어 현재 진행 상황 파악
 2. 기본 프로젝트 정보가 입력되어 있는지 확인
 3. 미입력 시: "프로젝트 시작을 위해 기본 정보가 필요합니다. `/workflow-domain-definition` 명령어로 시작하시겠습니까?"
 4. 완료 시: 현재 상태와 권장 다음 단계 안내
 
 권장 작업 순서 (참고용):
 1. 도메인 정의 (`/workflow-domain-definition`)
-2. 공통 UI 설계 (`/workflow-ui common`)
-3. 기능 UI 설계 (`/workflow-ui [기능명]`)
-4. 기능 구현 (`/workflow-implement [기능명]`)
-5. 시스템 통합 (`/workflow-integrate`)
-6. E2E 테스트 (`/workflow-e2e`)
+2. 각 기능마다 반복:
+   - 기능 명세 작성 (`/workflow-feature-spec [기능명]`)
+   - (필요시) UI 구현 (`/workflow-ui [기능명]`)
+   - 비즈니스 로직 구현 (`/workflow-implement [기능명]`)
+3. 시스템 통합 (`/workflow-integrate`)
+4. E2E 테스트 (`/workflow-e2e`)
 ```
 
 ---
@@ -75,7 +76,7 @@
 ```
 다음 정보를 표시해주세요:
 
-1. `docs/workflows/memory.md`를 읽어 전체 진행 상황 파악
+1. `.claude/docs/memory/memory.md`를 읽어 전체 진행 상황 파악
 2. 다음 정보 표시:
 
 **프로젝트 정보**:
@@ -118,7 +119,7 @@
 ```
 현재 상태를 메모리 파일에 업데이트해주세요:
 
-1. `docs/workflows/memory.md`를 읽어 현재 진행 상황 파악
+1. `.claude/docs/memory/memory.md`를 읽어 현재 진행 상황 파악
 2. 프로젝트의 현재 상태 분석:
    - 완료된 작업 확인
    - 현재 진행 중인 작업 파악
@@ -159,9 +160,10 @@
 
 **작업 명령어**:
 - /workflow-domain-definition - 도메인 정의
+- /workflow-feature-spec [기능명] - 기능 명세 작성 (요구사항 분석 및 계획)
 - /workflow-ui common - 공통 UI 설계
-- /workflow-ui [기능명] - 기능 UI 설계
-- /workflow-implement [기능명] - 기능 구현
+- /workflow-ui [기능명] - 기능 UI 설계 (선택)
+- /workflow-implement [기능명] - 기능 구현 (TDD)
 - /workflow-integrate - 통합 및 리팩토링
 - /workflow-e2e - E2E 테스트
 
@@ -179,7 +181,13 @@
 
 📄 상세 문서: `@workflow-domain-definition.md`
 
-### `/workflow-ui [scope]` - UI 설계 및 생성
+### `/workflow-feature-spec [기능명]` - 기능 명세 작성
+
+📄 상세 문서: `@workflow-feature-spec.md`
+
+**기능**: 요구사항 분석, 리서치, 구현 계획 수립
+
+### `/workflow-ui [scope]` - UI 설계 및 생성 (선택)
 
 📄 상세 문서: `@workflow-ui.md`
 
@@ -191,6 +199,8 @@
 ### `/workflow-implement [기능명]` - 기능 구현
 
 📄 상세 문서: `@workflow-implement.md`
+
+**필수 선행**: `/workflow-feature-spec [기능명]` 완료
 
 ### `/workflow-integrate` - 통합 및 리팩토링
 
@@ -225,8 +235,8 @@
 ```
 프로젝트를 초기화해주세요:
 
-1. `docs/workflows/memory-template.md` 파일 읽기
-2. `docs/workflows/memory.md` 파일을 템플릿으로 덮어쓰기
+1. `.claude/docs/memory/memory-template.md` 파일 읽기
+2. `.claude/docs/memory/memory.md` 파일을 템플릿으로 덮어쓰기
 3. 메시지 표시: "프로젝트가 초기화되었습니다. `/workflow start` 명령어로 시작해주세요."
 ```
 
@@ -252,21 +262,22 @@
 /workflow-domain-definition
 ```
 
-### 공통 컴포넌트 개발
+### 기능 명세 작성 (요구사항 분석 및 계획)
 
 ```
-/workflow-ui common    # 공통 컴포넌트 확장
+/workflow-feature-spec product-list
+/workflow-feature-spec cart
 ```
 
-### 기능 컴포넌트 개발
+### UI 구현 (필요시)
 
 ```
-/workflow-ui product-list    # ProductList 컴포넌트
-/workflow-ui product-list    # ProductCard 컴포넌트
-/workflow-ui cart            # CartPage 컴포넌트
+/workflow-ui common          # 공통 컴포넌트 확장
+/workflow-ui product-list    # ProductList UI
+/workflow-ui cart            # Cart UI
 ```
 
-### 기능 구현
+### 기능 구현 (TDD)
 
 ```
 /workflow-implement product-list
@@ -304,7 +315,7 @@
 ### 1. Memory.md 읽기
 
 ```
-docs/workflows/memory.md 파일을 읽어 다음을 파악:
+.claude/docs/memory/memory.md 파일을 읽어 다음을 파악:
 - 기본 프로젝트 정보
 - 기술 스택
 - 도메인 목록
@@ -357,12 +368,28 @@ memory.md 업데이트:
 > 💡 **참고용**: 이 순서를 따르지 않아도 됩니다.
 
 1. **도메인 정의** (`/workflow-domain-definition`)
-2. **공통 UI** (`/workflow-ui common`)
-3. **각 기능마다 반복**:
-   - 기능 UI (`/workflow-ui [기능명]`)
-   - 기능 구현 (`/workflow-implement [기능명]`)
-4. **시스템 통합** (`/workflow-integrate`)
-5. **E2E 테스트** (`/workflow-e2e`)
+   - 프로젝트 전체 도메인 모델 정의
+
+2. **각 기능마다 반복**:
+   1. **기능 명세 작성** (`/workflow-feature-spec [기능명]`)
+      - 요구사항 분석
+      - 리서치
+      - 구현 계획 수립
+
+   2. **UI 구현** (필요시, `/workflow-ui [기능명]`)
+      - Figma 디자인이 있는 경우
+      - UI 컴포넌트가 필요한 경우
+
+   3. **비즈니스 로직 구현** (`/workflow-implement [기능명]`)
+      - TDD 방식으로 구현
+      - Mock 데이터 사용
+
+3. **시스템 통합** (`/workflow-integrate`)
+   - 기능 간 연결
+   - 리팩토링
+
+4. **E2E 테스트** (`/workflow-e2e`)
+   - 전체 시나리오 테스트
 
 ---
 
@@ -382,12 +409,13 @@ memory.md 업데이트:
 **작업 명령어 파일** (각각 전체 워크플로우 세부사항 포함):
 
 - `.claude/commands/workflow-domain-definition.md` - 도메인 정의 상세 단계
-- `.claude/commands/workflow-ui.md` - UI 컴포넌트 개발 (공통/기능별)
-- `.claude/commands/workflow-implement.md` - 기능 구현 (Test-First)
+- `.claude/commands/workflow-feature-spec.md` - 기능 명세 작성 (요구사항 분석 및 계획)
+- `.claude/commands/workflow-ui.md` - UI 컴포넌트 개발 (공통/기능별, 선택)
+- `.claude/commands/workflow-implement.md` - 기능 구현 (TDD 방식)
 - `.claude/commands/workflow-integrate.md` - 시스템 통합 및 리팩토링
 - `.claude/commands/workflow-e2e.md` - E2E 테스트 및 배포 준비
 
 ### 메모리 파일
 
-- `docs/workflows/memory.md` - 현재 프로젝트 진행 상황 추적
-- `docs/workflows/memory-template.md` - 신규 프로젝트용 메모리 템플릿
+- `.claude/docs/memory/memory.md` - 현재 프로젝트 진행 상황 추적
+- `.claude/docs/memory/memory-template.md` - 신규 프로젝트용 메모리 템플릿
