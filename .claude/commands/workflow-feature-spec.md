@@ -35,7 +35,7 @@
 
 > ⚠️ Phase 0에서 로드한 제한 영역 준수
 
-**Agent: research-agent**
+**Agent: feature-research-agent**
 
 **조사 항목:**
 
