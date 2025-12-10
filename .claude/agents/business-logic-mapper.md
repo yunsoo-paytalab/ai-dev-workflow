@@ -1,8 +1,8 @@
 ---
 name: business-logic-mapper
-type: subagent
 description: 핵심 비즈니스 로직 및 변경 빈도 분석
 tools: Read, Grep, Glob, Bash, Write
+model: opus
 ---
 
 # Business Logic Mapper

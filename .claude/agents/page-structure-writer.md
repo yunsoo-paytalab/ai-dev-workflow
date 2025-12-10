@@ -1,6 +1,5 @@
 ---
 name: page-structure-writer
-type: subagent
 description: 페이지 구조 문서를 작성하는 전문 에이전트
 tools: Read, Write, Glob
 ---

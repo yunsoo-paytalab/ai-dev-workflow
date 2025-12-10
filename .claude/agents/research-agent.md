@@ -1,8 +1,8 @@
 ---
 name: research-agent
-type: subagent
 description: 코드베이스 탐색 및 문제 분석을 위한 Research 전문 에이전트
 tools: Read, Grep, Glob, Task, Bash, Write
+model: opus
 ---
 
 # Research Agent

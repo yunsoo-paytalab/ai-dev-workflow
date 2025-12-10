@@ -1,8 +1,8 @@
 ---
 name: structure-analyzer
-type: subagent
 description: 프로젝트 구조 및 아키텍처 빠른 분석
 tools: Read, Grep, Glob, Bash, Write
+model: haiku
 ---
 
 # Structure Analyzer

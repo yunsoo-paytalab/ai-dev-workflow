@@ -1,8 +1,8 @@
 ---
 name: domain-definition-writer
-type: subagent
 description: 도메인 정의 문서를 작성하는 전문 에이전트
 tools: Read, Write, Glob
+model: opus
 ---
 
 # Domain Definition Writer Agent

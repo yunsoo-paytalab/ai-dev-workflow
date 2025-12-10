@@ -1,8 +1,8 @@
 ---
 name: planning-agent
-type: subagent
 description: Research 결과를 바탕으로 구현 계획을 수립하는 Planning 전문 에이전트
 tools: Read, Bash, Write
+model: opus
 ---
 
 # Planning Agent

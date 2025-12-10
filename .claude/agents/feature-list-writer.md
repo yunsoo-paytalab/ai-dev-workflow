@@ -1,6 +1,5 @@
 ---
 name: feature-list-writer
-type: subagent
 description: 기능 목록 문서를 작성하는 전문 에이전트
 tools: Read, Write, Glob, Bash
 ---

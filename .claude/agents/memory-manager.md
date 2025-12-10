@@ -1,8 +1,8 @@
 ---
 name: memory-manager
-type: subagent
 description: 프로젝트 진행 상황과 컨텍스트를 관리하는 메모리 전문 에이전트
 tools: Read, Write, Edit
+model: haiku
 ---
 
 # Memory Manager Agent

@@ -1,8 +1,8 @@
 ---
 name: debt-analyzer
-type: subagent
 description: 기술 부채 및 코드 품질 분석
 tools: Read, Grep, Glob, Bash, Write
+model: haiku
 ---
 
 # Debt Analyzer

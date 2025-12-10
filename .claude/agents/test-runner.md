@@ -1,8 +1,8 @@
 ---
 name: test-runner
-type: subagent
 description: TDD의 Red-Green-Refactor 사이클을 관리하고 테스트를 실행하는 전문 에이전트
 tools: Read, Write, Edit, Bash
+model: opus
 ---
 
 # TDD Test Runner Agent
