@@ -30,54 +30,58 @@
 - Implementation Progress: 진행 중인 작업 및 완료 항목 확인
 - Historical Memory: 기능 구현 이력 및 패턴 확인
 - 출력: 프로젝트 컨텍스트 요약
-  - 현재 상태 (마지막 작업, 진행 단계, 차단 요소)
-  - 활성 컨텍스트 (파일, 결정사항, 제약사항)
-  - 단계별 진행상황
 
-### Phase 2: Research (조사)
+### Phase 2: Research & Design (조사 및 설계)
 
 > ⚠️ Phase 0에서 로드한 제한 영역 준수
 
 **Agent: research-agent**
 
+**조사 항목:**
+
 - 기능 요구사항 분석
 - 관련 코드베이스 탐색
 - 재사용 가능 컴포넌트 확인
-- 기술 스택 및 라이브러리 조사
 - 유사 기능 구현 패턴 분석
-- 출력: `.claude/docs/research/[기능명]-analysis.md`
-- **AgentId 저장**: 재개를 위한 ID 기록
+
+**설계 항목:**
+
+- 변경 사항 설계 (Before → After)
+- 인터페이스/타입 정의
+- API 스펙 설계
+- 데이터 흐름 설계
+- 컴포넌트 구조 (개요만, 상세는 /workflow-ui에서)
+- 핵심 로직 설계 (pseudo-code, 핵심 비즈니스 로직은 실제 코드)
+
+**출력:** `.claude/docs/specs/[기능명]-spec.md` (섹션 1~4)
 
 ### Phase 3: Review & Confirm (검수 & 컨펌)
 
 **사용자 검토**
 
-- Research 결과 검토
 - 요구사항 분석의 정확성 확인
+- 기술 설계의 타당성 검토
 - 재사용 컴포넌트 선택 검증
-- 기술적 접근 방식 승인
 - 추가 조사 필요 여부 결정
 
 ### Phase 4: Planning (계획)
 
 **Agent: planning-agent**
 
-- 구현 계획 수립
-- 테스트 시나리오 설계
-- 컴포넌트 구조 설계
-- API 인터페이스 정의
-- 데이터 플로우 설계
-- 출력: `.claude/docs/plans/[기능명]-plan.md`
+- Research 결과 기반 구현 계획 수립
+- 의사결정 필요 항목 정리
+- Phase별 작업 목록 작성 (파일명 + 한 줄 설명)
+- 검증 방법 정의
+
+**출력:** `.claude/docs/specs/[기능명]-spec.md` (섹션 5 추가)
 
 ### Phase 5: Review & Confirm (검수 & 컨펌)
 
 **사용자 검토**
 
-- 구현 계획의 타당성 확인
-- 테스트 시나리오 검증
-- 컴포넌트 구조 승인
-- API 설계 검토
-- 구현 우선순위 조정
+- 의사결정 항목 확인 및 선택
+- 구현 순서 검토
+- 검증 방법 확인
 
 ### Phase 6: Memory Update (메모리 업데이트)
 
@@ -103,20 +107,18 @@
 🔔 **Phase 3 확인 사항**:
 
 - 요구사항이 명확히 파악되었는가?
-- 선택한 기술 스택이 적절한가?
+- 기술 설계가 적절한가?
 - 재사용 가능한 컴포넌트가 모두 식별되었는가?
 
 🔔 **Phase 5 확인 사항**:
 
-- 테스트 시나리오가 충분한가?
-- 컴포넌트 구조가 확장 가능한가?
-- API 설계가 RESTful 원칙을 따르는가?
-- Mock 데이터 구조가 적절한가?
+- 의사결정 항목에 대한 선택이 완료되었는가?
+- 구현 순서가 적절한가?
+- 검증 방법이 충분한가?
 
 ## 결과물
 
-- `.claude/docs/research/[기능명]-analysis.md` - 기능 분석 문서
-- `.claude/docs/plans/[기능명]-plan.md` - 구현 계획서
+- `.claude/docs/specs/[기능명]-spec.md` - 통합 기능 명세서 (Research + Plan)
 - `.claude/docs/memory/memory.md` - 업데이트된 프로젝트 메모리
 
 ## 다음 단계
