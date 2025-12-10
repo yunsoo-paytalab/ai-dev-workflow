@@ -56,7 +56,8 @@ Research 결과(Feature Spec 섹션 1~4)를 분석하여 **Implementation Plan (
 | 2     | API 함수 구현        | `api.ts`        |
 | 3     | 커스텀 훅 구현       | `useXxx.ts`     |
 | 4     | 컴포넌트 구현        | `Component.tsx` |
-| 5     | 테스트 작성          | `*.test.ts`     |
+| 5     | Unit Test 작성 (핵심 비즈니스 로직) | `*.test.ts`     |
+| 6     | Component Test 작성 (핵심 컴포넌트) | `*.test.tsx`    |
 
 ### 5.3 검증 방법
 
