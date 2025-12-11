@@ -101,10 +101,30 @@ npx playwright test [테스트파일]
 
 ---
 
-### Phase 5: 진행 상황 저장
+### Phase 5: Memory Update (메모리 업데이트) - 필수
 
-- `progress.json` 업데이트
-- 테스트 리포트 생성
+> ⚠️ **필수**: 워크플로우 종료 전 반드시 memory-manager 에이전트를 호출해야 합니다.
+>
+> 호출 방법: "Use the memory-manager agent to update memory for e2e completion"
+
+**Agent: memory-manager** (MUST BE CALLED)
+
+**업데이트 대상:**
+
+1. **progress.json 업데이트:**
+   - currentPhase: "e2e-completed"
+   - 테스트 결과 요약
+
+2. **memory.md 업데이트:**
+   - 체크리스트: "E2E 테스트 완료" 체크
+   - 발견된 이슈 기록 (있는 경우)
+
+3. **테스트 리포트 생성:**
+   - `.claude/docs/e2e-test-report.md`
+
+4. **세션 요약 작성:**
+   - 이번 세션에서 수행한 테스트 요약
+   - 성공/실패 케이스 기록
 
 ---
 

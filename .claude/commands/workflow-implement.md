@@ -84,27 +84,30 @@ npm test
 - **Mock → Real**: Mock 데이터를 실제 API로 전환
 - **에러 핸들링**: API 오류 처리
 
-### Phase 2: Progress Update (진행 상황 업데이트)
+### Phase 2: Memory Update (메모리 업데이트) - 필수
 
-> **메모리 경로**: `.claude/docs/memory/.memory-ref`에서 메모리 ID를 읽어 `~/.claude-memory/projects/{id}/` 업데이트
+> ⚠️ **필수**: 워크플로우 종료 전 반드시 memory-manager 에이전트를 호출해야 합니다.
+>
+> 호출 방법: "Use the memory-manager agent to update memory for implementation completion"
 
-#### 2.1 progress.json 업데이트
+**Agent: memory-manager** (MUST BE CALLED)
 
-- tasks[taskId].status: "done" (완료된 작업)
-- features[featureId].status: "implemented"
-- currentPhase: "implementation-completed"
+**업데이트 대상:**
 
-#### 2.2 memory.md 업데이트
+1. **progress.json 업데이트:**
+   - tasks[taskId].status: "done" (완료된 작업)
+   - features[featureId].status: "implemented"
+   - currentPhase: "implementation-completed"
 
-> 이번 Phase에서 확정된 중요 결정사항 등을 memory.md에 추가
+2. **memory.md 업데이트:**
+   - 프로젝트 전반에 적용되는 기술적 결정사항
+   - 새로 발견된 제약사항
+   - 공통 패턴/컨벤션 추가
 
-**기록 대상:**
-
-- 프로젝트 전반에 적용되는 기술적 결정사항
-- 새로 발견된 제약사항
-- 공통 패턴/컨벤션 추가
-
-**기록 위치:** `memory.md`의 해당 섹션에 추가
+3. **세션 요약 작성:**
+   - 이번 세션에서 수행한 작업 요약
+   - 구현된 기능 목록
+   - 주요 결정사항 기록
 
 ## 사용자 결정 포인트
 

@@ -101,6 +101,25 @@ function getCurrentBranch() {
 }
 
 /**
+ * 특정 경로에서 Git 브랜치 이름 가져오기
+ */
+function getCurrentBranchFromPath(projectPath) {
+  if (!projectPath) {
+    return getCurrentBranch();
+  }
+  try {
+    const branch = execSync("git branch --show-current", {
+      cwd: projectPath,
+      encoding: "utf8",
+      stdio: ["pipe", "pipe", "pipe"],
+    }).trim();
+    return branch || "main";
+  } catch {
+    return "main";
+  }
+}
+
+/**
  * 짧은 해시 생성
  */
 function generateShortHash() {
@@ -113,6 +132,21 @@ function generateShortHash() {
 function getMemoryId() {
   try {
     return fs.readFileSync(getMemoryRefFile(), "utf8").trim();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 특정 프로젝트 경로에서 메모리 ID 가져오기
+ */
+function getMemoryIdFromPath(projectPath) {
+  if (!projectPath) {
+    return getMemoryId();
+  }
+  try {
+    const memoryRefPath = path.join(projectPath, ".claude", "docs", "memory", ".memory-ref");
+    return fs.readFileSync(memoryRefPath, "utf8").trim();
   } catch {
     return null;
   }
@@ -593,6 +627,7 @@ module.exports = {
 
   // 메모리 유틸리티
   getMemoryId,
+  getMemoryIdFromPath,
   getSessionCount,
   getFileSize,
 
@@ -619,6 +654,7 @@ module.exports = {
 
   // Git 유틸리티
   getCurrentBranch,
+  getCurrentBranchFromPath,
 
   // 기타
   generateShortHash,

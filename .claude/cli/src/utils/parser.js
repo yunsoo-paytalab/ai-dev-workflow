@@ -61,6 +61,21 @@ export function getFeatures(progress) {
 }
 
 /**
+ * Task ID에서 Feature ID 추출
+ * 예: "COMMON-001-001" -> "COMMON-001"
+ *     "AUTH-001-002" -> "AUTH-001"
+ */
+function extractFeatureId(taskId) {
+  // Task ID 형식: {DOMAIN}-{NUM}-{TASK_NUM} (예: COMMON-001-001)
+  const parts = taskId.split('-');
+  if (parts.length >= 3) {
+    // 마지막 부분(Task 번호)을 제외한 나머지를 Feature ID로
+    return parts.slice(0, -1).join('-');
+  }
+  return '';
+}
+
+/**
  * progress.json에서 Task 목록 조회 (배열 형태로 반환)
  */
 export function getTasks(progress) {
@@ -71,7 +86,7 @@ export function getTasks(progress) {
   return Object.entries(progress.tasks).map(([id, data]) => ({
     id,
     name: data.name || '',
-    featureId: data.featureId || '',
+    featureId: data.featureId || extractFeatureId(id),
     priority: data.priority || 'medium',
     dependencies: data.dependencies || [],
     status: data.status || 'pending',

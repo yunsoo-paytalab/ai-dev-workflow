@@ -218,28 +218,47 @@
 **사용법:**
 
 ```bash
-/workflow-memory remove my-app-legacy
+/workflow-memory remove my-app-legacy   # 특정 메모리 삭제
+/workflow-memory remove --all           # 모든 메모리 삭제
 ```
 
 **AI 실행 지침:**
 
 ```
-1. 해당 메모리 존재 여부 확인
-2. 삭제 대상 정보 표시 (세션 수, 생성일 등)
-3. 사용자 확인 요청 (AskUserQuestion 사용)
-4. 확인 시:
-   - ~/.claude-memory/projects/{id}/ 디렉토리 삭제
-   - index.json에서 제거
-   - 현재 연결된 메모리였다면 .memory-ref 및 심볼릭 링크 삭제
-5. 결과 메시지 출력
+1. --all 옵션인 경우:
+   - index.json에서 모든 메모리 목록 조회
+   - 전체 삭제 대상 정보 표시 (메모리 수, 총 세션 수 등)
+   - 사용자 확인 요청 (AskUserQuestion 사용)
+   - 확인 시:
+     - ~/.claude-memory/projects/ 하위 모든 디렉토리 삭제
+     - index.json 초기화 (빈 projects 객체)
+     - 현재 프로젝트의 .memory-ref 및 심볼릭 링크 삭제
 
-출력 예시:
+2. 특정 ID인 경우:
+   - 해당 메모리 존재 여부 확인
+   - 삭제 대상 정보 표시 (세션 수, 생성일 등)
+   - 사용자 확인 요청 (AskUserQuestion 사용)
+   - 확인 시:
+     - ~/.claude-memory/projects/{id}/ 디렉토리 삭제
+     - index.json에서 제거
+     - 현재 연결된 메모리였다면 .memory-ref 및 심볼릭 링크 삭제
+
+출력 예시 (특정 메모리):
 ⚠️  'my-app-legacy' 메모리를 삭제합니다.
     - 세션 8개
     - 생성일: 2023-12-01
 
 [사용자 확인 후]
 ✓ 메모리 'my-app-legacy' 삭제됨
+
+출력 예시 (--all):
+⚠️  모든 메모리를 삭제합니다.
+    - 메모리 3개 (my-app-v2, my-app-legacy, other-project)
+    - 총 세션 23개
+
+[사용자 확인 후]
+✓ 3개 메모리 삭제됨
+✓ 현재 프로젝트 연결 해제됨
 ```
 
 ---

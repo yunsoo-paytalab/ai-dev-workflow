@@ -20,12 +20,14 @@ const {
   readJson,
   writeJson,
   getMemoryId,
+  getMemoryIdFromPath,
   getMemoryPath,
   getLocalMemoryDir,
   getLocalMemoryFile,
   getTimestamp,
   getDateString,
   getCurrentBranch,
+  getCurrentBranchFromPath,
   generateShortHash,
   createSymlink,
   syncMemoryToCentral,
@@ -117,8 +119,23 @@ function handleSessionStart() {
 }
 
 // 세션 종료 처리
+// transcript에서 사용자 요청을 추출하여 세션 요약에 기록합니다.
 function handleSessionEnd() {
-  const memoryId = getMemoryId();
+  // stdin에서 hook 데이터 읽기 (cwd, transcript_path 포함)
+  let hookData = {};
+  let projectCwd = null;
+  try {
+    const input = fs.readFileSync(0, "utf-8");
+    if (input.trim()) {
+      hookData = JSON.parse(input);
+      projectCwd = hookData.cwd || null;
+    }
+  } catch (e) {
+    // stdin이 비어있거나 JSON이 아닌 경우 무시
+  }
+
+  // 프로젝트 경로에서 메모리 ID 확인
+  const memoryId = projectCwd ? getMemoryIdFromPath(projectCwd) : getMemoryId();
 
   if (!memoryId) {
     return; // 메모리 연결 없으면 무시
@@ -132,23 +149,81 @@ function handleSessionEnd() {
   ensureDir(sessionsDir);
 
   // 세션 파일 생성
-  const branch = getCurrentBranch();
+  // 프로젝트 경로에서 브랜치 가져오기
+  const branch = getCurrentBranchFromPath(projectCwd);
   const dateStr = getDateString();
   const hash = generateShortHash();
   const sessionFileName = `${dateStr}_${branch}_${hash}.md`;
   const sessionFilePath = path.join(sessionsDir, sessionFileName);
 
-  // 세션 내용 생성 (기본 템플릿)
+  // transcript에서 사용자 메시지 추출
+  const transcriptPath = hookData.transcript_path || null;
+  let userMessages = [];
+  if (transcriptPath && fs.existsSync(transcriptPath)) {
+    try {
+      const transcriptContent = fs.readFileSync(transcriptPath, "utf-8");
+      const lines = transcriptContent.trim().split("\n");
+      for (const line of lines) {
+        try {
+          const entry = JSON.parse(line);
+          // type이 "user"이고, isMeta가 아닌 실제 사용자 입력만 추출
+          if (entry.type === "user" && !entry.isMeta && entry.message?.content) {
+            let content = entry.message.content;
+
+            // 배열 형태인 경우 (tool_result 등)
+            if (Array.isArray(content)) {
+              // tool_result는 건너뛰기
+              const hasToolResult = content.some(c => c.type === "tool_result");
+              if (hasToolResult) continue;
+
+              content = content
+                .filter(c => c.type === "text")
+                .map(c => c.text)
+                .join(" ");
+            }
+
+            // 문자열인 경우
+            if (typeof content === "string") {
+              // 시스템/커맨드 메시지 필터링
+              if (content.startsWith("<command-name>") ||
+                  content.startsWith("<command-message>") ||
+                  content.startsWith("<local-command") ||
+                  content.startsWith("Caveat:") ||
+                  content.startsWith("This session is being continued") ||
+                  content.includes("<system-reminder>") ||
+                  content.includes("[Request interrupted")) {
+                continue;
+              }
+
+              if (content.trim()) {
+                userMessages.push(content.trim());
+              }
+            }
+          }
+        } catch (e) {
+          // JSON 파싱 실패 시 무시
+        }
+      }
+    } catch (e) {
+      // 파일 읽기 실패 시 무시
+    }
+  }
+
+  // 사용자 요청 목록 생성 (제한 없음)
+  const userRequestsSection = userMessages.length > 0
+    ? userMessages.map((msg, i) => `${i + 1}. ${msg}`).join("\n")
+    : "- (기록된 요청 없음)";
+
+  // 세션 내용 생성
   const sessionContent = `# 세션: ${dateStr} ${branch}
 
-## 시작 시간
-${getTimestamp()}
+## 세션 정보
+- **종료 시간**: ${getTimestamp()}
+- **브랜치**: ${branch || "N/A"}
+- **세션 ID**: ${hash}
 
-## 작업 요약
-- (세션 종료 시 자동 생성 예정)
-
-## 변경 파일
-- (추적된 파일 목록)
+## 사용자 요청 목록
+${userRequestsSection}
 
 ## 메모
 -
@@ -161,12 +236,16 @@ ${getTimestamp()}
   const meta = readJson(metaPath);
   meta.lastAccess = getTimestamp();
   meta.totalSessions = (meta.totalSessions || 0) + 1;
+  meta.lastSessionFile = sessionFileName; // memory-manager가 참조할 수 있도록
   writeJson(metaPath, meta);
 
   // 정리 규칙 적용
   applyCleanupRules(memoryId);
 
-  console.log(`✓ 세션 저장됨: ${sessionFileName}`);
+  console.log(`✓ 세션 기록됨: ${sessionFileName}`);
+  if (userMessages.length > 0) {
+    console.log(`  📝 사용자 요청 ${userMessages.length}개 기록됨`);
+  }
 }
 
 // /workflow 커맨드 시작 처리 (PreToolUse - SlashCommand)
@@ -275,21 +354,24 @@ function handleWorkflowStart() {
 
 // Compact 처리 (PreCompact 훅에서 호출)
 function handleCompact() {
-  const memoryId = getMemoryId();
-
-  if (!memoryId) {
-    return; // 메모리 연결 없으면 무시
-  }
-
   // stdin에서 hook 데이터 읽기 (비동기 처리 불필요 - 이미 전달됨)
   let hookData = {};
+  let projectCwd = null;
   try {
     const input = fs.readFileSync(0, "utf-8"); // stdin
     if (input.trim()) {
       hookData = JSON.parse(input);
+      projectCwd = hookData.cwd || null;
     }
   } catch (e) {
     // stdin이 비어있거나 JSON이 아닌 경우 무시
+  }
+
+  // 프로젝트 경로에서 메모리 ID 확인
+  const memoryId = projectCwd ? getMemoryIdFromPath(projectCwd) : getMemoryId();
+
+  if (!memoryId) {
+    return; // 메모리 연결 없으면 무시
   }
 
   const trigger = hookData.trigger || "unknown";
@@ -303,7 +385,8 @@ function handleCompact() {
   const sessionsDir = path.join(memoryPath, "sessions");
   ensureDir(sessionsDir);
 
-  const branch = getCurrentBranch();
+  // 프로젝트 경로에서 브랜치 가져오기
+  const branch = getCurrentBranchFromPath(projectCwd);
   const dateStr = getDateString();
   const timestamp = getTimestamp();
   const hash = generateShortHash();

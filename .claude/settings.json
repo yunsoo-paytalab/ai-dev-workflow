@@ -33,16 +33,6 @@
         ]
       }
     ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node .claude/hooks/memory-sync.cjs end"
-          }
-        ]
-      }
-    ]
+    "Stop": []
   }
 }
