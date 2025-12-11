@@ -206,7 +206,9 @@ async function runDashboardLoop(featureListPath) {
         },
         { name: "⚡ 워크플로우 실행", value: "workflows" },
         {
-          name: `⚙️  Bypass Permissions: ${bypassStatus ? "ON → OFF" : "OFF → ON"}`,
+          name: `⚙️  Bypass Permissions: ${
+            bypassStatus ? "ON → OFF" : "OFF → ON"
+          }`,
           value: "toggle-bypass",
         },
         { name: "🔄 새로고침", value: "refresh" },
@@ -302,28 +304,25 @@ async function showWorkflowMenu(features) {
   const workflow = WORKFLOWS[workflowKey];
   let arg = "";
 
-  // 인자가 필요한 경우 처리
+  // 인자가 필요한 경우 Feature 선택
   if (workflow.requiresArg) {
-    if (workflow.argName === "detailPath" || workflow.argName === "specPath") {
-      // Feature 선택 (상세 문서 경로가 있으면 사용, 없으면 featureId)
-      const selected = await selectWithEsc({
+    if (workflow.argName === "featureId") {
+      const featureId = await selectWithEsc({
         message: "Feature 선택:",
         pageSize: 20,
         choices: [
           ...features.map((f) => ({
             name: `${f.id} - ${f.name}`,
-            value: { id: f.id, detailPath: f.detailPath },
+            value: f.id,
           })),
           { name: "← 돌아가기", value: null },
         ],
       });
 
-      if (selected?._escaped || !selected) {
+      if (featureId?._escaped || !featureId) {
         return await showWorkflowMenu(features);
       }
-
-      // detailPath가 있으면 사용, 없으면 featureId 사용
-      arg = selected.detailPath || selected.id;
+      arg = featureId;
     }
   }
 
@@ -409,8 +408,7 @@ async function showFeatureDetail(feature, tasks, allFeatures) {
     case "feature-spec":
     case "implement":
     case "ui":
-      // detailPath가 있으면 사용, 없으면 featureId 사용
-      await executeClaudeWorkflow(action, feature.detailPath || feature.id);
+      await executeClaudeWorkflow(action, feature.id);
       break;
 
     case "other-workflow":
@@ -502,8 +500,7 @@ async function handleTaskAction(task, features) {
   }
 
   if (feature) {
-    // detailPath가 있으면 사용, 없으면 featureId 사용
-    await executeClaudeWorkflow(action, feature.detailPath || feature.id);
+    await executeClaudeWorkflow(action, feature.id);
   }
   return BACK;
 }

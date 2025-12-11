@@ -76,10 +76,10 @@ Research 결과를 바탕으로 **기능 목록 문서**를 작성합니다.
 
 ## 개별 Feature 파일 템플릿
 
-**파일명**: `.claude/docs/feature-list/{Feature ID}-{기능명}.md`
+**파일명**: `.claude/docs/feature-list/{기능 ID}-{기능명}.md`
 
 ```markdown
-# {Feature ID}: {기능명}
+# {기능 ID}: {기능명}
 
 ## 기본 정보
 
@@ -100,11 +100,11 @@ Research 결과를 바탕으로 **기능 목록 문서**를 작성합니다.
 
 ## Tasks
 
-| Task ID          | Task명   | 우선순위        | 의존성           | 상태    |
-| ---------------- | -------- | --------------- | ---------------- | ------- |
-| {Feature ID}-001 | [Task명] | high/medium/low | -                | pending |
-| {Feature ID}-002 | [Task명] | high/medium/low | {Feature ID}-001 | pending |
-| {Feature ID}-003 | [Task명] | high/medium/low | {Feature ID}-001 | pending |
+| Task ID          | Task명   | 우선순위        | 의존성           |
+| ---------------- | -------- | --------------- | ---------------- |
+| {Feature ID}-001 | [Task명] | high/medium/low | -                |
+| {Feature ID}-002 | [Task명] | high/medium/low | {Feature ID}-001 |
+| {Feature ID}-003 | [Task명] | high/medium/low | {Feature ID}-001 |
 
 ### {Feature ID}-001: [Task명]
 
@@ -155,24 +155,24 @@ Research 결과를 바탕으로 **기능 목록 문서**를 작성합니다.
 
 ## Feature 목록
 
-| Feature ID | Feature명   | 카테고리 | Tasks | 상태    | 상세 문서                                              |
-| ---------- | ----------- | -------- | ----- | ------- | ------------------------------------------------------ |
-| AUTH-001   | 사용자 인증 | 인증     | 7     | 설계 중 | [상세](./feature-list/AUTH-001-user-authentication.md) |
-| ORDER-001  | 주문 생성   | 주문     | 5     | 설계 중 | [상세](./feature-list/ORDER-001-order-creation.md)     |
+| Feature ID | Feature명   | 카테고리 | Tasks | 상세 문서                                              |
+| ---------- | ----------- | -------- | ----- | ------------------------------------------------------ |
+| AUTH-001   | 사용자 인증 | 인증     | 7     | [상세](./feature-list/AUTH-001-user-authentication.md) |
+| ORDER-001  | 주문 생성   | 주문     | 5     | [상세](./feature-list/ORDER-001-order-creation.md)     |
 
 ## 전체 Task 목록
 
-| Task ID       | Task명              | Feature   | 우선순위 | 의존성       | 상태    |
-| ------------- | ------------------- | --------- | -------- | ------------ | ------- |
-| AUTH-001-001  | Users 테이블 스키마 | AUTH-001  | high     | -            | pending |
-| AUTH-001-002  | JWT 유틸리티        | AUTH-001  | high     | AUTH-001-001 | pending |
-| AUTH-001-003  | 로그인 API          | AUTH-001  | high     | AUTH-001-002 | pending |
-| AUTH-001-004  | 회원가입 API        | AUTH-001  | high     | AUTH-001-002 | pending |
-| AUTH-001-005  | 인증 미들웨어       | AUTH-001  | high     | AUTH-001-002 | pending |
-| AUTH-001-006  | 로그인 폼           | AUTH-001  | medium   | -            | pending |
-| AUTH-001-007  | AuthContext         | AUTH-001  | medium   | AUTH-001-003 | pending |
-| ORDER-001-001 | 주문 테이블 스키마  | ORDER-001 | high     | AUTH-001-001 | pending |
-| ...           | ...                 | ...       | ...      | ...          | ...     |
+| Task ID       | Task명              | Feature   | 우선순위 | 의존성       |
+| ------------- | ------------------- | --------- | -------- | ------------ |
+| AUTH-001-001  | Users 테이블 스키마 | AUTH-001  | high     | -            |
+| AUTH-001-002  | JWT 유틸리티        | AUTH-001  | high     | AUTH-001-001 |
+| AUTH-001-003  | 로그인 API          | AUTH-001  | high     | AUTH-001-002 |
+| AUTH-001-004  | 회원가입 API        | AUTH-001  | high     | AUTH-001-002 |
+| AUTH-001-005  | 인증 미들웨어       | AUTH-001  | high     | AUTH-001-002 |
+| AUTH-001-006  | 로그인 폼           | AUTH-001  | medium   | -            |
+| AUTH-001-007  | AuthContext         | AUTH-001  | medium   | AUTH-001-003 |
+| ORDER-001-001 | 주문 테이블 스키마  | ORDER-001 | high     | AUTH-001-001 |
+| ...           | ...                 | ...       | ...      | ...          |
 
 ## 카테고리별 분류
 

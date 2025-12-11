@@ -46,11 +46,17 @@
 권장 작업 순서 (참고용):
 1. 도메인 정의 (`/workflow-domain-definition`)
 2. 각 기능마다 반복:
-   - 기능 명세 작성 (`/workflow-feature-spec [Feature ID]`)
-   - (필요시) UI 구현 (`/workflow-ui [Feature ID]`)
-   - 비즈니스 로직 구현 (`/workflow-implement [Feature ID]`)
+   - 기능 명세 작성 (`/workflow-feature-spec $ARGUMENTS`)
+   - (필요시) UI 구현 (`/workflow-ui $ARGUMENTS`)
+   - 비즈니스 로직 구현 (`/workflow-implement $ARGUMENTS`)
 3. 시스템 통합 (`/workflow-integrate`)
 4. E2E 테스트 (`/workflow-e2e`)
+
+$ARGUMENTS는 다음 형태로 입력 가능:
+- 파일 참조: `@.claude/docs/feature-list/auth.md`
+- Feature ID: `AUTH-001`
+- Feature 이름: `로그인 기능`
+- 일반 텍스트: `소셜 로그인 추가`
 ```
 
 ---
@@ -160,12 +166,17 @@
 
 **작업 명령어**:
 - /workflow-domain-definition - 도메인 정의
-- /workflow-feature-spec [Feature ID] - 기능 명세 작성 (요구사항 분석 및 계획)
-- /workflow-ui common - 공통 UI 설계
-- /workflow-ui [Feature ID] - 기능 UI 설계 (선택)
-- /workflow-implement [Feature ID] - 기능 구현 (TDD)
+- /workflow-feature-spec $ARGUMENTS - 기능 명세 작성 (요구사항 분석 및 계획)
+- /workflow-ui $ARGUMENTS - UI 설계 및 생성 (common 또는 Feature)
+- /workflow-implement $ARGUMENTS - 기능 구현 (TDD)
 - /workflow-integrate - 통합 및 리팩토링
 - /workflow-e2e - E2E 테스트
+
+**$ARGUMENTS 입력 형태**:
+- 파일 참조: @.claude/docs/specs/auth.md
+- Feature ID: AUTH-001
+- Feature 이름: 로그인 기능
+- 일반 텍스트: 소셜 로그인 추가
 
 **특수 명령어**:
 - /workflow reset - 프로젝트 초기화
@@ -181,26 +192,41 @@
 
 📄 상세 문서: `@workflow-domain-definition.md`
 
-### `/workflow-feature-spec [Feature ID]` - 기능 명세 작성
+### `/workflow-feature-spec $ARGUMENTS` - 기능 명세 작성
 
 📄 상세 문서: `@workflow-feature-spec.md`
 
 **기능**: 요구사항 분석, 리서치, 구현 계획 수립
 
-### `/workflow-ui [scope]` - UI 설계 및 생성 (선택)
+**$ARGUMENTS 입력 형태**:
+
+- 파일 참조: `@.claude/docs/feature-list/auth.md`
+- Feature ID: `AUTH-001`
+- Feature 이름: `로그인 기능`
+- 일반 텍스트: `소셜 로그인 추가`
+
+### `/workflow-ui $ARGUMENTS` - UI 설계 및 생성 (선택)
 
 📄 상세 문서: `@workflow-ui.md`
 
-**사용법**:
+**$ARGUMENTS 입력 형태**:
 
-- `/workflow-ui common` - 공통 컴포넌트 확장
-- `/workflow-ui [Feature ID]` - 기능별 UI 생성 (예: product-list, cart)
+- 예약어: `common` (공통 컴포넌트 확장)
+- 파일 참조: `@.claude/docs/specs/auth.md`
+- Feature ID: `AUTH-001`
+- Feature 이름: `로그인 기능`
+- 일반 텍스트: `소셜 로그인 UI`
 
-### `/workflow-implement [Feature ID]` - 기능 구현
+### `/workflow-implement $ARGUMENTS` - 기능 구현
 
 📄 상세 문서: `@workflow-implement.md`
 
-**필수 선행**: `/workflow-feature-spec [Feature ID]` 완료
+**$ARGUMENTS 입력 형태**:
+
+- 파일 참조: `@.claude/docs/specs/auth.md`
+- Feature ID: `AUTH-001`
+- Feature 이름: `로그인 기능`
+- 일반 텍스트: `소셜 로그인 구현`
 
 ### `/workflow-integrate` - 통합 및 리팩토링
 
@@ -265,23 +291,27 @@
 ### 기능 명세 작성 (요구사항 분석 및 계획)
 
 ```
-/workflow-feature-spec product-list
-/workflow-feature-spec cart
+/workflow-feature-spec @.claude/docs/feature-list/auth.md   # 파일 직접 참조
+/workflow-feature-spec AUTH-001                              # Feature ID로 검색
+/workflow-feature-spec 로그인 기능                            # Feature 이름으로 검색
+/workflow-feature-spec 소셜 로그인 추가                       # 일반 텍스트로 새 Feature
 ```
 
 ### UI 구현 (필요시)
 
 ```
-/workflow-ui common          # 공통 컴포넌트 확장
-/workflow-ui product-list    # ProductList UI
-/workflow-ui cart            # Cart UI
+/workflow-ui common                         # 공통 컴포넌트 확장
+/workflow-ui @.claude/docs/specs/auth.md    # 파일 직접 참조
+/workflow-ui AUTH-001                       # Feature ID로 검색
+/workflow-ui 로그인 기능                     # Feature 이름으로 검색
 ```
 
 ### 기능 구현 (TDD)
 
 ```
-/workflow-implement product-list
-/workflow-implement cart
+/workflow-implement @.claude/docs/specs/auth.md   # 파일 직접 참조
+/workflow-implement AUTH-001                       # Feature ID로 검색
+/workflow-implement 로그인 기능                    # Feature 이름으로 검색
 ```
 
 ### 시스템 통합
@@ -373,20 +403,22 @@ memory.md 업데이트:
 
 2. **각 기능마다 반복**:
 
-   1. **기능 명세 작성** (`/workflow-feature-spec [Feature ID]`)
+   1. **기능 명세 작성** (`/workflow-feature-spec $ARGUMENTS`)
 
       - 요구사항 분석
       - 리서치
       - 구현 계획 수립
 
-   2. **UI 구현** (필요시, `/workflow-ui [Feature ID]`)
+   2. **UI 구현** (필요시, `/workflow-ui $ARGUMENTS`)
 
       - Figma 디자인이 있는 경우
       - UI 컴포넌트가 필요한 경우
 
-   3. **비즈니스 로직 구현** (`/workflow-implement [Feature ID]`)
+   3. **비즈니스 로직 구현** (`/workflow-implement $ARGUMENTS`)
       - TDD 방식으로 구현
       - Mock 데이터 사용
+
+   > **$ARGUMENTS**: 파일 참조(`@path`), Feature ID, Feature 이름, 또는 일반 텍스트
 
 3. **시스템 통합** (`/workflow-integrate`)
 

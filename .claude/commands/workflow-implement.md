@@ -1,8 +1,36 @@
-# /workflow-implement [기능명]
+# /workflow-implement $ARGUMENTS
 
 선택한 기능을 RPI 패턴과 TDD 방식으로 구현합니다.
 
-> ⚠️ **필수 선행 작업**: 이 워크플로우를 실행하기 전에 `/workflow-feature-spec [기능명]`을 먼저 완료해야 합니다.
+> ⚠️ **필수 선행 작업**: 이 워크플로우를 실행하기 전에 `/workflow-feature-spec $ARGUMENTS`을 먼저 완료해야 합니다.
+
+## 인자 처리
+
+`$ARGUMENTS`는 다음 형태로 입력될 수 있습니다:
+
+| 입력 형태    | 예시                          | 설명                       |
+| ------------ | ----------------------------- | -------------------------- |
+| 파일 참조    | `@.claude/docs/specs/auth.md` | 파일 직접 참조             |
+| Feature ID   | `AUTH-001`                    | Feature ID로 문서 검색     |
+| Feature 이름 | `로그인 기능`                 | Feature 이름으로 문서 검색 |
+
+### 참조 문서(구현 계획서) 탐색
+
+**기본 참조 경로**: `.claude/docs/specs/`
+
+**파일 형식**: 각 파일의 첫 줄은 `# Feature Spec: Feature ID Feature 이름` 형식
+
+**탐색 로직**:
+
+1. `$ARGUMENTS`가 `@`로 시작하면 → 해당 파일을 직접 참조 문서로 사용
+2. 그 외의 경우, `.claude/docs/specs/` 폴더 내 모든 파일의 첫 줄을 읽음
+3. `$ARGUMENTS`와 매칭:
+   - Feature ID 일치 (예: `AUTH-001`)
+   - Feature 이름 일치 또는 포함 (예: `로그인 기능`)
+   - 부분 텍스트 매칭 (예: `로그인` → `로그인 기능` 매칭)
+4. **매칭 결과에 따른 분기**:
+   - ✅ 매칭 성공 → 해당 spec 문서를 기반으로 구현 진행
+   - ❌ 매칭 실패 → `$ARGUMENTS`를 일반 텍스트로 처리하여 구현 진행
 
 ## 실행 프로세스
 
@@ -15,7 +43,7 @@
 - Active Working Set: 현재 컨텍스트, 의사결정, 제약사항 로드
 - Implementation Progress: 진행 중인 작업 및 완료 항목 확인
 - 출력: 구현 컨텍스트 요약
-  - 구현 계획 (.claude/docs/plans/[기능명]-plan.md)
+  - 구현 계획 ($ARGUMENTS)
   - 활성 컨텍스트 (파일, 결정사항, 제약사항)
   - 구현 진행상황
 
@@ -78,7 +106,6 @@
 🔔 **구현 전 확인 사항**:
 
 - feature-spec 워크플로우가 완료되었는가?
-- 구현 계획서 (.claude/docs/plans/[기능명]-plan.md)가 준비되었는가?
 - 테스트 시나리오가 명확한가?
 
 🔔 **구현 중 확인 사항**:

@@ -1,13 +1,45 @@
-# /workflow-ui [scope]
+# /workflow-ui $ARGUMENTS
 
 Figma 디자인을 기반으로 UI 컴포넌트를 생성합니다.
 
 ## 사용법
 
 ```bash
-/workflow-ui common          # 공통 컴포넌트 확장
-/workflow-ui [기능명]        # 기능별 UI 생성 (예: product-list, cart)
+/workflow-ui common                        # 공통 컴포넌트 확장
+/workflow-ui @.claude/docs/specs/auth.md   # 파일 직접 참조
+/workflow-ui AUTH-001                      # Feature ID로 UI 생성
+/workflow-ui 로그인 기능                    # Feature 이름으로 UI 생성
 ```
+
+## 인자 처리
+
+`$ARGUMENTS`는 다음 형태로 입력될 수 있습니다:
+
+| 입력 형태    | 예시                           | 설명                       |
+| ------------ | ------------------------------ | -------------------------- |
+| 예약어       | `common`                       | 공통 컴포넌트 확장 모드    |
+| 파일 참조    | `@.claude/docs/specs/auth.md`  | 파일 직접 참조             |
+| Feature ID   | `AUTH-001`                     | Feature ID로 문서 검색     |
+| Feature 이름 | `로그인 기능`                  | Feature 이름으로 문서 검색 |
+
+### 참조 문서 탐색
+
+**기본 참조 경로**: `.claude/docs/specs/`
+
+**파일 형식**: 각 파일의 첫 줄은 `# Feature Spec: Feature ID Feature 이름` 형식
+
+**탐색 로직**:
+
+1. `$ARGUMENTS`가 `common`이면 → 공통 컴포넌트 모드로 진행
+2. `$ARGUMENTS`가 `@`로 시작하면 → 해당 파일을 직접 참조 문서로 사용
+3. 그 외의 경우, `.claude/docs/specs/` 폴더 내 모든 파일의 첫 줄을 읽음
+4. `$ARGUMENTS`와 매칭:
+   - Feature ID 일치 (예: `AUTH-001`)
+   - Feature 이름 일치 또는 포함 (예: `로그인 기능`)
+   - 부분 텍스트 매칭 (예: `로그인` → `로그인 기능` 매칭)
+5. **매칭 결과에 따른 분기**:
+   - ✅ 매칭 성공 → 해당 spec 문서를 기반으로 UI 구현 진행
+   - ❌ 매칭 실패 → `$ARGUMENTS`를 일반 텍스트로 처리하여 UI 구현 진행
 
 ## 전제 조건
 
