@@ -10,7 +10,7 @@
 
 **워크플로우 구조**:
 
-- `memory.md` - 진행 상황 추적 (중앙 저장소 `~/.claude-memory/`에서 심볼릭 링크)
+- `memory.md` - 진행 상황 추적 (중앙 저장소 `~/.claude-memory/projects/{id}/`에서 관리)
 - 명령어 파일 `.claude/commands/` - 각각 전체 워크플로우 세부사항 포함
 
 **메모리 시스템**:
@@ -49,7 +49,7 @@
    - 없으면: "메모리가 연결되지 않았습니다. `/workflow-memory init [id]` 명령어로 메모리를 생성하세요."
    - 있으면: 계속 진행
 
-2. `.claude/docs/memory/memory.md`를 읽어 현재 진행 상황 파악
+2. Hook이 자동으로 출력한 메모리 내용을 참조하여 현재 진행 상황 파악
 
 3. 기본 프로젝트 정보가 입력되어 있는지 확인
    - 미입력 시: "프로젝트 시작을 위해 기본 정보가 필요합니다. `/workflow-domain-definition` 명령어로 시작하시겠습니까?"
@@ -94,7 +94,7 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 ```
 다음 정보를 표시해주세요:
 
-1. `.claude/docs/memory/memory.md`를 읽어 전체 진행 상황 파악
+1. Hook이 자동으로 출력한 메모리 내용을 참조하여 전체 진행 상황 파악
 2. 다음 정보 표시:
 
 **프로젝트 정보**:
@@ -137,7 +137,7 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 ```
 현재 상태를 메모리 파일에 업데이트해주세요:
 
-1. `.claude/docs/memory/memory.md`를 읽어 현재 진행 상황 파악
+1. `.claude/docs/memory/.memory-ref`에서 메모리 ID 확인 후 `~/.claude-memory/projects/{id}/memory.md` 읽기
 2. 프로젝트의 현재 상태 분석:
    - 완료된 작업 확인
    - 현재 진행 중인 작업 파악

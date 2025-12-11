@@ -49,18 +49,7 @@
 - 🚫 Anti-Pattern, ⛔ Deprecated, 🔧 Hack, 🐛 Known Bug
 - 해당 영역의 코드는 읽거나 참고하지 않음
 
-### Phase 1: Memory Reading (메모리 읽기)
-
-**Agent: memory-manager**
-
-- `.claude/docs/memory/memory.md` 파일 읽기
-- Current Focus: 이전 작업 및 차단 요소 확인
-- Active Working Set: 현재 컨텍스트, 의사결정, 제약사항 로드
-- Implementation Progress: 진행 중인 작업 및 완료 항목 확인
-- Historical Memory: 기능 구현 이력 및 패턴 확인
-- 출력: 프로젝트 컨텍스트 요약
-
-### Phase 2: Research & Design (조사 및 설계)
+### Phase 1: Research & Design (조사 및 설계)
 
 > ⚠️ Phase 0에서 로드한 제한 영역 준수
 
@@ -90,7 +79,7 @@
 
 **출력:** `.claude/docs/specs/[Feature ID]-spec.md` (예: `AUTH-001-spec.md`, 섹션 1~4)
 
-### Phase 3: Review & Confirm (검수 & 컨펌)
+### Phase 2: Review & Confirm (검수 & 컨펌)
 
 **사용자 검토**
 
@@ -105,7 +94,7 @@
 - URL 제공 시: Notion MCP를 활용하여 API 스펙 확인
 - API 스펙 기반으로 인터페이스/타입 정의 보완
 
-### Phase 4: Planning (계획)
+### Phase 3: Planning (계획)
 
 **Agent: planning-agent**
 
@@ -116,7 +105,7 @@
 
 **출력:** `.claude/docs/specs/[Feature ID]-spec.md` (섹션 5 추가)
 
-### Phase 5: Review & Confirm (검수 & 컨펌)
+### Phase 4: Review & Confirm (검수 & 컨펌)
 
 **사용자 검토**
 
@@ -124,24 +113,27 @@
 - 구현 순서 검토
 - 검증 방법 확인
 
-### Phase 6: Memory Update (메모리 업데이트)
+### Phase 5: Progress Update (진행 상황 업데이트)
 
-**Agent: memory-manager**
+> **메모리 경로**: `.claude/docs/memory/.memory-ref`에서 메모리 ID를 읽어 `~/.claude-memory/projects/{id}/` 업데이트
 
-- `.claude/docs/memory/memory.md` 업데이트
-- Research Summary 업데이트
-  - status: "completed"
-  - key_findings: 주요 발견사항 추가
-- Planning Summary 업데이트
-  - status: "completed"
-  - verification: 검증 완료 항목
-- Active Working Set 갱신
-  - 기술적 결정사항 기록
-  - 제약사항 업데이트
-- Current Focus 갱신
-  - primary_goal: 다음 작업 목표 (구현 단계)
-  - working_on: 구현 대기
-  - phase: "Planning → Implementation"
+#### 5.1 progress.json 업데이트
+
+- tasks: 해당 Feature의 구현 작업 항목 추가
+- features[featureId].status: "spec-completed"
+- currentPhase: "feature-spec-completed"
+
+#### 5.2 memory.md 업데이트
+
+> 이번 Phase에서 확정된 중요 결정사항 등을 memory.md에 추가
+
+**기록 대상:**
+
+- 프로젝트 전반에 적용되는 기술적 결정사항
+- 새로 발견된 제약사항
+- 공통 패턴/컨벤션 추가
+
+**기록 위치:** `memory.md`의 해당 섹션에 추가
 
 ## 사용자 결정 포인트
 
@@ -161,7 +153,6 @@
 ## 결과물
 
 - `.claude/docs/specs/[Feature ID]-spec.md` - 통합 기능 명세서 (Research + Plan)
-- `.claude/docs/memory/memory.md` - 업데이트된 프로젝트 메모리
 
 ## 다음 단계
 

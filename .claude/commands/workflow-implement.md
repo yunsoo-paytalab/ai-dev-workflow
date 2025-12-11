@@ -34,22 +34,9 @@
 
 ## 실행 프로세스
 
-### Phase 1: Memory Reading (메모리 읽기)
+### Phase 1: Implementation (구현)
 
-**Agent: memory-manager**
-
-- `.claude/docs/memory/memory.md` 파일 읽기
-- Planning Summary 확인: 구현 계획서 로드
-- Active Working Set: 현재 컨텍스트, 의사결정, 제약사항 로드
-- Implementation Progress: 진행 중인 작업 및 완료 항목 확인
-- 출력: 구현 컨텍스트 요약
-  - 구현 계획 ($ARGUMENTS)
-  - 활성 컨텍스트 (파일, 결정사항, 제약사항)
-  - 구현 진행상황
-
-### Phase 2: Implementation (구현)
-
-#### 2.1 TDD Cycle
+#### 1.1 TDD Cycle
 
 **Agent: test-runner**
 
@@ -58,7 +45,7 @@
 - 🔵 **Refactor**: 코드 개선
 - 사이클 반복
 
-#### 2.2 필수 통합 작업
+#### 1.2 필수 통합 작업
 
 **Agent: implementation-agent**
 
@@ -68,38 +55,34 @@
 - **이벤트 핸들링**: UI와 비즈니스 로직 연결
 - **스타일링**: CSS/Tailwind 적용
 
-#### 2.3 선택적 API 연동 (--with-api 옵션)
+#### 1.3 선택적 API 연동 (--with-api 옵션)
 
 - **API 클라이언트**: Axios/Fetch 설정
 - **엔드포인트 연결**: 백엔드 API와 통합
 - **Mock → Real**: Mock 데이터를 실제 API로 전환
 - **에러 핸들링**: API 오류 처리
 
-### Phase 3: Memory Update (메모리 업데이트)
+### Phase 2: Progress Update (진행 상황 업데이트)
 
-**Agent: memory-manager**
+> **메모리 경로**: `.claude/docs/memory/.memory-ref`에서 메모리 ID를 읽어 `~/.claude-memory/projects/{id}/` 업데이트
 
-- `.claude/docs/memory/memory.md` 업데이트
-- Research Summary 업데이트
-  - status: "completed"
-  - key_findings: 주요 발견사항 추가
-- Planning Summary 업데이트
-  - status: "completed"
-  - verification: 검증 완료 항목
-- Implementation Progress 업데이트
-  - completed: 완료된 작업 항목 추가
-  - pending: 남은 작업 항목 업데이트
-  - status: 전체 완료 시 "completed"로 변경
-- Historical Memory 업데이트
-  - 기능 진행 상황 테이블에 진행률 업데이트
-- Active Working Set 갱신
-  - 구현 관련 파일 추가
-  - 기술적 결정사항 기록
-  - 제약사항 업데이트
-- Current Focus 갱신
-  - primary_goal: 다음 작업 목표
-  - working_on: 다음 작업 항목 (또는 null if 완료)
-  - phase: "Implementation" (또는 null if 완료)
+#### 2.1 progress.json 업데이트
+
+- tasks[taskId].status: "done" (완료된 작업)
+- features[featureId].status: "implemented"
+- currentPhase: "implementation-completed"
+
+#### 2.2 memory.md 업데이트
+
+> 이번 Phase에서 확정된 중요 결정사항 등을 memory.md에 추가
+
+**기록 대상:**
+
+- 프로젝트 전반에 적용되는 기술적 결정사항
+- 새로 발견된 제약사항
+- 공통 패턴/컨벤션 추가
+
+**기록 위치:** `memory.md`의 해당 섹션에 추가
 
 ## 사용자 결정 포인트
 
@@ -120,7 +103,6 @@
 - `src/features/[기능명]/mocks/` - Mock 데이터 및 서비스
 - `tests/[기능명]/` - 테스트 코드
 - `src/services/[기능명]/` - API 연동 (선택적)
-- `.claude/docs/memory/memory.md` - 업데이트된 프로젝트 메모리
 
 ## 관련 워크플로우
 

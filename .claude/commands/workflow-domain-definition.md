@@ -20,21 +20,7 @@
 - 🚫 Anti-Pattern, ⛔ Deprecated, 🔧 Hack, 🐛 Known Bug
 - 해당 영역의 코드는 읽거나 참고하지 않음
 
-### Phase 1: Memory Reading (메모리 읽기)
-
-**Agent: memory-manager**
-
-- `.claude/docs/memory/memory.md` 파일 읽기
-- Current Focus: 이전 작업 및 차단 요소 확인
-- Active Working Set: 현재 컨텍스트, 의사결정, 제약사항 로드
-- Research Summary: 이전 조사 결과 확인
-- Historical Memory: 도메인, 페이지, 기능 이력 확인
-- 출력: 프로젝트 컨텍스트 요약
-  - 현재 상태 (마지막 작업, 진행 단계, 차단 요소)
-  - 활성 컨텍스트 (파일, 결정사항, 제약사항)
-  - 단계별 진행상황
-
-### Phase 2: Research (분석)
+### Phase 1: Research (분석)
 
 > ⚠️ Phase 0에서 로드한 제한 영역 준수
 
@@ -47,7 +33,7 @@
 - 출력: `.claude/docs/research/domain-analysis.md`
 - **AgentId 저장**: 추후 재개를 위해 ID 기록
 
-### Phase 3: Review & Confirm (검수 & 컨펌)
+### Phase 2: Review & Confirm (검수 & 컨펌)
 
 **사용자 검토**
 
@@ -56,7 +42,7 @@
 - 추가 요구사항 또는 누락 사항 파악
 - 승인 또는 수정 요청
 
-### Phase 4: Domain Documentation (도메인 문서화)
+### Phase 3: Domain Documentation (도메인 문서화)
 
 ⚡ **IMPORTANT: 3개의 Agent를 병렬로 동시에 실행**
 
@@ -82,7 +68,7 @@
 - `.claude/docs/feature-list.md` (Feature/Task 리스트)
 - `.claude/docs/page-structure.md`
 
-### Phase 5: Review & Confirm (검수 & 컨펌)
+### Phase 4: Review & Confirm (검수 & 컨펌)
 
 **사용자 검토**
 
@@ -95,12 +81,12 @@
 
 **사용자 승인 후 자동 진행:**
 
-- 승인 시: **즉시 Phase 6으로 진행** (Feature 상세 문서 작성)
-- 수정 요청 시: Phase 4로 돌아가 수정 후 다시 검토
+- 승인 시: **즉시 Phase 5로 진행** (Feature 상세 문서 작성)
+- 수정 요청 시: Phase 3으로 돌아가 수정 후 다시 검토
 
-⚠️ **IMPORTANT**: 사용자가 승인하면 반드시 Phase 6을 실행해야 합니다. Phase 6을 건너뛰지 마세요.
+⚠️ **IMPORTANT**: 사용자가 승인하면 반드시 Phase 5를 실행해야 합니다. Phase 5를 건너뛰지 마세요.
 
-### Phase 6: Feature Detail Writing (Feature 상세 문서 작성)
+### Phase 5: Feature Detail Writing (Feature 상세 문서 작성)
 
 ⚠️ **필수 단계** - 이 단계를 건너뛰면 후속 워크플로우에서 Feature 상세 정보를 참조할 수 없습니다.
 
@@ -130,29 +116,15 @@ Task 도구를 사용하여 feature-detail-writer 에이전트 호출:
 - 모든 Feature에 대한 상세 문서 파일 존재 확인
 - 링크 연결 정확성 확인
 
-### Phase 7: Memory Update (메모리 업데이트)
+### Phase 6: Progress Update (진행 상황 업데이트)
 
-**Agent: memory-manager**
+> **메모리 경로**: `.claude/docs/memory/.memory-ref`에서 메모리 ID를 읽어 `~/.claude-memory/projects/{id}/progress.json` 업데이트
 
-- `.claude/docs/memory/memory.md` 업데이트
-- Research Summary 업데이트
-  - status: "completed"
-  - key_findings: 주요 발견사항 추가
-  - architecture: 아키텍처 요약
-- Planning Summary 업데이트
-  - status: "completed"
-  - verification: 검증 완료 항목
-- Historical Memory 업데이트
-  - 도메인 정의 테이블에 새 도메인 추가
-  - 페이지 구조 테이블에 페이지 추가
-  - 기능 진행 상황 테이블에 기능 추가
-- Active Working Set 갱신
-  - 설계 결정사항 기록
-  - 제약사항 업데이트
-- Current Focus 갱신
-  - primary_goal: 다음 단계 목표
-  - working_on: null (완료)
-  - phase: null
+**progress.json 업데이트 항목:**
+
+- features: 도메인 정의에서 도출된 기능 목록 추가
+- tasks: 다음 단계 작업 항목 추가
+- currentPhase: "domain-definition-completed"
 
 ## 사용자 결정 포인트
 
@@ -177,4 +149,3 @@ Task 도구를 사용하여 feature-detail-writer 에이전트 호출:
 - `.claude/docs/feature-list.md` - Feature/Task 목록
 - `.claude/docs/feature-list/[기능ID]-[기능명].md` - 각 Feature 상세 문서
 - `.claude/docs/page-structure.md` - 페이지 구조
-- `.claude/docs/memory/memory.md` - 업데이트된 프로젝트 메모리
