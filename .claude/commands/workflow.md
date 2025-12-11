@@ -485,10 +485,10 @@ memory.md 업데이트:
 
 ### Hook 파일
 
-- `.claude/hooks/memory-sync.js` - 세션 시작/종료 시 메모리 동기화
-- `.claude/hooks/memory-init.js` - 새 메모리 생성
-- `.claude/hooks/memory-list.js` - 메모리 목록 표시
-- `.claude/hooks/memory-switch.js` - 메모리 전환
-- `.claude/hooks/memory-status.js` - 메모리 상태 표시
-- `.claude/hooks/memory-remove.js` - 메모리 삭제
-- `.claude/hooks/memory-cleanup.js` - 정리 규칙 실행
+- `.claude/hooks/memory-sync.cjs` - 세션 시작/종료 시 메모리 동기화
+- `.claude/hooks/memory-init.cjs` - 새 메모리 생성
+- `.claude/hooks/memory-list.cjs` - 메모리 목록 표시
+- `.claude/hooks/memory-switch.cjs` - 메모리 전환
+- `.claude/hooks/memory-status.cjs` - 메모리 상태 표시
+- `.claude/hooks/memory-remove.cjs` - 메모리 삭제
+- `.claude/hooks/memory-cleanup.cjs` - 정리 규칙 실행

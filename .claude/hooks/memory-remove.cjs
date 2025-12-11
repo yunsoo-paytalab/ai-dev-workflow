@@ -24,7 +24,7 @@ const {
   getLocalMemoryFile,
   formatDate,
   deleteFolderRecursive,
-} = require("./lib/utils");
+} = require("./lib/utils.cjs");
 
 // 메모리 삭제
 function removeMemory(memoryId) {

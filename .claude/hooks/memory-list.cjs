@@ -17,7 +17,7 @@ const {
   getMemoryId,
   getSessionCount,
   formatDate,
-} = require("./lib/utils");
+} = require("./lib/utils.cjs");
 const path = require("path");
 const fs = require("fs");
 

@@ -19,7 +19,7 @@ const {
   getMemoryId,
   getMemoryPath,
   getFileSize,
-} = require("./lib/utils");
+} = require("./lib/utils.cjs");
 
 // 메모리 내용 파싱
 function parseMemoryStatus(memoryContent) {

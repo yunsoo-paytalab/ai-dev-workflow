@@ -28,7 +28,7 @@ const {
   generateShortHash,
   createSymlink,
   syncMemoryToCentral,
-} = require("./lib/utils");
+} = require("./lib/utils.cjs");
 
 // 중앙 저장소 초기화
 function initCentralStore() {
@@ -168,6 +168,69 @@ ${getTimestamp()}
   console.log(`✓ 세션 저장됨: ${sessionFileName}`);
 }
 
+// Compact 처리 (PreCompact 훅에서 호출)
+function handleCompact() {
+  const memoryId = getMemoryId();
+
+  if (!memoryId) {
+    return; // 메모리 연결 없으면 무시
+  }
+
+  // stdin에서 hook 데이터 읽기 (비동기 처리 불필요 - 이미 전달됨)
+  let hookData = {};
+  try {
+    const input = fs.readFileSync(0, "utf-8"); // stdin
+    if (input.trim()) {
+      hookData = JSON.parse(input);
+    }
+  } catch (e) {
+    // stdin이 비어있거나 JSON이 아닌 경우 무시
+  }
+
+  const trigger = hookData.trigger || "unknown";
+  const memoryPath = getMemoryPath(memoryId);
+
+  // 복사 모드일 경우 로컬 → 중앙 저장소 동기화
+  syncMemoryToCentral(memoryId);
+
+  // 컴팩트 로그 저장
+  const sessionsDir = path.join(memoryPath, "sessions");
+  ensureDir(sessionsDir);
+
+  const branch = getCurrentBranch();
+  const dateStr = getDateString();
+  const timestamp = getTimestamp();
+  const hash = generateShortHash();
+  const compactFileName = `${dateStr}_${branch}_compact_${hash}.md`;
+  const compactFilePath = path.join(sessionsDir, compactFileName);
+
+  const compactContent = `# Compact: ${dateStr} ${branch}
+
+## 정보
+- 시간: ${timestamp}
+- 트리거: ${trigger}
+- 세션 ID: ${hookData.session_id || "N/A"}
+
+## 컨텍스트 스냅샷
+> Compact 시점의 메모리 상태가 저장되었습니다.
+
+## 메모
+-
+`;
+
+  fs.writeFileSync(compactFilePath, compactContent);
+
+  // meta.json 업데이트
+  const metaPath = path.join(memoryPath, "meta.json");
+  const meta = readJson(metaPath);
+  meta.lastAccess = timestamp;
+  meta.lastCompact = timestamp;
+  meta.compactCount = (meta.compactCount || 0) + 1;
+  writeJson(metaPath, meta);
+
+  console.log(`✓ Compact 메모리 저장됨 (${trigger}): ${compactFileName}`);
+}
+
 // 정리 규칙 적용
 function applyCleanupRules(memoryId) {
   const configPath = path.join(CENTRAL_STORE, "config.json");
@@ -214,7 +277,10 @@ switch (command) {
   case "end":
     handleSessionEnd();
     break;
+  case "compact":
+    handleCompact();
+    break;
   default:
-    console.log("사용법: node memory-sync.js [start|end]");
+    console.log("사용법: node memory-sync.js [start|end|compact]");
     process.exit(1);
 }

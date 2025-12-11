@@ -26,7 +26,7 @@ const {
   getLocalMemoryFile,
   getTimestamp,
   createSymlink,
-} = require("./lib/utils");
+} = require("./lib/utils.cjs");
 
 // 메모리 목록 가져오기
 function getMemoryList() {

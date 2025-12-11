@@ -27,7 +27,7 @@ const {
   getLocalMemoryFile,
   getTimestamp,
   createSymlink,
-} = require("./lib/utils");
+} = require("./lib/utils.cjs");
 
 // 메모리 템플릿
 const MEMORY_TEMPLATE = `# 프로젝트 메모리
