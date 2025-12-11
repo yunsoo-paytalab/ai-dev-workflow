@@ -36,14 +36,22 @@
 
 ### Phase 1: Implementation (구현)
 
-#### 1.1 TDD Cycle
+#### 1.1 TDD Cycle (필수)
 
-**Agent: test-runner**
+> ⚠️ **필수**: 구현 전 반드시 test-runner 에이전트를 먼저 호출해야 합니다.
+>
+> 호출 방법: "Use the test-runner agent to write tests for [기능명]"
 
-- 🔴 **Red**: 실패하는 테스트 작성
+**Agent: test-runner** (MUST BE USED FIRST)
+
+- 🔴 **Red**: 실패하는 테스트 작성 (한글로 describe/it 작성)
 - 🟢 **Green**: 테스트 통과하는 최소 구현
 - 🔵 **Refactor**: 코드 개선
 - 사이클 반복
+
+**테스트 작성 규칙:**
+- describe, it 설명문은 **한글**로 작성
+- 예: `describe("장바구니", () => { it("아이템 추가 시 목록에 포함되어야 한다", ...) })`
 
 #### 1.2 필수 통합 작업
 
@@ -55,7 +63,21 @@
 - **이벤트 핸들링**: UI와 비즈니스 로직 연결
 - **스타일링**: CSS/Tailwind 적용
 
-#### 1.3 선택적 API 연동 (--with-api 옵션)
+#### 1.3 코드 검증
+
+> ⚠️ **Lint 에러 처리 규칙** (무한 루프 방지)
+>
+> - lint 에러 수정은 **최대 3회까지만 재시도**
+> - 3회 시도 후에도 해결되지 않으면 **사용자에게 보고**하고 다음 단계로 진행
+> - 절대로 lint 수정을 무한 반복하지 말 것
+
+```bash
+npm run lint      # 최대 3회 재시도
+npm run type-check
+npm test
+```
+
+#### 1.4 선택적 API 연동 (--with-api 옵션)
 
 - **API 클라이언트**: Axios/Fetch 설정
 - **엔드포인트 연결**: 백엔드 API와 통합

@@ -1,6 +1,6 @@
 ---
 name: test-runner
-description: TDD의 Red-Green-Refactor 사이클을 관리하고 테스트를 실행하는 전문 에이전트
+description: TDD의 Red-Green-Refactor 사이클을 관리하고 테스트를 실행하는 전문 에이전트. MUST BE USED - 구현 작업 시 반드시 이 에이전트를 먼저 호출하여 테스트를 작성해야 합니다. PROACTIVELY use this agent before any implementation.
 tools: Read, Write, Edit, Bash
 model: opus
 ---
@@ -23,16 +23,16 @@ Test-Driven Development 사이클을 관리하며, 테스트 우선 작성, 최�
 
 - **AAA 패턴**: Arrange(준비) - Act(실행) - Assert(검증)
 - **단일 책임**: 하나의 테스트는 하나의 동작만 검증
-- **명확한 네이밍**: `should_[동작]_when_[조건]`
+- **한글 네이밍**: describe, it 설명은 반드시 한글로 작성
 
 ### 예시
 
 ```typescript
-describe("ShoppingCart", () => {
-  it("should add item to cart when addItem is called", () => {
+describe("장바구니", () => {
+  it("addItem 호출 시 아이템이 추가되어야 한다", () => {
     // Arrange
     const cart = new ShoppingCart();
-    const item = { id: "1", name: "Product", price: 100 };
+    const item = { id: "1", name: "상품", price: 100 };
 
     // Act
     cart.addItem(item);
@@ -99,6 +99,12 @@ npm run lint      # 코드 스타일 검사
 npm run type-check # 타입 검사
 ```
 
+### ⚠️ Lint 에러 처리 규칙
+
+- **최대 3회까지만 재시도** - 3회 시도 후에도 해결되지 않으면 중단
+- 해결되지 않은 lint 에러는 사용자에게 보고하고 다음 단계로 진행
+- 무한 루프 방지: lint 수정 → 확인 → 실패 시 카운트 증가
+
 ## 테스트 우선순위
 
 ### Priority 1: Core 비즈니스 로직
@@ -126,20 +132,20 @@ npm run type-check # 타입 검사
 ```markdown
 ## TDD Progress
 
-### Round 1: Core 기능
+### Round 1: 핵심 기능
 
-- [x] 🔴 Test: 아이템 추가
-- [x] 🟢 Impl: 최소 구현
-- [x] 🔵 Refactor: 데이터 구조 개선
+- [x] 🔴 테스트: 아이템 추가
+- [x] 🟢 구현: 최소 구현
+- [x] 🔵 리팩토링: 데이터 구조 개선
 
 ### Round 2: 수량 관리
 
-- [x] 🔴 Test: 중복 아이템 처리
-- [ ] 🟢 Impl: 수량 로직
-- [ ] 🔵 Refactor: 진행 예정
+- [x] 🔴 테스트: 중복 아이템 처리
+- [ ] 🟢 구현: 수량 로직
+- [ ] 🔵 리팩토링: 진행 예정
 
-Coverage: 87%
-Next: 가격 계산 로직
+커버리지: 87%
+다음: 가격 계산 로직
 ```
 
 ## 실행 명령어
