@@ -1,9 +1,5 @@
 import chalk from 'chalk';
-import {
-  findFeatureListPath,
-  parseFeatureList,
-  parseTaskList,
-} from '../utils/parser.js';
+import { loadProjectData } from '../utils/parser.js';
 import {
   printHeader,
   printFeatureTable,
@@ -15,39 +11,54 @@ import {
  * Feature/Task 목록 출력
  */
 export async function list(options) {
-  const featureListPath = findFeatureListPath();
+  // progress.json에서 데이터 로드
+  const { features, tasks, memoryId, hasProgress } = loadProjectData();
 
-  if (!featureListPath) {
-    printError('feature-list.md 파일을 찾을 수 없습니다.');
-    console.log(chalk.gray('  .claude/docs/feature-list.md 또는 docs/feature-list.md 경로를 확인하세요.'));
+  if (!memoryId) {
+    printError('Memory가 연결되지 않았습니다.');
+    console.log(chalk.gray('  /workflow-memory init 명령어로 메모리를 생성하세요.'));
     console.log();
     return;
   }
 
-  try {
-    const features = await parseFeatureList(featureListPath);
-    const tasks = await parseTaskList(featureListPath);
+  // 데이터 소스 표시
+  const sourceInfo = hasProgress
+    ? chalk.green(`(Memory: ${memoryId})`)
+    : chalk.yellow(`(Memory: ${memoryId}, empty)`);
 
-    if (options.tasks) {
-      // Task 목록만 표시
-      printHeader('Task List', `Total: ${tasks.length} tasks`);
+  if (options.tasks) {
+    // Task 목록만 표시
+    printHeader('Task List', `Total: ${tasks.length} tasks ${sourceInfo}`);
+    if (tasks.length === 0) {
+      console.log(chalk.yellow('  등록된 Task가 없습니다.'));
+      console.log();
+    } else {
       printTaskTable(tasks, options.feature);
-    } else if (options.feature) {
-      // 특정 Feature의 Task만 표시
-      const feature = features.find(f => f.id === options.feature);
-      if (feature) {
-        printHeader(`${feature.id}: ${feature.name}`, `Status: ${feature.status}`);
-        printTaskTable(tasks, options.feature);
+    }
+  } else if (options.feature) {
+    // 특정 Feature의 Task만 표시
+    const feature = features.find(f => f.id === options.feature);
+    if (feature) {
+      printHeader(`${feature.id}: ${feature.name}`, `Status: ${feature.status} ${sourceInfo}`);
+      const featureTasks = tasks.filter(t => t.featureId === feature.id);
+      if (featureTasks.length === 0) {
+        console.log(chalk.yellow('  등록된 Task가 없습니다.'));
+        console.log();
       } else {
-        printError(`Feature "${options.feature}"를 찾을 수 없습니다.`);
+        printTaskTable(featureTasks);
       }
     } else {
-      // Feature 목록 표시
-      printHeader('Feature List', `Total: ${features.length} features, ${tasks.length} tasks`);
+      printError(`Feature "${options.feature}"를 찾을 수 없습니다.`);
+    }
+  } else {
+    // Feature 목록 표시
+    printHeader('Feature List', `${features.length} features, ${tasks.length} tasks ${sourceInfo}`);
+    if (features.length === 0) {
+      console.log(chalk.yellow('  등록된 Feature가 없습니다.'));
+      console.log(chalk.gray('  /workflow-feature-spec으로 Feature를 추가하세요.'));
+      console.log();
+    } else {
       printFeatureTable(features, tasks);
     }
-
-  } catch (error) {
-    printError(`파일 읽기 오류: ${error.message}`);
   }
 }

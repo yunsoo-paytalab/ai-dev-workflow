@@ -1,88 +1,44 @@
-# 프로젝트 메모리 v2.0
+# 프로젝트 메모리
 
-> 최종 업데이트: [timestamp] | 컨텍스트: [%] / 목표: 40-60%
+> 마지막 업데이트: [timestamp]
 
-## 🎯 Current Focus
-
-```yaml
-primary_goal: null
-working_on: null
-phase: null # Research | Planning | Implementation
-blocked_by: null
-```
-
-## 📊 Context Health
+## 현재 상태
 
 ```yaml
-window_usage: 0/200000 # tokens
-utilization: 0%
-active_files: 0
-status: "🟢 optimal" # 🟡 attention | 🔴 critical
+working_on: null          # 진행 중인 작업
+phase: null               # Research | Planning | Implementation
+blocked_by: null          # 차단 요소
 ```
 
-## 🗂️ Active Working Set
+## 기술 스택
+
+- Frontend:
+- Backend:
+- Database:
+- 기타:
+
+## 핵심 결정사항
+
+| 날짜 | 결정 | 이유 |
+|------|------|------|
+| - | - | - |
+
+## 기능 상태
+
+| ID | 기능 | 상태 | 비고 |
+|----|------|------|------|
+| - | - | ⏳ 대기 | - |
+
+**상태 범례:** ⏳ 대기 | 🔄 진행중 | ✅ 완료 | ❌ 취소
+
+## 주요 패턴
 
 ```yaml
-files: []
-context: {}
-decisions: []
-constraints: []
+api: null                 # API 호출 패턴 (예: src/api/ + React Query)
+state: null               # 상태 관리 패턴 (예: Zustand per feature)
+components: null          # 컴포넌트 구조 (예: src/components/ 공통, src/features/ 기능별)
 ```
 
-## 📝 Research Summary
+## 메모
 
-```yaml
-status: "not_started"
-architecture: null
-key_findings: []
-```
-
-## 📋 Planning Summary
-
-```yaml
-status: "not_started"
-current_step: null
-total_steps: 0
-verification: []
-```
-
-## 🔧 Implementation Progress
-
-```yaml
-status: "not_started"
-current: null
-completed: []
-pending: []
-```
-
-## 📚 Historical Memory
-
-### 도메인 정의
-
-| 도메인 | 설명 | 책임 범위 | 상태 |
-| ------ | ---- | --------- | ---- |
-| -      | -    | -         | -    |
-
-### 페이지 구조
-
-| 경로 | 페이지명 | 도메인 | 상태 |
-| ---- | -------- | ------ | ---- |
-| -    | -        | -      | -    |
-
-### 기능 진행 상황
-
-| ID  | 기능명 | 우선순위 | 진행률 |
-| --- | ------ | -------- | ------ |
-| -   | -      | -        | 0%     |
-
-## 🔄 Compaction Log
-
-```yaml
-history: []
-```
-
-## 💾 Archives
-
-- 도메인: `.claude/docs/domain-definition.md`
-- 기능: `.claude/docs/feature-list.md`
-- API: `.claude/docs/api-spec.md`
+-

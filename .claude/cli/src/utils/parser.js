@@ -1,154 +1,109 @@
-import { readFile } from 'fs/promises';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
+import { homedir } from 'os';
 
 /**
- * feature-list.md 파일 경로 찾기
+ * 중앙 저장소 경로
  */
-export function findFeatureListPath() {
-  const possiblePaths = [
-    join(process.cwd(), '.claude/docs/feature-list.md'),
-    join(process.cwd(), 'docs/feature-list.md'),
-  ];
+const CENTRAL_STORE = join(homedir(), '.claude-memory');
 
-  for (const path of possiblePaths) {
-    if (existsSync(path)) {
-      return path;
-    }
+/**
+ * .memory-ref 파일에서 메모리 ID 읽기
+ */
+export function getMemoryId() {
+  const refPath = join(process.cwd(), '.claude', 'docs', 'memory', '.memory-ref');
+  try {
+    return readFileSync(refPath, 'utf-8').trim();
+  } catch {
+    return null;
   }
-
-  return null;
 }
 
 /**
- * 개별 Feature 파일 경로 찾기
+ * progress.json 파일 경로 가져오기
  */
-export function findFeatureFilePath(featureId) {
-  const possiblePaths = [
-    join(process.cwd(), '.claude/docs/feature-list'),
-    join(process.cwd(), 'docs/feature-list'),
-  ];
-
-  for (const basePath of possiblePaths) {
-    if (existsSync(basePath)) {
-      return basePath;
-    }
-  }
-
-  return null;
+export function getProgressFilePath(memoryId) {
+  return join(CENTRAL_STORE, 'projects', memoryId, 'progress.json');
 }
 
 /**
- * feature-list.md 파싱하여 Feature 목록 추출
+ * progress.json 읽기
  */
-export async function parseFeatureList(filePath) {
-  const content = await readFile(filePath, 'utf-8');
-  const features = [];
+export function readProgressJson(memoryId) {
+  if (!memoryId) return null;
 
-  // Feature 목록 테이블 파싱
-  // | Feature ID | Feature명 | 카테고리 | Tasks | 상태 | 상세 문서 |
-  const featureTableRegex = /\|\s*([A-Z]+-\d+)\s*\|\s*([^|]+)\s*\|\s*([^|]+)\s*\|\s*(\d+)\s*\|\s*([^|]+?)\s*\|(?:\s*\[상세\]\(([^)]+)\)\s*\|)?/g;
-
-  let match;
-  while ((match = featureTableRegex.exec(content)) !== null) {
-    const status = match[5].trim();
-    // 헤더 행 스킵
-    if (status === '상태' || status.includes('---')) continue;
-
-    features.push({
-      id: match[1].trim(),
-      name: match[2].trim(),
-      category: match[3].trim(),
-      taskCount: parseInt(match[4].trim(), 10),
-      status: status,
-      detailPath: match[6]?.trim() || '',
-    });
+  const progressPath = getProgressFilePath(memoryId);
+  try {
+    return JSON.parse(readFileSync(progressPath, 'utf-8'));
+  } catch {
+    return null;
   }
-
-  return features;
 }
 
 /**
- * feature-list.md에서 전체 Task 목록 파싱
+ * progress.json에서 Feature 목록 조회 (배열 형태로 반환)
  */
-export async function parseTaskList(filePath) {
-  const content = await readFile(filePath, 'utf-8');
-  const tasks = [];
-
-  // Task 목록 테이블 파싱
-  // | Task ID | Task명 | Feature | 우선순위 | 의존성 | 상태 |
-  const taskTableRegex = /\|\s*([A-Z]+-\d+-\d+)\s*\|\s*([^|]+)\s*\|\s*([A-Z]+-\d+)\s*\|\s*(high|medium|low)\s*\|\s*([^|]*)\s*\|\s*([^|]+?)\s*\|/gi;
-
-  let match;
-  while ((match = taskTableRegex.exec(content)) !== null) {
-    const status = match[6].trim().toLowerCase().replace('-', '_');
-    // 헤더 행 스킵
-    if (status === '상태' || status.includes('---')) continue;
-
-    tasks.push({
-      id: match[1].trim(),
-      name: match[2].trim(),
-      featureId: match[3].trim(),
-      priority: match[4].trim().toLowerCase(),
-      dependencies: match[5].trim() === '-' ? [] : match[5].trim().split(',').map(d => d.trim()).filter(Boolean),
-      status: status,
-    });
+export function getFeatures(progress) {
+  if (!progress || !progress.features) {
+    return [];
   }
 
-  return tasks;
+  return Object.entries(progress.features).map(([id, data]) => ({
+    id,
+    name: data.name || '',
+    category: data.category || 'Feature',
+    status: data.status || 'pending',
+    createdAt: data.createdAt || null,
+    updatedAt: data.updatedAt || null,
+    completedAt: data.completedAt || null,
+    note: data.note || '',
+  }));
 }
 
 /**
- * 개별 Feature 파일 파싱하여 Task 상세 정보 추출
+ * progress.json에서 Task 목록 조회 (배열 형태로 반환)
  */
-export async function parseFeatureFile(filePath) {
-  const content = await readFile(filePath, 'utf-8');
+export function getTasks(progress) {
+  if (!progress || !progress.tasks) {
+    return [];
+  }
 
-  const feature = {
-    id: '',
-    name: '',
-    category: '',
-    status: '',
-    relatedPages: '',
-    permissions: '',
-    overview: '',
-    requirements: [],
-    tasks: [],
-    dependencies: {
-      preceding: [],
-      following: [],
-    },
+  return Object.entries(progress.tasks).map(([id, data]) => ({
+    id,
+    name: data.name || '',
+    featureId: data.featureId || '',
+    priority: data.priority || 'medium',
+    dependencies: data.dependencies || [],
+    status: data.status || 'pending',
+    createdAt: data.createdAt || null,
+    updatedAt: data.updatedAt || null,
+    completedAt: data.completedAt || null,
+    note: data.note || '',
+  }));
+}
+
+/**
+ * Feature/Task 데이터 로드 (progress.json에서만)
+ */
+export function loadProjectData() {
+  const memoryId = getMemoryId();
+  const progress = readProgressJson(memoryId);
+
+  const features = getFeatures(progress);
+  const tasks = getTasks(progress);
+
+  // Feature별 Task 개수 계산
+  const featuresWithTaskCount = features.map(feature => ({
+    ...feature,
+    taskCount: tasks.filter(t => t.featureId === feature.id).length,
+  }));
+
+  return {
+    features: featuresWithTaskCount,
+    tasks,
+    memoryId,
+    hasProgress: !!progress,
   };
-
-  // Feature ID와 이름 추출
-  const titleMatch = content.match(/^#\s*([A-Z]+-\d+):\s*(.+)$/m);
-  if (titleMatch) {
-    feature.id = titleMatch[1].trim();
-    feature.name = titleMatch[2].trim();
-  }
-
-  // 기본 정보 추출
-  const categoryMatch = content.match(/\*\*카테고리\*\*:\s*(.+)/);
-  if (categoryMatch) feature.category = categoryMatch[1].trim();
-
-  const statusMatch = content.match(/\*\*상태\*\*:\s*(.+)/);
-  if (statusMatch) feature.status = statusMatch[1].trim();
-
-  // Task 테이블 파싱
-  const taskTableRegex = /\|\s*([A-Z]+-\d+-\d+)\s*\|\s*([^|]+)\s*\|\s*(high|medium|low)\s*\|\s*([^|]*)\s*\|\s*(pending|in_progress|done|completed)\s*\|/gi;
-
-  let match;
-  while ((match = taskTableRegex.exec(content)) !== null) {
-    feature.tasks.push({
-      id: match[1].trim(),
-      name: match[2].trim(),
-      priority: match[3].trim().toLowerCase(),
-      dependencies: match[4].trim() === '-' ? [] : match[4].trim().split(',').map(d => d.trim()).filter(Boolean),
-      status: match[5].trim().toLowerCase(),
-    });
-  }
-
-  return feature;
 }
 
 /**
@@ -171,13 +126,15 @@ export function calculateStats(features, tasks) {
   };
 
   const completedTasks = tasksByStatus.done;
-  const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   // 다음 작업 추천 (의존성 충족된 pending task 중 high 우선순위)
   const readyTasks = tasks.filter(task => {
     if (task.status !== 'pending') return false;
 
-    // 의존성이 모두 완료되었는지 확인
+    // 의존성이 없거나 모두 완료되었는지 확인
+    if (!task.dependencies || task.dependencies.length === 0) return true;
+
     return task.dependencies.every(depId => {
       const depTask = tasks.find(t => t.id === depId);
       return depTask && ['done', 'completed'].includes(depTask.status);
@@ -186,7 +143,7 @@ export function calculateStats(features, tasks) {
 
   const nextTask = readyTasks.sort((a, b) => {
     const priorityOrder = { high: 0, medium: 1, low: 2 };
-    return priorityOrder[a.priority] - priorityOrder[b.priority];
+    return (priorityOrder[a.priority] || 1) - (priorityOrder[b.priority] || 1);
   })[0] || null;
 
   return {
@@ -195,7 +152,7 @@ export function calculateStats(features, tasks) {
     tasksByStatus,
     tasksByPriority,
     completedTasks,
-    progress,
+    progress: progressPercent,
     nextTask,
     readyTasks,
   };

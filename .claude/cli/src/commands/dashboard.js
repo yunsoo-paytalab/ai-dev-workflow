@@ -1,12 +1,7 @@
 import chalk from "chalk";
 import { select, confirm, input } from "@inquirer/prompts";
 import readline from "readline";
-import {
-  findFeatureListPath,
-  parseFeatureList,
-  parseTaskList,
-  calculateStats,
-} from "../utils/parser.js";
+import { loadProjectData, calculateStats } from "../utils/parser.js";
 import {
   printHeader,
   printFeatureTable,
@@ -41,7 +36,7 @@ async function selectWithEsc(options) {
     let promptPromise;
     let resolved = false;
 
-    const onKeypress = (str, key) => {
+    const onKeypress = (_, key) => {
       if (key && key.name === "escape") {
         resolved = true;
         process.stdin.removeListener("keypress", onKeypress);
@@ -115,21 +110,8 @@ async function inputWithEsc(options) {
  * 대화형 대시보드 실행
  */
 export async function dashboard() {
-  const featureListPath = findFeatureListPath();
-
-  if (!featureListPath) {
-    printError("feature-list.md 파일을 찾을 수 없습니다.");
-    console.log(
-      chalk.gray(
-        "  .claude/docs/feature-list.md 또는 docs/feature-list.md 경로를 확인하세요."
-      )
-    );
-    console.log();
-    return;
-  }
-
   try {
-    await runDashboardLoop(featureListPath);
+    await runDashboardLoop();
   } catch (error) {
     if (error.name === "ExitPromptError") {
       console.log();
@@ -144,12 +126,12 @@ export async function dashboard() {
 /**
  * 대시보드 메인 루프
  */
-async function runDashboardLoop(featureListPath) {
+async function runDashboardLoop() {
   while (true) {
     console.clear();
 
-    const features = await parseFeatureList(featureListPath);
-    const tasks = await parseTaskList(featureListPath);
+    // progress.json에서 데이터 로드
+    const { features, tasks, memoryId, hasProgress } = loadProjectData();
     const stats = calculateStats(features, tasks);
 
     // 헤더 및 요약
@@ -158,6 +140,22 @@ async function runDashboardLoop(featureListPath) {
       `${features.length} Features | ${tasks.length} Tasks`
     );
     console.log();
+
+    // Memory 연결 상태 표시
+    if (memoryId) {
+      console.log(
+        `  ${chalk.blue("Memory:")} ${memoryId} ${
+          hasProgress ? chalk.green("✓") : chalk.yellow("(empty)")
+        }`
+      );
+    } else {
+      console.log(
+        `  ${chalk.yellow("Memory:")} 연결 안됨 ${chalk.gray(
+          "(/workflow-memory init)"
+        )}`
+      );
+    }
+
     console.log(
       `  ${chalk.cyan("Progress:")} ${progressBar(
         stats.completedTasks,
@@ -336,6 +334,15 @@ async function showWorkflowMenu(features) {
 async function showFeatureList(features, tasks) {
   console.clear();
   printHeader("Feature List");
+
+  if (features.length === 0) {
+    console.log(chalk.yellow("  등록된 Feature가 없습니다."));
+    console.log(chalk.gray("  /workflow-feature-spec으로 Feature를 추가하세요."));
+    console.log();
+    await inputWithEsc({ message: "Enter로 돌아가기..." });
+    return BACK;
+  }
+
   printFeatureTable(features, tasks);
   console.log(chalk.gray("  (Esc: 뒤로가기)"));
 
@@ -385,7 +392,12 @@ async function showFeatureDetail(feature, tasks, allFeatures) {
   );
   console.log();
 
-  printTaskTable(featureTasks);
+  if (featureTasks.length === 0) {
+    console.log(chalk.yellow("  등록된 Task가 없습니다."));
+    console.log();
+  } else {
+    printTaskTable(featureTasks);
+  }
   console.log(chalk.gray("  (Esc: 뒤로가기)"));
 
   const action = await selectWithEsc({
@@ -424,46 +436,17 @@ async function showFeatureDetail(feature, tasks, allFeatures) {
 async function showTaskList(tasks) {
   console.clear();
   printHeader("Task List", `Total: ${tasks.length} tasks`);
-  printTaskTable(tasks);
+
+  if (tasks.length === 0) {
+    console.log(chalk.yellow("  등록된 Task가 없습니다."));
+    console.log();
+  } else {
+    printTaskTable(tasks);
+  }
 
   await inputWithEsc({
     message: "Enter로 돌아가기...",
   });
-  return BACK;
-}
-
-/**
- * Feature 선택
- */
-async function selectFeature(features, tasks) {
-  console.log(chalk.gray("  (Esc: 뒤로가기)"));
-
-  const featureId = await selectWithEsc({
-    message: "Feature를 선택하세요:",
-    pageSize: 20,
-    choices: [
-      ...features.map((f) => {
-        const featureTasks = tasks.filter((t) => t.featureId === f.id);
-        const doneTasks = featureTasks.filter((t) =>
-          ["done", "completed"].includes(t.status)
-        ).length;
-        return {
-          name: `${f.id} - ${f.name} [${doneTasks}/${featureTasks.length}]`,
-          value: f.id,
-        };
-      }),
-      { name: "← 돌아가기", value: null },
-    ],
-  });
-
-  if (featureId?._escaped || !featureId) {
-    return BACK;
-  }
-
-  const feature = features.find((f) => f.id === featureId);
-  if (feature) {
-    return await showFeatureDetail(feature, tasks, features);
-  }
   return BACK;
 }
 

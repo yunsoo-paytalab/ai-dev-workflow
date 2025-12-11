@@ -10,8 +10,14 @@
 
 **워크플로우 구조**:
 
-- `memory.md` - 진행 상황 추적 (`.claude/docs/memory/`에 위치)
+- `memory.md` - 진행 상황 추적 (중앙 저장소 `~/.claude-memory/`에서 심볼릭 링크)
 - 명령어 파일 `.claude/commands/` - 각각 전체 워크플로우 세부사항 포함
+
+**메모리 시스템**:
+
+- 중앙 저장소 (`~/.claude-memory/`)에서 프로젝트별 메모리 관리
+- Hook 기반 자동 동기화 (세션 시작/종료 시)
+- `/workflow-memory` 명령어로 메모리 관리
 
 ---
 
@@ -38,10 +44,16 @@
 ```
 다음 단계를 수행해주세요:
 
-1. `.claude/docs/memory/memory.md`를 읽어 현재 진행 상황 파악
-2. 기본 프로젝트 정보가 입력되어 있는지 확인
-3. 미입력 시: "프로젝트 시작을 위해 기본 정보가 필요합니다. `/workflow-domain-definition` 명령어로 시작하시겠습니까?"
-4. 완료 시: 현재 상태와 권장 다음 단계 안내
+1. 메모리 연결 확인:
+   - `.claude/docs/memory/.memory-ref` 파일 확인
+   - 없으면: "메모리가 연결되지 않았습니다. `/workflow-memory init [id]` 명령어로 메모리를 생성하세요."
+   - 있으면: 계속 진행
+
+2. `.claude/docs/memory/memory.md`를 읽어 현재 진행 상황 파악
+
+3. 기본 프로젝트 정보가 입력되어 있는지 확인
+   - 미입력 시: "프로젝트 시작을 위해 기본 정보가 필요합니다. `/workflow-domain-definition` 명령어로 시작하시겠습니까?"
+   - 완료 시: 현재 상태와 권장 다음 단계 안내
 
 권장 작업 순서 (참고용):
 1. 도메인 정의 (`/workflow-domain-definition`)
@@ -163,6 +175,14 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 - /workflow status - 현재 상태 확인
 - /workflow update - 메모리 수동 업데이트
 - /workflow help - 도움말
+
+**메모리 명령어**:
+- /workflow-memory init [id] - 새 메모리 생성 및 연결
+- /workflow-memory list - 사용 가능한 메모리 목록
+- /workflow-memory switch [id] - 다른 메모리로 전환
+- /workflow-memory status - 현재 메모리 상태 상세
+- /workflow-memory remove [id] - 메모리 삭제
+- /workflow-memory cleanup - 정리 규칙 수동 실행
 
 **작업 명령어**:
 - /workflow-domain-definition - 도메인 정의
@@ -452,7 +472,23 @@ memory.md 업데이트:
 - `.claude/commands/workflow-integrate.md` - 시스템 통합 및 리팩토링
 - `.claude/commands/workflow-e2e.md` - E2E 테스트 및 배포 준비
 
+### 메모리 관리
+
+- `/workflow-memory` - 메모리 관리 명령어 모음
+
 ### 메모리 파일
 
-- `.claude/docs/memory/memory.md` - 현재 프로젝트 진행 상황 추적
+- `~/.claude-memory/` - 중앙 저장소 (모든 프로젝트 메모리)
+- `.claude/docs/memory/memory.md` - 심볼릭 링크 (중앙 저장소 연결)
+- `.claude/docs/memory/.memory-ref` - 연결된 메모리 ID
 - `.claude/docs/memory/memory-template.md` - 신규 프로젝트용 메모리 템플릿
+
+### Hook 파일
+
+- `.claude/hooks/memory-sync.js` - 세션 시작/종료 시 메모리 동기화
+- `.claude/hooks/memory-init.js` - 새 메모리 생성
+- `.claude/hooks/memory-list.js` - 메모리 목록 표시
+- `.claude/hooks/memory-switch.js` - 메모리 전환
+- `.claude/hooks/memory-status.js` - 메모리 상태 표시
+- `.claude/hooks/memory-remove.js` - 메모리 삭제
+- `.claude/hooks/memory-cleanup.js` - 정리 규칙 실행
