@@ -77,7 +77,7 @@ tools: Read, Grep, Glob, Task, Bash, Write
 ## 출력
 
 - Research 결과를 `.claude/docs/research/` 디렉토리에 저장
-- 파일명: `[기능명]-analysis.md` 또는 `domain-analysis.md`
+- 파일명: `domain-analysis.md`
 
 ## 작성 지침
 

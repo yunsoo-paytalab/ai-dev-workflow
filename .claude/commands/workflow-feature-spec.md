@@ -1,4 +1,4 @@
-# /workflow-feature-spec [기능명]
+# /workflow-feature-spec [Feature ID 또는 상세문서 경로]
 
 선택한 기능의 요구사항을 분석하고 구현 계획을 수립합니다.
 
@@ -54,7 +54,7 @@
 - 핵심 로직 설계 (pseudo-code, 핵심 비즈니스 로직은 실제 코드)
 - 테스트 설계 (핵심 비즈니스 로직 Unit Test, 핵심 컴포넌트 Component Test)
 
-**출력:** `.claude/docs/specs/[기능명]-spec.md` (섹션 1~4)
+**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (예: `AUTH-001-spec.md`, 섹션 1~4)
 
 ### Phase 3: Review & Confirm (검수 & 컨펌)
 
@@ -80,7 +80,7 @@
 - Phase별 작업 목록 작성 (파일명 + 한 줄 설명)
 - 검증 방법 정의
 
-**출력:** `.claude/docs/specs/[기능명]-spec.md` (섹션 5 추가)
+**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (섹션 5 추가)
 
 ### Phase 5: Review & Confirm (검수 & 컨펌)
 
@@ -126,9 +126,9 @@
 
 ## 결과물
 
-- `.claude/docs/specs/[기능명]-spec.md` - 통합 기능 명세서 (Research + Plan)
+- `.claude/docs/specs/[Feature ID]-spec.md` - 통합 기능 명세서 (Research + Plan)
 - `.claude/docs/memory/memory.md` - 업데이트된 프로젝트 메모리
 
 ## 다음 단계
 
-기능 명세가 완료되면 `/workflow-implement [기능명]`을 실행하여 구현을 시작합니다.
+기능 명세가 완료되면 `/workflow-implement .claude/docs/specs/[Feature ID]-spec.md`을 실행하여 구현을 시작합니다.

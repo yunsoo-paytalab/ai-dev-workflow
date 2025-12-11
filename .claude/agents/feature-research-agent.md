@@ -86,13 +86,13 @@ model: opus
 ## 출력
 
 - Feature Spec 문서를 `.claude/docs/specs/` 디렉토리에 저장
-- 파일명: `[기능명]-spec.md`
+- 파일명: `[Feature ID]-spec.md` (예: `AUTH-001-spec.md`)
 - **섹션 1~4만 작성** (섹션 5 Implementation Plan은 planning-agent가 추가)
 
 ## 출력 문서 구조
 
 ````markdown
-# Feature Spec: [기능명]
+# Feature Spec: [Feature ID]
 
 ## 1. 요구사항 분석
 

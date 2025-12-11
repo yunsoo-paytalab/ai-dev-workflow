@@ -63,10 +63,12 @@
 **한 번의 메시지에서 3개의 Task를 모두 호출하여 병렬 실행:**
 
 1. **Agent: domain-definition-writer**
+
    - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 도메인 정의 문서 작성
    - 출력: `.claude/docs/domain-definition.md`
 
 2. **Agent: feature-list-writer**
+
    - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 기능 목록 문서 작성
    - 출력: `.claude/docs/feature-list.md` + `.claude/docs/feature-list/[기능ID]-[기능명].md`
 
@@ -75,6 +77,7 @@
    - 출력: `.claude/docs/page-structure.md`
 
 **출력 파일**:
+
 - `.claude/docs/domain-definition.md`
 - `.claude/docs/feature-list.md`
 - `.claude/docs/feature-list/[기능ID]-[기능명].md` (각 기능별)

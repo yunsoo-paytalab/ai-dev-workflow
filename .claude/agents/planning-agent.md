@@ -21,7 +21,7 @@ Research 결과(Feature Spec 섹션 1~4)를 분석하여 **Implementation Plan (
 
 ## 입력
 
-- Feature Spec 문서 (`.claude/docs/specs/[기능명]-spec.md`, 섹션 1~4)
+- Feature Spec 문서 (`.claude/docs/specs/[Feature ID]-spec.md`, 섹션 1~4)
 
 ## 출력
 
@@ -50,12 +50,12 @@ Research 결과(Feature Spec 섹션 1~4)를 분석하여 **Implementation Plan (
 
 ### 5.2 Implementation Phases
 
-| Phase | 작업                 | 파일            |
-| ----- | -------------------- | --------------- |
-| 1     | 타입/인터페이스 정의 | `types.ts`      |
-| 2     | API 함수 구현        | `api.ts`        |
-| 3     | 커스텀 훅 구현       | `useXxx.ts`     |
-| 4     | 컴포넌트 구현        | `Component.tsx` |
+| Phase | 작업                                | 파일            |
+| ----- | ----------------------------------- | --------------- |
+| 1     | 타입/인터페이스 정의                | `types.ts`      |
+| 2     | API 함수 구현                       | `api.ts`        |
+| 3     | 커스텀 훅 구현                      | `useXxx.ts`     |
+| 4     | 컴포넌트 구현                       | `Component.tsx` |
 | 5     | Unit Test 작성 (핵심 비즈니스 로직) | `*.test.ts`     |
 | 6     | Component Test 작성 (핵심 컴포넌트) | `*.test.tsx`    |
 

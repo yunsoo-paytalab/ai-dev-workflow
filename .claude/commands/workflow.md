@@ -46,9 +46,9 @@
 권장 작업 순서 (참고용):
 1. 도메인 정의 (`/workflow-domain-definition`)
 2. 각 기능마다 반복:
-   - 기능 명세 작성 (`/workflow-feature-spec [기능명]`)
-   - (필요시) UI 구현 (`/workflow-ui [기능명]`)
-   - 비즈니스 로직 구현 (`/workflow-implement [기능명]`)
+   - 기능 명세 작성 (`/workflow-feature-spec [Feature ID]`)
+   - (필요시) UI 구현 (`/workflow-ui [Feature ID]`)
+   - 비즈니스 로직 구현 (`/workflow-implement [Feature ID]`)
 3. 시스템 통합 (`/workflow-integrate`)
 4. E2E 테스트 (`/workflow-e2e`)
 ```
@@ -160,10 +160,10 @@
 
 **작업 명령어**:
 - /workflow-domain-definition - 도메인 정의
-- /workflow-feature-spec [기능명] - 기능 명세 작성 (요구사항 분석 및 계획)
+- /workflow-feature-spec [Feature ID] - 기능 명세 작성 (요구사항 분석 및 계획)
 - /workflow-ui common - 공통 UI 설계
-- /workflow-ui [기능명] - 기능 UI 설계 (선택)
-- /workflow-implement [기능명] - 기능 구현 (TDD)
+- /workflow-ui [Feature ID] - 기능 UI 설계 (선택)
+- /workflow-implement [Feature ID] - 기능 구현 (TDD)
 - /workflow-integrate - 통합 및 리팩토링
 - /workflow-e2e - E2E 테스트
 
@@ -181,7 +181,7 @@
 
 📄 상세 문서: `@workflow-domain-definition.md`
 
-### `/workflow-feature-spec [기능명]` - 기능 명세 작성
+### `/workflow-feature-spec [Feature ID]` - 기능 명세 작성
 
 📄 상세 문서: `@workflow-feature-spec.md`
 
@@ -194,13 +194,13 @@
 **사용법**:
 
 - `/workflow-ui common` - 공통 컴포넌트 확장
-- `/workflow-ui [기능명]` - 기능별 UI 생성 (예: product-list, cart)
+- `/workflow-ui [Feature ID]` - 기능별 UI 생성 (예: product-list, cart)
 
-### `/workflow-implement [기능명]` - 기능 구현
+### `/workflow-implement [Feature ID]` - 기능 구현
 
 📄 상세 문서: `@workflow-implement.md`
 
-**필수 선행**: `/workflow-feature-spec [기능명]` 완료
+**필수 선행**: `/workflow-feature-spec [Feature ID]` 완료
 
 ### `/workflow-integrate` - 통합 및 리팩토링
 
@@ -368,23 +368,28 @@ memory.md 업데이트:
 > 💡 **참고용**: 이 순서를 따르지 않아도 됩니다.
 
 1. **도메인 정의** (`/workflow-domain-definition`)
+
    - 프로젝트 전체 도메인 모델 정의
 
 2. **각 기능마다 반복**:
-   1. **기능 명세 작성** (`/workflow-feature-spec [기능명]`)
+
+   1. **기능 명세 작성** (`/workflow-feature-spec [Feature ID]`)
+
       - 요구사항 분석
       - 리서치
       - 구현 계획 수립
 
-   2. **UI 구현** (필요시, `/workflow-ui [기능명]`)
+   2. **UI 구현** (필요시, `/workflow-ui [Feature ID]`)
+
       - Figma 디자인이 있는 경우
       - UI 컴포넌트가 필요한 경우
 
-   3. **비즈니스 로직 구현** (`/workflow-implement [기능명]`)
+   3. **비즈니스 로직 구현** (`/workflow-implement [Feature ID]`)
       - TDD 방식으로 구현
       - Mock 데이터 사용
 
 3. **시스템 통합** (`/workflow-integrate`)
+
    - 기능 간 연결
    - 리팩토링
 

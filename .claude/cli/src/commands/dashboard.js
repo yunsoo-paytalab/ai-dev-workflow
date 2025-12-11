@@ -17,7 +17,12 @@ import {
   priorityBadge,
   statusBadge,
 } from "../utils/ui.js";
-import { WORKFLOWS, runWorkflow } from "../utils/claude.js";
+import {
+  WORKFLOWS,
+  runWorkflow,
+  getBypassPermissions,
+  setBypassPermissions,
+} from "../utils/claude.js";
 
 // ESC 키로 뒤로가기 반환값
 const BACK = Symbol("back");
@@ -177,6 +182,14 @@ async function runDashboardLoop(featureListPath) {
       );
     }
     console.log();
+
+    // Bypass Permissions 상태 표시
+    const bypassStatus = getBypassPermissions();
+    console.log(
+      `  ${chalk.gray("Bypass Permissions:")} ${
+        bypassStatus ? chalk.yellow("ON ⚠️") : chalk.gray("OFF")
+      }`
+    );
     console.log(chalk.gray("  (Esc: 종료)"));
 
     // 메인 메뉴
@@ -192,7 +205,10 @@ async function runDashboardLoop(featureListPath) {
           disabled: !stats.nextTask,
         },
         { name: "⚡ 워크플로우 실행", value: "workflows" },
-        { name: "🔍 특정 Feature 선택", value: "select-feature" },
+        {
+          name: `⚙️  Bypass Permissions: ${bypassStatus ? "ON → OFF" : "OFF → ON"}`,
+          value: "toggle-bypass",
+        },
         { name: "🔄 새로고침", value: "refresh" },
         { name: "❌ 종료", value: "exit" },
       ],
@@ -225,9 +241,9 @@ async function runDashboardLoop(featureListPath) {
         await showWorkflowMenu(features);
         break;
 
-      case "select-feature":
-        await selectFeature(features, tasks);
-        break;
+      case "toggle-bypass":
+        setBypassPermissions(!bypassStatus);
+        continue;
 
       case "refresh":
         continue;
@@ -286,34 +302,28 @@ async function showWorkflowMenu(features) {
   const workflow = WORKFLOWS[workflowKey];
   let arg = "";
 
-  // 인자가 필요한 경우 Feature 선택
+  // 인자가 필요한 경우 처리
   if (workflow.requiresArg) {
-    if (workflow.argName === "featureId") {
-      const featureId = await selectWithEsc({
+    if (workflow.argName === "detailPath" || workflow.argName === "specPath") {
+      // Feature 선택 (상세 문서 경로가 있으면 사용, 없으면 featureId)
+      const selected = await selectWithEsc({
         message: "Feature 선택:",
         pageSize: 20,
         choices: [
           ...features.map((f) => ({
             name: `${f.id} - ${f.name}`,
-            value: f.id,
+            value: { id: f.id, detailPath: f.detailPath },
           })),
           { name: "← 돌아가기", value: null },
         ],
       });
 
-      if (featureId?._escaped || !featureId) {
+      if (selected?._escaped || !selected) {
         return await showWorkflowMenu(features);
       }
-      arg = featureId;
-    } else if (workflow.argName === "scope") {
-      const scope = await inputWithEsc({
-        message: "Scope 입력 (예: header, sidebar):",
-      });
 
-      if (!scope) {
-        return await showWorkflowMenu(features);
-      }
-      arg = scope;
+      // detailPath가 있으면 사용, 없으면 featureId 사용
+      arg = selected.detailPath || selected.id;
     }
   }
 
@@ -397,15 +407,10 @@ async function showFeatureDetail(feature, tasks, allFeatures) {
 
   switch (action) {
     case "feature-spec":
-      await executeClaudeWorkflow("feature-spec", feature.id);
-      break;
-
     case "implement":
-      await executeClaudeWorkflow("implement", feature.id);
-      break;
-
     case "ui":
-      await executeClaudeWorkflow("ui", feature.id);
+      // detailPath가 있으면 사용, 없으면 featureId 사용
+      await executeClaudeWorkflow(action, feature.detailPath || feature.id);
       break;
 
     case "other-workflow":
@@ -497,7 +502,8 @@ async function handleTaskAction(task, features) {
   }
 
   if (feature) {
-    await executeClaudeWorkflow(action, feature.id);
+    // detailPath가 있으면 사용, 없으면 featureId 사용
+    await executeClaudeWorkflow(action, feature.detailPath || feature.id);
   }
   return BACK;
 }

@@ -30,7 +30,7 @@ export const WORKFLOWS = {
     description: "UI 컴포넌트를 구현합니다",
     icon: "🎨",
     requiresArg: true,
-    argName: "scope",
+    argName: "featureId",
     category: "feature",
   },
 
@@ -104,6 +104,25 @@ export const WORKFLOWS = {
   },
 };
 
+// 설정
+let bypassPermissions = false;
+
+/**
+ * Bypass Permissions 설정
+ * @param {boolean} enabled - 활성화 여부
+ */
+export function setBypassPermissions(enabled) {
+  bypassPermissions = enabled;
+}
+
+/**
+ * Bypass Permissions 상태 확인
+ * @returns {boolean}
+ */
+export function getBypassPermissions() {
+  return bypassPermissions;
+}
+
 /**
  * Claude Code CLI 실행 (대화형 모드)
  * @param {string} command - 실행할 명령어 (예: '/workflow-feature-spec')
@@ -117,10 +136,18 @@ export function runClaudeCommand(command, arg = "") {
     console.log();
     console.log(chalk.cyan("🤖 Claude Code 실행 중..."));
     console.log(chalk.gray(`   Command: ${fullPrompt}`));
+    if (bypassPermissions) {
+      console.log(chalk.yellow("   ⚠️  Bypass Permissions: ON"));
+    }
     console.log();
 
-    // 대화형 모드로 Claude 실행 (프롬프트를 argument로 전달)
-    const claude = spawn("claude", [fullPrompt], {
+    // 인자 구성
+    const args = bypassPermissions
+      ? ["--dangerously-skip-permissions", fullPrompt]
+      : [fullPrompt];
+
+    // 대화형 모드로 Claude 실행
+    const claude = spawn("claude", args, {
       stdio: "inherit",
     });
 
