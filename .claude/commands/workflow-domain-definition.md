@@ -67,10 +67,10 @@
    - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 도메인 정의 문서 작성
    - 출력: `.claude/docs/domain-definition.md`
 
-2. **Agent: feature-list-writer**
+2. **Agent: feature-classifier**
 
-   - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 기능 목록 문서 작성
-   - 출력: `.claude/docs/feature-list.md` + `.claude/docs/feature-list/[기능ID]-[기능명].md`
+   - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 Feature/Task 분류 리스트 작성
+   - 출력: `.claude/docs/feature-list.md` (상세 문서 없이 리스트만)
 
 3. **Agent: page-structure-writer**
    - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 페이지 구조 문서 작성
@@ -79,8 +79,7 @@
 **출력 파일**:
 
 - `.claude/docs/domain-definition.md`
-- `.claude/docs/feature-list.md`
-- `.claude/docs/feature-list/[기능ID]-[기능명].md` (각 기능별)
+- `.claude/docs/feature-list.md` (Feature/Task 리스트)
 - `.claude/docs/page-structure.md`
 
 ### Phase 5: Review & Confirm (검수 & 컨펌)
@@ -88,12 +87,26 @@
 **사용자 검토**
 
 - 도메인 경계 적절성 확인
-- 기능 배치 검증
+- **Feature 분류 검토** (완결된 기능 단위로 적절하게 분류되었는지)
+- **Task 분류 검토** (개별 작업 단위로 적절하게 분류되었는지)
 - 누락 기능 체크
 - 페이지 구조 합리성 확인
 - 엔티티 관계 검토
 
-### Phase 6: Memory Update (메모리 업데이트)
+### Phase 6: Feature Detail Writing (Feature 상세 문서 작성)
+
+**Agent: feature-detail-writer**
+
+- 사용자 승인된 Feature 목록 (`.claude/docs/feature-list.md`)을 바탕으로 상세 문서 작성
+- 출력: `.claude/docs/feature-list/[기능ID]-[기능명].md` (각 기능별)
+- Feature 목록에 상세 문서 링크 추가
+
+**출력 파일**:
+
+- `.claude/docs/feature-list/[기능ID]-[기능명].md` (각 기능별)
+- `.claude/docs/feature-list.md` (상세 문서 링크 추가)
+
+### Phase 7: Memory Update (메모리 업데이트)
 
 **Agent: memory-manager**
 
@@ -128,6 +141,8 @@
 🔔 **Phase 5 확인 사항**:
 
 - 도메인이 비즈니스 요구사항과 일치하는가?
+- Feature가 완결된 기능 단위로 적절하게 분류되었는가?
+- Task가 개별 작업 단위로 적절하게 분류되었는가?
 - 기능 의존성이 올바르게 정의되었는가?
 - UI/UX 흐름이 직관적인가?
 
@@ -135,6 +150,7 @@
 
 - `.claude/docs/research/domain-analysis.md` - 도메인 분석 결과
 - `.claude/docs/domain-definition.md` - 도메인 정의 문서
-- `.claude/docs/feature-list.md` - 기능 목록
+- `.claude/docs/feature-list.md` - Feature/Task 목록
+- `.claude/docs/feature-list/[기능ID]-[기능명].md` - 각 Feature 상세 문서
 - `.claude/docs/page-structure.md` - 페이지 구조
 - `.claude/docs/memory/memory.md` - 업데이트된 프로젝트 메모리
