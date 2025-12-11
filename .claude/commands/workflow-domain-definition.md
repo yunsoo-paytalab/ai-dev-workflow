@@ -93,18 +93,42 @@
 - 페이지 구조 합리성 확인
 - 엔티티 관계 검토
 
+**사용자 승인 후 자동 진행:**
+
+- 승인 시: **즉시 Phase 6으로 진행** (Feature 상세 문서 작성)
+- 수정 요청 시: Phase 4로 돌아가 수정 후 다시 검토
+
+⚠️ **IMPORTANT**: 사용자가 승인하면 반드시 Phase 6을 실행해야 합니다. Phase 6을 건너뛰지 마세요.
+
 ### Phase 6: Feature Detail Writing (Feature 상세 문서 작성)
+
+⚠️ **필수 단계** - 이 단계를 건너뛰면 후속 워크플로우에서 Feature 상세 정보를 참조할 수 없습니다.
 
 **Agent: feature-detail-writer**
 
-- 사용자 승인된 Feature 목록 (`.claude/docs/feature-list.md`)을 바탕으로 상세 문서 작성
-- 출력: `.claude/docs/feature-list/[기능ID]-[기능명].md` (각 기능별)
-- Feature 목록에 상세 문서 링크 추가
+**실행 방법:**
+
+```
+Task 도구를 사용하여 feature-detail-writer 에이전트 호출:
+- subagent_type: "feature-detail-writer"
+- prompt: "Feature 목록(.claude/docs/feature-list.md)을 바탕으로 각 Feature의 상세 문서를 작성하세요."
+```
+
+**에이전트 작업 내용:**
+
+1. `.claude/docs/feature-list/` 디렉토리 생성
+2. 각 Feature마다 상세 문서 작성: `[기능ID]-[기능명].md`
+3. `.claude/docs/feature-list.md`에 상세 문서 링크 추가
 
 **출력 파일**:
 
 - `.claude/docs/feature-list/[기능ID]-[기능명].md` (각 기능별)
-- `.claude/docs/feature-list.md` (상세 문서 링크 추가)
+- `.claude/docs/feature-list.md` (상세 문서 링크 업데이트)
+
+**검증:**
+
+- 모든 Feature에 대한 상세 문서 파일 존재 확인
+- 링크 연결 정확성 확인
 
 ### Phase 7: Memory Update (메모리 업데이트)
 

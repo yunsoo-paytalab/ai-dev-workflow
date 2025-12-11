@@ -84,66 +84,117 @@ AUTH-001 사용자 인증 전체 (로그인 + 회원가입 + 비밀번호 재설
 **파일명**: `.claude/docs/feature-list.md`
 
 ```markdown
-# 기능 목록
+# Feature 목록
 
 ## 개요
 
 [프로젝트의 주요 기능에 대한 간략한 설명]
 
-## Feature 목록
+- **총 Feature 수**: N개
+- **총 Task 수**: N개
+- **도메인 수**: N개
 
-| Feature ID | Feature명      | 카테고리 | Tasks |
-| ---------- | -------------- | -------- | ----- |
-| AUTH-001   | 로그인 기능    | 인증     | 4     |
-| AUTH-002   | 회원가입 기능  | 인증     | 5     |
-| ORDER-001  | 주문 생성      | 주문     | 6     |
-| SETUP-001  | API 클라이언트 | 설정     | 2     |
+---
 
-## Feature별 Task 목록
+## Feature 요약
 
-### AUTH-001: 로그인 기능
+### AUTH: 인증 (N features, N tasks)
 
-| Task ID       | Task명            | 우선순위 | 의존성       |
-| ------------- | ----------------- | -------- | ------------ |
-| AUTH-001-001  | 로그인 타입 정의  | high     | -            |
-| AUTH-001-002  | 로그인 API 함수   | high     | AUTH-001-001 |
-| AUTH-001-003  | useLogin 훅       | high     | AUTH-001-002 |
-| AUTH-001-004  | 로그인 폼 컴포넌트 | medium   | AUTH-001-003 |
+| ID | Feature명 | 설명 | Tasks | 우선순위 |
+|----|-----------|------|-------|----------|
+| AUTH-001 | 로그인 기능 | 사용자 인증 및 세션 관리 | 4 | High |
+| AUTH-002 | 회원가입 기능 | 신규 사용자 등록 | 5 | High |
 
-### AUTH-002: 회원가입 기능
+### ORDER: 주문 (N features, N tasks)
 
-| Task ID       | Task명              | 우선순위 | 의존성       |
-| ------------- | ------------------- | -------- | ------------ |
-| AUTH-002-001  | 회원가입 타입 정의  | high     | -            |
-| AUTH-002-002  | 회원가입 API 함수   | high     | AUTH-002-001 |
-| ...           | ...                 | ...      | ...          |
+| ID | Feature명 | 설명 | Tasks | 우선순위 |
+|----|-----------|------|-------|----------|
+| ORDER-001 | 주문 생성 | 상품 주문 및 결제 처리 | 6 | High |
 
-(Feature별로 반복)
+### COMMON: 공통 (N features, N tasks)
 
-## 도메인별 분류
+| ID | Feature명 | 설명 | Tasks | 우선순위 |
+|----|-----------|------|-------|----------|
+| COMMON-001 | API 클라이언트 설정 | Axios 설정, 인터셉터, 에러 핸들러 | 4 | High |
+| COMMON-002 | 공통 UI 컴포넌트 | 버튼, 입력필드, 테이블 등 | 8 | High |
 
-### 인증 (AUTH)
-
-- AUTH-001: 로그인 기능 (4 tasks)
-- AUTH-002: 회원가입 기능 (5 tasks)
-
-### 주문 (ORDER)
-
-- ORDER-001: 주문 생성 (6 tasks)
-
-### 설정 (SETUP)
-
-- SETUP-001: API 클라이언트 (2 tasks)
+---
 
 ## Feature 의존성
 
 ```
-SETUP-001 (API 클라이언트)
+COMMON-001 (API 클라이언트)
     ↓
 AUTH-001 (로그인) → AUTH-002 (회원가입)
     ↓
-ORDER-001 (주문 생성)
+┌─────────────────┬─────────────────┐
+│                 │                 │
+ORDER-001         PRODUCT-001       (병렬 가능)
+│                 │                 │
+└─────────────────┴─────────────────┘
 ```
+
+---
+
+## 구현 우선순위 가이드
+
+### Phase 1: 기반 구축 (High Priority)
+
+1. COMMON-001: API 클라이언트 설정
+2. AUTH-001: 로그인 기능
+3. COMMON-002: 공통 UI 컴포넌트
+
+### Phase 2: 핵심 기능 (High Priority)
+
+> 병렬 작업 가능
+
+1. ORDER-001: 주문 생성
+2. PRODUCT-001: 상품 목록
+
+### Phase 3: 부가 기능 (Medium/Low Priority)
+
+1. DASH-001: 대시보드
+2. SETTING-001: 설정
+
+---
+
+## 병렬 작업 가능 그룹
+
+> 같은 그룹 내 Feature는 동시에 작업 가능합니다.
+
+| 그룹 | Features | 선행 조건 |
+|------|----------|-----------|
+| Group A | COMMON-001, COMMON-002 | - |
+| Group B | AUTH-001, AUTH-002 | COMMON-001 완료 |
+| Group C | ORDER-001, PRODUCT-001, CART-001 | AUTH-001 완료 |
+| Group D | DASH-001, SETTING-001 | Group C 완료 |
+
+---
+
+## Task 상세
+
+> 각 Feature별 Task 목록입니다.
+
+### AUTH-001: 로그인 기능
+
+| Task ID | Task명 | 우선순위 | 의존성 |
+|---------|--------|----------|--------|
+| AUTH-001-001 | 인증 타입 정의 | High | - |
+| AUTH-001-002 | 로그인 API 함수 | High | AUTH-001-001 |
+| AUTH-001-003 | useAuth 훅 | High | AUTH-001-002 |
+| AUTH-001-004 | 로그인 폼 컴포넌트 | Medium | AUTH-001-003 |
+
+### AUTH-002: 회원가입 기능
+
+| Task ID | Task명 | 우선순위 | 의존성 |
+|---------|--------|----------|--------|
+| AUTH-002-001 | 회원가입 타입 정의 | High | - |
+| AUTH-002-002 | 회원가입 API 함수 | High | AUTH-002-001 |
+| AUTH-002-003 | useSignup 훅 | High | AUTH-002-002 |
+| AUTH-002-004 | 회원가입 폼 컴포넌트 | Medium | AUTH-002-003 |
+| AUTH-002-005 | 입력 검증 로직 | Medium | - |
+
+(Feature별로 반복)
 ```
 
 ## 실행 프로세스
@@ -155,13 +206,14 @@ ORDER-001 (주문 생성)
 
 2. **도메인 식별**
 
-   - 주요 도메인 추출 (예: AUTH, ORDER, PRODUCT, SETUP)
+   - 주요 도메인 추출 (예: AUTH, ORDER, PRODUCT, COMMON)
    - 각 도메인의 범위 정의
 
 3. **Feature 도출**
 
    - 완결된 기능 단위로 Feature 생성
    - Feature ID 부여
+   - Feature별 설명 및 우선순위 부여
 
 4. **Task 분리**
 
@@ -170,18 +222,29 @@ ORDER-001 (주문 생성)
    - 의존성 설정
    - 우선순위 할당
 
-5. **리스트 파일 작성**
+5. **의존성 분석 및 병렬 작업 그룹 도출**
+
+   - Feature 간 의존성 그래프 작성
+   - **병렬 작업 가능 그룹 분석**:
+     - 동일한 선행 조건을 가진 Feature 그룹화
+     - 서로 의존성이 없는 Feature 식별
+   - 구현 Phase 정의 (기반 구축 → 핵심 기능 → 부가 기능)
+
+6. **리스트 파일 작성**
 
    - `.claude/docs/feature-list.md` 생성
-   - Feature 목록 표
-   - Feature별 Task 목록 표
-   - 도메인별 분류
+   - 개요 (총 Feature 수, Task 수, 도메인 수)
+   - Feature 요약 (도메인별 그룹화)
    - Feature 의존성 그래프
+   - 구현 우선순위 가이드 (Phase별)
+   - **병렬 작업 가능 그룹 테이블**
+   - Task 상세 (Feature별)
 
-6. **검증**
+7. **검증**
    - Feature 완결성 확인
    - Task 의존성 순환 체크
    - 누락된 기능 확인
+   - 병렬 그룹 선행 조건 검증
 
 ## 주의사항
 
