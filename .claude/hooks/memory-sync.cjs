@@ -5,6 +5,8 @@
  *
  * 사용법:
  *   node memory-sync.cjs workflow-start  # /workflow 커맨드 시작 시
+ *   node memory-sync.cjs user-input      # 사용자 입력 시 (UserPromptSubmit)
+ *   node memory-sync.cjs assistant-response  # Claude 응답 완료 시 (Stop)
  *   node memory-sync.cjs end             # 세션 종료 시
  *   node memory-sync.cjs compact         # compact 시
  *
@@ -26,6 +28,7 @@ const {
   getLocalMemoryFile,
   getTimestamp,
   getDateString,
+  getTimeString,
   getCurrentBranch,
   getCurrentBranchFromPath,
   generateShortHash,
@@ -119,7 +122,7 @@ function handleSessionStart() {
 }
 
 // 세션 종료 처리
-// transcript에서 사용자 요청을 추출하여 세션 요약에 기록합니다.
+// 현재 세션 파일에 종료 시간을 추가하고 마무리합니다.
 function handleSessionEnd() {
   // stdin에서 hook 데이터 읽기 (cwd, transcript_path 포함)
   let hookData = {};
@@ -145,107 +148,36 @@ function handleSessionEnd() {
   syncMemoryToCentral(memoryId);
 
   const memoryPath = getMemoryPath(memoryId);
-  const sessionsDir = path.join(memoryPath, "sessions");
-  ensureDir(sessionsDir);
-
-  // 세션 파일 생성
-  // 프로젝트 경로에서 브랜치 가져오기
-  const branch = getCurrentBranchFromPath(projectCwd);
-  const dateStr = getDateString();
-  const hash = generateShortHash();
-  const sessionFileName = `${dateStr}_${branch}_${hash}.md`;
-  const sessionFilePath = path.join(sessionsDir, sessionFileName);
-
-  // transcript에서 사용자 메시지 추출
-  const transcriptPath = hookData.transcript_path || null;
-  let userMessages = [];
-  if (transcriptPath && fs.existsSync(transcriptPath)) {
-    try {
-      const transcriptContent = fs.readFileSync(transcriptPath, "utf-8");
-      const lines = transcriptContent.trim().split("\n");
-      for (const line of lines) {
-        try {
-          const entry = JSON.parse(line);
-          // type이 "user"이고, isMeta가 아닌 실제 사용자 입력만 추출
-          if (entry.type === "user" && !entry.isMeta && entry.message?.content) {
-            let content = entry.message.content;
-
-            // 배열 형태인 경우 (tool_result 등)
-            if (Array.isArray(content)) {
-              // tool_result는 건너뛰기
-              const hasToolResult = content.some(c => c.type === "tool_result");
-              if (hasToolResult) continue;
-
-              content = content
-                .filter(c => c.type === "text")
-                .map(c => c.text)
-                .join(" ");
-            }
-
-            // 문자열인 경우
-            if (typeof content === "string") {
-              // 시스템/커맨드 메시지 필터링
-              if (content.startsWith("<command-name>") ||
-                  content.startsWith("<command-message>") ||
-                  content.startsWith("<local-command") ||
-                  content.startsWith("Caveat:") ||
-                  content.startsWith("This session is being continued") ||
-                  content.includes("<system-reminder>") ||
-                  content.includes("[Request interrupted")) {
-                continue;
-              }
-
-              if (content.trim()) {
-                userMessages.push(content.trim());
-              }
-            }
-          }
-        } catch (e) {
-          // JSON 파싱 실패 시 무시
-        }
-      }
-    } catch (e) {
-      // 파일 읽기 실패 시 무시
-    }
-  }
-
-  // 사용자 요청 목록 생성 (제한 없음)
-  const userRequestsSection = userMessages.length > 0
-    ? userMessages.map((msg, i) => `${i + 1}. ${msg}`).join("\n")
-    : "- (기록된 요청 없음)";
-
-  // 세션 내용 생성
-  const sessionContent = `# 세션: ${dateStr} ${branch}
-
-## 세션 정보
-- **종료 시간**: ${getTimestamp()}
-- **브랜치**: ${branch || "N/A"}
-- **세션 ID**: ${hash}
-
-## 사용자 요청 목록
-${userRequestsSection}
-
-## 메모
--
-`;
-
-  fs.writeFileSync(sessionFilePath, sessionContent);
-
-  // meta.json 업데이트
   const metaPath = path.join(memoryPath, "meta.json");
   const meta = readJson(metaPath);
+
+  // 현재 세션 파일이 있으면 종료 시간 추가
+  if (meta.currentSessionFile) {
+    const sessionsDir = path.join(memoryPath, "sessions");
+    const sessionFilePath = path.join(sessionsDir, meta.currentSessionFile);
+
+    if (fs.existsSync(sessionFilePath)) {
+      // 종료 구분선 추가
+      const endSection = `---
+**종료 시간**: ${getTimestamp()}
+`;
+      fs.appendFileSync(sessionFilePath, endSection);
+
+      console.log(`✓ 세션 종료: ${meta.currentSessionFile}`);
+    }
+
+    // lastSessionFile 업데이트 및 currentSessionFile 해제
+    meta.lastSessionFile = meta.currentSessionFile;
+    delete meta.currentSessionFile;
+  }
+
+  // meta.json 업데이트
   meta.lastAccess = getTimestamp();
   meta.totalSessions = (meta.totalSessions || 0) + 1;
-  meta.lastSessionFile = sessionFileName; // memory-manager가 참조할 수 있도록
   writeJson(metaPath, meta);
 
   // 정리 규칙 적용
   applyCleanupRules(memoryId);
-
-  console.log(`✓ 세션 기록됨: ${sessionFileName}`);
-  if (userMessages.length > 0) {
-    console.log(`  📝 사용자 요청 ${userMessages.length}개 기록됨`);
-  }
 }
 
 // /workflow 커맨드 시작 처리 (PreToolUse - SlashCommand)
@@ -306,15 +238,43 @@ function handleWorkflowStart() {
   const pendingResume = meta.pendingResume || null;
   meta.lastAccess = getTimestamp();
 
+  // 세션 파일 생성 (실시간 기록용)
+  const sessionsDir = path.join(memoryPath, "sessions");
+  ensureDir(sessionsDir);
+
+  const branch = getCurrentBranch();
+  const dateStr = getDateString();
+  const hash = generateShortHash();
+  const sessionFileName = `${dateStr}_${branch}_${hash}.md`;
+  const sessionFilePath = path.join(sessionsDir, sessionFileName);
+
+  // 세션 파일 초기 내용 생성
+  const sessionContent = `# 세션: ${dateStr} ${branch}
+
+## 세션 정보
+- **시작 시간**: ${getTimestamp()}
+- **브랜치**: ${branch || "N/A"}
+- **세션 ID**: ${hash}
+- **워크플로우**: ${command}
+
+## 대화 기록
+
+`;
+
+  fs.writeFileSync(sessionFilePath, sessionContent);
+
+  // meta.json에 현재 세션 파일 저장
+  meta.currentSessionFile = sessionFileName;
+
   // 메모리 내용 출력 (Claude 컨텍스트로 전달)
   console.log("─".repeat(50));
   console.log(`📁 프로젝트 메모리: ${memoryId}`);
   console.log(`📍 경로: ${memoryPath}`);
+  console.log(`📝 세션 파일: ${sessionFileName}`);
   console.log("─".repeat(50));
 
   // 이전 세션 요약 출력 (auto-compact 이후 재시작 시)
   if (pendingResume) {
-    const sessionsDir = path.join(memoryPath, "sessions");
     const summaryPath = path.join(sessionsDir, pendingResume);
     if (fs.existsSync(summaryPath)) {
       console.log("\n## 이전 세션 요약 (auto-compact 이후 재시작)\n");
@@ -455,6 +415,177 @@ ${userMessages.length > 0 ? userMessages.map((msg, i) => `${i + 1}. ${msg.slice(
   console.log(`✓ Compact 메모리 저장됨 (${trigger}): ${compactFileName}`);
 }
 
+// 사용자 입력 처리 (UserPromptSubmit hook에서 호출)
+function handleUserInput() {
+  // stdin에서 hook 데이터 읽기
+  let hookData = {};
+  let projectCwd = null;
+  try {
+    const input = fs.readFileSync(0, "utf-8");
+    if (input.trim()) {
+      hookData = JSON.parse(input);
+      projectCwd = hookData.cwd || null;
+    }
+  } catch (e) {
+    return; // stdin이 비어있거나 JSON이 아닌 경우 무시
+  }
+
+  // 프로젝트 경로에서 메모리 ID 확인
+  const memoryId = projectCwd ? getMemoryIdFromPath(projectCwd) : getMemoryId();
+
+  if (!memoryId) {
+    return; // 메모리 연결 없으면 무시
+  }
+
+  const memoryPath = getMemoryPath(memoryId);
+  const metaPath = path.join(memoryPath, "meta.json");
+  const meta = readJson(metaPath);
+
+  // 현재 세션 파일이 없으면 무시 (워크플로우 외 입력)
+  if (!meta.currentSessionFile) {
+    return;
+  }
+
+  const sessionsDir = path.join(memoryPath, "sessions");
+  const sessionFilePath = path.join(sessionsDir, meta.currentSessionFile);
+
+  if (!fs.existsSync(sessionFilePath)) {
+    return;
+  }
+
+  // 사용자 프롬프트 가져오기
+  const prompt = hookData.prompt || "";
+
+  // 시스템 메시지 필터링
+  if (!prompt.trim() ||
+      prompt.startsWith("<command-name>") ||
+      prompt.startsWith("<command-message>") ||
+      prompt.startsWith("<local-command") ||
+      prompt.includes("<system-reminder>")) {
+    return;
+  }
+
+  // 세션 파일에 사용자 입력 추가
+  const timeStr = getTimeString();
+  const entry = `### ${timeStr}\n**사용자**: ${prompt}\n\n`;
+
+  fs.appendFileSync(sessionFilePath, entry);
+}
+
+// Claude 응답 완료 처리 (Stop hook에서 호출)
+function handleAssistantResponse() {
+  // stdin에서 hook 데이터 읽기
+  let hookData = {};
+  let projectCwd = null;
+  try {
+    const input = fs.readFileSync(0, "utf-8");
+    if (input.trim()) {
+      hookData = JSON.parse(input);
+      projectCwd = hookData.cwd || null;
+    }
+  } catch (e) {
+    return; // stdin이 비어있거나 JSON이 아닌 경우 무시
+  }
+
+  // 프로젝트 경로에서 메모리 ID 확인
+  const memoryId = projectCwd ? getMemoryIdFromPath(projectCwd) : getMemoryId();
+
+  if (!memoryId) {
+    return; // 메모리 연결 없으면 무시
+  }
+
+  const memoryPath = getMemoryPath(memoryId);
+  const metaPath = path.join(memoryPath, "meta.json");
+  const meta = readJson(metaPath);
+
+  // 현재 세션 파일이 없으면 무시
+  if (!meta.currentSessionFile) {
+    return;
+  }
+
+  const sessionsDir = path.join(memoryPath, "sessions");
+  const sessionFilePath = path.join(sessionsDir, meta.currentSessionFile);
+
+  if (!fs.existsSync(sessionFilePath)) {
+    return;
+  }
+
+  // transcript에서 마지막 assistant 응답 추출
+  const transcriptPath = hookData.transcript_path || null;
+  let lastResponse = "";
+
+  if (transcriptPath && fs.existsSync(transcriptPath)) {
+    try {
+      const transcriptContent = fs.readFileSync(transcriptPath, "utf-8");
+      const lines = transcriptContent.trim().split("\n");
+
+      // 역순으로 마지막 assistant 응답 찾기
+      for (let i = lines.length - 1; i >= 0; i--) {
+        try {
+          const entry = JSON.parse(lines[i]);
+          if (entry.type === "assistant" && entry.message?.content) {
+            let content = entry.message.content;
+
+            // 배열 형태인 경우
+            if (Array.isArray(content)) {
+              content = content
+                .filter(c => c.type === "text")
+                .map(c => c.text)
+                .join(" ");
+            }
+
+            if (typeof content === "string" && content.trim()) {
+              lastResponse = content.trim();
+              break;
+            }
+          }
+        } catch (e) {
+          // JSON 파싱 실패 시 무시
+        }
+      }
+    } catch (e) {
+      // 파일 읽기 실패 시 무시
+    }
+  }
+
+  if (!lastResponse) {
+    return;
+  }
+
+  // 응답 요약 (최대 200자 + 도구 사용 요약)
+  let summary = lastResponse;
+
+  // 도구 사용 패턴 감지
+  const toolPatterns = [
+    { pattern: /Read.*file/gi, label: "파일 읽기" },
+    { pattern: /Write.*file/gi, label: "파일 작성" },
+    { pattern: /Edit.*file/gi, label: "파일 수정" },
+    { pattern: /Bash|실행|npm|git/gi, label: "명령 실행" },
+    { pattern: /Grep|검색|찾/gi, label: "검색" },
+  ];
+
+  const usedTools = [];
+  toolPatterns.forEach(({ pattern, label }) => {
+    if (pattern.test(lastResponse)) {
+      usedTools.push(label);
+    }
+  });
+
+  // 요약 생성
+  if (summary.length > 200) {
+    summary = summary.slice(0, 200) + "...";
+  }
+
+  if (usedTools.length > 0) {
+    summary += ` [${usedTools.join(", ")}]`;
+  }
+
+  // 세션 파일에 응답 추가
+  const entry = `**Claude**: ${summary}\n\n`;
+
+  fs.appendFileSync(sessionFilePath, entry);
+}
+
 // 정리 규칙 적용
 function applyCleanupRules(memoryId) {
   const configPath = path.join(CENTRAL_STORE, "config.json");
@@ -498,6 +629,12 @@ switch (command) {
   case "workflow-start":
     handleWorkflowStart();
     break;
+  case "user-input":
+    handleUserInput();
+    break;
+  case "assistant-response":
+    handleAssistantResponse();
+    break;
   case "start":
     handleSessionStart();
     break;
@@ -508,6 +645,6 @@ switch (command) {
     handleCompact();
     break;
   default:
-    console.log("사용법: node memory-sync.cjs [workflow-start|start|end|compact]");
+    console.log("사용법: node memory-sync.cjs [workflow-start|user-input|assistant-response|start|end|compact]");
     process.exit(1);
 }

@@ -86,6 +86,13 @@ function getDateString() {
 }
 
 /**
+ * 시간 문자열 반환 (HH:MM:SS)
+ */
+function getTimeString() {
+  return new Date().toTimeString().split(" ")[0];
+}
+
+/**
  * 현재 Git 브랜치 이름
  */
 function getCurrentBranch() {
@@ -649,6 +656,7 @@ module.exports = {
   // 날짜/시간 유틸리티
   getTimestamp,
   getDateString,
+  getTimeString,
   formatDate,
   formatFileSize,
 
