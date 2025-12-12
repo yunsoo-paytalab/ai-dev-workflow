@@ -17,7 +17,7 @@ const fs = require("fs");
 const path = require("path");
 const {
   CENTRAL_STORE,
-  DEFAULT_CONFIG,
+  getConfig,
   ensureDir,
   readJson,
   writeJson,
@@ -34,6 +34,13 @@ const {
   generateShortHash,
   createSymlink,
   syncMemoryToCentral,
+  setCurrentWorkflow,
+  getCurrentWorkflow,
+  finishCurrentWorkflow,
+  recalculateProgress,
+  syncProgressToMemory,
+  parseFeatureListToProgress,
+  parseDomainDefinitionToProgress,
 } = require("./lib/utils.cjs");
 
 // 중앙 저장소 초기화
@@ -41,10 +48,8 @@ function initCentralStore() {
   ensureDir(CENTRAL_STORE);
   ensureDir(path.join(CENTRAL_STORE, "projects"));
 
-  const configPath = path.join(CENTRAL_STORE, "config.json");
-  if (!fs.existsSync(configPath)) {
-    writeJson(configPath, DEFAULT_CONFIG);
-  }
+  // config.json 초기화 (getConfig가 자동으로 기본값 생성)
+  getConfig();
 
   const indexPath = path.join(CENTRAL_STORE, "index.json");
   if (!fs.existsSync(indexPath)) {
@@ -137,6 +142,8 @@ function handleSessionEnd() {
     // stdin이 비어있거나 JSON이 아닌 경우 무시
   }
 
+  const sessionId = hookData.session_id || null;
+
   // 프로젝트 경로에서 메모리 ID 확인
   const memoryId = projectCwd ? getMemoryIdFromPath(projectCwd) : getMemoryId();
 
@@ -151,10 +158,16 @@ function handleSessionEnd() {
   const metaPath = path.join(memoryPath, "meta.json");
   const meta = readJson(metaPath);
 
-  // 현재 세션 파일이 있으면 종료 시간 추가
-  if (meta.currentSessionFile) {
+  // activeSessions 확인
+  if (!meta.activeSessions) {
+    meta.activeSessions = {};
+  }
+
+  // 현재 세션 확인 (session_id 기반)
+  const currentSession = meta.activeSessions[sessionId];
+  if (currentSession) {
     const sessionsDir = path.join(memoryPath, "sessions");
-    const sessionFilePath = path.join(sessionsDir, meta.currentSessionFile);
+    const sessionFilePath = path.join(sessionsDir, currentSession.file);
 
     if (fs.existsSync(sessionFilePath)) {
       // 종료 구분선 추가
@@ -163,12 +176,39 @@ function handleSessionEnd() {
 `;
       fs.appendFileSync(sessionFilePath, endSection);
 
-      console.log(`✓ 세션 종료: ${meta.currentSessionFile}`);
+      console.log(`✓ 세션 종료: ${currentSession.file}`);
     }
 
-    // lastSessionFile 업데이트 및 currentSessionFile 해제
-    meta.lastSessionFile = meta.currentSessionFile;
-    delete meta.currentSessionFile;
+    // lastSessionFile 업데이트 및 activeSessions에서 제거
+    meta.lastSessionFile = currentSession.file;
+    delete meta.activeSessions[sessionId];
+  }
+
+  // 현재 워크플로우가 있으면 완료 처리
+  const currentWorkflow = getCurrentWorkflow(memoryId);
+  if (currentWorkflow) {
+    finishCurrentWorkflow(memoryId);
+
+    // 워크플로우별 문서 파싱 및 progress.json 업데이트
+    if (projectCwd) {
+      if (currentWorkflow === "domain-definition") {
+        // domain-definition은 Phase 4-5에서 feature-list도 생성하므로 둘 다 파싱
+        const domainResult = parseDomainDefinitionToProgress(memoryId, projectCwd);
+        if (domainResult.success) {
+          console.log(`✓ domain-definition 파싱: ${domainResult.domains}개 도메인`);
+        }
+        const featureResult = parseFeatureListToProgress(memoryId, projectCwd);
+        if (featureResult.success) {
+          console.log(`✓ feature-list 파싱: ${featureResult.features}개 Feature, ${featureResult.tasks}개 Task`);
+        }
+      }
+    }
+
+    console.log(`✓ 워크플로우 완료: ${currentWorkflow}`);
+
+    // progress.json 재계산 및 memory.md 동기화
+    recalculateProgress(memoryId);
+    syncProgressToMemory(memoryId);
   }
 
   // meta.json 업데이트
@@ -180,145 +220,14 @@ function handleSessionEnd() {
   applyCleanupRules(memoryId);
 }
 
-// /workflow 커맨드 시작 처리 (PreToolUse - SlashCommand)
-function handleWorkflowStart() {
-  // stdin에서 hook 데이터 읽기
-  let hookData = {};
-  try {
-    const input = fs.readFileSync(0, "utf-8");
-    if (input.trim()) {
-      hookData = JSON.parse(input);
-    }
-  } catch (e) {
-    // stdin이 비어있거나 JSON이 아닌 경우 무시
-    return;
-  }
-
-  // SlashCommand의 command 확인
-  const command = hookData.tool_input?.command || "";
-
-  // /workflow로 시작하지 않으면 무시
-  if (!command.startsWith("/workflow")) {
-    return;
-  }
-
-  const memoryId = getMemoryId();
-
-  if (!memoryId) {
-    console.log("─".repeat(50));
-    console.log("⚠️  프로젝트 메모리가 연결되지 않았습니다.");
-    console.log("   `/workflow-memory init [id]` 명령어로 메모리를 생성하세요.");
-    console.log("─".repeat(50));
-    return;
-  }
-
-  const memoryPath = getMemoryPath(memoryId);
-  const memoryFile = path.join(memoryPath, "memory.md");
-  const progressFile = path.join(memoryPath, "progress.json");
-
-  if (!fs.existsSync(memoryFile)) {
-    console.log("─".repeat(50));
-    console.log(`⚠️  메모리 '${memoryId}'를 찾을 수 없습니다.`);
-    console.log("   `/workflow-memory init` 명령어로 다시 생성하세요.");
-    console.log("─".repeat(50));
-    return;
-  }
-
-  // index.json 업데이트 (lastAccess)
-  const indexPath = path.join(CENTRAL_STORE, "index.json");
-  const index = readJson(indexPath, { projects: {} });
-  if (index.projects[memoryId]) {
-    index.projects[memoryId].lastAccess = getTimestamp();
-    writeJson(indexPath, index);
-  }
-
-  // meta.json 읽기 및 업데이트
-  const metaPath = path.join(memoryPath, "meta.json");
-  const meta = readJson(metaPath);
-  const pendingResume = meta.pendingResume || null;
-  meta.lastAccess = getTimestamp();
-
-  // 세션 파일 생성 (실시간 기록용)
-  const sessionsDir = path.join(memoryPath, "sessions");
-  ensureDir(sessionsDir);
-
-  const branch = getCurrentBranch();
-  const dateStr = getDateString();
-  const hash = generateShortHash();
-  const sessionFileName = `${dateStr}_${branch}_${hash}.md`;
-  const sessionFilePath = path.join(sessionsDir, sessionFileName);
-
-  // 세션 파일 초기 내용 생성
-  const sessionContent = `# 세션: ${dateStr} ${branch}
-
-## 세션 정보
-- **시작 시간**: ${getTimestamp()}
-- **브랜치**: ${branch || "N/A"}
-- **세션 ID**: ${hash}
-- **워크플로우**: ${command}
-
-## 대화 기록
-
-`;
-
-  fs.writeFileSync(sessionFilePath, sessionContent);
-
-  // meta.json에 현재 세션 파일 저장
-  meta.currentSessionFile = sessionFileName;
-
-  // 메모리 내용 출력 (Claude 컨텍스트로 전달)
-  console.log("─".repeat(50));
-  console.log(`📁 프로젝트 메모리: ${memoryId}`);
-  console.log(`📍 경로: ${memoryPath}`);
-  console.log(`📝 세션 파일: ${sessionFileName}`);
-  console.log("─".repeat(50));
-
-  // 이전 세션 요약 출력 (auto-compact 이후 재시작 시)
-  if (pendingResume) {
-    const summaryPath = path.join(sessionsDir, pendingResume);
-    if (fs.existsSync(summaryPath)) {
-      console.log("\n## 이전 세션 요약 (auto-compact 이후 재시작)\n");
-      console.log(fs.readFileSync(summaryPath, "utf-8"));
-      console.log("─".repeat(50));
-    }
-    // 플래그 해제
-    delete meta.pendingResume;
-  }
-
-  // meta.json 저장
-  writeJson(metaPath, meta);
-
-  // memory.md 내용 출력
-  const memoryContent = fs.readFileSync(memoryFile, "utf-8");
-  console.log("\n## 프로젝트 메모리 (memory.md)\n");
-  console.log(memoryContent);
-
-  // progress.json이 있으면 요약 출력
-  if (fs.existsSync(progressFile)) {
-    const progress = readJson(progressFile, {});
-    const features = progress.features || {};
-    const tasks = progress.tasks || {};
-
-    const featureCount = Object.keys(features).length;
-    const taskCount = Object.keys(tasks).length;
-    const completedTasks = Object.values(tasks).filter(t => t.status === "done").length;
-    const inProgressTasks = Object.values(tasks).filter(t => t.status === "in_progress").length;
-
-    console.log("\n## 진행 상황 (progress.json)\n");
-    console.log(`- Features: ${featureCount}개`);
-    console.log(`- Tasks: ${completedTasks}/${taskCount} 완료 (${inProgressTasks}개 진행중)`);
-  }
-
-  console.log("\n" + "─".repeat(50));
-}
-
 // Compact 처리 (PreCompact 훅에서 호출)
+// 간소화: 별도 파일 생성 없이 현재 세션 파일을 pendingResume으로 설정
 function handleCompact() {
-  // stdin에서 hook 데이터 읽기 (비동기 처리 불필요 - 이미 전달됨)
+  // stdin에서 hook 데이터 읽기
   let hookData = {};
   let projectCwd = null;
   try {
-    const input = fs.readFileSync(0, "utf-8"); // stdin
+    const input = fs.readFileSync(0, "utf-8");
     if (input.trim()) {
       hookData = JSON.parse(input);
       projectCwd = hookData.cwd || null;
@@ -327,6 +236,8 @@ function handleCompact() {
     // stdin이 비어있거나 JSON이 아닌 경우 무시
   }
 
+  const sessionId = hookData.session_id || null;
+
   // 프로젝트 경로에서 메모리 ID 확인
   const memoryId = projectCwd ? getMemoryIdFromPath(projectCwd) : getMemoryId();
 
@@ -334,85 +245,34 @@ function handleCompact() {
     return; // 메모리 연결 없으면 무시
   }
 
-  const trigger = hookData.trigger || "unknown";
-  const transcriptPath = hookData.transcript_path || null;
   const memoryPath = getMemoryPath(memoryId);
+  const timestamp = getTimestamp();
 
   // 복사 모드일 경우 로컬 → 중앙 저장소 동기화
   syncMemoryToCentral(memoryId);
 
-  // 컴팩트 로그 저장
-  const sessionsDir = path.join(memoryPath, "sessions");
-  ensureDir(sessionsDir);
-
-  // 프로젝트 경로에서 브랜치 가져오기
-  const branch = getCurrentBranchFromPath(projectCwd);
-  const dateStr = getDateString();
-  const timestamp = getTimestamp();
-  const hash = generateShortHash();
-  const compactFileName = `${dateStr}_${branch}_compact_${hash}.md`;
-  const compactFilePath = path.join(sessionsDir, compactFileName);
-
-  // transcript에서 사용자 메시지 추출하여 요약 저장
-  let userMessages = [];
-  if (transcriptPath && fs.existsSync(transcriptPath)) {
-    try {
-      const transcriptContent = fs.readFileSync(transcriptPath, "utf-8");
-      const lines = transcriptContent.trim().split("\n");
-      for (const line of lines) {
-        try {
-          const entry = JSON.parse(line);
-          if (entry.type === "human" && entry.message?.content) {
-            userMessages.push(entry.message.content);
-          }
-        } catch (e) {
-          // JSON 파싱 실패 시 무시
-        }
-      }
-    } catch (e) {
-      // 파일 읽기 실패 시 무시
-    }
-  }
-
-  // 요약 파일 저장
-  const summaryFileName = `${dateStr}_${branch}_summary_${hash}.md`;
-  const summaryFilePath = path.join(sessionsDir, summaryFileName);
-
-  const summaryContent = `# 세션 요약: ${dateStr} ${branch}
-
-## 사용자 요청 목록
-${userMessages.length > 0 ? userMessages.map((msg, i) => `${i + 1}. ${msg.slice(0, 200)}${msg.length > 200 ? "..." : ""}`).join("\n") : "- (없음)"}
-
-## 메모
--
-`;
-
-  fs.writeFileSync(summaryFilePath, summaryContent);
-
-  const compactContent = `# Compact: ${dateStr} ${branch}
-
-## 정보
-- 시간: ${timestamp}
-- 트리거: ${trigger}
-- 세션 ID: ${hookData.session_id || "N/A"}
-- 요약 파일: ${summaryFileName}
-
-## 컨텍스트 스냅샷
-> Compact 시점의 메모리 상태가 저장되었습니다.
-`;
-
-  fs.writeFileSync(compactFilePath, compactContent);
-
-  // meta.json 업데이트 (pendingResume 플래그 설정)
+  // meta.json 업데이트
   const metaPath = path.join(memoryPath, "meta.json");
   const meta = readJson(metaPath);
+
   meta.lastAccess = timestamp;
   meta.lastCompact = timestamp;
   meta.compactCount = (meta.compactCount || 0) + 1;
-  meta.pendingResume = summaryFileName; // 다음 워크플로우 시작 시 참조할 요약 파일
+
+  // activeSessions 확인
+  if (!meta.activeSessions) {
+    meta.activeSessions = {};
+  }
+
+  // 현재 세션 파일이 있으면 pendingResume으로 설정
+  const currentSession = meta.activeSessions[sessionId];
+  if (currentSession) {
+    meta.pendingResume = currentSession.file;
+  }
+
   writeJson(metaPath, meta);
 
-  console.log(`✓ Compact 메모리 저장됨 (${trigger}): ${compactFileName}`);
+  console.log(`✓ Compact 처리됨 (세션: ${currentSession?.file || 'N/A'})`);
 }
 
 // 사용자 입력 처리 (UserPromptSubmit hook에서 호출)
@@ -430,31 +290,9 @@ function handleUserInput() {
     return; // stdin이 비어있거나 JSON이 아닌 경우 무시
   }
 
-  // 프로젝트 경로에서 메모리 ID 확인
-  const memoryId = projectCwd ? getMemoryIdFromPath(projectCwd) : getMemoryId();
-
-  if (!memoryId) {
-    return; // 메모리 연결 없으면 무시
-  }
-
-  const memoryPath = getMemoryPath(memoryId);
-  const metaPath = path.join(memoryPath, "meta.json");
-  const meta = readJson(metaPath);
-
-  // 현재 세션 파일이 없으면 무시 (워크플로우 외 입력)
-  if (!meta.currentSessionFile) {
-    return;
-  }
-
-  const sessionsDir = path.join(memoryPath, "sessions");
-  const sessionFilePath = path.join(sessionsDir, meta.currentSessionFile);
-
-  if (!fs.existsSync(sessionFilePath)) {
-    return;
-  }
-
   // 사용자 프롬프트 가져오기
   const prompt = hookData.prompt || "";
+  const sessionId = hookData.session_id || null;
 
   // 시스템 메시지 필터링
   if (!prompt.trim() ||
@@ -465,9 +303,125 @@ function handleUserInput() {
     return;
   }
 
+  // 프로젝트 경로에서 메모리 ID 확인
+  const memoryId = projectCwd ? getMemoryIdFromPath(projectCwd) : getMemoryId();
+
+  if (!memoryId) {
+    return; // 메모리 연결 없으면 무시
+  }
+
+  const memoryPath = getMemoryPath(memoryId);
+  const metaPath = path.join(memoryPath, "meta.json");
+  let meta = readJson(metaPath);
+
+  // activeSessions 초기화
+  if (!meta.activeSessions) {
+    meta.activeSessions = {};
+  }
+
+  // /workflow-* 명령 감지 시 세션 시작
+  const workflowMatch = prompt.match(/^\/workflow-(\S+)/);
+  if (workflowMatch && sessionId) {
+    const workflowName = workflowMatch[1];
+
+    // /workflow-memory는 메모리 관리 커맨드이므로 제외
+    if (!workflowName.startsWith("memory")) {
+      // 이전 워크플로우가 있으면 완료 처리
+      const previousWorkflow = getCurrentWorkflow(memoryId);
+      if (previousWorkflow && previousWorkflow !== workflowName) {
+        finishCurrentWorkflow(memoryId);
+
+        // 워크플로우별 문서 파싱 및 progress.json 업데이트
+        if (previousWorkflow === "domain-definition") {
+          // domain-definition은 Phase 4-5에서 feature-list도 생성하므로 둘 다 파싱
+          const domainResult = parseDomainDefinitionToProgress(memoryId, projectCwd);
+          if (domainResult.success) {
+            console.log(`✓ domain-definition 파싱: ${domainResult.domains}개 도메인`);
+          }
+          const featureResult = parseFeatureListToProgress(memoryId, projectCwd);
+          if (featureResult.success) {
+            console.log(`✓ feature-list 파싱: ${featureResult.features}개 Feature, ${featureResult.tasks}개 Task`);
+          }
+        }
+
+        recalculateProgress(memoryId);
+        syncProgressToMemory(memoryId);
+        console.log(`✓ 이전 워크플로우 완료: ${previousWorkflow}`);
+      }
+
+      // 새 워크플로우 설정
+      setCurrentWorkflow(memoryId, workflowName);
+
+      // 세션 파일 생성
+      const sessionsDir = path.join(memoryPath, "sessions");
+      ensureDir(sessionsDir);
+
+      const branch = getCurrentBranchFromPath(projectCwd);
+      const dateStr = getDateString();
+      const hash = generateShortHash();
+      const sessionFileName = `${dateStr}_${branch}_${hash}.md`;
+      const sessionFilePath = path.join(sessionsDir, sessionFileName);
+
+      const sessionContent = `# 세션: ${dateStr} ${branch}
+
+## 세션 정보
+- **시작 시간**: ${getTimestamp()}
+- **브랜치**: ${branch || "N/A"}
+- **세션 ID**: ${hash}
+- **터미널 세션**: ${sessionId}
+- **워크플로우**: /workflow-${workflowName}
+
+## 대화 기록
+
+`;
+
+      fs.writeFileSync(sessionFilePath, sessionContent);
+
+      // meta.json 업데이트 - activeSessions에 추가
+      meta.activeSessions[sessionId] = {
+        file: sessionFileName,
+        workflow: workflowName,
+        startedAt: getTimestamp()
+      };
+      meta.lastAccess = getTimestamp();
+      writeJson(metaPath, meta);
+
+      // 메모리 정보 출력
+      console.log("─".repeat(50));
+      console.log(`📁 프로젝트 메모리: ${memoryId}`);
+      console.log(`📝 세션 파일: ${sessionFileName}`);
+      console.log(`🔄 워크플로우: ${workflowName}`);
+      console.log("─".repeat(50));
+    }
+  }
+
+  // 현재 세션 파일 확인 (session_id 기반)
+  meta = readJson(metaPath); // 세션 생성 후 다시 읽기
+  if (!meta.activeSessions) {
+    meta.activeSessions = {};
+  }
+
+  const currentSession = meta.activeSessions[sessionId];
+  if (!currentSession) {
+    return; // 이 터미널에 활성 세션 없음
+  }
+
+  const sessionsDir = path.join(memoryPath, "sessions");
+  const sessionFilePath = path.join(sessionsDir, currentSession.file);
+
+  if (!fs.existsSync(sessionFilePath)) {
+    return;
+  }
+
   // 세션 파일에 사용자 입력 추가
   const timeStr = getTimeString();
-  const entry = `### ${timeStr}\n**사용자**: ${prompt}\n\n`;
+  const entry = `### ${timeStr}
+**사용자**:
+\`\`\`\`
+${prompt}
+\`\`\`\`
+
+`;
 
   fs.appendFileSync(sessionFilePath, entry);
 }
@@ -487,6 +441,8 @@ function handleAssistantResponse() {
     return; // stdin이 비어있거나 JSON이 아닌 경우 무시
   }
 
+  const sessionId = hookData.session_id || null;
+
   // 프로젝트 경로에서 메모리 ID 확인
   const memoryId = projectCwd ? getMemoryIdFromPath(projectCwd) : getMemoryId();
 
@@ -498,13 +454,19 @@ function handleAssistantResponse() {
   const metaPath = path.join(memoryPath, "meta.json");
   const meta = readJson(metaPath);
 
-  // 현재 세션 파일이 없으면 무시
-  if (!meta.currentSessionFile) {
+  // activeSessions 확인
+  if (!meta.activeSessions) {
     return;
   }
 
+  // 현재 세션 확인 (session_id 기반)
+  const currentSession = meta.activeSessions[sessionId];
+  if (!currentSession) {
+    return; // 이 터미널에 활성 세션 없음
+  }
+
   const sessionsDir = path.join(memoryPath, "sessions");
-  const sessionFilePath = path.join(sessionsDir, meta.currentSessionFile);
+  const sessionFilePath = path.join(sessionsDir, currentSession.file);
 
   if (!fs.existsSync(sessionFilePath)) {
     return;
@@ -552,7 +514,11 @@ function handleAssistantResponse() {
     return;
   }
 
-  // 응답 요약 (최대 200자 + 도구 사용 요약)
+  // config에서 최대 글자 수 설정 읽기
+  const config = getConfig();
+  const maxResponseLength = config.session?.maxResponseLength || 2000;
+
+  // 응답 요약
   let summary = lastResponse;
 
   // 도구 사용 패턴 감지
@@ -571,9 +537,9 @@ function handleAssistantResponse() {
     }
   });
 
-  // 요약 생성
-  if (summary.length > 200) {
-    summary = summary.slice(0, 200) + "...";
+  // 글자 수 제한 적용
+  if (summary.length > maxResponseLength) {
+    summary = summary.slice(0, maxResponseLength) + "...";
   }
 
   if (usedTools.length > 0) {
@@ -581,15 +547,19 @@ function handleAssistantResponse() {
   }
 
   // 세션 파일에 응답 추가
-  const entry = `**Claude**: ${summary}\n\n`;
+  const entry = `**Claude**:
+\`\`\`\`
+${summary}
+\`\`\`\`
+
+`;
 
   fs.appendFileSync(sessionFilePath, entry);
 }
 
 // 정리 규칙 적용
 function applyCleanupRules(memoryId) {
-  const configPath = path.join(CENTRAL_STORE, "config.json");
-  const config = readJson(configPath, DEFAULT_CONFIG);
+  const config = getConfig();
   const { maxSessionsPerProject, maxSessionAgeDays } = config.retention;
 
   const sessionsDir = path.join(getMemoryPath(memoryId), "sessions");
@@ -622,13 +592,50 @@ function applyCleanupRules(memoryId) {
   });
 }
 
+// Progress 동기화 처리 (워크플로우 Phase 완료 시 호출)
+// Claude가 직접 호출: node .claude/hooks/memory-sync.cjs sync-progress
+function handleSyncProgress() {
+  // 현재 디렉토리에서 메모리 ID 확인
+  const projectCwd = process.cwd();
+  const memoryId = getMemoryIdFromPath(projectCwd);
+
+  if (!memoryId) {
+    console.log("⚠️  메모리가 연결되지 않았습니다.");
+    return;
+  }
+
+  console.log("─".repeat(50));
+  console.log("📊 Progress 동기화 시작...");
+
+  // domain-definition.md 파싱
+  const domainResult = parseDomainDefinitionToProgress(memoryId, projectCwd);
+  if (domainResult.success) {
+    console.log(`✓ 도메인 파싱: ${domainResult.domains}개`);
+  } else if (domainResult.error !== "domain-definition.md not found") {
+    console.log(`⚠️  도메인 파싱 실패: ${domainResult.error}`);
+  }
+
+  // feature-list.md 파싱
+  const featureResult = parseFeatureListToProgress(memoryId, projectCwd);
+  if (featureResult.success) {
+    console.log(`✓ Feature 파싱: ${featureResult.features}개`);
+    console.log(`✓ Task 파싱: ${featureResult.tasks}개`);
+  } else if (featureResult.error !== "feature-list.md not found") {
+    console.log(`⚠️  Feature 파싱 실패: ${featureResult.error}`);
+  }
+
+  // progress.json 재계산 및 memory.md 동기화
+  recalculateProgress(memoryId);
+  syncProgressToMemory(memoryId);
+
+  console.log("✓ Progress 동기화 완료!");
+  console.log("─".repeat(50));
+}
+
 // 메인 실행
 const command = process.argv[2];
 
 switch (command) {
-  case "workflow-start":
-    handleWorkflowStart();
-    break;
   case "user-input":
     handleUserInput();
     break;
@@ -644,7 +651,10 @@ switch (command) {
   case "compact":
     handleCompact();
     break;
+  case "sync-progress":
+    handleSyncProgress();
+    break;
   default:
-    console.log("사용법: node memory-sync.cjs [workflow-start|user-input|assistant-response|start|end|compact]");
+    console.log("사용법: node memory-sync.cjs [user-input|assistant-response|start|end|compact|sync-progress]");
     process.exit(1);
 }

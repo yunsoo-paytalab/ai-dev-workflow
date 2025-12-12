@@ -14,7 +14,7 @@ const IS_WINDOWS = process.platform === "win32";
 
 // 경로 설정
 const HOME = process.env.HOME || process.env.USERPROFILE;
-const CENTRAL_STORE = path.join(HOME, ".claude-memory");
+const CENTRAL_STORE = path.join(HOME, ".claude-aidev-memory");
 
 /**
  * 프로젝트 루트 경로 (현재 작업 디렉토리)
@@ -152,7 +152,13 @@ function getMemoryIdFromPath(projectPath) {
     return getMemoryId();
   }
   try {
-    const memoryRefPath = path.join(projectPath, ".claude", "docs", "memory", ".memory-ref");
+    const memoryRefPath = path.join(
+      projectPath,
+      ".claude",
+      "docs",
+      "memory",
+      ".memory-ref"
+    );
     return fs.readFileSync(memoryRefPath, "utf8").trim();
   } catch {
     return null;
@@ -337,48 +343,88 @@ function getSessionCount(memoryId) {
   }
 }
 
-// 기본 설정
-const DEFAULT_CONFIG = {
-  version: "1.0",
-  retention: {
-    maxSessionsPerProject: 50,
-    maxSessionAgeDays: 90,
-  },
-  summarization: {
-    model: "claude-sonnet-4-20250514",
-    maxTokens: 500,
-  },
-};
+// ============================================================
+// 설정 관리 (config.json 기반)
+// ============================================================
 
-// progress.json 기본 구조 (Feature/Task 정의 + 상태 통합)
-const DEFAULT_PROGRESS = {
-  version: "1.0",
-  lastUpdated: null,
-  features: {},
-  // Feature 예시:
-  // "AUTH-001": {
-  //   name: "사용자 인증",
-  //   category: "Core",
-  //   status: "in_progress",  // pending | in_progress | done | cancelled
-  //   createdAt: "...",
-  //   updatedAt: "...",
-  //   completedAt: null,
-  //   note: ""
-  // }
-  tasks: {},
-  // Task 예시:
-  // "AUTH-001-001": {
-  //   name: "Users 테이블 스키마 설계",
-  //   featureId: "AUTH-001",
-  //   priority: "high",  // high | medium | low
-  //   dependencies: [],  // ["AUTH-001-001", ...]
-  //   status: "done",    // pending | in_progress | done | cancelled
-  //   createdAt: "...",
-  //   updatedAt: "...",
-  //   completedAt: "...",
-  //   note: ""
-  // }
-};
+/**
+ * 기본 설정값 (config.json이 없을 때 사용)
+ * 단일 소스: .claude/hooks/lib/config.defaults.json
+ */
+const CONFIG_DEFAULTS = require("./config.defaults.json");
+
+/**
+ * config.json 파일 경로
+ */
+function getConfigFile() {
+  return path.join(CENTRAL_STORE, "config.json");
+}
+
+/**
+ * 깊은 병합 유틸리티
+ */
+function deepMerge(target, source) {
+  const result = { ...target };
+
+  for (const key in source) {
+    if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
+      result[key] = deepMerge(target[key] || {}, source[key]);
+    } else if (source[key] !== undefined) {
+      result[key] = source[key];
+    }
+  }
+
+  return result;
+}
+
+/**
+ * 전역 설정 읽기 (config.json)
+ * - 파일이 없으면 기본값으로 생성
+ * - 누락된 필드는 기본값으로 채움
+ */
+function getConfig() {
+  const configPath = getConfigFile();
+
+  // 디렉토리 확인
+  ensureDir(CENTRAL_STORE);
+
+  let config = {};
+  if (fs.existsSync(configPath)) {
+    config = readJson(configPath, {});
+  }
+
+  // 기본값과 병합 (깊은 병합)
+  const merged = deepMerge(CONFIG_DEFAULTS, config);
+
+  // 병합된 설정 저장 (누락된 필드 추가)
+  if (JSON.stringify(config) !== JSON.stringify(merged)) {
+    writeJson(configPath, merged);
+  }
+
+  return merged;
+}
+
+/**
+ * 전역 설정 업데이트
+ */
+function updateConfig(updates) {
+  const config = getConfig();
+  const updated = deepMerge(config, updates);
+  writeJson(getConfigFile(), updated);
+  return updated;
+}
+
+/**
+ * progress.json 기본값 가져오기
+ */
+function getDefaultProgress() {
+  const config = getConfig();
+  return {
+    version: config.version,
+    lastUpdated: null,
+    ...config.defaultProgress,
+  };
+}
 
 /**
  * progress.json 파일 경로
@@ -392,7 +438,7 @@ function getProgressFile(memoryId) {
  */
 function readProgress(memoryId) {
   const progressFile = getProgressFile(memoryId);
-  return readJson(progressFile, { ...DEFAULT_PROGRESS });
+  return readJson(progressFile, getDefaultProgress());
 }
 
 /**
@@ -604,13 +650,504 @@ function getAllProgress(memoryId) {
   return readProgress(memoryId);
 }
 
+// ============================================================
+// v2.0 확장 함수들
+// ============================================================
+
+/**
+ * 워크플로우 완료 상태 업데이트
+ */
+function completeWorkflow(memoryId, workflowName) {
+  const progress = readProgress(memoryId);
+
+  if (!progress.setup) {
+    progress.setup = { workflows: {}, custom: [] };
+  }
+  if (!progress.setup.workflows) {
+    progress.setup.workflows = {};
+  }
+
+  progress.setup.workflows[workflowName] = {
+    done: true,
+    completedAt: getDateString(),
+  };
+
+  writeProgress(memoryId, progress);
+  return progress;
+}
+
+/**
+ * 현재 진행 중인 워크플로우 설정
+ */
+function setCurrentWorkflow(memoryId, workflowName) {
+  const memoryPath = getMemoryPath(memoryId);
+  const metaPath = path.join(memoryPath, "meta.json");
+  const meta = readJson(metaPath, {});
+
+  meta.currentWorkflow = workflowName;
+  meta.workflowStartedAt = getTimestamp();
+
+  writeJson(metaPath, meta);
+  return meta;
+}
+
+/**
+ * 현재 워크플로우 가져오기
+ */
+function getCurrentWorkflow(memoryId) {
+  const memoryPath = getMemoryPath(memoryId);
+  const metaPath = path.join(memoryPath, "meta.json");
+  const meta = readJson(metaPath, {});
+
+  return meta.currentWorkflow || null;
+}
+
+/**
+ * 현재 워크플로우 완료 처리
+ */
+function finishCurrentWorkflow(memoryId) {
+  const currentWorkflow = getCurrentWorkflow(memoryId);
+
+  if (!currentWorkflow) {
+    return null;
+  }
+
+  // 워크플로우 완료 표시
+  completeWorkflow(memoryId, currentWorkflow);
+
+  // meta에서 currentWorkflow 제거
+  const memoryPath = getMemoryPath(memoryId);
+  const metaPath = path.join(memoryPath, "meta.json");
+  const meta = readJson(metaPath, {});
+
+  const finishedWorkflow = meta.currentWorkflow;
+  delete meta.currentWorkflow;
+  delete meta.workflowStartedAt;
+
+  writeJson(metaPath, meta);
+
+  return finishedWorkflow;
+}
+
+/**
+ * 커스텀 설정 항목 추가
+ */
+function addCustomSetupItem(memoryId, id, label) {
+  const progress = readProgress(memoryId);
+
+  if (!progress.setup) {
+    progress.setup = { workflows: {}, custom: [] };
+  }
+  if (!progress.setup.custom) {
+    progress.setup.custom = [];
+  }
+
+  // 중복 체크
+  const exists = progress.setup.custom.find((item) => item.id === id);
+  if (!exists) {
+    progress.setup.custom.push({ id, label, done: false });
+    writeProgress(memoryId, progress);
+  }
+
+  return progress;
+}
+
+/**
+ * 커스텀 설정 항목 완료 처리
+ */
+function completeCustomSetupItem(memoryId, id) {
+  const progress = readProgress(memoryId);
+
+  if (!progress.setup?.custom) {
+    return progress;
+  }
+
+  const item = progress.setup.custom.find((item) => item.id === id);
+  if (item) {
+    item.done = true;
+    item.completedAt = getDateString();
+    writeProgress(memoryId, progress);
+  }
+
+  return progress;
+}
+
+/**
+ * 도메인 초기화/업데이트
+ */
+function initDomain(memoryId, domainCode, domainData) {
+  const progress = readProgress(memoryId);
+
+  if (!progress.domains) {
+    progress.domains = {};
+  }
+
+  progress.domains[domainCode] = {
+    name: domainData.name || domainCode,
+    status: "not_started",
+    totalFeatures: domainData.totalFeatures || 0,
+    completedFeatures: 0,
+    ...progress.domains[domainCode],
+  };
+
+  writeProgress(memoryId, progress);
+  return progress;
+}
+
+/**
+ * Phase 초기화/업데이트
+ */
+function initPhase(memoryId, phaseId, phaseData) {
+  const progress = readProgress(memoryId);
+
+  if (!progress.phases) {
+    progress.phases = {};
+  }
+
+  progress.phases[phaseId] = {
+    name: phaseData.name || phaseId,
+    status: "not_started",
+    totalPoints: phaseData.totalPoints || 0,
+    completedPoints: 0,
+    features: phaseData.features || [],
+    ...progress.phases[phaseId],
+  };
+
+  writeProgress(memoryId, progress);
+  return progress;
+}
+
+/**
+ * 도메인/Phase 상태 재계산
+ */
+function recalculateProgress(memoryId) {
+  const progress = readProgress(memoryId);
+
+  // 도메인별 완료 Feature 수 계산
+  if (progress.domains && progress.features) {
+    Object.keys(progress.domains).forEach((domainCode) => {
+      const domainFeatures = Object.entries(progress.features).filter(([id]) =>
+        id.startsWith(domainCode + "-")
+      );
+
+      const completed = domainFeatures.filter(
+        ([, f]) => f.status === "done"
+      ).length;
+      const total = domainFeatures.length;
+
+      progress.domains[domainCode].totalFeatures = total;
+      progress.domains[domainCode].completedFeatures = completed;
+      progress.domains[domainCode].status =
+        completed === 0
+          ? "not_started"
+          : completed === total
+          ? "completed"
+          : "in_progress";
+    });
+  }
+
+  // Phase별 완료 포인트 계산
+  if (progress.phases && progress.features) {
+    Object.keys(progress.phases).forEach((phaseId) => {
+      const phase = progress.phases[phaseId];
+      const phaseFeatures = (phase.features || [])
+        .map((fId) => progress.features[fId])
+        .filter(Boolean);
+
+      const completedPoints = phaseFeatures
+        .filter((f) => f.status === "done")
+        .reduce((sum, f) => sum + (f.points || 0), 0);
+
+      phase.completedPoints = completedPoints;
+      phase.status =
+        completedPoints === 0
+          ? "not_started"
+          : completedPoints >= phase.totalPoints
+          ? "completed"
+          : "in_progress";
+    });
+  }
+
+  writeProgress(memoryId, progress);
+  return progress;
+}
+
+/**
+ * memory.md 체크리스트 섹션 생성
+ */
+function generateProgressMarkdown(memoryId) {
+  const progress = readProgress(memoryId);
+  let md = "";
+
+  // 워크플로우 섹션
+  md += "### 워크플로우\n";
+  const workflowLabels = {
+    "legacy-profile": "레거시 프로파일링",
+    "domain-definition": "도메인 정의",
+    "task-point": "Task Point 산정",
+  };
+
+  if (progress.setup?.workflows) {
+    Object.entries(progress.setup.workflows).forEach(([key, value]) => {
+      const label = workflowLabels[key] || key;
+      const check = value.done ? "x" : " ";
+      const date = value.completedAt ? ` (${value.completedAt})` : "";
+      md += `- [${check}] ${label}${date}\n`;
+    });
+  }
+
+  // 프로젝트 설정 섹션
+  if (progress.setup?.custom?.length > 0) {
+    md += "\n### 프로젝트 설정\n";
+    progress.setup.custom.forEach((item) => {
+      const check = item.done ? "x" : " ";
+      const date = item.completedAt ? ` (${item.completedAt})` : "";
+      md += `- [${check}] ${item.label}${date}\n`;
+    });
+  }
+
+  // Phase별 진행 섹션
+  if (progress.phases && Object.keys(progress.phases).length > 0) {
+    md += "\n### Phase별 진행\n";
+    Object.entries(progress.phases).forEach(([, phase]) => {
+      const check = phase.status === "completed" ? "x" : " ";
+      md += `- [${check}] ${phase.name} (${phase.completedPoints}/${phase.totalPoints} pt)\n`;
+    });
+  }
+
+  // 도메인별 진행 섹션
+  if (progress.domains && Object.keys(progress.domains).length > 0) {
+    md += "\n### 도메인별 진행\n";
+    Object.entries(progress.domains).forEach(([code, domain]) => {
+      const check = domain.status === "completed" ? "x" : " ";
+      md += `- [${check}] ${code} (${domain.completedFeatures}/${domain.totalFeatures} features)\n`;
+    });
+  }
+
+  return md;
+}
+
+/**
+ * memory.md의 진행 상황 섹션 업데이트
+ */
+function syncProgressToMemory(memoryId) {
+  const memoryPath = getMemoryPath(memoryId);
+  const memoryFile = path.join(memoryPath, "memory.md");
+
+  if (!fs.existsSync(memoryFile)) {
+    return false;
+  }
+
+  let content = fs.readFileSync(memoryFile, "utf-8");
+  const progressMd = generateProgressMarkdown(memoryId);
+
+  // "## 진행 상황" 섹션 찾기 및 교체
+  const sectionRegex = /## 진행 상황[\s\S]*?(?=\n## |$)/;
+  const newSection = `## 진행 상황\n\n${progressMd}\n`;
+
+  if (sectionRegex.test(content)) {
+    content = content.replace(sectionRegex, newSection);
+  } else {
+    // 섹션이 없으면 파일 끝에 추가
+    content += `\n${newSection}`;
+  }
+
+  fs.writeFileSync(memoryFile, content);
+  return true;
+}
+
+/**
+ * feature-list.md 파싱하여 progress.json 업데이트
+ */
+function parseFeatureListToProgress(memoryId, projectPath) {
+  const featureListPath = path.join(
+    projectPath,
+    ".claude",
+    "docs",
+    "feature-list.md"
+  );
+
+  if (!fs.existsSync(featureListPath)) {
+    return { success: false, error: "feature-list.md not found" };
+  }
+
+  const content = fs.readFileSync(featureListPath, "utf-8");
+  const progress = readProgress(memoryId);
+
+  // 기존 features/tasks 초기화
+  progress.features = progress.features || {};
+  progress.tasks = progress.tasks || {};
+  progress.domains = progress.domains || {};
+
+  // Feature 테이블 파싱 (| ID | Feature명 | 설명 | Tasks | 우선순위 |)
+  const featureRegex =
+    /\|\s*([A-Z]+-\d+)\s*\|\s*([^|]+)\s*\|\s*([^|]+)\s*\|\s*(\d+)\s*\|\s*(\w+)\s*\|/g;
+  let match;
+  let featureCount = 0;
+  let taskCount = 0;
+
+  while ((match = featureRegex.exec(content)) !== null) {
+    const [, featureId, featureName, description, tasksNum, priority] = match;
+
+    // 헤더 행 스킵
+    if (featureId === "ID" || featureName.includes("---")) continue;
+
+    const domainCode = featureId.split("-")[0];
+
+    // Feature 추가
+    progress.features[featureId] = {
+      name: featureName.trim(),
+      description: description.trim(),
+      status: "not_started",
+      priority: priority.trim().toLowerCase(),
+      tasksCount: parseInt(tasksNum, 10),
+      completedTasks: 0,
+    };
+    featureCount++;
+
+    // 도메인 초기화
+    if (!progress.domains[domainCode]) {
+      progress.domains[domainCode] = {
+        name: domainCode,
+        status: "not_started",
+        totalFeatures: 0,
+        completedFeatures: 0,
+      };
+    }
+    progress.domains[domainCode].totalFeatures++;
+  }
+
+  // 개별 Feature 상세 파일에서 Task 파싱
+  const featureListDir = path.join(
+    projectPath,
+    ".claude",
+    "docs",
+    "feature-list"
+  );
+  if (fs.existsSync(featureListDir)) {
+    const files = fs
+      .readdirSync(featureListDir)
+      .filter((f) => f.endsWith(".md"));
+
+    for (const file of files) {
+      const filePath = path.join(featureListDir, file);
+      const fileContent = fs.readFileSync(filePath, "utf-8");
+
+      // Task 테이블 파싱 (| Task ID | Task명 | 설명 | 우선순위 | 의존성 |)
+      const taskRegex =
+        /\|\s*([A-Z]+-\d+-\d+)\s*\|\s*([^|]+)\s*\|\s*([^|]+)\s*\|\s*(\w+)\s*\|\s*([^|]*)\s*\|/g;
+      let taskMatch;
+
+      while ((taskMatch = taskRegex.exec(fileContent)) !== null) {
+        const [, taskId, taskName, taskDesc, taskPriority] = taskMatch;
+
+        // 헤더 행 스킵
+        if (taskId === "Task ID" || taskName.includes("---")) continue;
+
+        const featureId = taskId.split("-").slice(0, 2).join("-");
+
+        progress.tasks[taskId] = {
+          name: taskName.trim(),
+          description: taskDesc.trim(),
+          featureId: featureId,
+          status: "not_started",
+          priority: taskPriority.trim().toLowerCase(),
+          points: null, // task-point 워크플로우에서 설정됨
+        };
+        taskCount++;
+      }
+    }
+  }
+
+  progress.lastUpdated = getTimestamp();
+  writeProgress(memoryId, progress);
+
+  return {
+    success: true,
+    features: featureCount,
+    tasks: taskCount,
+    domains: Object.keys(progress.domains).length,
+  };
+}
+
+/**
+ * domain-definition.md 파싱하여 progress.json 업데이트
+ */
+function parseDomainDefinitionToProgress(memoryId, projectPath) {
+  const domainDefPath = path.join(
+    projectPath,
+    ".claude",
+    "docs",
+    "domain-definition.md"
+  );
+
+  if (!fs.existsSync(domainDefPath)) {
+    return { success: false, error: "domain-definition.md not found" };
+  }
+
+  const content = fs.readFileSync(domainDefPath, "utf-8");
+  const progress = readProgress(memoryId);
+
+  progress.domains = progress.domains || {};
+
+  // Bounded Context 섹션 파싱
+  // ### 1. 테스트 환경 관리 (Test Environment Management) - Core Domain
+  const contextRegex =
+    /###\s*\d+\.\s*([^(]+)\s*\(([^)]+)\)\s*-?\s*(Core Domain|Supporting Domain|Generic Domain)?/g;
+  let match;
+  let domainCount = 0;
+
+  while ((match = contextRegex.exec(content)) !== null) {
+    const [, koreanName, englishName, domainType] = match;
+
+    // 도메인 코드 추출 (예: Test Environment Management → TEST-ENV)
+    const code = englishName
+      .trim()
+      .split(" ")
+      .map((w) => w.toUpperCase().slice(0, w.length > 3 ? 4 : w.length))
+      .slice(0, 2)
+      .join("-");
+
+    if (!progress.domains[code]) {
+      progress.domains[code] = {
+        name: koreanName.trim(),
+        englishName: englishName.trim(),
+        type: domainType ? domainType.trim() : "Core Domain",
+        status: "not_started",
+        totalFeatures: 0,
+        completedFeatures: 0,
+      };
+      domainCount++;
+    } else {
+      // 기존 도메인 정보 업데이트
+      progress.domains[code].name = koreanName.trim();
+      progress.domains[code].englishName = englishName.trim();
+      progress.domains[code].type = domainType
+        ? domainType.trim()
+        : "Core Domain";
+    }
+  }
+
+  progress.lastUpdated = getTimestamp();
+  writeProgress(memoryId, progress);
+
+  return {
+    success: true,
+    domains: domainCount,
+  };
+}
+
 module.exports = {
   // 상수
   IS_WINDOWS,
   HOME,
   CENTRAL_STORE,
-  DEFAULT_CONFIG,
-  DEFAULT_PROGRESS,
+
+  // 설정 관리
+  getConfig,
+  getConfigFile,
+  updateConfig,
+  getDefaultProgress,
 
   // 경로 함수
   getProjectRoot,
@@ -652,6 +1189,21 @@ module.exports = {
   getTaskStatus,
   getFeatureStatus,
   getAllProgress,
+
+  // Progress v2.0 확장 유틸리티
+  completeWorkflow,
+  setCurrentWorkflow,
+  getCurrentWorkflow,
+  finishCurrentWorkflow,
+  addCustomSetupItem,
+  completeCustomSetupItem,
+  initDomain,
+  initPhase,
+  recalculateProgress,
+  generateProgressMarkdown,
+  syncProgressToMemory,
+  parseFeatureListToProgress,
+  parseDomainDefinitionToProgress,
 
   // 날짜/시간 유틸리티
   getTimestamp,

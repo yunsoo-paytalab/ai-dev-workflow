@@ -84,30 +84,14 @@ npm test
 - **Mock → Real**: Mock 데이터를 실제 API로 전환
 - **에러 핸들링**: API 오류 처리
 
-### Phase 2: Memory Update (메모리 업데이트) - 필수
+### 참고: 메모리 자동 업데이트
 
-> ⚠️ **필수**: 워크플로우 종료 전 반드시 memory-manager 에이전트를 호출해야 합니다.
->
-> 호출 방법: "Use the memory-manager agent to update memory for implementation completion"
+> 워크플로우 진행 상황은 **자동으로 기록**됩니다.
+> - 워크플로우 완료 상태 → progress.json (자동)
+> - 체크리스트 업데이트 → memory.md (자동)
+> - 대화 기록 → sessions/*.md (자동)
 
-**Agent: memory-manager** (MUST BE CALLED)
-
-**업데이트 대상:**
-
-1. **progress.json 업데이트:**
-   - tasks[taskId].status: "done" (완료된 작업)
-   - features[featureId].status: "implemented"
-   - currentPhase: "implementation-completed"
-
-2. **memory.md 업데이트:**
-   - 프로젝트 전반에 적용되는 기술적 결정사항
-   - 새로 발견된 제약사항
-   - 공통 패턴/컨벤션 추가
-
-3. **세션 요약 작성:**
-   - 이번 세션에서 수행한 작업 요약
-   - 구현된 기능 목록
-   - 주요 결정사항 기록
+**중요한 기술적 결정**이 있었다면 memory-manager 에이전트를 호출하여 기록하세요.
 
 ## 사용자 결정 포인트
 

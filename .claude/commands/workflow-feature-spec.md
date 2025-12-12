@@ -49,7 +49,7 @@
 - 🚫 Anti-Pattern, ⛔ Deprecated, 🔧 Hack, 🐛 Known Bug
 - 해당 영역의 코드는 읽거나 참고하지 않음
 
-### Phase 1: Research & Design (조사 및 설계)
+### Phase 1: Research (조사)
 
 > ⚠️ Phase 0에서 로드한 제한 영역 준수
 
@@ -57,8 +57,8 @@
 
 **입력: 참조 문서 또는 일반 텍스트**
 
-- ✅ **참조 문서 있음**: `.claude/docs/feature-list/[파일명].md` 문서를 읽고, 정의된 요구사항을 기반으로 조사 및 설계 수행
-- ❌ **참조 문서 없음**: `$ARGUMENTS`를 새 Feature 설명으로 간주하고, 해당 텍스트를 기반으로 조사 및 설계 수행
+- ✅ **참조 문서 있음**: `.claude/docs/feature-list/[파일명].md` 문서를 읽고, 정의된 요구사항을 기반으로 조사 수행
+- ❌ **참조 문서 없음**: `$ARGUMENTS`를 새 Feature 설명으로 간주하고, 해당 텍스트를 기반으로 조사 수행
 
 **조사 항목 (참조 문서 기반):**
 
@@ -66,6 +66,26 @@
 - 관련 코드베이스 탐색
 - 재사용 가능 컴포넌트 확인
 - 유사 기능 구현 패턴 분석
+
+**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (예: `AUTH-001-spec.md`, 섹션 1~2)
+
+### Phase 2: Review & Confirm (검수 & 컨펌)
+
+**사용자 검토**
+
+- 요구사항 분석의 정확성 확인
+- 재사용 컴포넌트 선택 검증
+- 추가 조사 필요 여부 결정
+
+**API 문서 확인 (API 구현이 필요한 경우)**
+
+- 참고할 API 문서(Notion 등) URL이 있는지 사용자에게 확인
+- URL 제공 시: Notion MCP를 활용하여 API 스펙 확인
+- API 스펙 기반으로 인터페이스/타입 정의 보완
+
+### Phase 3: Design & Planning (설계 및 계획)
+
+**Agent: planning-agent**
 
 **설계 항목:**
 
@@ -77,84 +97,51 @@
 - 핵심 로직 설계 (pseudo-code, 핵심 비즈니스 로직은 실제 코드)
 - 테스트 설계 (핵심 비즈니스 로직 Unit Test, 핵심 컴포넌트 Component Test)
 
-**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (예: `AUTH-001-spec.md`, 섹션 1~4)
-
-### Phase 2: Review & Confirm (검수 & 컨펌)
-
-**사용자 검토**
-
-- 요구사항 분석의 정확성 확인
-- 기술 설계의 타당성 검토
-- 재사용 컴포넌트 선택 검증
-- 추가 조사 필요 여부 결정
-
-**API 문서 확인 (API 구현이 필요한 경우)**
-
-- 참고할 API 문서(Notion 등) URL이 있는지 사용자에게 확인
-- URL 제공 시: Notion MCP를 활용하여 API 스펙 확인
-- API 스펙 기반으로 인터페이스/타입 정의 보완
-
-### Phase 3: Planning (계획)
-
-**Agent: planning-agent**
+**계획 항목:**
 
 - Research 결과 기반 구현 계획 수립
 - 의사결정 필요 항목 정리
 - Phase별 작업 목록 작성 (파일명 + 한 줄 설명)
 - 검증 방법 정의
 
-**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (섹션 5 추가)
+**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (섹션 3~5 추가)
 
 ### Phase 4: Review & Confirm (검수 & 컨펌)
 
 **사용자 검토**
 
+- 기술 설계의 타당성 검토
 - 의사결정 항목 확인 및 선택
 - 구현 순서 검토
 - 검증 방법 확인
 
-### Phase 5: Memory Update (메모리 업데이트) - 필수
+### 참고: 메모리 자동 업데이트
 
-> ⚠️ **필수**: 워크플로우 종료 전 반드시 memory-manager 에이전트를 호출해야 합니다.
->
-> 호출 방법: "Use the memory-manager agent to update memory for feature-spec completion"
+> 워크플로우 진행 상황은 **자동으로 기록**됩니다.
+> - 워크플로우 완료 상태 → progress.json (자동)
+> - 체크리스트 업데이트 → memory.md (자동)
+> - 대화 기록 → sessions/*.md (자동)
 
-**Agent: memory-manager** (MUST BE CALLED)
-
-**업데이트 대상:**
-
-1. **progress.json 업데이트:**
-   - tasks: 해당 Feature의 구현 작업 항목 추가
-   - features[featureId].status: "spec-completed"
-   - currentPhase: "feature-spec-completed"
-
-2. **memory.md 업데이트:**
-   - 프로젝트 전반에 적용되는 기술적 결정사항
-   - 새로 발견된 제약사항
-   - 공통 패턴/컨벤션 추가
-
-3. **세션 요약 작성:**
-   - 이번 세션에서 수행한 작업 요약
-   - 주요 결정사항 기록
+**중요한 기술적 결정**이 있었다면 memory-manager 에이전트를 호출하여 기록하세요.
 
 ## 사용자 결정 포인트
 
-🔔 **Phase 3 확인 사항**:
+🔔 **Phase 2 확인 사항**:
 
 - 요구사항이 명확히 파악되었는가?
-- 기술 설계가 적절한가?
 - 재사용 가능한 컴포넌트가 모두 식별되었는가?
 - (API 구현 필요 시) 참고할 API 문서 URL이 있는가?
 
-🔔 **Phase 5 확인 사항**:
+🔔 **Phase 4 확인 사항**:
 
+- 기술 설계가 적절한가?
 - 의사결정 항목에 대한 선택이 완료되었는가?
 - 구현 순서가 적절한가?
 - 검증 방법이 충분한가?
 
 ## 결과물
 
-- `.claude/docs/specs/[Feature ID]-spec.md` - 통합 기능 명세서 (Research + Plan)
+- `.claude/docs/specs/[Feature ID]-spec.md` - 통합 기능 명세서 (Research + Design + Plan)
 
 ## 다음 단계
 

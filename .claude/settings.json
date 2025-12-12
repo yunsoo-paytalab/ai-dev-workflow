@@ -1,16 +1,5 @@
 {
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "SlashCommand",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node .claude/hooks/memory-sync.cjs workflow-start"
-          }
-        ]
-      }
-    ],
     "UserPromptSubmit": [
       {
         "matcher": "",

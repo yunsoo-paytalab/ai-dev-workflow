@@ -1,19 +1,31 @@
-import { existsSync, readFileSync } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  mkdirSync,
+} from "fs";
+import { join, dirname } from "path";
+import { homedir } from "os";
 
 /**
  * 중앙 저장소 경로
  */
-const CENTRAL_STORE = join(homedir(), '.claude-memory');
+const CENTRAL_STORE = join(homedir(), ".claude-aidev-memory");
 
 /**
  * .memory-ref 파일에서 메모리 ID 읽기
  */
 export function getMemoryId() {
-  const refPath = join(process.cwd(), '.claude', 'docs', 'memory', '.memory-ref');
+  const refPath = join(
+    process.cwd(),
+    ".claude",
+    "docs",
+    "memory",
+    ".memory-ref"
+  );
   try {
-    return readFileSync(refPath, 'utf-8').trim();
+    return readFileSync(refPath, "utf-8").trim();
   } catch {
     return null;
   }
@@ -23,7 +35,7 @@ export function getMemoryId() {
  * progress.json 파일 경로 가져오기
  */
 export function getProgressFilePath(memoryId) {
-  return join(CENTRAL_STORE, 'projects', memoryId, 'progress.json');
+  return join(CENTRAL_STORE, "projects", memoryId, "progress.json");
 }
 
 /**
@@ -34,7 +46,7 @@ export function readProgressJson(memoryId) {
 
   const progressPath = getProgressFilePath(memoryId);
   try {
-    return JSON.parse(readFileSync(progressPath, 'utf-8'));
+    return JSON.parse(readFileSync(progressPath, "utf-8"));
   } catch {
     return null;
   }
@@ -50,13 +62,13 @@ export function getFeatures(progress) {
 
   return Object.entries(progress.features).map(([id, data]) => ({
     id,
-    name: data.name || '',
-    category: data.category || 'Feature',
-    status: data.status || 'pending',
+    name: data.name || "",
+    category: data.category || "Feature",
+    status: data.status || "pending",
     createdAt: data.createdAt || null,
     updatedAt: data.updatedAt || null,
     completedAt: data.completedAt || null,
-    note: data.note || '',
+    note: data.note || "",
   }));
 }
 
@@ -67,12 +79,12 @@ export function getFeatures(progress) {
  */
 function extractFeatureId(taskId) {
   // Task ID 형식: {DOMAIN}-{NUM}-{TASK_NUM} (예: COMMON-001-001)
-  const parts = taskId.split('-');
+  const parts = taskId.split("-");
   if (parts.length >= 3) {
     // 마지막 부분(Task 번호)을 제외한 나머지를 Feature ID로
-    return parts.slice(0, -1).join('-');
+    return parts.slice(0, -1).join("-");
   }
-  return '';
+  return "";
 }
 
 /**
@@ -85,15 +97,15 @@ export function getTasks(progress) {
 
   return Object.entries(progress.tasks).map(([id, data]) => ({
     id,
-    name: data.name || '',
+    name: data.name || "",
     featureId: data.featureId || extractFeatureId(id),
-    priority: data.priority || 'medium',
+    priority: data.priority || "medium",
     dependencies: data.dependencies || [],
-    status: data.status || 'pending',
+    status: data.status || "pending",
     createdAt: data.createdAt || null,
     updatedAt: data.updatedAt || null,
     completedAt: data.completedAt || null,
-    note: data.note || '',
+    note: data.note || "",
   }));
 }
 
@@ -108,9 +120,9 @@ export function loadProjectData() {
   const tasks = getTasks(progress);
 
   // Feature별 Task 개수 계산
-  const featuresWithTaskCount = features.map(feature => ({
+  const featuresWithTaskCount = features.map((feature) => ({
     ...feature,
-    taskCount: tasks.filter(t => t.featureId === feature.id).length,
+    taskCount: tasks.filter((t) => t.featureId === feature.id).length,
   }));
 
   return {
@@ -129,37 +141,41 @@ export function calculateStats(features, tasks) {
   const totalTasks = tasks.length;
 
   const tasksByStatus = {
-    pending: tasks.filter(t => t.status === 'pending').length,
-    in_progress: tasks.filter(t => t.status === 'in_progress').length,
-    done: tasks.filter(t => ['done', 'completed'].includes(t.status)).length,
+    pending: tasks.filter((t) => t.status === "pending").length,
+    in_progress: tasks.filter((t) => t.status === "in_progress").length,
+    done: tasks.filter((t) => ["done", "completed"].includes(t.status)).length,
   };
 
   const tasksByPriority = {
-    high: tasks.filter(t => t.priority === 'high').length,
-    medium: tasks.filter(t => t.priority === 'medium').length,
-    low: tasks.filter(t => t.priority === 'low').length,
+    high: tasks.filter((t) => t.priority === "high").length,
+    medium: tasks.filter((t) => t.priority === "medium").length,
+    low: tasks.filter((t) => t.priority === "low").length,
   };
 
   const completedTasks = tasksByStatus.done;
-  const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const progressPercent =
+    totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   // 다음 작업 추천 (의존성 충족된 pending task 중 high 우선순위)
-  const readyTasks = tasks.filter(task => {
-    if (task.status !== 'pending') return false;
+  const readyTasks = tasks.filter((task) => {
+    if (task.status !== "pending") return false;
 
     // 의존성이 없거나 모두 완료되었는지 확인
     if (!task.dependencies || task.dependencies.length === 0) return true;
 
-    return task.dependencies.every(depId => {
-      const depTask = tasks.find(t => t.id === depId);
-      return depTask && ['done', 'completed'].includes(depTask.status);
+    return task.dependencies.every((depId) => {
+      const depTask = tasks.find((t) => t.id === depId);
+      return depTask && ["done", "completed"].includes(depTask.status);
     });
   });
 
-  const nextTask = readyTasks.sort((a, b) => {
-    const priorityOrder = { high: 0, medium: 1, low: 2 };
-    return (priorityOrder[a.priority] || 1) - (priorityOrder[b.priority] || 1);
-  })[0] || null;
+  const nextTask =
+    readyTasks.sort((a, b) => {
+      const priorityOrder = { high: 0, medium: 1, low: 2 };
+      return (
+        (priorityOrder[a.priority] || 1) - (priorityOrder[b.priority] || 1)
+      );
+    })[0] || null;
 
   return {
     totalFeatures,
@@ -171,4 +187,51 @@ export function calculateStats(features, tasks) {
     nextTask,
     readyTasks,
   };
+}
+
+/**
+ * 사용 가능한 Memory ID 목록 조회
+ * ~/.claude-aidev-memory/projects/ 하위 디렉토리 목록 반환
+ */
+export function getAvailableMemoryIds() {
+  const projectsPath = join(CENTRAL_STORE, "projects");
+
+  try {
+    if (!existsSync(projectsPath)) {
+      return [];
+    }
+
+    const entries = readdirSync(projectsPath, { withFileTypes: true });
+    return entries
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
+      .map((entry) => entry.name);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Memory ID 설정 (.memory-ref 파일에 저장)
+ */
+export function setMemoryId(memoryId) {
+  const refPath = join(
+    process.cwd(),
+    ".claude",
+    "docs",
+    "memory",
+    ".memory-ref"
+  );
+  const refDir = dirname(refPath);
+
+  try {
+    // 디렉토리가 없으면 생성
+    if (!existsSync(refDir)) {
+      mkdirSync(refDir, { recursive: true });
+    }
+
+    writeFileSync(refPath, memoryId, "utf-8");
+    return true;
+  } catch {
+    return false;
+  }
 }

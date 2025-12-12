@@ -16,8 +16,8 @@ const path = require("path");
 const readline = require("readline");
 const {
   CENTRAL_STORE,
-  DEFAULT_CONFIG,
-  DEFAULT_PROGRESS,
+  getConfig,
+  getDefaultProgress,
   ensureDir,
   readJson,
   writeJson,
@@ -92,11 +92,8 @@ function createMemory(memoryId) {
   ensureDir(CENTRAL_STORE);
   ensureDir(path.join(CENTRAL_STORE, "projects"));
 
-  // config.json 초기화
-  const configPath = path.join(CENTRAL_STORE, "config.json");
-  if (!fs.existsSync(configPath)) {
-    writeJson(configPath, DEFAULT_CONFIG);
-  }
+  // config.json 초기화 (getConfig가 자동으로 기본값 생성)
+  getConfig();
 
   // index.json 초기화/업데이트
   const indexPath = path.join(CENTRAL_STORE, "index.json");
@@ -132,7 +129,7 @@ function createMemory(memoryId) {
   // progress.json 생성
   const progressFile = path.join(memoryPath, "progress.json");
   writeJson(progressFile, {
-    ...DEFAULT_PROGRESS,
+    ...getDefaultProgress(),
     lastUpdated: getTimestamp(),
   });
 

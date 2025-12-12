@@ -1,11 +1,11 @@
 # /workflow-memory
 
-프로젝트 메모리를 관리합니다. 중앙 저장소(`~/.claude-memory/`)를 사용하여 세션 간 컨텍스트를 유지합니다.
+프로젝트 메모리를 관리합니다. 중앙 저장소(`~/.claude-aidev-memory/`)를 사용하여 세션 간 컨텍스트를 유지합니다.
 
 ## 개요
 
 ```
-~/.claude-memory/                    # 중앙 저장소
+~/.claude-aidev-memory/                    # 중앙 저장소
 ├── config.json                      # 전역 설정
 ├── index.json                       # 프로젝트 인덱스
 └── projects/
@@ -20,12 +20,37 @@
 └── memory.md → 심볼릭 링크          # 중앙 저장소 연결
 ```
 
-### progress.json 구조 (Feature/Task 정의 + 상태 통합)
+### progress.json 구조 (워크플로우 + Feature/Task 통합 관리)
 
 ```json
 {
   "version": "1.0",
   "lastUpdated": "2024-01-16T15:30:00Z",
+  "setup": {
+    "workflows": {
+      "legacy-profile": { "done": true, "completedAt": "2024-01-10" },
+      "domain-definition": { "done": true, "completedAt": "2024-01-12" },
+      "task-point": { "done": false, "completedAt": null }
+    },
+    "custom": []
+  },
+  "phases": {
+    "phase1": {
+      "name": "기반 구축",
+      "status": "in_progress",
+      "totalPoints": 88,
+      "completedPoints": 25,
+      "features": ["COMMON-001", "AUTH-001"]
+    }
+  },
+  "domains": {
+    "AUTH": {
+      "name": "인증",
+      "status": "in_progress",
+      "totalFeatures": 2,
+      "completedFeatures": 0
+    }
+  },
   "features": {
     "AUTH-001": {
       "name": "사용자 인증",
@@ -48,21 +73,19 @@
       "updatedAt": "2024-01-15T14:00:00Z",
       "completedAt": "2024-01-15T14:00:00Z",
       "note": ""
-    },
-    "AUTH-001-002": {
-      "name": "JWT 유틸리티 구현",
-      "featureId": "AUTH-001",
-      "priority": "high",
-      "dependencies": ["AUTH-001-001"],
-      "status": "in_progress",
-      "createdAt": "2024-01-10T09:00:00Z",
-      "updatedAt": "2024-01-16T10:00:00Z",
-      "completedAt": null,
-      "note": ""
     }
   }
 }
 ```
+
+| 섹션              | 설명                                                                 |
+| ----------------- | -------------------------------------------------------------------- |
+| `setup.workflows` | 워크플로우 수행 상태 (legacy-profile, domain-definition, task-point) |
+| `setup.custom`    | 프로젝트별 커스텀 설정 항목                                          |
+| `phases`          | Phase별 진행 상황                                                    |
+| `domains`         | 도메인별 진행 상황                                                   |
+| `features`        | Feature 정의 및 상태                                                 |
+| `tasks`           | Task 정의 및 상태                                                    |
 
 **역할 분리:**
 
@@ -90,7 +113,7 @@
 
 ```
 1. ID가 제공되지 않으면 사용자에게 입력 요청
-2. ~/.claude-memory/projects/{id}/ 디렉토리 생성
+2. ~/.claude-aidev-memory/projects/{id}/ 디렉토리 생성
 3. 초기 파일 생성:
    - meta.json: 프로젝트 경로, 생성일, 이름
    - memory.md: 템플릿에서 복사
@@ -103,7 +126,7 @@
 출력 예시:
 ✓ 메모리 '{id}' 생성됨
 ✓ 심볼릭 링크 연결됨
-  경로: ~/.claude-memory/projects/{id}/
+  경로: ~/.claude-aidev-memory/projects/{id}/
 ```
 
 ---
@@ -121,7 +144,7 @@
 **AI 실행 지침:**
 
 ```
-1. ~/.claude-memory/index.json 읽기
+1. ~/.claude-aidev-memory/index.json 읽기
 2. 각 프로젝트의 meta.json에서 상세 정보 수집
 3. 현재 연결된 메모리 확인 (.memory-ref)
 4. 테이블 형식으로 출력
@@ -190,7 +213,7 @@
 
 출력 예시:
 📁 메모리: my-app-v2
-📍 경로: ~/.claude-memory/projects/my-app-v2/
+📍 경로: ~/.claude-aidev-memory/projects/my-app-v2/
 📊 세션: 12개
 💾 메모리 크기: 2.3KB
 
@@ -230,7 +253,7 @@
    - 전체 삭제 대상 정보 표시 (메모리 수, 총 세션 수 등)
    - 사용자 확인 요청 (AskUserQuestion 사용)
    - 확인 시:
-     - ~/.claude-memory/projects/ 하위 모든 디렉토리 삭제
+     - ~/.claude-aidev-memory/projects/ 하위 모든 디렉토리 삭제
      - index.json 초기화 (빈 projects 객체)
      - 현재 프로젝트의 .memory-ref 및 심볼릭 링크 삭제
 
@@ -239,7 +262,7 @@
    - 삭제 대상 정보 표시 (세션 수, 생성일 등)
    - 사용자 확인 요청 (AskUserQuestion 사용)
    - 확인 시:
-     - ~/.claude-memory/projects/{id}/ 디렉토리 삭제
+     - ~/.claude-aidev-memory/projects/{id}/ 디렉토리 삭제
      - index.json에서 제거
      - 현재 연결된 메모리였다면 .memory-ref 및 심볼릭 링크 삭제
 
@@ -361,23 +384,22 @@
 
 ## 설정 파일
 
-### `~/.claude-memory/config.json`
+### `~/.claude-aidev-memory/config.json`
 
-```json
-{
-  "version": "1.0",
-  "retention": {
-    "maxSessionsPerProject": 50,
-    "maxSessionAgeDays": 90
-  },
-  "summarization": {
-    "model": "claude-sonnet-4-20250514",
-    "maxTokens": 500
-  }
-}
-```
+모든 설정을 통합 관리하는 전역 설정 파일입니다.
 
-### `~/.claude-memory/index.json`
+> **기본값**: `.claude/hooks/lib/config.defaults.json` 참조
+>
+> config.json이 없거나 누락된 필드가 있으면 기본값으로 자동 생성/병합됩니다.
+
+| 섹션              | 설명                         |
+| ----------------- | ---------------------------- |
+| `retention`       | 세션 정리 규칙 (개수, 기간)  |
+| `summarization`   | 세션 요약 설정               |
+| `session`         | 세션 기록 설정               |
+| `defaultProgress` | progress.json 생성 시 기본값 |
+
+### `~/.claude-aidev-memory/index.json`
 
 ```json
 {
@@ -391,7 +413,7 @@
 }
 ```
 
-### `~/.claude-memory/projects/{id}/meta.json`
+### `~/.claude-aidev-memory/projects/{id}/meta.json`
 
 ```json
 {

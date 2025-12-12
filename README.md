@@ -1,360 +1,413 @@
 # AI-Driven Development Workflow
 
+Claude Code와 함께 체계적으로 개발을 진행하기 위한 워크플로우 시스템입니다.
+
+## 이런 분들에게 추천합니다
+
+- Claude Code로 개발할 때 **체계적인 프로세스**가 필요한 분
+- AI에게 맥락을 반복 설명하는 것이 **번거로운** 분
+- 기능별로 **명세 → 구현 → 테스트** 순서를 지키고 싶은 분
+- 프로젝트 **진행 상황을 추적**하고 싶은 분
+
+## 내 프로젝트에 적용하기
+
+### Step 1. 파일 복사
+
+`.claude` 폴더를 프로젝트 루트에 복사합니다.
+
+```bash
+# 예시: ai-dev-workflow 저장소를 클론한 후
+cp -r ai-dev-workflow/.claude /your-project/
+```
+
+### Step 2. 요구사항 작성
+
+`.claude/docs/requirements.md` 파일에 프로젝트 요구사항을 작성합니다.
+
+```markdown
+# 프로젝트 요구사항
+
 ## 개요
+쇼핑몰 웹사이트 개발
 
-이 워크플로우는 AI(Cursor)와 함께 체계적으로 프론트엔드 개발을 진행하기 위한 개발 프로세스입니다.
+## 기술 스택
+- React + TypeScript
+- TailwindCSS
+- Zustand
 
-## 워크플로우 특징
+## 주요 기능
+- 상품 목록 조회
+- 장바구니
+- 결제
+```
 
-- **유연한 순서**: 원하는 순서로 작업 가능
-- **진행 상황 추적**: memory.md를 통한 중앙 집중식 상태 관리
-- **테스트 우선 개발**: Test-First 방식으로 안전한 구현 보장
+### Step 3. 워크플로우 시작
 
-## 주요 작업 단계
-
-1. **도메인 정의**: 비즈니스 도메인의 핵심 개념과 기능 정의
-2. **기능 명세 작성** (기능별): 요구사항 분석, 리서치, 구현 계획 수립
-3. **UI 구현** (필요시): Figma 기반 UI 컴포넌트 개발
-4. **비즈니스 로직 구현**: TDD 방식으로 구현 (Mock 데이터 우선)
-5. **시스템 통합**: 중복 코드 제거 및 전체 구조 개선
-6. **E2E 테스트**: 최종 품질 검증 및 배포 준비
-
-## 빠른 시작
-
-### 1. 프로젝트 시작
+Claude Code에서 아래 명령어를 실행합니다.
 
 ```
 /workflow start
 ```
 
-### 2. 현재 상태 확인
+끝! 이제 Claude가 프로젝트 상태를 파악하고 다음 단계를 안내해줍니다.
+
+---
+
+## 기본 사용법
+
+### 0. 레거시 분석 (기존 코드가 있는 경우)
+
+이미 코드가 있는 프로젝트라면 **가장 먼저** 실행하세요.
 
 ```
-/workflow status
+/workflow-legacy-profile
 ```
 
-### 3. 도메인 정의
+위험한 코드 영역을 식별하고, 이후 작업에서 자동으로 주의 사항을 안내받습니다.
+
+> 새 프로젝트라면 이 단계를 건너뛰세요.
+
+### 1. 도메인 정의 (프로젝트 시작 시 1회)
+
+프로젝트의 전체 구조와 기능 목록을 정의합니다.
 
 ```
 /workflow-domain-definition
 ```
 
-### 4. 기능 명세 작성
+**결과물:**
+- 도메인 정의서 (`domain-definition.md`)
+- 기능 목록 (`feature-list.md`)
+- 페이지 구조 (`page-structure.md`)
+
+### 2. 기능별 개발 사이클
+
+각 기능마다 아래 과정을 반복합니다.
 
 ```
-/workflow-feature-spec 상품목록   # 요구사항 분석 및 계획
-/workflow-feature-spec 장바구니   # 요구사항 분석 및 계획
+/workflow-feature-spec 로그인     # 요구사항 분석 및 설계
+/workflow-implement 로그인        # TDD 방식으로 구현
 ```
 
-### 5. UI 구현 (필요시)
+> UI가 필요한 경우: `/workflow-ui 로그인`을 중간에 실행
+
+### 3. 통합 및 완료
+
+모든 기능 구현이 끝나면:
 
 ```
-/workflow-ui common            # 공통 컴포넌트
-/workflow-ui 상품목록          # 기능별 UI
+/workflow-integrate    # 코드 정리 및 통합
+/workflow-e2e          # 최종 테스트
 ```
 
-### 6. 비즈니스 로직 구현
+---
+
+## 전체 흐름 한눈에 보기
 
 ```
-/workflow-implement 상품목록   # TDD 방식 구현
-/workflow-implement 장바구니   # TDD 방식 구현
+/workflow start                    ← 프로젝트 시작
+       ↓
+/workflow-legacy-profile           ← 레거시 분석 (기존 코드 있을 때만)
+       ↓
+/workflow-domain-definition        ← 전체 구조 정의
+       ↓
+┌─────────────────────────────┐
+│  각 기능마다 반복:          │
+│                             │
+│  /workflow-feature-spec     │   ← 명세 작성
+│           ↓                 │
+│  /workflow-ui (선택)        │   ← UI 구현
+│           ↓                 │
+│  /workflow-implement        │   ← 로직 구현 (TDD)
+└─────────────────────────────┘
+       ↓
+/workflow-integrate                ← 통합 및 리팩토링
+       ↓
+/workflow-e2e                      ← 최종 검증
 ```
 
-## 주요 커맨드
+---
 
-### 메인 커맨드
+## 자주 쓰는 커맨드
 
-- `/workflow start`: 프로젝트 시작 및 상태 확인
-- `/workflow status`: 현재 진행 상황 확인
-- `/workflow update`: memory.md 수동 업데이트
-- `/workflow help`: 사용 가능한 모든 커맨드 확인
-- `/workflow reset`: 프로젝트 초기화
+| 커맨드                            | 언제 사용하나요?                       |
+| --------------------------------- | -------------------------------------- |
+| `/workflow start`                 | 프로젝트 시작하거나 상태 확인할 때     |
+| `/workflow status`                | 현재 진행 상황 확인할 때               |
+| `/workflow-legacy-profile`        | 기존 코드가 있는 프로젝트에 적용할 때  |
+| `/workflow-domain-definition`     | 프로젝트 구조를 처음 잡을 때           |
+| `/workflow-feature-spec [기능명]` | 새 기능 개발 전 설계할 때              |
+| `/workflow-implement [기능명]`    | 기능을 실제로 구현할 때                |
+| `/workflow help`                  | 전체 커맨드 목록 볼 때                 |
 
-### 작업 커맨드
+---
 
-#### 1단계: 도메인 정의
+## 이 워크플로우가 하는 일
 
-- `/workflow-domain-definition`: 도메인 목록, 페이지 구조, 기능 목록 정의
+### 1. 컨텍스트 유지
 
-#### 2단계: 기능 명세 작성 (기능별)
+Claude Code 세션이 바뀌어도 `memory.md` 파일에 진행 상황이 저장됩니다.
+다음 세션에서 `/workflow start`만 하면 이전 맥락을 이어갈 수 있습니다.
 
-- `/workflow-feature-spec [기능명]`: 요구사항 분석, 리서치, 구현 계획 수립
+### 2. 체계적인 개발 프로세스
 
-#### 3단계: UI 구현 (필요시)
+```
+Research (분석) → Planning (설계) → Implementation (구현)
+```
 
-- `/workflow-ui common`: 공통 컴포넌트 개발 (Button, Input, Dialog 등)
-- `/workflow-ui [기능명]`: 기능별 UI 컴포넌트 설계
+무작정 코드부터 짜지 않고, 요구사항 분석과 설계를 먼저 진행합니다.
 
-#### 4단계: 비즈니스 로직 구현
+### 3. TDD 방식 구현
 
-- `/workflow-implement [기능명]`: TDD 방식으로 구현 (Mock 데이터 우선)
-  - **필수 선행**: `/workflow-feature-spec [기능명]` 완료
+테스트 코드를 먼저 작성하고, 그 다음 구현합니다.
+Mock 데이터로 먼저 동작을 확인하고, API 연동은 나중에 합니다.
 
-#### 5단계: 통합 및 검증
+### 4. 자동 문서화
 
-- `/workflow-integrate`: 시스템 통합 및 리팩토링
-- `/workflow-e2e`: E2E 테스트 및 최종 검증
+각 단계에서 분석 문서, 명세서, 계획서가 자동 생성됩니다.
+나중에 참고하거나 팀원과 공유할 때 유용합니다.
 
-## 파일 구조
+---
+
+## 실제 사용 예시
+
+### 예시: 쇼핑몰의 장바구니 기능 개발
+
+```bash
+# 1. 장바구니 기능 명세 작성
+/workflow-feature-spec 장바구니
+
+# Claude가 요구사항을 분석하고 설계 문서를 생성합니다
+# → .claude/docs/specs/CART-001-spec.md 생성
+
+# 2. (검토 후) 구현 시작
+/workflow-implement 장바구니
+
+# Claude가 TDD 방식으로 구현합니다
+# - 테스트 코드 먼저 작성
+# - 테스트 통과하는 최소 코드 작성
+# - 리팩토링
+```
+
+### 예시: 진행 상황 확인
+
+```bash
+/workflow status
+
+# 출력 예시:
+# ✅ 도메인 정의 완료
+# ✅ AUTH-001: 로그인 - 완료
+# 🔄 CART-001: 장바구니 - 구현 중
+# ⏳ PAY-001: 결제 - 대기
+```
+
+---
+
+## 기존 프로젝트에 적용하기 (레거시 분석)
+
+이미 코드가 있는 프로젝트에 워크플로우를 적용할 때는 **레거시 분석을 먼저** 실행하세요.
+
+```
+/workflow-legacy-profile
+```
+
+### 이 커맨드가 하는 일
+
+1. **코드 구조 분석**: 폴더 구조, 의존성 관계 파악
+2. **기술 부채 식별**: 중복 코드, 복잡한 함수, TODO/FIXME 등
+3. **위험 영역 분류**: 수정 시 주의가 필요한 코드 식별
+4. **안전 규칙 생성**: 후속 작업에서 자동 적용
+
+### 위험 영역 분류
+
+분석 후 코드가 4단계로 분류됩니다:
+
+| 등급                  | 의미                       | 수정 시                |
+| --------------------- | -------------------------- | ---------------------- |
+| 🟢 **Safe**           | 안전하게 수정 가능         | 자유롭게 진행          |
+| 🟡 **Medium Risk**    | 주의 필요                  | 주의 사항 안내         |
+| 🟠 **High Risk**      | 영향 범위 큼               | 계획 설명 + 승인 필요  |
+| 🔴 **Critical**       | 핵심 비즈니스 로직         | 테스트 + 명시적 승인   |
+
+### 참고 금지 영역
+
+잘못된 패턴의 코드는 "참고 금지"로 분류됩니다:
+
+- 🚫 **Anti-Pattern**: God Object, 스파게티 코드 등
+- ⛔ **Deprecated**: 폐기 예정 코드
+- 🔧 **Hack**: 임시로 작성된 코드
+- 🐛 **Known Bug**: 알려진 버그가 있는 코드
+
+Claude는 이런 코드를 참고하지 않고, 올바른 패턴으로 새로 구현합니다.
+
+### 레거시 프로젝트 권장 순서
+
+```
+/workflow-legacy-profile       ← 먼저 실행! (위험 영역 파악)
+       ↓
+/workflow-domain-definition    ← 도메인 정의
+       ↓
+(이후 일반 워크플로우와 동일)
+```
+
+### 결과물
+
+```
+.claude/docs/legacy-analysis/
+├── structure-overview.md      # 프로젝트 구조
+├── dependency-graph.md        # 의존성 관계
+├── technical-debt.md          # 기술 부채 목록
+├── danger-zones.md            # 위험 영역 상세
+├── no-reference-zones.md      # 참고 금지 영역
+└── restricted-zones.json      # 자동 적용 규칙
+```
+
+---
+
+## FAQ
+
+### Q. 기존 프로젝트에도 적용할 수 있나요?
+
+네. `.claude` 폴더만 복사하면 됩니다. 레거시 코드가 많다면 `/workflow-legacy-profile`을 먼저 실행하세요.
+
+### Q. 꼭 순서대로 해야 하나요?
+
+아니요. 유연하게 사용 가능합니다. 다만 `feature-spec` → `implement` 순서는 권장합니다.
+
+### Q. 여러 프로젝트를 동시에 관리할 수 있나요?
+
+네. 메모리가 중앙 저장소(`~/.claude-aidev-memory/`)에서 프로젝트별로 관리됩니다.
+
+```bash
+/workflow-memory init my-project-1    # 첫 번째 프로젝트
+/workflow-memory switch my-project-2  # 다른 프로젝트로 전환
+```
+
+### Q. Claude Code 세션이 끊기면 어떻게 되나요?
+
+Hook이 자동으로 진행 상황을 저장합니다. 다음 세션에서 `/workflow start`하면 이어서 작업할 수 있습니다.
+
+---
+
+## 폴더 구조
 
 ```
 .claude/
-├── commands/                          # 워크플로우 명령어 정의
-│   ├── workflow.md                    # 메인 커맨드 (start, status, update, help, reset)
-│   ├── workflow-domain-definition.md  # 도메인 정의
-│   ├── workflow-feature-spec.md       # 기능 명세 작성 ⭐ NEW
-│   ├── workflow-ui.md                 # UI 구현 (선택)
-│   ├── workflow-implement.md          # 비즈니스 로직 구현 (TDD)
-│   ├── workflow-integrate.md          # 시스템 통합
-│   ├── workflow-e2e.md                # E2E 테스트
-│   └── workflow-legacy-profile.md     # 레거시 코드 분석
-│
-├── agents/                            # AI 에이전트 정의
-│   ├── research-agent.md              # 리서치 전문 에이전트
-│   ├── planning-agent.md              # 계획 수립 전문 에이전트
-│   ├── memory-manager.md              # 메모리 관리 에이전트
-│   ├── test-runner.md                 # TDD 사이클 관리
-│   └── ...
-│
-├── docs/                              # 워크플로우 문서 ⭐
-│   ├── memory/                        # 프로젝트 메모리
-│   │   ├── memory.md                  # 🧠 진행 상황 추적 (중앙 관리)
-│   │   └── memory-template.md         # 📋 메모리 템플릿
-│   ├── research/                      # 기능 분석 문서 (생성 예정)
-│   ├── plans/                         # 구현 계획서 (생성 예정)
-│   ├── legacy-analysis/               # 레거시 분석
-│   └── feature-list/                  # 기능 목록
-│
-└── skills/                            # Claude 스킬
-    └── figma-ui-generator/            # Figma 기반 UI 생성
+├── commands/          # 워크플로우 커맨드 정의
+├── agents/            # AI 에이전트 (자동 호출됨)
+├── hooks/             # 자동 저장 스크립트
+├── docs/              # 생성되는 문서들
+│   ├── memory/        # 진행 상황 추적
+│   ├── specs/         # 기능 명세서
+│   ├── feature-list/  # 기능 목록
+│   └── requirements.md # ← 여기에 요구사항 작성
+└── settings.json      # Hook 설정
 ```
 
-### 파일 역할 설명
+---
 
-#### 📋 커맨드 파일 (.claude/commands/)
+## 더 알아보기
 
-- **workflow.md**: 메인 커맨드 정의 (start, status, update, help, reset)
-- **workflow-domain-definition.md**: 도메인 정의 (전체 프로젝트 도메인 모델)
-- **workflow-feature-spec.md**: 기능 명세 작성 (요구사항 분석 및 계획) ⭐ NEW
-- **workflow-ui.md**: UI 구현 (Figma 기반, 선택적)
-- **workflow-implement.md**: 비즈니스 로직 구현 (TDD 방식)
-- **workflow-integrate.md**: 시스템 통합 및 리팩토링
-- **workflow-e2e.md**: E2E 테스트 및 최종 검증
+### 전체 커맨드 목록
 
-#### 🤖 AI 에이전트 (.claude/agents/)
+<details>
+<summary>클릭해서 펼치기</summary>
 
-전문화된 AI 에이전트들:
+#### 메인 커맨드
 
-- **research-agent**: 코드베이스 탐색 및 기능 분석
-- **planning-agent**: 구현 계획 수립 및 테스트 시나리오 설계
-- **memory-manager**: 프로젝트 메모리 관리 및 컨텍스트 유지
-- **test-runner**: TDD Red-Green-Refactor 사이클 관리
-- **feature-documenter**: 기능 문서 생성 및 관리
+| 커맨드             | 설명                       |
+| ------------------ | -------------------------- |
+| `/workflow start`  | 프로젝트 시작 및 상태 파악 |
+| `/workflow status` | 현재 진행 상황 확인        |
+| `/workflow update` | memory.md 수동 업데이트    |
+| `/workflow help`   | 전체 커맨드 목록           |
+| `/workflow reset`  | 프로젝트 초기화            |
 
-#### 📚 워크플로우 문서 (.claude/docs/)
+#### 작업 커맨드
 
-- **memory/**: 프로젝트 진행 상황 추적 (중앙 관리)
-- **research/**: 기능별 분석 문서 (feature-spec에서 생성)
-- **plans/**: 구현 계획서 (feature-spec에서 생성)
-- **legacy-analysis/**: 레거시 코드 분석 결과
-- **feature-list/**: 기능 목록 및 분류
+| 커맨드                            | 설명                        |
+| --------------------------------- | --------------------------- |
+| `/workflow-domain-definition`     | 도메인, 기능 목록 정의      |
+| `/workflow-feature-spec [기능명]` | 요구사항 분석 및 설계       |
+| `/workflow-ui [기능명]`           | UI 컴포넌트 개발 (선택)     |
+| `/workflow-implement [기능명]`    | TDD 방식 구현               |
+| `/workflow-integrate`             | 시스템 통합 및 리팩토링     |
+| `/workflow-e2e`                   | E2E 테스트 및 최종 검증     |
+| `/workflow-legacy-profile`        | 레거시 코드 분석            |
+| `/workflow-task-point [기능명]`   | 작업량 추정                 |
 
-#### 🎨 스킬 (.claude/skills/)
+#### 메모리 관리
 
-- **figma-ui-generator**: Figma 디자인을 React 컴포넌트로 변환
+| 커맨드                         | 설명               |
+| ------------------------------ | ------------------ |
+| `/workflow-memory init [id]`   | 새 메모리 초기화   |
+| `/workflow-memory status`      | 메모리 상태 확인   |
+| `/workflow-memory list`        | 메모리 목록 조회   |
+| `/workflow-memory switch [id]` | 다른 메모리로 전환 |
 
-## 사용 예시
+</details>
 
-### 시나리오 1: 처음부터 시작 (권장)
+### AI 에이전트
 
-```bash
-# 1. 프로젝트 시작
-/workflow start
+<details>
+<summary>클릭해서 펼치기</summary>
 
-# 2. 도메인 정의
-/workflow-domain-definition
+워크플로우 실행 시 자동으로 호출되는 전문 에이전트들입니다.
 
-# 3. 각 기능마다 반복
-# 3-1. 기능 명세 작성
-/workflow-feature-spec 상품목록   # 요구사항 분석 및 계획
-/workflow-feature-spec 장바구니   # 요구사항 분석 및 계획
+| 에이전트                   | 역할                   |
+| -------------------------- | ---------------------- |
+| `memory-manager`           | 진행 상황 기록         |
+| `research-agent`           | 코드베이스 분석        |
+| `planning-agent`           | 구현 계획 수립         |
+| `test-runner`              | TDD 사이클 관리        |
+| `domain-definition-writer` | 도메인 정의서 작성     |
+| `feature-classifier`       | 기능 분류              |
+| `feature-detail-writer`    | 기능 상세 문서         |
+| `task-point-estimator`     | 작업량 추정            |
+| `dependency-analyzer`      | 의존성 분석            |
+| `risk-classifier`          | 위험도 분류            |
 
-# 3-2. UI 구현 (필요시)
-/workflow-ui common              # 공통 컴포넌트
-/workflow-ui 상품목록            # 기능별 UI
+</details>
 
-# 3-3. 비즈니스 로직 구현
-/workflow-implement 상품목록     # TDD 방식
-/workflow-implement 장바구니     # TDD 방식
+### 명명 규칙
 
-# 4. 통합 및 검증
-/workflow-integrate
-/workflow-e2e
-```
+<details>
+<summary>클릭해서 펼치기</summary>
 
-### 시나리오 2: 기능 명세 먼저 작성
+| 항목       | 형식                        | 예시               |
+| ---------- | --------------------------- | ------------------ |
+| Feature ID | `{DOMAIN}-{NUM}`            | `AUTH-001`         |
+| Task ID    | `{DOMAIN}-{NUM}-{TASK_NUM}` | `AUTH-001-001`     |
+| 명세 파일  | `[ID]-spec.md`              | `AUTH-001-spec.md` |
 
-```bash
-# 모든 기능의 명세를 먼저 작성
-/workflow-feature-spec 상품목록
-/workflow-feature-spec 장바구니
-/workflow-feature-spec 결제
+</details>
 
-# 검토 및 승인 후 구현 시작
-/workflow-implement 상품목록
-/workflow-implement 장바구니
-/workflow-implement 결제
-```
-
-### 시나리오 3: UI가 필요 없는 경우
-
-```bash
-# API 서비스나 비즈니스 로직만 필요한 경우
-/workflow-feature-spec 결제처리
-/workflow-implement 결제처리     # UI 없이 바로 구현
-```
-
-### 시나리오 4: 진행 상황 확인
-
-```bash
-# 현재 상태 확인
-/workflow status
-
-# Memory 수동 업데이트
-/workflow update
-```
-
-## 워크플로우 특징
-
-### 1. 유연한 작업 순서
-
-- 원하는 순서대로 작업 가능
-- 필요한 단계부터 시작 가능
-
-**권장 작업 순서** (참고용):
-
-1. **도메인 정의** → 2. **각 기능마다 반복** (기능 명세 → UI 구현(필요시) → 비즈니스 로직 구현) → 3. **통합** → 4. **E2E**
-
-### 2. 중앙 집중식 상태 관리
-
-**memory.md 파일 역할**:
-
-- 프로젝트 기본 정보 저장
-- 진행 상황 체크리스트 관리
-- 기능별 진행상황 추적
-- 파일 경로 중앙 관리
-- 주요 결정 사항 기록
-
-## 품질 보장
-
-### Test-First 개발 방식
-
-**기능 구현 프로세스**:
-
-1. 테스트 작성 (더미 데이터 기반)
-2. 구현 (더미 데이터 우선)
-3. 리팩토링
-4. API 연동 (선택)
-
-**테스트 체크리스트**:
-
-- 단위 테스트: 각 함수/컴포넌트별
-- 통합 테스트: 기능 간 연동
-- E2E 테스트: 사용자 플로우
-
-### 각 단계별 검수
-
-- **도메인 정의**: 기능 목록, 페이지 구조 확인
-- **UI 설계**: Figma 일치도, 반응형 체크
-- **기능 구현**: 테스트 통과, 더미 데이터 동작 확인
-- **통합**: 중복 코드 제거, 성능 최적화
-- **E2E**: 전체 플로우 동작 확인
-
-## 도움말
-
-### 사용 가능한 모든 커맨드 확인
-
-```bash
-/workflow help
-```
-
-### 프로젝트 초기화
-
-```bash
-/workflow reset
-```
+---
 
 ## 문제 해결
 
-### 진행 상황 파악이 어려울 때
+### "memory.md를 찾을 수 없다"는 오류
 
 ```bash
-/workflow status
+/workflow-memory init my-project
 ```
 
-### Memory 파일 업데이트가 필요할 때
+### 진행 상황이 저장되지 않음
 
 ```bash
-/workflow update
+/workflow-memory status    # 상태 확인
+/workflow update           # 수동 저장
 ```
 
-### 특정 작업 가이드 확인
+### 이전 프로젝트로 돌아가고 싶음
 
-- 각 커맨드 파일 (`.claude/commands/`) 확인
-- 메모리 파일 (`.claude/docs/memory/`) 확인
-- 분석 문서 (`.claude/docs/research/`) 및 계획서 (`.claude/docs/plans/`) 확인
-
-## 핵심 원칙
-
-1. **Test-First 개발**: 테스트 작성 → 구현 → 리팩토링
-2. **더미 데이터 우선**: API 연동은 선택적으로, 우선 더미 데이터로 구현
-3. **단계별 검수**: 각 단계마다 사용자 검수 진행
-4. **유연한 워크플로우**: 원하는 순서대로 작업 가능
-5. **중앙 집중식 관리**: memory.md를 통한 진행 상황 추적
-6. **타입 안전성**: TypeScript를 활용한 완전한 타입 안전성 보장
-
-## 추가 정보
-
-### 커맨드 실행 시 자동 작업
-
-1. `memory.md` 읽어 현재 상태 파악
-2. 필요한 스킬 순차 실행 (메모리 기반 데이터 전달)
-3. 작업 수행 및 검수
-4. 결과물 저장 (.claude/docs/ 또는 src/)
-5. `.claude/docs/memory/memory.md` 업데이트
-
-### 에이전트 기반 워크플로우
-
-**기능 명세 작성 프로세스** (`/workflow-feature-spec`):
-
-```
-1. memory-manager: 프로젝트 컨텍스트 로드
-   ↓
-2. research-agent: 요구사항 분석 및 코드베이스 탐색
-   ↓ .claude/docs/research/[기능명]-analysis.md
-3. planning-agent: 구현 계획 및 테스트 시나리오 수립
-   ↓ .claude/docs/plans/[기능명]-plan.md
-4. memory-manager: 진행 상황 업데이트
+```bash
+/workflow-memory list              # 목록 확인
+/workflow-memory switch 프로젝트ID
 ```
 
-**비즈니스 로직 구현 프로세스** (`/workflow-implement`):
+---
 
-```
-1. memory-manager: 구현 계획 로드
-   ↓
-2. test-runner: TDD Red-Green-Refactor 사이클 관리
-   ↓ 테스트 코드 + 구현 코드
-3. memory-manager: 완료 상황 업데이트
-```
+## 라이선스
 
-**장점**:
-
-- 전문화된 AI 에이전트가 각 단계 담당
-- 메모리 기반 컨텍스트 유지
-- 체계적인 문서 생성 및 관리
-
-### 도움이 필요하신가요?
-
-- 각 커맨드 파일 (`.claude/commands/`)에 상세한 가이드가 포함되어 있습니다
-- 메모리 파일 (`.claude/docs/memory/memory.md`)에 진행 상황이 추적됩니다
-- `/workflow help` 커맨드로 전체 커맨드 목록 확인 가능
+MIT License

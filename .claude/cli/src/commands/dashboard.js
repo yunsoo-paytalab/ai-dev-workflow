@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { select, confirm, input } from "@inquirer/prompts";
 import readline from "readline";
-import { loadProjectData, calculateStats } from "../utils/parser.js";
+import { loadProjectData, calculateStats, getAvailableMemoryIds, setMemoryId } from "../utils/parser.js";
 import {
   printHeader,
   printFeatureTable,
@@ -203,6 +203,7 @@ async function runDashboardLoop() {
           disabled: !stats.nextTask,
         },
         { name: "⚡ 워크플로우 실행", value: "workflows" },
+        { name: "🔗 Memory 선택", value: "memory" },
         {
           name: `⚙️  Bypass Permissions: ${
             bypassStatus ? "ON → OFF" : "OFF → ON"
@@ -239,6 +240,10 @@ async function runDashboardLoop() {
 
       case "workflows":
         await showWorkflowMenu(features);
+        break;
+
+      case "memory":
+        await showMemoryMenu(memoryId);
         break;
 
       case "toggle-bypass":
@@ -325,6 +330,79 @@ async function showWorkflowMenu(features) {
   }
 
   await executeClaudeWorkflow(workflowKey, arg);
+  return BACK;
+}
+
+/**
+ * Memory 선택 메뉴 표시
+ */
+async function showMemoryMenu(currentMemoryId) {
+  console.clear();
+  printHeader("Memory 선택");
+
+  const availableIds = getAvailableMemoryIds();
+
+  if (availableIds.length === 0) {
+    console.log(chalk.yellow("  사용 가능한 Memory가 없습니다."));
+    console.log(chalk.gray("  /workflow-memory init으로 Memory를 생성하세요."));
+    console.log();
+    await inputWithEsc({ message: "Enter로 돌아가기..." });
+    return BACK;
+  }
+
+  // 현재 연결 상태 표시
+  if (currentMemoryId) {
+    console.log(`  ${chalk.blue("현재 연결:")} ${chalk.green(currentMemoryId)}`);
+  } else {
+    console.log(`  ${chalk.yellow("현재 연결:")} 없음`);
+  }
+  console.log();
+  console.log(chalk.gray("  (Esc: 뒤로가기)"));
+
+  const selectedId = await selectWithEsc({
+    message: "Memory 선택:",
+    pageSize: 15,
+    choices: [
+      ...availableIds.map((id) => ({
+        name: id === currentMemoryId ? `${id} ${chalk.green("(현재)")}` : id,
+        value: id,
+      })),
+      { name: "← 돌아가기", value: "back" },
+    ],
+  });
+
+  if (selectedId?._escaped || selectedId === "back") {
+    return BACK;
+  }
+
+  // 같은 Memory를 선택한 경우
+  if (selectedId === currentMemoryId) {
+    console.log();
+    console.log(chalk.gray("  이미 선택된 Memory입니다."));
+    await inputWithEsc({ message: "Enter로 돌아가기..." });
+    return BACK;
+  }
+
+  // Memory 변경 확인
+  const confirmed = await confirmWithEsc({
+    message: `"${selectedId}" Memory로 변경하시겠습니까?`,
+    default: true,
+  });
+
+  if (!confirmed) {
+    return BACK;
+  }
+
+  // Memory ID 저장
+  const success = setMemoryId(selectedId);
+
+  if (success) {
+    printSuccess(`Memory가 "${selectedId}"로 변경되었습니다.`);
+  } else {
+    printError("Memory 변경에 실패했습니다.");
+  }
+
+  await inputWithEsc({ message: "Enter로 돌아가기..." });
   return BACK;
 }
 

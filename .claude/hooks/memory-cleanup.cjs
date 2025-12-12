@@ -16,7 +16,7 @@ const path = require("path");
 const readline = require("readline");
 const {
   CENTRAL_STORE,
-  DEFAULT_CONFIG,
+  getConfig,
   readJson,
   getMemoryId,
   getMemoryPath,
@@ -119,8 +119,7 @@ async function main() {
   const forceFlag = args.includes("--force");
 
   // 설정 로드
-  const configPath = path.join(CENTRAL_STORE, "config.json");
-  const config = readJson(configPath, DEFAULT_CONFIG);
+  const config = getConfig();
 
   // 대상 메모리 결정
   let targetMemories = [];

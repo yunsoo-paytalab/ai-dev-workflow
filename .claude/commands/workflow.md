@@ -10,12 +10,12 @@
 
 **워크플로우 구조**:
 
-- `memory.md` - 진행 상황 추적 (중앙 저장소 `~/.claude-memory/projects/{id}/`에서 관리)
+- `memory.md` - 진행 상황 추적 (중앙 저장소 `~/.claude-aidev-memory/projects/{id}/`에서 관리)
 - 명령어 파일 `.claude/commands/` - 각각 전체 워크플로우 세부사항 포함
 
 **메모리 시스템**:
 
-- 중앙 저장소 (`~/.claude-memory/`)에서 프로젝트별 메모리 관리
+- 중앙 저장소 (`~/.claude-aidev-memory/`)에서 프로젝트별 메모리 관리
 - Hook 기반 자동 동기화 (세션 시작/종료 시)
 - `/workflow-memory` 명령어로 메모리 관리
 
@@ -137,7 +137,7 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 ```
 현재 상태를 메모리 파일에 업데이트해주세요:
 
-1. `.claude/docs/memory/.memory-ref`에서 메모리 ID 확인 후 `~/.claude-memory/projects/{id}/memory.md` 읽기
+1. `.claude/docs/memory/.memory-ref`에서 메모리 ID 확인 후 `~/.claude-aidev-memory/projects/{id}/memory.md` 읽기
 2. 프로젝트의 현재 상태 분석:
    - 완료된 작업 확인
    - 현재 진행 중인 작업 파악
@@ -478,7 +478,7 @@ memory.md 업데이트:
 
 ### 메모리 파일
 
-- `~/.claude-memory/` - 중앙 저장소 (모든 프로젝트 메모리)
+- `~/.claude-aidev-memory/` - 중앙 저장소 (모든 프로젝트 메모리)
 - `.claude/docs/memory/memory.md` - 심볼릭 링크 (중앙 저장소 연결)
 - `.claude/docs/memory/.memory-ref` - 연결된 메모리 ID
 - `.claude/docs/memory/memory-template.md` - 신규 프로젝트용 메모리 템플릿

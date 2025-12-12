@@ -116,30 +116,29 @@ Task 도구를 사용하여 feature-detail-writer 에이전트 호출:
 - 모든 Feature에 대한 상세 문서 파일 존재 확인
 - 링크 연결 정확성 확인
 
-### Phase 6: Memory Update (메모리 업데이트) - 필수
+### Phase 6: Progress 동기화
 
-> ⚠️ **필수**: 워크플로우 종료 전 반드시 memory-manager 에이전트를 호출해야 합니다.
->
-> 호출 방법: "Use the memory-manager agent to update memory for domain-definition completion"
+⚠️ **필수 단계** - Feature 상세 문서 작성 완료 후 반드시 실행
 
-**Agent: memory-manager** (MUST BE CALLED)
+**Bash로 실행:**
 
-**업데이트 대상:**
+```bash
+node .claude/hooks/memory-sync.cjs sync-progress
+```
 
-1. **memory.md 업데이트:**
-   - 기술 스택 섹션
-   - 도메인 목록 섹션
-   - 페이지 구조 섹션
-   - 체크리스트: "도메인 정의 완료" 체크
+이 명령은 다음을 수행합니다:
+- `domain-definition.md` → progress.json (도메인 정보)
+- `feature-list.md` + `feature-list/*.md` → progress.json (Feature/Task 정보)
+- progress.json → memory.md (체크리스트 동기화)
 
-2. **progress.json 업데이트:**
-   - features: 도메인 정의에서 도출된 기능 목록 추가
-   - tasks: 다음 단계 작업 항목 추가
-   - currentPhase: "domain-definition-completed"
+### 참고: 메모리 자동 업데이트
 
-3. **세션 요약 작성:**
-   - 이번 세션에서 수행한 작업 요약
-   - 주요 결정사항 기록
+> 워크플로우 진행 상황은 **자동으로 기록**됩니다.
+> - 워크플로우 완료 상태 → progress.json (자동)
+> - 체크리스트 업데이트 → memory.md (자동)
+> - 대화 기록 → sessions/*.md (자동)
+
+**중요한 기술적 결정**이 있었다면 memory-manager 에이전트를 호출하여 기록하세요.
 
 ## 사용자 결정 포인트
 

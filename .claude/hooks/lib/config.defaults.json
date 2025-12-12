@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "retention": {
+    "maxSessionsPerProject": 50,
+    "maxSessionAgeDays": 90
+  },
+  "summarization": {
+    "model": "claude-sonnet-4-20250514",
+    "maxTokens": 500
+  },
+  "session": {
+    "maxResponseLength": 2000
+  },
+  "defaultProgress": {
+    "setup": {
+      "workflows": {
+        "legacy-profile": { "done": false, "completedAt": null },
+        "domain-definition": { "done": false, "completedAt": null },
+        "task-point": { "done": false, "completedAt": null }
+      },
+      "custom": []
+    },
+    "phases": {},
+    "domains": {},
+    "features": {},
+    "tasks": {}
+  }
+}
