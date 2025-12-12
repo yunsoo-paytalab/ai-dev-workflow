@@ -1,22 +1,25 @@
 ---
 name: page-structure-writer
-description: 페이지 구조 문서를 작성하는 전문 에이전트
+description: 페이지/라우팅 설계 및 구조 문서를 작성하는 전문 에이전트
 tools: Read, Write, Glob
+model: opus
 ---
 
 # Page Structure Writer Agent
 
 ## 역할
 
-Research 결과를 바탕으로 **페이지 구조 문서**를 작성합니다.
+Research 결과를 바탕으로 **페이지/라우팅 설계 및 구조 문서**를 작성합니다.
+
+> ⚠️ Research 단계에서는 분석만 수행되므로, 이 에이전트에서 **설계**를 담당합니다.
 
 ## 핵심 원칙
 
-**"사용자 중심의 페이지 흐름 설계"**
+**"분석 결과를 바탕으로 사용자 중심의 페이지 흐름을 설계"**
 
 ## 입력
 
-- Research 문서 (`.claude/docs/research/domain-analysis.md`)
+- Research 문서 (`.claude/docs/research/domain-research.md`)
 - 요구사항 문서 (있는 경우)
 
 ## 출력
@@ -162,7 +165,7 @@ Research 결과를 바탕으로 **페이지 구조 문서**를 작성합니다.
 
 1. **Research 문서 읽기**
 
-   - `.claude/docs/research/domain-analysis.md` 분석
+   - `.claude/docs/research/domain-research.md` 분석
    - 사용자 플로우 파악
 
 2. **페이지 식별**

@@ -23,15 +23,15 @@
 ### Phase 1: Research (분석)
 
 > ⚠️ Phase 0에서 로드한 제한 영역 준수
+> ⚠️ **설계는 하지 않음** - 분석만 수행
 
-**Agent: research-agent**
+**Agent: domain-research-agent**
 
 - 요구사항 문서 분석 (requirements.md)
 - 기존 코드베이스 탐색
 - 기술 스택 및 제약사항 파악
 - 비즈니스 요구사항 이해
-- 출력: `.claude/docs/research/domain-analysis.md`
-- **AgentId 저장**: 추후 재개를 위해 ID 기록
+- 출력: `.claude/docs/research/domain-research.md`
 
 ### Phase 2: Review & Confirm (검수 & 컨펌)
 
@@ -42,31 +42,43 @@
 - 추가 요구사항 또는 누락 사항 파악
 - 승인 또는 수정 요청
 
-### Phase 3: Domain Documentation (도메인 문서화)
+### Phase 3: Design & Documentation (설계 및 문서화)
 
-⚡ **IMPORTANT: 3개의 Agent를 병렬로 동시에 실행**
+> Research 분석 결과를 바탕으로 **설계**와 **문서화**를 수행합니다.
 
-**한 번의 메시지에서 3개의 Task를 모두 호출하여 병렬 실행:**
+#### Phase 3-1: 병렬 실행 (도메인 설계 + 페이지 설계)
+
+⚡ **IMPORTANT: 2개의 Agent를 병렬로 동시에 실행**
+
+**한 번의 메시지에서 2개의 Task를 호출하여 병렬 실행:**
 
 1. **Agent: domain-definition-writer**
 
-   - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 도메인 정의 문서 작성
+   - Research 결과 (`.claude/docs/research/domain-research.md`)를 바탕으로 도메인 설계 및 문서 작성
+   - Bounded Context, 엔티티/인터페이스 설계 포함
    - 출력: `.claude/docs/domain-definition.md`
 
-2. **Agent: feature-classifier**
-
-   - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 Feature/Task 분류 리스트 작성
-   - 출력: `.claude/docs/feature-list.md` (상세 문서 없이 리스트만)
-
-3. **Agent: page-structure-writer**
-   - Research 결과 (`.claude/docs/research/domain-analysis.md`)를 바탕으로 페이지 구조 문서 작성
+2. **Agent: page-structure-writer**
+   - Research 결과 (`.claude/docs/research/domain-research.md`)를 바탕으로 페이지/라우팅 설계 및 문서 작성
    - 출력: `.claude/docs/page-structure.md`
+
+#### Phase 3-2: 순차 실행 (Feature 분류)
+
+> ⚠️ Phase 3-1 완료 후 실행 - domain-definition.md를 참조하여 더 정확한 분류 수행
+
+**Agent: feature-classifier**
+
+- 입력:
+  - Research 결과 (`.claude/docs/research/domain-research.md`)
+  - 도메인 설계 결과 (`.claude/docs/domain-definition.md`) ← **추가 참조**
+- 도메인 구조를 참고하여 Feature/Task 분류 리스트 작성
+- 출력: `.claude/docs/feature-list.md` (상세 문서 없이 리스트만)
 
 **출력 파일**:
 
 - `.claude/docs/domain-definition.md`
-- `.claude/docs/feature-list.md` (Feature/Task 리스트)
 - `.claude/docs/page-structure.md`
+- `.claude/docs/feature-list.md` (Feature/Task 리스트)
 
 ### Phase 4: Review & Confirm (검수 & 컨펌)
 
@@ -127,6 +139,7 @@ node .claude/hooks/memory-sync.cjs sync-progress
 ```
 
 이 명령은 다음을 수행합니다:
+
 - `domain-definition.md` → progress.json (도메인 정보)
 - `feature-list.md` + `feature-list/*.md` → progress.json (Feature/Task 정보)
 - progress.json → memory.md (체크리스트 동기화)
@@ -134,21 +147,22 @@ node .claude/hooks/memory-sync.cjs sync-progress
 ### 참고: 메모리 자동 업데이트
 
 > 워크플로우 진행 상황은 **자동으로 기록**됩니다.
+>
 > - 워크플로우 완료 상태 → progress.json (자동)
 > - 체크리스트 업데이트 → memory.md (자동)
-> - 대화 기록 → sessions/*.md (자동)
+> - 대화 기록 → sessions/\*.md (자동)
 
 **중요한 기술적 결정**이 있었다면 memory-manager 에이전트를 호출하여 기록하세요.
 
 ## 사용자 결정 포인트
 
-🔔 **Phase 3 확인 사항**:
+🔔 **Phase 2 확인 사항** (Research 결과 검토):
 
 - 비즈니스 요구사항이 정확히 분석되었는가?
 - 기술적 제약사항이 모두 파악되었는가?
 - 추가 조사가 필요한 부분은 없는가?
 
-🔔 **Phase 5 확인 사항**:
+🔔 **Phase 4 확인 사항** (설계 및 문서화 결과 검토):
 
 - 도메인이 비즈니스 요구사항과 일치하는가?
 - Feature가 완결된 기능 단위로 적절하게 분류되었는가?
@@ -158,7 +172,7 @@ node .claude/hooks/memory-sync.cjs sync-progress
 
 ## 결과물
 
-- `.claude/docs/research/domain-analysis.md` - 도메인 분석 결과
+- `.claude/docs/research/domain-research.md` - 도메인 분석 결과
 - `.claude/docs/domain-definition.md` - 도메인 정의 문서
 - `.claude/docs/feature-list.md` - Feature/Task 목록
 - `.claude/docs/feature-list/[기능ID]-[기능명].md` - 각 Feature 상세 문서

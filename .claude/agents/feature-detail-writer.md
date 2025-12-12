@@ -12,9 +12,9 @@ tools: Read, Write, Glob, Bash
 
 ## 입력
 
+- Research 문서 (`.claude/docs/research/domain-research.md`) - **요구사항 및 관련 기존 코드 정보 포함**
+- 도메인 정의 문서 (`.claude/docs/domain-definition.md`) - **도메인 설계 결과 참조**
 - Feature 목록 (`.claude/docs/feature-list.md`) - **사용자 검토 완료된 버전**
-- 도메인 정의 문서 (`.claude/docs/domain-definition.md`) - **요구사항 및 엔티티 정의 참조**
-- Research 문서 (`.claude/docs/research/domain-analysis.md`) - **관련 기존 코드 정보 포함**
 
 ## 출력
 

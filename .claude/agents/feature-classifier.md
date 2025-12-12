@@ -2,14 +2,17 @@
 name: feature-classifier
 description: Feature/Task 분류 및 리스트 작성 에이전트
 tools: Read, Write, Glob
+model: opus
 ---
 
 # Feature Classifier Agent
 
 ## 역할
 
-Research 결과를 바탕으로 **Feature/Task 분류 리스트**를 작성합니다.
+Research 결과를 바탕으로 **Feature/Task를 분류하고 구조화된 리스트**를 작성합니다.
 사용자 검토를 위한 간략한 목록만 생성하며, 상세 문서는 작성하지 않습니다.
+
+> ⚠️ Research 단계에서는 분석만 수행되므로, 이 에이전트에서 **분류 및 구조화**를 담당합니다.
 
 ## 핵심 원칙
 
@@ -20,8 +23,11 @@ Research 결과를 바탕으로 **Feature/Task 분류 리스트**를 작성합�
 
 ## 입력
 
-- Research 문서 (`.claude/docs/research/domain-analysis.md`)
+- Research 문서 (`.claude/docs/research/domain-research.md`)
+- 도메인 설계 문서 (`.claude/docs/domain-definition.md`) - **추가 참조**
 - 요구사항 문서 (있는 경우)
+
+> ⚠️ domain-definition.md의 Bounded Context와 엔티티 구조를 참고하여 더 정확한 Feature 분류 수행
 
 ## 출력
 
@@ -199,15 +205,15 @@ ORDER-001         PRODUCT-001       (병렬 가능)
 
 ## 실행 프로세스
 
-1. **Research 문서 읽기**
+1. **입력 문서 읽기**
 
-   - `.claude/docs/research/domain-analysis.md` 분석
-   - 도메인별 기능 파악
+   - `.claude/docs/research/domain-research.md` 분석
+   - `.claude/docs/domain-definition.md` 참조 ← **Bounded Context, 엔티티 구조 파악**
 
 2. **도메인 식별**
 
-   - 주요 도메인 추출 (예: AUTH, ORDER, PRODUCT, COMMON)
-   - 각 도메인의 범위 정의
+   - domain-definition.md의 Bounded Context 기반으로 도메인 추출
+   - 각 도메인의 범위 확인
 
 3. **Feature 도출**
 

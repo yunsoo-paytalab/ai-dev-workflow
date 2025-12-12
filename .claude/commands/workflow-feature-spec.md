@@ -49,25 +49,26 @@
 - 🚫 Anti-Pattern, ⛔ Deprecated, 🔧 Hack, 🐛 Known Bug
 - 해당 영역의 코드는 읽거나 참고하지 않음
 
-### Phase 1: Research (조사)
+### Phase 1: Research (분석)
 
 > ⚠️ Phase 0에서 로드한 제한 영역 준수
+> ⚠️ **설계는 하지 않음** - 분석만 수행
 
 **Agent: feature-research-agent**
 
 **입력: 참조 문서 또는 일반 텍스트**
 
-- ✅ **참조 문서 있음**: `.claude/docs/feature-list/[파일명].md` 문서를 읽고, 정의된 요구사항을 기반으로 조사 수행
-- ❌ **참조 문서 없음**: `$ARGUMENTS`를 새 Feature 설명으로 간주하고, 해당 텍스트를 기반으로 조사 수행
+- ✅ **참조 문서 있음**: `.claude/docs/feature-list/[파일명].md` 문서를 읽고, 정의된 요구사항을 기반으로 분석 수행
+- ❌ **참조 문서 없음**: `$ARGUMENTS`를 새 Feature 설명으로 간주하고, 해당 텍스트를 기반으로 분석 수행
 
-**조사 항목 (참조 문서 기반):**
+**분석 항목:**
 
 - 참조 문서의 기능 요구사항 분석 및 구체화
 - 관련 코드베이스 탐색
 - 재사용 가능 컴포넌트 확인
-- 유사 기능 구현 패턴 분석
+- 기술적 제약사항 파악
 
-**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (예: `AUTH-001-spec.md`, 섹션 1~2)
+**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (섹션 1~2만 작성)
 
 ### Phase 2: Review & Confirm (검수 & 컨펌)
 
