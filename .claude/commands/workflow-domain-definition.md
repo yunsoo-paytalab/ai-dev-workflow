@@ -102,21 +102,44 @@
 
 ⚠️ **필수 단계** - 이 단계를 건너뛰면 후속 워크플로우에서 Feature 상세 정보를 참조할 수 없습니다.
 
-**Agent: feature-detail-writer**
+⚡ **IMPORTANT: 병렬 실행으로 처리 시간 단축**
 
 **실행 방법:**
 
+1. **디렉토리 먼저 생성** (병렬 실행 전 필수)
+   ```bash
+   mkdir -p .claude/docs/feature-list
+   ```
+2. Feature 목록을 다중 배치로 분할 (한 그룹에 feature 3~4개씩)
+3. 각 배치에 대해 feature-detail-writer 에이전트를 **병렬 호출**
+
+**예시 (17개 Feature 기준):**
+
+한 번의 메시지에서 4개의 Task를 병렬 호출:
+
 ```
-Task 도구를 사용하여 feature-detail-writer 에이전트 호출:
-- subagent_type: "feature-detail-writer"
-- prompt: "Feature 목록(.claude/docs/feature-list.md)을 바탕으로 각 Feature의 상세 문서를 작성하세요."
+Task 1: feature-detail-writer
+- prompt: "다음 Feature만 작성: AUTH-001, AUTH-002, DASH-001, DASH-002, TEST-001"
+
+Task 2: feature-detail-writer
+- prompt: "다음 Feature만 작성: TEST-002, TEST-003, PASSER-001, PASSER-002"
+
+Task 3: feature-detail-writer
+- prompt: "다음 Feature만 작성: PASSER-003, STORE-001, STORE-002, MSG-001"
+
+Task 4: feature-detail-writer
+- prompt: "다음 Feature만 작성: MSG-002, SHARED-001, SHARED-002, SHARED-003, SHARED-004"
 ```
 
-**에이전트 작업 내용:**
+**배치 분할 기준:**
 
-1. `.claude/docs/feature-list/` 디렉토리 생성
-2. 각 Feature마다 상세 문서 작성: `[기능ID]-[기능명].md`
-3. `.claude/docs/feature-list.md`에 상세 문서 링크 추가
+- 병렬 작업 Agent 수: Feature 수 ÷ 4 (약 4~5개씩)
+- 도메인별 그룹핑 권장
+
+**병렬 완료 후:**
+
+- `.claude/docs/feature-list.md`에 상세 문서 링크 일괄 추가
+- 모든 Feature 문서 존재 여부 검증
 
 **출력 파일**:
 

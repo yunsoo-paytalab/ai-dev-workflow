@@ -15,6 +15,7 @@ tools: Read, Write, Glob, Bash
 - Research 문서 (`.claude/docs/research/domain-research.md`) - **요구사항 및 관련 기존 코드 정보 포함**
 - 도메인 정의 문서 (`.claude/docs/domain-definition.md`) - **도메인 설계 결과 참조**
 - Feature 목록 (`.claude/docs/feature-list.md`) - **사용자 검토 완료된 버전**
+- **처리할 Feature ID 목록** (prompt에서 전달) - 병렬 배치 처리용
 
 ## 출력
 
@@ -181,31 +182,28 @@ type CalculateTotal = (items: Item[], discounts: Discount[]) => TotalResult;
 
 ## 실행 프로세스
 
-1. **입력 문서 읽기**
+1. **입력 파라미터 확인**
 
-   - `.claude/docs/feature-list.md` 분석
+   - prompt에서 처리할 Feature ID 목록 파싱
+   - 지정된 Feature만 처리 (미지정 시 전체 Feature)
+
+2. **입력 문서 읽기**
+
+   - `.claude/docs/feature-list.md`에서 지정된 Feature 정보 추출
    - `.claude/docs/domain-definition.md` 참조 (요구사항 및 엔티티 정의)
-   - 각 Feature의 Task 목록 확인
 
-2. **폴더 생성**
+3. **지정된 Feature 문서만 작성**
 
-   - `.claude/docs/feature-list/` 디렉토리 생성 (없는 경우)
+   > ⚠️ 디렉토리는 병렬 실행 전에 이미 생성되어 있음 (생성 시도 금지)
 
-3. **개별 Feature 문서 작성**
-
-   - 각 Feature마다 상세 문서 작성
+   - 배치에 포함된 Feature만 상세 문서 작성
+   - 다른 배치의 Feature는 건드리지 않음
    - Task 테이블 + 모든 Task 섹션 포함
    - 파일명: `{Feature ID}-{기능명}.md`
 
-4. **Feature 목록 업데이트**
-
-   - `.claude/docs/feature-list.md`에 상세 문서 링크 추가
-   - Feature 목록 표에 `상세 문서` 컬럼 추가
-
-5. **검증**
-   - 모든 Feature에 대한 상세 문서 존재 확인
-   - 링크 연결 정확성 확인
-   - Task 정보 일관성 확인
+5. **완료 보고**
+   - 작성한 Feature ID 목록 반환
+   - 에러 발생 시 실패한 Feature ID 명시
 
 ## Feature 목록 업데이트 형식
 
