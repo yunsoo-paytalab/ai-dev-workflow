@@ -677,6 +677,40 @@ function handleSyncProgress() {
   console.log("─".repeat(50));
 }
 
+// Feature 상태 업데이트 처리
+// Claude가 직접 호출: node .claude/hooks/memory-sync.cjs update-feature-status [featureId] [status]
+function handleUpdateFeatureStatus() {
+  const featureId = process.argv[3];
+  const status = process.argv[4];
+  const projectCwd = process.cwd();
+  const memoryId = getMemoryIdFromPath(projectCwd);
+
+  if (!memoryId) {
+    console.log("⚠️  메모리가 연결되지 않았습니다.");
+    return;
+  }
+
+  if (!featureId || !status) {
+    console.log("⚠️  Feature ID와 상태가 필요합니다.");
+    console.log(
+      "   사용법: node .claude/hooks/memory-sync.cjs update-feature-status [featureId] [status]"
+    );
+    return;
+  }
+
+  const {
+    updateFeatureStatus,
+    recalculateProgress,
+    syncProgressToMemory,
+  } = require("./lib/utils.cjs");
+
+  updateFeatureStatus(memoryId, featureId, status);
+  recalculateProgress(memoryId);
+  syncProgressToMemory(memoryId);
+
+  console.log(`✓ Feature ${featureId} 상태 업데이트: ${status}`);
+}
+
 // 메인 실행
 const command = process.argv[2];
 
@@ -702,9 +736,12 @@ switch (command) {
   case "workflow-complete":
     handleWorkflowComplete();
     break;
+  case "update-feature-status":
+    handleUpdateFeatureStatus();
+    break;
   default:
     console.log(
-      "사용법: node memory-sync.cjs [user-input|assistant-response|start|end|compact|sync-progress|workflow-complete]"
+      "사용법: node memory-sync.cjs [user-input|assistant-response|start|end|compact|sync-progress|workflow-complete|update-feature-status]"
     );
     process.exit(1);
 }

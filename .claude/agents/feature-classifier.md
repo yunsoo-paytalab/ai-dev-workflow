@@ -258,6 +258,6 @@ ORDER-001 PRODUCT-001 (병렬 가능)
 
 ## 주의사항
 
-- **상세 문서는 작성하지 않음** (feature-spec-writer가 담당)
+- **상세 문서는 작성하지 않음** (feature-detail-writer가 담당)
 - 사용자 검토를 위한 **간략한 리스트**만 생성
 - Feature/Task 분류의 **적절성**에 집중

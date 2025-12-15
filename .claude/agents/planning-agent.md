@@ -129,18 +129,59 @@ function coreLogic() {
 
 ## 4. Implementation Plan
 
-### 4.1 Implementation Phases
+### 4.1 Implementation Groups
 
-| Phase | 작업                                | 파일            |
-| ----- | ----------------------------------- | --------------- |
-| 1     | 타입/인터페이스 정의                | `types.ts`      |
-| 2     | API 함수 구현                       | `api.ts`        |
-| 3     | 커스텀 훅 구현                      | `useXxx.ts`     |
-| 4     | 컴포넌트 구현                       | `Component.tsx` |
-| 5     | Unit Test 작성 (핵심 비즈니스 로직) | `*.test.ts`     |
-| 6     | Component Test 작성 (핵심 컴포넌트) | `*.test.tsx`    |
+> ⚠️ **그룹화 원칙**
+> - 논리적으로 관련된 작업들을 하나의 그룹으로 묶음
+> - 각 그룹은 독립적으로 검증 가능해야 함
+> - 그룹당 3-7개 정도의 task가 적절
+> - 의존성 순서를 고려하여 그룹 배치
+> - 전체 4-6개 그룹으로 구성 권장
 
-### 4.2 검증 방법
+**Group 1: [그룹명 - 예: 타입 및 인터페이스 정의]**
+- Task: 기본 타입 정의 - `src/types/[기능명].ts`
+- Task: API 인터페이스 정의 - `src/types/api.ts`
+- Task: 상태 타입 정의 - `src/types/state.ts`
+**검증:** `npm run type-check` 통과
+
+**Group 2: [그룹명 - 예: API 레이어 구현]**
+- Task: API 클라이언트 함수 작성 - `src/api/[기능명].ts`
+- Task: Mock 데이터 작성 - `src/api/mocks/[기능명].ts`
+- Task: API 함수 Unit Test - `src/api/__tests__/[기능명].test.ts`
+**검증:** API 관련 테스트 통과
+
+**Group 3: [그룹명 - 예: 비즈니스 로직 구현]**
+- Task: 커스텀 훅 구현 - `src/hooks/use[기능명].ts`
+- Task: 유틸리티 함수 구현 - `src/utils/[기능명].ts`
+- Task: 비즈니스 로직 Unit Test - `src/hooks/__tests__/use[기능명].test.ts`
+**검증:** 비즈니스 로직 테스트 통과
+
+**Group 4: [그룹명 - 예: UI 컴포넌트 구현]**
+- Task: 메인 컴포넌트 구현 - `src/components/[Component].tsx`
+- Task: 하위 컴포넌트 구현 - `src/components/[SubComponent].tsx`
+- Task: 컴포넌트 스타일링 - `src/components/[Component].styles.ts`
+- Task: Component Test - `src/components/__tests__/[Component].test.tsx`
+**검증:** 컴포넌트 테스트 통과, 렌더링 확인
+
+**Group 5: [그룹명 - 예: 통합 및 최종 검증] (선택적)**
+- Task: 전체 기능 통합 - 여러 파일
+- Task: E2E 시나리오 검증
+**검증:** 전체 테스트 스위트 통과, 기능 동작 확인
+
+### 4.2 Detailed Tasks (선택적)
+
+필요한 경우 각 그룹의 task를 더 상세히 나열:
+
+| Phase | 작업                                | 파일            | 그룹 |
+| ----- | ----------------------------------- | --------------- | ---- |
+| 1     | 타입/인터페이스 정의                | `types.ts`      | G1   |
+| 2     | API 함수 구현                       | `api.ts`        | G2   |
+| 3     | 커스텀 훅 구현                      | `useXxx.ts`     | G3   |
+| 4     | 컴포넌트 구현                       | `Component.tsx` | G4   |
+| 5     | Unit Test 작성 (핵심 비즈니스 로직) | `*.test.ts`     | G2,G3|
+| 6     | Component Test 작성 (핵심 컴포넌트) | `*.test.tsx`    | G4   |
+
+### 4.3 검증 방법
 
 **자동 검증:**
 
@@ -197,31 +238,42 @@ function coreLogic() {
    - 사용자 확인이 필요한 경우
    - 리스크가 있는 경우
 
-4. **Implementation Phases 작성**
+4. **Implementation Groups 작성**
 
-   - 의존성 순서대로 배치
-   - 파일명 + 한 줄 설명만
-   - 상세 내용은 섹션 2 참조
+   - 논리적으로 관련된 작업들을 그룹으로 묶기
+   - 각 그룹은 독립적으로 검증 가능하게
+   - 의존성 순서대로 그룹 배치
+   - 각 그룹에 명확한 검증 조건 명시
+   - 전체 4-6개 그룹 권장
 
 5. **검증 방법 정의**
-   - 자동화 가능한 검증
+   - 각 그룹별 검증 조건 명시
+   - 자동화 가능한 검증 우선
    - 수동 확인 항목
 
 ### 계획 원칙
 
-1. **간결함**
+1. **그룹화**
+
+   - 논리적으로 관련된 작업들을 묶음
+   - 각 그룹은 독립적으로 검증 가능
+   - 개발자가 검토하기 적절한 크기 (그룹당 3-7개 task)
+   - 전체 4-6개 그룹으로 구성
+
+2. **간결함**
 
    - 파일명 + 한 줄 설명
    - 코드 예시는 의사결정 필요시에만
-   - 섹션 3과 중복 금지
+   - 섹션 2와 중복 금지
 
-2. **실행 가능성**
+3. **실행 가능성**
 
    - 명확한 순서
    - 검증 가능한 단위
    - 의존성 고려
+   - 각 그룹에 검증 조건 명시
 
-3. **검수 용이성**
+4. **검수 용이성**
    - 의사결정 항목을 맨 앞에
    - 체크리스트 형태
-   - 명확한 검증 방법
+   - 그룹별로 commit 가능한 단위

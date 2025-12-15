@@ -34,36 +34,58 @@
 
 ## 실행 프로세스
 
-### Phase 1: Implementation (구현)
+### Phase 1: Implementation by Groups (그룹별 구현)
 
-#### 1.1 TDD Cycle (필수)
+> ⚠️ **핵심 변경사항**: 구현 계획을 논리적 그룹 단위로 나누어 진행하며, 각 그룹 완료 후 개발자 검토 및 commit을 진행합니다.
+
+**Spec 문서 확인:**
+- Spec 문서의 섹션 4.1 "Implementation Groups" 참조
+- 각 그룹의 task 목록 및 검증 조건 확인
+
+**그룹별 반복 프로세스:**
+
+각 그룹마다 다음 단계를 순서대로 진행:
+
+#### 1.1 그룹 시작 - 현재 그룹 정보 안내
+
+```
+🔹 Group [N]/[전체]: [그룹명]
+📋 Task 목록:
+  - Task 1: [설명] - `파일명`
+  - Task 2: [설명] - `파일명`
+  ...
+✅ 검증 조건: [이 그룹의 완료 조건]
+```
+
+#### 1.2 TDD Cycle (그룹 내 테스트 작성)
 
 > ⚠️ **필수**: 구현 전 반드시 test-runner 에이전트를 먼저 호출해야 합니다.
 >
-> 호출 방법: "Use the test-runner agent to write tests for [기능명]"
+> 호출 방법: "Use the test-runner agent to write tests for [현재 그룹의 기능]"
 
 **Agent: test-runner** (MUST BE USED FIRST)
 
-- 🔴 **Red**: 실패하는 테스트 작성 (한글로 describe/it 작성)
+- 🔴 **Red**: 현재 그룹에 해당하는 실패하는 테스트 작성
 - 🟢 **Green**: 테스트 통과하는 최소 구현
 - 🔵 **Refactor**: 코드 개선
-- 사이클 반복
 
 **테스트 작성 규칙:**
 - describe, it 설명문은 **한글**로 작성
 - 예: `describe("장바구니", () => { it("아이템 추가 시 목록에 포함되어야 한다", ...) })`
 
-#### 1.2 필수 통합 작업
+#### 1.3 그룹 구현
 
 **Agent: implementation-agent**
 
-- **컴포넌트 구현**: UI 및 비즈니스 로직 작성
-- **Mock 서비스**: 임시 데이터 처리 계층
-- **상태 관리**: Redux/Zustand 통합
-- **이벤트 핸들링**: UI와 비즈니스 로직 연결
-- **스타일링**: CSS/Tailwind 적용
+현재 그룹의 task 목록에 따라 구현:
 
-#### 1.3 코드 검증
+- **타입/인터페이스**: TypeScript 타입 및 인터페이스 정의
+- **API 레이어**: API 함수, Mock 데이터
+- **비즈니스 로직**: 커스텀 훅, 유틸리티 함수
+- **UI 컴포넌트**: 컴포넌트, 스타일링
+- **상태 관리**: Redux/Zustand 통합 (필요시)
+
+#### 1.4 그룹 검증
 
 > ⚠️ **Lint 에러 처리 규칙** (무한 루프 방지)
 >
@@ -71,13 +93,67 @@
 > - 3회 시도 후에도 해결되지 않으면 **사용자에게 보고**하고 다음 단계로 진행
 > - 절대로 lint 수정을 무한 반복하지 말 것
 
+**자동 검증:**
 ```bash
-npm run lint      # 최대 3회 재시도
+npm run lint          # 최대 3회 재시도
 npm run type-check
-npm test
+npm test              # 현재 그룹 관련 테스트만
 ```
 
-#### 1.4 선택적 API 연동 (--with-api 옵션)
+**그룹별 검증 조건 확인:**
+- Spec 문서의 해당 그룹 "검증" 항목 확인
+- 예: "타입 체크 통과", "API 테스트 통과" 등
+
+#### 1.5 개발자 검토 및 Commit 결정 ⭐
+
+**변경사항 요약 제시:**
+```
+✅ Group [N] 완료: [그룹명]
+
+📝 변경된 파일:
+  - src/types/example.ts (new, 50 lines)
+  - src/api/example.ts (new, 120 lines)
+  - src/api/__tests__/example.test.ts (new, 80 lines)
+
+✅ 검증 결과:
+  - npm run type-check: ✅ 통과
+  - npm run lint: ✅ 통과
+  - npm test: ✅ 통과 (3/3 tests)
+
+📊 다음 그룹: Group [N+1]/[전체] - [다음 그룹명]
+```
+
+**사용자 선택 요청:**
+
+```
+🔍 코드 검토 및 Commit 여부를 결정해주세요:
+
+[1] ✅ Commit하고 다음 그룹 진행
+    → git add 후 commit 메시지 자동 생성
+
+[2] 🔄 수정 필요
+    → 피드백을 입력해주세요
+
+[3] ⏭️  Commit 없이 다음 그룹 진행
+    → 여러 그룹을 묶어서 나중에 commit
+
+[4] ⏸️  작업 일시 중지
+    → 여기서 작업 중단
+```
+
+**Commit 처리 (옵션 1 선택 시):**
+- 변경된 파일들을 git add
+- Commit 메시지 생성 (예: `feat: [그룹명] 구현 완료`)
+- git commit 실행
+- 다음 그룹으로 진행
+
+#### 1.6 다음 그룹으로
+
+모든 그룹이 완료될 때까지 1.1 ~ 1.5 반복
+
+#### 1.7 선택적 API 연동 (--with-api 옵션)
+
+모든 그룹 완료 후, 필요시 진행:
 
 - **API 클라이언트**: Axios/Fetch 설정
 - **엔드포인트 연결**: 백엔드 API와 통합
@@ -98,11 +174,21 @@ npm test
 🔔 **구현 전 확인 사항**:
 
 - feature-spec 워크플로우가 완료되었는가?
-- 테스트 시나리오가 명확한가?
+- Implementation Groups가 명확히 정의되었는가?
+- 각 그룹의 검증 조건이 명확한가?
+
+🔔 **각 그룹 완료 후** (가장 중요!):
+
+- ✅ **Commit 여부 결정**
+  - 옵션 1: Commit하고 다음 그룹 진행
+  - 옵션 2: 수정 필요 (피드백 제공)
+  - 옵션 3: Commit 없이 다음 그룹 진행
+  - 옵션 4: 작업 일시 중지
 
 🔔 **구현 중 확인 사항**:
 
 - TDD Red-Green-Refactor 사이클을 따르고 있는가?
+- 각 그룹의 검증 조건이 충족되는가?
 - Mock 데이터 구조가 적절한가?
 - API 연동 여부 결정 (백엔드 준비 시)
 
