@@ -88,6 +88,15 @@
   - danger-zones: 개발자 컨펌 필수 (위험도별 차등)
   - no-reference-zones: 참고 금지 (읽기도 금지)
 
+**사용자 승인 후:**
+
+**워크플로우 완료 처리** (Bash 실행):
+```bash
+node .claude/hooks/memory-sync.cjs workflow-complete legacy-profile
+```
+
+워크플로우 완료!
+
 ### (Optional) Phase 4: Refactoring Strategy (리팩토링 전략)
 
 **Agent: planning-agent**

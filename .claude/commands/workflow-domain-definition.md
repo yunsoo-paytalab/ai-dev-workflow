@@ -91,12 +91,19 @@
 - 페이지 구조 합리성 확인
 - 엔티티 관계 검토
 
-**사용자 승인 후 자동 진행:**
+**사용자 승인 후:**
 
-- 승인 시: **즉시 Phase 5로 진행** (Feature 상세 문서 작성)
+1. **워크플로우 완료 처리** (Bash 실행):
+   ```bash
+   node .claude/hooks/memory-sync.cjs workflow-complete domain-definition
+   ```
+
+2. **즉시 Phase 5로 진행** (Feature 상세 문서 작성)
+
+⚠️ **IMPORTANT**:
+- 사용자가 승인하면 반드시 위 Bash 명령을 먼저 실행하세요
+- 그 다음 Phase 5를 실행해야 합니다. Phase 5를 건너뛰지 마세요
 - 수정 요청 시: Phase 3으로 돌아가 수정 후 다시 검토
-
-⚠️ **IMPORTANT**: 사용자가 승인하면 반드시 Phase 5를 실행해야 합니다. Phase 5를 건너뛰지 마세요.
 
 ### Phase 5: Feature Detail Writing (Feature 상세 문서 작성)
 

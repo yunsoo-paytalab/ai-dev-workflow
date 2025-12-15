@@ -131,7 +131,7 @@ async function runDashboardLoop() {
     console.clear();
 
     // progress.json에서 데이터 로드
-    const { features, tasks, memoryId, hasProgress } = loadProjectData();
+    const { features, tasks, workflows, memoryId, hasProgress } = loadProjectData();
     const stats = calculateStats(features, tasks);
 
     // 헤더 및 요약
@@ -154,6 +154,42 @@ async function runDashboardLoop() {
           "(/workflow-memory init)"
         )}`
       );
+    }
+
+    // Workflows 현황 표시
+    if (Object.keys(workflows).length > 0) {
+      console.log();
+      console.log(chalk.magenta("  Workflows:"));
+
+      const workflowLabels = {
+        "legacy-profile": "레거시 프로파일링",
+        "domain-definition": "도메인 정의",
+        "task-point": "Task Point 산정",
+      };
+
+      Object.entries(workflows).forEach(([key, value]) => {
+        const label = workflowLabels[key] || key;
+
+        // status 기반 아이콘 및 상태 표시
+        let icon = chalk.gray("○");
+        let statusText = "";
+
+        if (value.status === "done") {
+          icon = chalk.green("✓");
+          statusText = value.completedAt ? chalk.gray(` (완료: ${value.completedAt})`) : chalk.gray(" (완료)");
+        } else if (value.status === "in_progress") {
+          icon = chalk.yellow("⋯");
+          statusText = value.startedAt ? chalk.yellow(` (진행중: ${value.startedAt}~)`) : chalk.yellow(" (진행중)");
+        }
+
+        // 하위 호환성: 기존 done 필드도 지원
+        if (value.done && !value.status) {
+          icon = chalk.green("✓");
+          statusText = value.completedAt ? chalk.gray(` (${value.completedAt})`) : "";
+        }
+
+        console.log(`    ${icon} ${label}${statusText}`);
+      });
     }
 
     console.log(

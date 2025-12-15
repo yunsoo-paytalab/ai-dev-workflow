@@ -65,7 +65,9 @@ function handleSessionStart() {
 
   if (!memoryId) {
     console.log("⚠️  메모리가 연결되지 않았습니다.");
-    console.log("   `/workflow-memory init [id]` 명령어로 메모리를 생성하세요.");
+    console.log(
+      "   `/workflow-memory init [id]` 명령어로 메모리를 생성하세요."
+    );
     return;
   }
 
@@ -126,6 +128,46 @@ function handleSessionStart() {
   }
 }
 
+// 워크플로우 완료 공통 로직 (중복 제거)
+function completeCurrentWorkflow(memoryId, workflowName, projectCwd) {
+  console.log(`✓ 워크플로우 완료: ${workflowName}`);
+
+  // 워크플로우 완료 표시
+  completeWorkflow(memoryId, workflowName);
+
+  // 워크플로우별 문서 파싱
+  if (projectCwd) {
+    if (workflowName === "domain-definition") {
+      const domainResult = parseDomainDefinitionToProgress(
+        memoryId,
+        projectCwd
+      );
+      const featureResult = parseFeatureListToProgress(memoryId, projectCwd);
+      if (domainResult.success) {
+        console.log(
+          `✓ domain-definition 파싱: ${domainResult.domains}개 도메인`
+        );
+      }
+      if (featureResult.success) {
+        console.log(
+          `✓ feature-list 파싱: ${featureResult.features}개 Feature, ${featureResult.tasks}개 Task`
+        );
+      }
+    } else if (workflowName === "task-point") {
+      const featureResult = parseFeatureListToProgress(memoryId, projectCwd);
+      if (featureResult.success) {
+        console.log(
+          `✓ feature-list 파싱: ${featureResult.features}개 Feature, ${featureResult.tasks}개 Task`
+        );
+      }
+    }
+  }
+
+  // progress.json 재계산 및 memory.md 동기화
+  recalculateProgress(memoryId);
+  syncProgressToMemory(memoryId);
+}
+
 // 세션 종료 처리
 // 현재 세션 파일에 종료 시간을 추가하고 마무리합니다.
 function handleSessionEnd() {
@@ -163,7 +205,15 @@ function handleSessionEnd() {
     meta.activeSessions = {};
   }
 
-  // 현재 세션 확인 (session_id 기반)
+  // 세션 처리와 별개로 워크플로우 완료 처리 (폴백)
+  const currentWorkflow = getCurrentWorkflow(memoryId);
+  if (currentWorkflow) {
+    console.log("⚠️  승인 없이 종료됨, 자동 완료 처리");
+    completeCurrentWorkflow(memoryId, currentWorkflow, projectCwd);
+    finishCurrentWorkflow(memoryId);
+  }
+
+  // 세션 정리 (세션을 찾을 수 있으면)
   const currentSession = meta.activeSessions[sessionId];
   if (currentSession) {
     const sessionsDir = path.join(memoryPath, "sessions");
@@ -182,33 +232,6 @@ function handleSessionEnd() {
     // lastSessionFile 업데이트 및 activeSessions에서 제거
     meta.lastSessionFile = currentSession.file;
     delete meta.activeSessions[sessionId];
-  }
-
-  // 현재 워크플로우가 있으면 완료 처리
-  const currentWorkflow = getCurrentWorkflow(memoryId);
-  if (currentWorkflow) {
-    finishCurrentWorkflow(memoryId);
-
-    // 워크플로우별 문서 파싱 및 progress.json 업데이트
-    if (projectCwd) {
-      if (currentWorkflow === "domain-definition") {
-        // domain-definition은 Phase 4-5에서 feature-list도 생성하므로 둘 다 파싱
-        const domainResult = parseDomainDefinitionToProgress(memoryId, projectCwd);
-        if (domainResult.success) {
-          console.log(`✓ domain-definition 파싱: ${domainResult.domains}개 도메인`);
-        }
-        const featureResult = parseFeatureListToProgress(memoryId, projectCwd);
-        if (featureResult.success) {
-          console.log(`✓ feature-list 파싱: ${featureResult.features}개 Feature, ${featureResult.tasks}개 Task`);
-        }
-      }
-    }
-
-    console.log(`✓ 워크플로우 완료: ${currentWorkflow}`);
-
-    // progress.json 재계산 및 memory.md 동기화
-    recalculateProgress(memoryId);
-    syncProgressToMemory(memoryId);
   }
 
   // meta.json 업데이트
@@ -272,7 +295,7 @@ function handleCompact() {
 
   writeJson(metaPath, meta);
 
-  console.log(`✓ Compact 처리됨 (세션: ${currentSession?.file || 'N/A'})`);
+  console.log(`✓ Compact 처리됨 (세션: ${currentSession?.file || "N/A"})`);
 }
 
 // 사용자 입력 처리 (UserPromptSubmit hook에서 호출)
@@ -295,11 +318,13 @@ function handleUserInput() {
   const sessionId = hookData.session_id || null;
 
   // 시스템 메시지 필터링
-  if (!prompt.trim() ||
-      prompt.startsWith("<command-name>") ||
-      prompt.startsWith("<command-message>") ||
-      prompt.startsWith("<local-command") ||
-      prompt.includes("<system-reminder>")) {
+  if (
+    !prompt.trim() ||
+    prompt.startsWith("<command-name>") ||
+    prompt.startsWith("<command-message>") ||
+    prompt.startsWith("<local-command") ||
+    prompt.includes("<system-reminder>")
+  ) {
     return;
   }
 
@@ -326,27 +351,12 @@ function handleUserInput() {
 
     // /workflow-memory는 메모리 관리 커맨드이므로 제외
     if (!workflowName.startsWith("memory")) {
-      // 이전 워크플로우가 있으면 완료 처리
+      // 이전 워크플로우가 있으면 자동 완료 처리
       const previousWorkflow = getCurrentWorkflow(memoryId);
       if (previousWorkflow && previousWorkflow !== workflowName) {
+        console.log(`⚠️  이전 워크플로우 자동 완료: ${previousWorkflow}`);
+        completeCurrentWorkflow(memoryId, previousWorkflow, projectCwd);
         finishCurrentWorkflow(memoryId);
-
-        // 워크플로우별 문서 파싱 및 progress.json 업데이트
-        if (previousWorkflow === "domain-definition") {
-          // domain-definition은 Phase 4-5에서 feature-list도 생성하므로 둘 다 파싱
-          const domainResult = parseDomainDefinitionToProgress(memoryId, projectCwd);
-          if (domainResult.success) {
-            console.log(`✓ domain-definition 파싱: ${domainResult.domains}개 도메인`);
-          }
-          const featureResult = parseFeatureListToProgress(memoryId, projectCwd);
-          if (featureResult.success) {
-            console.log(`✓ feature-list 파싱: ${featureResult.features}개 Feature, ${featureResult.tasks}개 Task`);
-          }
-        }
-
-        recalculateProgress(memoryId);
-        syncProgressToMemory(memoryId);
-        console.log(`✓ 이전 워크플로우 완료: ${previousWorkflow}`);
       }
 
       // 새 워크플로우 설정
@@ -381,7 +391,7 @@ function handleUserInput() {
       meta.activeSessions[sessionId] = {
         file: sessionFileName,
         workflow: workflowName,
-        startedAt: getTimestamp()
+        startedAt: getTimestamp(),
       };
       meta.lastAccess = getTimestamp();
       writeJson(metaPath, meta);
@@ -491,8 +501,8 @@ function handleAssistantResponse() {
             // 배열 형태인 경우
             if (Array.isArray(content)) {
               content = content
-                .filter(c => c.type === "text")
-                .map(c => c.text)
+                .filter((c) => c.type === "text")
+                .map((c) => c.text)
                 .join(" ");
             }
 
@@ -592,6 +602,41 @@ function applyCleanupRules(memoryId) {
   });
 }
 
+// 워크플로우 완료 처리 (사용자 승인 시 호출)
+// Claude가 직접 호출: node .claude/hooks/memory-sync.cjs workflow-complete [workflow-name]
+function handleWorkflowComplete() {
+  const workflowName = process.argv[3]; // domain-definition, task-point 등
+  const projectCwd = process.cwd();
+  const memoryId = getMemoryIdFromPath(projectCwd);
+
+  if (!memoryId) {
+    console.log("⚠️  메모리가 연결되지 않았습니다.");
+    return;
+  }
+
+  if (!workflowName) {
+    console.log("⚠️  워크플로우 이름이 필요합니다.");
+    console.log(
+      "   사용법: node .claude/hooks/memory-sync.cjs workflow-complete [workflow-name]"
+    );
+    return;
+  }
+
+  console.log("─".repeat(50));
+  console.log(`📋 사용자 승인으로 워크플로우 완료 처리`);
+
+  completeCurrentWorkflow(memoryId, workflowName, projectCwd);
+
+  // currentWorkflow 제거
+  const currentWorkflow = getCurrentWorkflow(memoryId);
+  if (currentWorkflow === workflowName) {
+    finishCurrentWorkflow(memoryId);
+  }
+
+  console.log("✓ Progress 동기화 완료!");
+  console.log("─".repeat(50));
+}
+
 // Progress 동기화 처리 (워크플로우 Phase 완료 시 호출)
 // Claude가 직접 호출: node .claude/hooks/memory-sync.cjs sync-progress
 function handleSyncProgress() {
@@ -654,7 +699,12 @@ switch (command) {
   case "sync-progress":
     handleSyncProgress();
     break;
+  case "workflow-complete":
+    handleWorkflowComplete();
+    break;
   default:
-    console.log("사용법: node memory-sync.cjs [user-input|assistant-response|start|end|compact|sync-progress]");
+    console.log(
+      "사용법: node memory-sync.cjs [user-input|assistant-response|start|end|compact|sync-progress|workflow-complete]"
+    );
     process.exit(1);
 }

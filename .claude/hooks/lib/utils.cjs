@@ -367,7 +367,11 @@ function deepMerge(target, source) {
   const result = { ...target };
 
   for (const key in source) {
-    if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
+    if (
+      source[key] &&
+      typeof source[key] === "object" &&
+      !Array.isArray(source[key])
+    ) {
       result[key] = deepMerge(target[key] || {}, source[key]);
     } else if (source[key] !== undefined) {
       result[key] = source[key];
@@ -667,8 +671,12 @@ function completeWorkflow(memoryId, workflowName) {
     progress.setup.workflows = {};
   }
 
+  // 기존 워크플로우 정보 유지 (startedAt)
+  const existingWorkflow = progress.setup.workflows[workflowName] || {};
+
   progress.setup.workflows[workflowName] = {
-    done: true,
+    status: "done",
+    startedAt: existingWorkflow.startedAt || null,
     completedAt: getDateString(),
   };
 
@@ -688,6 +696,28 @@ function setCurrentWorkflow(memoryId, workflowName) {
   meta.workflowStartedAt = getTimestamp();
 
   writeJson(metaPath, meta);
+
+  // progress.json의 워크플로우 상태를 in_progress로 업데이트
+  const progress = readProgress(memoryId);
+
+  if (!progress.setup) {
+    progress.setup = { workflows: {}, custom: [] };
+  }
+  if (!progress.setup.workflows) {
+    progress.setup.workflows = {};
+  }
+
+  // 기존 워크플로우 정보 유지
+  const existingWorkflow = progress.setup.workflows[workflowName] || {};
+
+  progress.setup.workflows[workflowName] = {
+    status: "in_progress",
+    startedAt: existingWorkflow.startedAt || getDateString(),
+    completedAt: null,
+  };
+
+  writeProgress(memoryId, progress);
+
   return meta;
 }
 
@@ -890,9 +920,29 @@ function generateProgressMarkdown(memoryId) {
   if (progress.setup?.workflows) {
     Object.entries(progress.setup.workflows).forEach(([key, value]) => {
       const label = workflowLabels[key] || key;
-      const check = value.done ? "x" : " ";
-      const date = value.completedAt ? ` (${value.completedAt})` : "";
-      md += `- [${check}] ${label}${date}\n`;
+
+      // status 기반 체크박스 및 상태 표시
+      let check = " ";
+      let statusText = "";
+
+      if (value.status === "done") {
+        check = "x";
+        statusText = value.completedAt
+          ? ` (완료: ${value.completedAt})`
+          : " (완료)";
+      } else if (value.status === "in_progress") {
+        statusText = value.startedAt
+          ? ` (진행중: ${value.startedAt}~)`
+          : " (진행중)";
+      }
+
+      // 하위 호환성: 기존 done 필드도 지원
+      if (value.done && !value.status) {
+        check = "x";
+        statusText = value.completedAt ? ` (${value.completedAt})` : "";
+      }
+
+      md += `- [${check}] ${label}${statusText}\n`;
     });
   }
 

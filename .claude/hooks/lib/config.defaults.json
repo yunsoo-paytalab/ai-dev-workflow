@@ -14,9 +14,9 @@
   "defaultProgress": {
     "setup": {
       "workflows": {
-        "legacy-profile": { "done": false, "completedAt": null },
-        "domain-definition": { "done": false, "completedAt": null },
-        "task-point": { "done": false, "completedAt": null }
+        "legacy-profile": { "status": "not_started", "startedAt": null, "completedAt": null },
+        "domain-definition": { "status": "not_started", "startedAt": null, "completedAt": null },
+        "task-point": { "status": "not_started", "startedAt": null, "completedAt": null }
       },
       "custom": []
     },

@@ -125,9 +125,13 @@ export function loadProjectData() {
     taskCount: tasks.filter((t) => t.featureId === feature.id).length,
   }));
 
+  // setup.workflows 데이터 추출
+  const workflows = progress?.setup?.workflows || {};
+
   return {
     features: featuresWithTaskCount,
     tasks,
+    workflows,
     memoryId,
     hasProgress: !!progress,
   };
