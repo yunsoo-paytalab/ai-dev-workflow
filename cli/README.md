@@ -5,14 +5,14 @@ Feature와 Task 현황을 한눈에 보고, Claude Code와 연동하여 워크�
 ## 설치
 
 ```bash
-cd .claude/cli
+cd cli
 npm install
 ```
 
 ### 전역 명령어로 등록 (권장)
 
 ```bash
-cd .claude/cli
+cd cli
 npm link
 ```
 
@@ -32,26 +32,26 @@ aidev list         # Feature 목록
 
 ```bash
 # 대화형 대시보드 (기본)
-node .claude/cli/src/index.js
+node cli/src/index.js
 
 # 상태 요약
-node .claude/cli/src/index.js status
+node cli/src/index.js status
 
 # Feature 목록
-node .claude/cli/src/index.js list
+node cli/src/index.js list
 
 # Task 목록
-node .claude/cli/src/index.js list --tasks
+node cli/src/index.js list --tasks
 
 # 특정 Feature의 Task만
-node .claude/cli/src/index.js list --feature AUTH-001
+node cli/src/index.js list --feature AUTH-001
 ```
 
 ### alias 설정 (권장)
 
 ```bash
 # ~/.zshrc 또는 ~/.bashrc에 추가
-alias aidev="node $(pwd)/.claude/cli/src/index.js"
+alias aidev="node $(pwd)/cli/src/index.js"
 ```
 
 그러면 다음과 같이 사용 가능:
@@ -65,17 +65,17 @@ aidev list -t  # Task 목록
 
 ## 명령어
 
-| 명령어 | 단축 | 설명 |
-|--------|------|------|
-| `dashboard` | `d` | 대화형 대시보드 실행 |
-| `status` | `s` | 현재 진행 상황 요약 |
-| `list` | `l` | Feature/Task 목록 출력 |
+| 명령어      | 단축 | 설명                   |
+| ----------- | ---- | ---------------------- |
+| `dashboard` | `d`  | 대화형 대시보드 실행   |
+| `status`    | `s`  | 현재 진행 상황 요약    |
+| `list`      | `l`  | Feature/Task 목록 출력 |
 
 ### list 옵션
 
-| 옵션 | 설명 |
-|------|------|
-| `--tasks, -t` | Task 목록만 표시 |
+| 옵션                 | 설명                |
+| -------------------- | ------------------- |
+| `--tasks, -t`        | Task 목록만 표시    |
 | `--feature, -f <id>` | 특정 Feature만 표시 |
 
 ## 대시보드 기능
@@ -100,7 +100,6 @@ aidev list -t  # Task 목록
 
 ? 무엇을 하시겠습니까?
 ❯ 📋 Feature 목록 보기
-  📝 Task 목록 보기
   🚀 다음 Task 작업 시작
   🔍 특정 Feature 선택
   ❌ 종료
@@ -123,14 +122,14 @@ aidev list -t  # Task 목록
 ```markdown
 ## Feature 목록
 
-| Feature ID | Feature명 | 카테고리 | Tasks | 상태 | 상세 문서 |
-|------------|-----------|----------|-------|------|-----------|
-| AUTH-001 | 사용자 인증 | 인증 | 7 | 개발 중 | [상세](./feature-list/AUTH-001.md) |
+| Feature ID | Feature명   | 카테고리 | Tasks | 상태    | 상세 문서                          |
+| ---------- | ----------- | -------- | ----- | ------- | ---------------------------------- |
+| AUTH-001   | 사용자 인증 | 인증     | 7     | 개발 중 | [상세](./feature-list/AUTH-001.md) |
 
 ## 전체 Task 목록
 
-| Task ID | Task명 | Feature | 우선순위 | 의존성 | 상태 |
-|---------|--------|---------|----------|--------|------|
-| AUTH-001-001 | Users 테이블 | AUTH-001 | high | - | done |
-| AUTH-001-002 | JWT 유틸리티 | AUTH-001 | high | AUTH-001-001 | pending |
+| Task ID      | Task명       | Feature  | 우선순위 | 의존성       | 상태    |
+| ------------ | ------------ | -------- | -------- | ------------ | ------- |
+| AUTH-001-001 | Users 테이블 | AUTH-001 | high     | -            | done    |
+| AUTH-001-002 | JWT 유틸리티 | AUTH-001 | high     | AUTH-001-001 | pending |
 ```
