@@ -160,7 +160,7 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 - /workflow-e2e - E2E 테스트
 
 **$ARGUMENTS 입력 형태**:
-- 파일 참조: @.claude/docs/specs/auth.md
+- 파일 참조: @.claude/docs/feature-list/AUTH-001-login.md
 - Feature ID: AUTH-001
 - Feature 이름: 로그인 기능
 - 일반 텍스트: 소셜 로그인 추가
@@ -199,7 +199,7 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 **$ARGUMENTS 입력 형태**:
 
 - 예약어: `common` (공통 컴포넌트 확장)
-- 파일 참조: `@.claude/docs/specs/auth.md`
+- 파일 참조: `@.claude/docs/plan/AUTH-001-plan.md`
 - Feature ID: `AUTH-001`
 - Feature 이름: `로그인 기능`
 - 일반 텍스트: `소셜 로그인 UI`
@@ -210,7 +210,7 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 
 **$ARGUMENTS 입력 형태**:
 
-- 파일 참조: `@.claude/docs/specs/auth.md`
+- 파일 참조: `@.claude/docs/plan/AUTH-001-plan.md`
 - Feature ID: `AUTH-001`
 - Feature 이름: `로그인 기능`
 - 일반 텍스트: `소셜 로그인 구현`
@@ -309,18 +309,18 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 ### UI 구현 (필요시)
 
 ```
-/workflow-ui common                         # 공통 컴포넌트 확장
-/workflow-ui @.claude/docs/specs/auth.md    # 파일 직접 참조
-/workflow-ui AUTH-001                       # Feature ID로 검색
-/workflow-ui 로그인 기능                     # Feature 이름으로 검색
+/workflow-ui common                                # 공통 컴포넌트 확장
+/workflow-ui @.claude/docs/plan/AUTH-001-plan.md   # 파일 직접 참조
+/workflow-ui AUTH-001                              # Feature ID로 검색
+/workflow-ui 로그인 기능                            # Feature 이름으로 검색
 ```
 
 ### 기능 구현 (TDD)
 
 ```
-/workflow-implement @.claude/docs/specs/auth.md   # 파일 직접 참조
-/workflow-implement AUTH-001                       # Feature ID로 검색
-/workflow-implement 로그인 기능                    # Feature 이름으로 검색
+/workflow-implement @.claude/docs/plan/AUTH-001-plan.md   # 파일 직접 참조
+/workflow-implement AUTH-001                               # Feature ID로 검색
+/workflow-implement 로그인 기능                            # Feature 이름으로 검색
 ```
 
 ### 시스템 통합

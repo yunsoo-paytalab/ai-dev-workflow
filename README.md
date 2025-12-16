@@ -178,7 +178,7 @@ Mock 데이터로 먼저 동작을 확인하고, API 연동은 나중에 합니�
 /workflow-feature-spec 장바구니
 
 # Claude가 요구사항을 분석하고 설계 문서를 생성합니다
-# → .claude/docs/specs/CART-001-spec.md 생성
+# → .claude/docs/plan/CART-001-plan.md 생성
 
 # 2. (검토 후) 구현 시작
 /workflow-implement 장바구니
@@ -374,11 +374,11 @@ Hook이 자동으로 진행 상황을 저장합니다. 다음 세션에서 `/wor
 <details>
 <summary>클릭해서 펼치기</summary>
 
-| 항목       | 형식                        | 예시               |
-| ---------- | --------------------------- | ------------------ |
-| Feature ID | `{DOMAIN}-{NUM}`            | `AUTH-001`         |
-| Task ID    | `{DOMAIN}-{NUM}-{TASK_NUM}` | `AUTH-001-001`     |
-| 명세 파일  | `[ID]-spec.md`              | `AUTH-001-spec.md` |
+| 항목       | 형식                                  | 예시                                   |
+| ---------- | ------------------------------------- | -------------------------------------- |
+| Feature ID | `{DOMAIN}-{NUM}`                      | `AUTH-001`                             |
+| Task ID    | `{DOMAIN}-{NUM}-{TASK_NUM}`           | `AUTH-001-001`                         |
+| 명세 파일  | `[ID]-plan.md / [ID]-research.md`     | `AUTH-001-plan.md, AUTH-001-research.md` |
 
 </details>
 

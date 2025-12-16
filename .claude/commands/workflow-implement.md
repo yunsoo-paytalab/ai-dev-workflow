@@ -8,11 +8,11 @@
 
 `$ARGUMENTS`는 다음 형태로 입력될 수 있습니다:
 
-| 입력 형태    | 예시                          | 설명                       |
-| ------------ | ----------------------------- | -------------------------- |
-| 파일 참조    | `@.claude/docs/specs/auth.md` | 파일 직접 참조             |
-| Feature ID   | `AUTH-001`                    | Feature ID로 문서 검색     |
-| Feature 이름 | `로그인 기능`                 | Feature 이름으로 문서 검색 |
+| 입력 형태    | 예시                                     | 설명                       |
+| ------------ | ---------------------------------------- | -------------------------- |
+| 파일 참조    | `@.claude/docs/plan/AUTH-001-plan.md`    | 파일 직접 참조             |
+| Feature ID   | `AUTH-001`                               | Feature ID로 문서 검색     |
+| Feature 이름 | `로그인 기능`                            | Feature 이름으로 문서 검색 |
 
 ### 실행 모드 옵션
 
@@ -30,64 +30,33 @@
 
 ### 참조 문서 탐색
 
+> 💡 **Feature Resolver SKILL 사용**
+>
+> 상세 로직: `@.claude/skills/feature-resolver/SKILL.md` 참조
+>
+> ```
+> 파라미터:
+> - argument: $ARGUMENTS
+> - searchPaths: [".claude/docs/research", ".claude/docs/plan"]
+> - requiredFiles: ["research", "plan"]
+> - allowFallback: false
+> ```
+
 > ⚠️ **필수 참조 문서**:
 >
 > - **Research 파일**: `.claude/docs/research/[Feature ID]-research.md` (요구사항)
 > - **Plan 파일**: `.claude/docs/plan/[Feature ID]-plan.md` (구현 계획)
 
-**Feature ID 패턴**: `^[A-Z]+(-[A-Z]+)*-\d+$`
+**결과에 따른 처리:**
 
-- 예: `AUTH-001`, `USER-MGMT-002`, `DASHBOARD-123`
+| SKILL 결과                                   | 처리 방법                                                                    |
+| -------------------------------------------- | ---------------------------------------------------------------------------- |
+| `feature-id` (모든 필수 파일 exists: true)   | 두 파일 모두 로드 → 구현 진행 (Phase 1 시작)                                 |
+| `feature-name` (모든 필수 파일 exists: true) | 매칭된 Feature의 파일들 로드 → 구현 진행                                     |
+| `direct` (연결된 research도 exists: true)    | 직접 참조 파일 + research 로드 → 구현 진행                                   |
+| `error` (필수 파일 누락)                     | 에러 메시지 표시 → 워크플로우 중단 → `/workflow-feature-spec` 먼저 실행 안내 |
 
-**탐색 로직**:
-
-1. **`$ARGUMENTS`가 `@`로 시작하면** → 해당 파일을 직접 plan 파일로 사용
-   - Feature ID 추출 후 해당 research 파일도 로드 시도
-   - research 파일이 없으면 에러 발생
-
-2. **Feature ID 패턴 감지 시** (예: `AUTH-001`):
-
-   ```bash
-   # Feature ID 추출
-   FEATURE_ID="$ARGUMENTS"  # 예: AUTH-001
-
-   # 필수 파일 경로 확인
-   RESEARCH_FILE=".claude/docs/research/${FEATURE_ID}-research.md"
-   PLAN_FILE=".claude/docs/plan/${FEATURE_ID}-plan.md"
-   ```
-
-   **분기 처리**:
-
-   - ✅ **research + plan 모두 존재**:
-     - 두 파일을 모두 로드
-     - 구현 진행 (Phase 1 시작)
-
-   - ❌ **하나라도 없는 경우**:
-     - **에러 메시지 출력**:
-       ```
-       ❌ 필수 파일이 없습니다:
-
-       누락된 파일:
-       - .claude/docs/research/AUTH-001-research.md
-       또는
-       - .claude/docs/plan/AUTH-001-plan.md
-
-       먼저 다음 명령어를 실행하세요:
-       /workflow-feature-spec AUTH-001
-       ```
-     - 워크플로우 중단
-
-3. **Feature ID 패턴이 아닌 경우** (예: `로그인 기능`):
-
-   - `.claude/docs/plan/` 폴더 내 모든 파일명에서 Feature ID 추출
-   - `$ARGUMENTS`와 매칭:
-     - Feature 이름 일치 또는 포함 (예: `로그인 기능`)
-     - 부분 텍스트 매칭 (예: `로그인` → `로그인 기능` 매칭)
-   - **매칭 결과**:
-     - ✅ 매칭 성공 → plan 파일과 research 파일을 모두 로드하여 구현 진행
-     - ❌ 매칭 실패 → 에러 메시지 + `/workflow-feature-spec` 먼저 실행 안내
-
-**로드된 문서 역할**:
+**로드된 문서 역할:**
 
 - **Research 파일**: 요구사항 검증의 기준 (1.4.1 단계에서 사용)
 - **Plan 파일**: 구현 계획 및 Implementation Groups (1.1~1.3 단계에서 사용)

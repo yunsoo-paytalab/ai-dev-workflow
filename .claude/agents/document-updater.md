@@ -112,7 +112,7 @@ Write: .claude/docs/feature-list/AUTH-001-login.md
 
 ⏳ 문서 업데이트 중... (2/4)
 
-✅ .claude/docs/specs/AUTH-001-spec.md
+✅ .claude/docs/plan/AUTH-001-plan.md
    → 2섹션 수정 완료
 
 ...
@@ -153,7 +153,7 @@ Write: .claude/docs/feature-list/AUTH-001-login.md
 
 ---
 
-### .claude/docs/specs/AUTH-001-spec.md
+### .claude/docs/plan/AUTH-001-plan.md
 
 **변경 1: 섹션 2.3 API 스펙**
 OAuth 1.0 엔드포인트로 변경
@@ -220,7 +220,7 @@ git diff --check
 
 ✅ 성공: 2개 문서
   - .claude/docs/feature-list/AUTH-001-login.md (3군데 수정)
-  - .claude/docs/specs/AUTH-001-spec.md (2섹션 수정)
+  - .claude/docs/plan/AUTH-001-plan.md (2섹션 수정)
 
 ⏭️  건너뜀: 1개 문서
   - AUTH-002 (사용자가 선택하지 않음)
@@ -322,7 +322,7 @@ git diff --check
 ```markdown
 ⚠️ 경고: Git 충돌 가능성
 
-파일: .claude/docs/specs/AUTH-001-spec.md
+파일: .claude/docs/plan/AUTH-001-plan.md
 상태: Uncommitted changes 있음
 
 권장 사항:
@@ -366,7 +366,7 @@ git diff --check
    - 라인 42: OAuth 2.0 → OAuth 1.0
    - 섹션 추가: OAuth 1.0 요구사항
 
-📄 .claude/docs/specs/AUTH-001-spec.md
+📄 .claude/docs/plan/AUTH-001-plan.md
    예상 변경:
    - 섹션 2.3: API 스펙 수정
    - 섹션 2.4: 데이터 흐름 수정
@@ -386,11 +386,11 @@ git diff --check
 ```markdown
 ❌ 에러: 파일 읽기 권한 없음
 
-파일: .claude/docs/specs/AUTH-001-spec.md
+파일: .claude/docs/plan/AUTH-001-plan.md
 권한: 현재 사용자는 읽기 권한 없음
 
 해결 방법:
-chmod +r .claude/docs/specs/AUTH-001-spec.md
+chmod +r .claude/docs/plan/AUTH-001-plan.md
 ```
 
 ---
@@ -400,11 +400,11 @@ chmod +r .claude/docs/specs/AUTH-001-spec.md
 ```markdown
 ❌ 에러: 파일 쓰기 권한 없음
 
-파일: .claude/docs/specs/AUTH-001-spec.md
+파일: .claude/docs/plan/AUTH-001-plan.md
 권한: 현재 사용자는 쓰기 권한 없음
 
 해결 방법:
-chmod +w .claude/docs/specs/AUTH-001-spec.md
+chmod +w .claude/docs/plan/AUTH-001-plan.md
 ```
 
 ---

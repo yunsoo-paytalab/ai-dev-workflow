@@ -15,60 +15,25 @@
 
 ### 참조 문서 탐색
 
-**Feature ID 패턴**: `^[A-Z]+(-[A-Z]+)*-\d+$`
+> 💡 **Feature Resolver SKILL 사용**
+>
+> 상세 로직: `@.claude/skills/feature-resolver/SKILL.md` 참조
+>
+> ```
+> 파라미터:
+> - argument: $ARGUMENTS
+> - searchPaths: [".claude/docs/feature-list"]
+> - allowFallback: true
+> ```
 
-- 예: `AUTH-001`, `USER-MGMT-002`, `DASHBOARD-123`
+**결과에 따른 처리:**
 
-**탐색 로직**:
-
-1. **`$ARGUMENTS`가 `@`로 시작하면** → 해당 파일을 직접 참조 문서로 사용
-
-2. **Feature ID 패턴 감지 시** (예: `AUTH-001`):
-
-   ```bash
-   # Feature ID 추출
-   FEATURE_ID="$ARGUMENTS"  # 예: AUTH-001
-
-   # 기존 파일 경로 확인
-   RESEARCH_FILE=".claude/docs/research/${FEATURE_ID}-research.md"
-   PLAN_FILE=".claude/docs/plan/${FEATURE_ID}-plan.md"
-   ```
-
-   **분기 처리**:
-
-   - ✅ **research + plan 모두 존재**:
-
-     - 기존 파일을 읽어서 사용자에게 표시
-     - "이미 작성된 문서가 있습니다. 계속 진행하시겠어요?"
-     - 사용자 승인 시: 기존 내용 기반으로 업데이트/재검토
-     - 사용자 거부 시: 새로 시작
-
-   - ✅ **research만 존재**:
-
-     - research 파일 로드
-     - Phase 1 건너뛰고 Phase 3부터 시작 (plan 생성)
-     - "research 문서를 찾았습니다. 설계 단계부터 진행합니다."
-
-   - ⚠️ **plan만 존재** (비정상 상황):
-
-     - 경고 메시지 출력
-     - "plan 파일만 존재합니다. research 파일이 필요합니다."
-     - 사용자 확인: 새로 시작 또는 plan 기반으로 research 역생성
-
-   - ❌ **둘 다 없음**:
-     - `.claude/docs/feature-list/` 폴더에서 Feature ID 검색
-     - 매칭되면 해당 참조 문서 사용
-     - 매칭 실패 시 새 Feature로 처리
-
-3. **Feature ID 패턴이 아닌 경우** (예: `로그인 기능`):
-
-   - `.claude/docs/feature-list/` 폴더 내 모든 파일의 첫 줄을 읽음
-   - `$ARGUMENTS`와 매칭:
-     - Feature 이름 일치 또는 포함 (예: `로그인 기능`)
-     - 부분 텍스트 매칭 (예: `로그인` → `로그인 기능` 매칭)
-   - **매칭 결과**:
-     - ✅ 매칭 성공 → 해당 참조 문서를 기반으로 Phase 2 진행
-     - ❌ 매칭 실패 → `$ARGUMENTS`를 일반 텍스트로 처리하여 새 Feature로 Phase 2 진행
+| SKILL 결과     | 처리 방법                                                                       |
+| -------------- | ------------------------------------------------------------------------------- |
+| `feature-id`   | feature-list 파일 존재 → 로드 → Phase 0부터 시작 (기존 업데이트 또는 새로 작성) |
+| `feature-name` | 매칭된 feature-list 파일 로드 → Phase 0부터 시작                                |
+| `direct`       | 직접 참조된 feature-list 파일 로드 → Phase 0부터 시작                           |
+| `fallback`     | 새 Feature로 처리 → Phase 0부터 시작 (처음부터 작성)                            |
 
 ## 실행 프로세스
 

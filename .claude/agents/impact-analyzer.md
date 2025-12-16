@@ -38,7 +38,8 @@ model: opus
 **탐색 경로:**
 ```
 .claude/docs/feature-list/[FEATURE_ID]*.md
-.claude/docs/specs/[FEATURE_ID]*.md
+.claude/docs/research/[FEATURE_ID]*.md
+.claude/docs/plan/[FEATURE_ID]*.md
 ```
 
 **예시:**
@@ -47,7 +48,7 @@ Feature ID: AUTH-001
 
 탐색 결과:
 - .claude/docs/feature-list/AUTH-001-login.md
-- .claude/docs/specs/AUTH-001-spec.md
+- .claude/docs/plan/AUTH-001-plan.md
 ```
 
 ---
@@ -56,8 +57,9 @@ Feature ID: AUTH-001
 
 **대상 문서:**
 1. Feature 세부 문서 (`.claude/docs/feature-list/`)
-2. Spec 문서 (`.claude/docs/specs/`)
-3. 관련 도메인 문서 (`.claude/docs/domain/`)
+2. Research 문서 (`.claude/docs/research/`)
+3. Plan 문서 (`.claude/docs/plan/`)
+4. 관련 도메인 문서 (`.claude/docs/domain/`)
 
 **분석 방법:**
 
@@ -223,7 +225,7 @@ src/features/auth/oauth.test.ts
    - 섹션 추가: OAuth 1.0 요구사항
    총 3군데 수정
 
-2. .claude/docs/specs/AUTH-001-spec.md
+2. .claude/docs/plan/AUTH-001-plan.md
    변경 항목:
    - 섹션 2.3 API 스펙: OAuth 1.0 엔드포인트로 변경
    - 섹션 2.4 데이터 흐름: OAuth 1.0 플로우로 수정
@@ -344,7 +346,7 @@ src/features/auth/oauth.test.ts
 ```markdown
 ⚠️ 충돌 가능성 감지
 
-.claude/docs/specs/AUTH-001-spec.md
+.claude/docs/plan/AUTH-001-plan.md
   최근 수정: 2시간 전
   수정자: (git log 확인 필요)
 
@@ -416,7 +418,8 @@ Feature ID: AUTH-001
 
 다음 위치를 확인했으나 발견되지 않음:
 - .claude/docs/feature-list/AUTH-001*.md
-- .claude/docs/specs/AUTH-001*.md
+- .claude/docs/research/AUTH-001*.md
+- .claude/docs/plan/AUTH-001*.md
 
 권장 사항:
 1. Feature ID를 확인하세요
