@@ -5,14 +5,14 @@ Feature와 Task 현황을 한눈에 보고, Claude Code와 연동하여 워크�
 ## 설치
 
 ```bash
-cd cli
+cd ai-dev-dashboard
 npm install
 ```
 
 ### 전역 명령어로 등록 (권장)
 
 ```bash
-cd cli
+cd ai-dev-dashboard
 npm link
 ```
 
@@ -27,32 +27,6 @@ aidev list         # Feature 목록
 > **Note**: `npm link`를 해제하려면 `npm unlink -g aidev`를 실행하세요.
 
 ## 사용법
-
-### 프로젝트 루트에서 실행
-
-```bash
-# 대화형 대시보드 (기본)
-node cli/src/index.js
-
-# 상태 요약
-node cli/src/index.js status
-
-# Feature 목록
-node cli/src/index.js list
-
-# Task 목록
-node cli/src/index.js list --tasks
-
-# 특정 Feature의 Task만
-node cli/src/index.js list --feature AUTH-001
-```
-
-### alias 설정 (권장)
-
-```bash
-# ~/.zshrc 또는 ~/.bashrc에 추가
-alias aidev="node $(pwd)/cli/src/index.js"
-```
 
 그러면 다음과 같이 사용 가능:
 
