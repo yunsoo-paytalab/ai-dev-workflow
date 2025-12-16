@@ -87,13 +87,6 @@
 | `features`        | Feature 정의 및 상태                                                 |
 | `tasks`           | Task 정의 및 상태                                                    |
 
-**역할 분리:**
-
-- `progress.json`: Feature/Task 정의 + 진행 상태 (CLI의 단일 데이터 소스)
-- `memory.md`: 컨텍스트, 결정사항, 메모 (사람 읽기용)
-
-> ⚠️ `feature-list.md`는 더 이상 사용하지 않습니다. 모든 Feature/Task 정보는 `progress.json`에서 관리됩니다.
-
 ---
 
 ## 서브 커맨드
@@ -282,37 +275,6 @@
 [사용자 확인 후]
 ✓ 3개 메모리 삭제됨
 ✓ 현재 프로젝트 연결 해제됨
-```
-
----
-
-### `/workflow-memory export [id]`
-
-메모리를 파일로 내보냅니다.
-
-**사용법:**
-
-```bash
-/workflow-memory export my-app-v2           # 특정 메모리
-/workflow-memory export                      # 현재 연결된 메모리
-```
-
-**AI 실행 지침:**
-
-```
-1. ID 미지정 시 현재 연결된 메모리 사용
-2. 내보내기 대상:
-   - memory.md
-   - sessions/ (모든 세션 파일)
-   - meta.json
-3. ZIP 파일로 압축
-4. 저장 경로: ~/Downloads/{id}_{날짜}.zip
-
-출력 예시:
-✓ 내보내기 완료: ~/Downloads/my-app-v2_2024-01-16.zip
-  - memory.md
-  - sessions/ (12개 파일)
-  - meta.json
 ```
 
 ---

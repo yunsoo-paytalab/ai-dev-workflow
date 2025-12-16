@@ -116,42 +116,6 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 
 ---
 
-### `/workflow update`
-
-**사용 시점**: 메모리 파일 수동 업데이트가 필요할 때
-
-**기능**:
-
-- 현재 진행 상황 분석
-- `memory.md` 파일 업데이트
-- 완료된 작업 체크
-
-**사용법**:
-
-```
-/workflow update
-```
-
-**AI 실행 지침**:
-
-```
-현재 상태를 memory.md 파일에 업데이트해주세요:
-
-1. `.claude/docs/memory/.memory-ref`에서 메모리 ID 확인 후 `~/.claude-aidev-memory/projects/{id}/memory.md` 읽기
-2. 프로젝트의 현재 상태 분석:
-   - 완료된 작업 확인
-   - 현재 진행 중인 작업 파악
-   - 파일 시스템 확인
-3. `memory.md` 파일 업데이트:
-   - 체크리스트 업데이트
-   - 기능 진행 상황 테이블 업데이트
-4. 업데이트된 내용을 사용자에게 보고
-
-💡 전역 메모리 파일 전체를 업데이트하려면 `/workflow-memory update`를 사용하세요.
-```
-
----
-
 ### `/workflow help`
 
 **사용 시점**: 언제든지
@@ -175,8 +139,8 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 **메인 명령어**:
 - /workflow start - 프로젝트 시작
 - /workflow status - 현재 상태 확인
-- /workflow update - memory.md 간단 업데이트
 - /workflow help - 도움말
+- /workflow reset - 프로젝트 초기화
 
 **메모리 명령어**:
 - /workflow-memory init [id] - 새 메모리 생성 및 연결
@@ -284,9 +248,31 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 ```
 프로젝트를 초기화해주세요:
 
-1. `.claude/docs/memory/memory-template.md` 파일 읽기
-2. `.claude/docs/memory/memory.md` 파일을 템플릿으로 덮어쓰기
-3. 메시지 표시: "프로젝트가 초기화되었습니다. `/workflow start` 명령어로 시작해주세요."
+1. 메모리 연결 확인:
+   - `.claude/docs/memory/.memory-ref` 파일 확인
+   - 없으면: "메모리가 연결되지 않았습니다. `/workflow-memory init [id]` 명령어로 메모리를 생성하세요."
+   - 있으면: 메모리 ID 읽기
+
+2. 전역 메모리 초기화:
+   - 메모리 경로: `~/.claude-aidev-memory/projects/{id}/`
+   - `memory.md`: `.claude/docs/memory/memory-template.md`의 내용으로 덮어쓰기
+   - `progress.json`: 기본 구조로 초기화 (`.claude/hooks/lib/config.defaults.json`의 defaultProgress 참조)
+   - `sessions/`: 기존 세션 파일들은 유지 (삭제하지 않음)
+
+3. index.json 업데이트:
+   - `~/.claude-aidev-memory/index.json`에서 lastAccess 갱신
+
+4. 메시지 표시:
+   "✅ 프로젝트가 초기화되었습니다.
+
+   초기화된 항목:
+   - memory.md (템플릿으로 리셋)
+   - progress.json (기본 구조로 리셋)
+
+   유지된 항목:
+   - sessions/ (기존 세션 기록 보존)
+
+   `/workflow start` 명령어로 시작해주세요."
 ```
 
 ---
@@ -347,12 +333,6 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 
 ```
 /workflow-e2e
-```
-
-### 메모리 업데이트
-
-```
-/workflow update
 ```
 
 ### 도움말
@@ -462,7 +442,6 @@ memory.md 업데이트:
 - `.claude/commands/workflow.md` - 메인 명령어 및 전체 가이드
   - `/workflow start` - 프로젝트 시작
   - `/workflow status` - 현재 상태 확인
-  - `/workflow update` - 메모리 수동 업데이트
   - `/workflow help` - 도움말
   - `/workflow reset` - 프로젝트 초기화
 
