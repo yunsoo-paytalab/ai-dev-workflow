@@ -127,10 +127,26 @@ export function printFeatureTable(features, tasks) {
     },
   });
 
+  // ✅ 최적화: tasks를 한 번만 순회해서 feature별로 그룹화
+  const tasksByFeature = new Map();
+  const doneTasksByFeature = new Map();
+
+  for (const task of tasks) {
+    const featureId = task.featureId;
+
+    // 전체 task 개수
+    tasksByFeature.set(featureId, (tasksByFeature.get(featureId) || 0) + 1);
+
+    // 완료된 task 개수
+    if (['done', 'completed'].includes(task.status)) {
+      doneTasksByFeature.set(featureId, (doneTasksByFeature.get(featureId) || 0) + 1);
+    }
+  }
+
+  // Feature 테이블 생성
   for (const feature of features) {
-    const featureTasks = tasks.filter(t => t.featureId === feature.id);
-    const doneTasks = featureTasks.filter(t => ['done', 'completed'].includes(t.status)).length;
-    const totalTasks = featureTasks.length;
+    const totalTasks = tasksByFeature.get(feature.id) || 0;
+    const doneTasks = doneTasksByFeature.get(feature.id) || 0;
 
     table.push([
       chalk.cyan(feature.id),

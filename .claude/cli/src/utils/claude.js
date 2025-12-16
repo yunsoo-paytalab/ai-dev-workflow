@@ -147,8 +147,12 @@ export function runClaudeCommand(command, arg = "") {
       : [fullPrompt];
 
     // 대화형 모드로 Claude 실행
+    // shell: false로 직접 실행 (shell 파싱 문제 방지)
     const claude = spawn("claude", args, {
       stdio: "inherit",
+      shell: false, // shell 파싱 우회
+      env: process.env, // 환경 변수 명시적 전달
+      cwd: process.cwd(), // 현재 작업 디렉토리 명시적 전달
     });
 
     claude.on("error", (error) => {

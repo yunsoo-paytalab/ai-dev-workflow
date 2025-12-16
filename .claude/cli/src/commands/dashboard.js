@@ -1,7 +1,13 @@
 import chalk from "chalk";
 import { select, confirm, input } from "@inquirer/prompts";
 import readline from "readline";
-import { loadProjectData, calculateStats, getAvailableMemoryIds, setMemoryId } from "../utils/parser.js";
+import {
+  loadProjectData,
+  calculateStats,
+  getAvailableMemoryIds,
+  setMemoryId,
+  invalidateCache,
+} from "../utils/parser.js";
 import {
   printHeader,
   printFeatureTable,
@@ -287,6 +293,8 @@ async function runDashboardLoop() {
         continue;
 
       case "refresh":
+        // 새로고침 시 캐시 무효화
+        invalidateCache();
         continue;
     }
   }
@@ -433,6 +441,8 @@ async function showMemoryMenu(currentMemoryId) {
   const success = setMemoryId(selectedId);
 
   if (success) {
+    // Memory 변경 시 캐시 무효화
+    invalidateCache();
     printSuccess(`Memory가 "${selectedId}"로 변경되었습니다.`);
   } else {
     printError("Memory 변경에 실패했습니다.");
@@ -465,9 +475,7 @@ async function showFeatureList(features, tasks) {
     pageSize: 20,
     choices: [
       ...features.map((f) => ({
-        name: `${f.id} - ${f.name} (${
-          tasks.filter((t) => t.featureId === f.id).length
-        } tasks)`,
+        name: `${f.id} - ${f.name} (${f.taskCount || 0} tasks)`,
         value: f.id,
       })),
       { name: "← 돌아가기", value: "back" },
@@ -619,11 +627,25 @@ async function executeClaudeWorkflow(workflowKey, arg = "") {
 
   if (!confirmed) return;
 
+  // stdin 상태 확인 및 정리
+  if (process.stdin.isTTY && process.stdin.isRaw) {
+    process.stdin.setRawMode(false);
+  }
+
+  // stdin 리스너 정리
+  if (process.stdin.listenerCount("keypress") > 0) {
+    process.stdin.removeAllListeners("keypress");
+  }
+
   console.clear();
   printHeader(`Claude: ${workflow.name}`);
 
   try {
     await runWorkflow(workflowKey, arg);
+
+    // 워크플로우 실행 후 캐시 무효화
+    invalidateCache();
+
     printSuccess("완료되었습니다.");
   } catch (error) {
     printError(error.message);

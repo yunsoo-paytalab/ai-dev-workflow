@@ -37,6 +37,7 @@ const {
   setCurrentWorkflow,
   getCurrentWorkflow,
   finishCurrentWorkflow,
+  completeWorkflow,
   recalculateProgress,
   syncProgressToMemory,
   parseFeatureListToProgress,
@@ -625,15 +626,22 @@ function handleWorkflowComplete() {
   console.log("─".repeat(50));
   console.log(`📋 사용자 승인으로 워크플로우 완료 처리`);
 
-  completeCurrentWorkflow(memoryId, workflowName, projectCwd);
+  try {
+    completeCurrentWorkflow(memoryId, workflowName, projectCwd);
 
-  // currentWorkflow 제거
-  const currentWorkflow = getCurrentWorkflow(memoryId);
-  if (currentWorkflow === workflowName) {
-    finishCurrentWorkflow(memoryId);
+    // 성공한 경우에만 currentWorkflow 제거
+    const currentWorkflow = getCurrentWorkflow(memoryId);
+    if (currentWorkflow === workflowName) {
+      finishCurrentWorkflow(memoryId);
+    }
+
+    console.log("✓ Progress 동기화 완료!");
+  } catch (error) {
+    console.error("❌ 워크플로우 완료 처리 실패:", error.message);
+    console.log("⚠️  currentWorkflow는 유지되어 다시 시도할 수 있습니다.");
+    throw error;
   }
 
-  console.log("✓ Progress 동기화 완료!");
   console.log("─".repeat(50));
 }
 

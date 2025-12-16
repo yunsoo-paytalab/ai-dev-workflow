@@ -109,10 +109,37 @@ export function getTasks(progress) {
   }));
 }
 
+// 데이터 캐시
+let dataCache = null;
+let cacheTimestamp = null;
+const CACHE_DURATION = 5000; // 5초
+
+/**
+ * 캐시 무효화
+ */
+export function invalidateCache() {
+  dataCache = null;
+  cacheTimestamp = null;
+}
+
 /**
  * Feature/Task 데이터 로드 (progress.json에서만)
+ * @param {boolean} forceRefresh - 캐시 무시하고 강제로 다시 로드
  */
-export function loadProjectData() {
+export function loadProjectData(forceRefresh = false) {
+  const now = Date.now();
+
+  // 캐시가 유효하면 재사용
+  if (
+    !forceRefresh &&
+    dataCache &&
+    cacheTimestamp &&
+    now - cacheTimestamp < CACHE_DURATION
+  ) {
+    return dataCache;
+  }
+
+  // 캐시 갱신
   const memoryId = getMemoryId();
   const progress = readProgressJson(memoryId);
 
@@ -128,13 +155,16 @@ export function loadProjectData() {
   // setup.workflows 데이터 추출
   const workflows = progress?.setup?.workflows || {};
 
-  return {
+  dataCache = {
     features: featuresWithTaskCount,
     tasks,
     workflows,
     memoryId,
     hasProgress: !!progress,
   };
+  cacheTimestamp = now;
+
+  return dataCache;
 }
 
 /**
