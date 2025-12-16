@@ -17,9 +17,22 @@ const HOME = process.env.HOME || process.env.USERPROFILE;
 const CENTRAL_STORE = path.join(HOME, ".claude-aidev-memory");
 
 /**
- * 프로젝트 루트 경로 (현재 작업 디렉토리)
+ * 프로젝트 루트 경로 (.claude 폴더가 있는 디렉토리)
+ * 현재 디렉토리에서 시작하여 .claude 폴더를 찾을 때까지 상위로 탐색
  */
 function getProjectRoot() {
+  let currentDir = process.cwd();
+
+  // .claude 폴더를 찾을 때까지 상위로 탐색
+  while (currentDir !== path.parse(currentDir).root) {
+    const claudeDir = path.join(currentDir, ".claude");
+    if (fs.existsSync(claudeDir)) {
+      return currentDir;
+    }
+    currentDir = path.dirname(currentDir);
+  }
+
+  // .claude 폴더를 찾지 못하면 현재 작업 디렉토리 반환 (fallback)
   return process.cwd();
 }
 
@@ -956,7 +969,61 @@ function generateProgressMarkdown(memoryId) {
     });
   }
 
-  // Phase별 진행 섹션
+  // Feature별 진행 섹션 (메인)
+  if (progress.features && Object.keys(progress.features).length > 0) {
+    md += "\n### Feature별 진행\n";
+
+    // Feature를 status별로 그룹화하여 정렬
+    const features = Object.entries(progress.features).map(([id, data]) => ({
+      id,
+      ...data,
+    }));
+
+    // 정렬: in_progress > spec_done > research > pending/not_started > done
+    const statusOrder = {
+      in_progress: 1,
+      spec_done: 2,
+      research: 3,
+      pending: 4,
+      not_started: 4,
+      done: 5,
+      completed: 5,
+    };
+
+    features.sort((a, b) => {
+      const orderA = statusOrder[a.status] || 99;
+      const orderB = statusOrder[b.status] || 99;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.id.localeCompare(b.id);
+    });
+
+    // Feature 목록 출력
+    features.forEach((feature) => {
+      let icon = "⏳";
+      let statusText = "";
+
+      if (feature.status === "done" || feature.status === "completed") {
+        icon = "✅";
+        statusText = "완료";
+      } else if (feature.status === "in_progress") {
+        icon = "🔄";
+        statusText = "진행중";
+      } else if (feature.status === "spec_done") {
+        icon = "📝";
+        statusText = "설계완료";
+      } else if (feature.status === "research") {
+        icon = "🔬";
+        statusText = "연구중";
+      } else {
+        statusText = "대기중";
+      }
+
+      const name = feature.name || feature.id;
+      md += `- ${icon} ${feature.id}: ${name} (${statusText})\n`;
+    });
+  }
+
+  // Phase별 진행 섹션 (선택적 - 데이터가 있을 때만)
   if (progress.phases && Object.keys(progress.phases).length > 0) {
     md += "\n### Phase별 진행\n";
     Object.entries(progress.phases).forEach(([, phase]) => {
@@ -965,7 +1032,7 @@ function generateProgressMarkdown(memoryId) {
     });
   }
 
-  // 도메인별 진행 섹션
+  // 도메인별 진행 섹션 (선택적 - 데이터가 있을 때만)
   if (progress.domains && Object.keys(progress.domains).length > 0) {
     md += "\n### 도메인별 진행\n";
     Object.entries(progress.domains).forEach(([code, domain]) => {

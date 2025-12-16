@@ -350,6 +350,85 @@
 
 ---
 
+### `/workflow-memory update` ⭐
+
+현재 프로젝트 상태를 전역 메모리 파일들에 완전히 동기화합니다.
+
+> 💡 **핵심 명령어**: 프로젝트 상태를 정확하게 메모리에 반영하려면 이 명령어를 사용하세요.
+> `/workflow update`는 memory.md만 간단히 업데이트합니다.
+
+**사용법:**
+
+```bash
+/workflow-memory update
+```
+
+**AI 실행 지침:**
+
+```
+현재 상태를 전역 메모리 파일들에 업데이트해주세요:
+
+1. `.claude/docs/memory/.memory-ref`에서 메모리 ID 확인
+   - 연결되지 않은 경우: "메모리가 연결되지 않았습니다" 메시지 출력
+   - 메모리 경로: `~/.claude-aidev-memory/projects/{id}/`
+
+2. 프로젝트의 현재 상태 분석:
+   - 완료된 워크플로우 확인 (domain-definition, task-point 등)
+   - Feature/Task 진행 상황 파악
+   - 파일 시스템 확인 (.claude/docs/research/, .claude/docs/plan/, .claude/docs/feature-list/ 등)
+   - 현재 진행 중인 작업 확인
+
+3. `meta.json` 파일 업데이트:
+   - lastAccess: 현재 시간으로 갱신
+   - totalSessions: sessions/ 폴더의 파일 수 계산하여 갱신
+   - 필요시 projectName, projectPath 등 메타정보 검증 및 갱신
+
+4. `progress.json` 파일 업데이트:
+   - lastUpdated: 현재 시간으로 갱신
+   - setup.workflows: 완료된 워크플로우 상태 업데이트
+     - legacy-profile, domain-definition, task-point 등의 done 상태 확인
+   - phases: Phase별 진행 상황 업데이트
+     - totalPoints, completedPoints 재계산
+     - features 목록 갱신
+   - domains: 도메인별 Feature 진행 상황 업데이트
+     - totalFeatures, completedFeatures 재계산
+   - features: Feature별 상태 및 완료 시간 업데이트
+     - 파일 시스템 기반으로 상태 확인 (research, plan, 구현 파일 등)
+   - tasks: Task별 상태 및 완료 시간 업데이트
+
+5. `memory.md` 파일 업데이트:
+   - 체크리스트 업데이트 (완료된 워크플로우 체크)
+   - 기능 진행 상황 테이블 업데이트
+   - 최근 결정사항 기록 (필요시)
+
+6. `index.json` 업데이트:
+   - lastAccess 시간 갱신
+
+7. 업데이트 결과 보고:
+   - 업데이트된 파일 목록
+   - 주요 변경 사항 요약
+   - Feature/Task 진행률 표시
+
+출력 예시:
+✓ 메모리 업데이트 완료
+
+📊 업데이트된 파일:
+  - meta.json (lastAccess 갱신)
+  - progress.json (3개 feature 상태 업데이트)
+  - memory.md (체크리스트 2개 체크)
+  - index.json (lastAccess 갱신)
+
+📈 진행 상황:
+  워크플로우: domain-definition ✅, task-point ✅
+  Features: 2/5 완료 (40%)
+  - ✅ AUTH-001 (로그인)
+  - 🔄 AUTH-002 (회원가입) - 진행중
+  - ⏳ DASH-001 (대시보드) - 대기
+  Tasks: 8/25 완료 (32%)
+```
+
+---
+
 ### `/workflow-memory cleanup`
 
 정리 규칙을 수동으로 실행합니다.

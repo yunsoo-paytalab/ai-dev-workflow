@@ -135,7 +135,7 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 **AI 실행 지침**:
 
 ```
-현재 상태를 메모리 파일에 업데이트해주세요:
+현재 상태를 memory.md 파일에 업데이트해주세요:
 
 1. `.claude/docs/memory/.memory-ref`에서 메모리 ID 확인 후 `~/.claude-aidev-memory/projects/{id}/memory.md` 읽기
 2. 프로젝트의 현재 상태 분석:
@@ -146,6 +146,8 @@ $ARGUMENTS는 다음 형태로 입력 가능:
    - 체크리스트 업데이트
    - 기능 진행 상황 테이블 업데이트
 4. 업데이트된 내용을 사용자에게 보고
+
+💡 전역 메모리 파일 전체를 업데이트하려면 `/workflow-memory update`를 사용하세요.
 ```
 
 ---
@@ -173,7 +175,7 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 **메인 명령어**:
 - /workflow start - 프로젝트 시작
 - /workflow status - 현재 상태 확인
-- /workflow update - 메모리 수동 업데이트
+- /workflow update - memory.md 간단 업데이트
 - /workflow help - 도움말
 
 **메모리 명령어**:
@@ -181,6 +183,7 @@ $ARGUMENTS는 다음 형태로 입력 가능:
 - /workflow-memory list - 사용 가능한 메모리 목록
 - /workflow-memory switch [id] - 다른 메모리로 전환
 - /workflow-memory status - 현재 메모리 상태 상세
+- /workflow-memory update - 전역 메모리 전체 업데이트 (meta.json, progress.json, memory.md) ⭐
 - /workflow-memory remove [id] - 메모리 삭제
 - /workflow-memory cleanup - 정리 규칙 수동 실행
 

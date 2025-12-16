@@ -238,7 +238,6 @@ async function runDashboardLoop() {
       pageSize: 20,
       choices: [
         { name: "📋 Feature 목록 보기", value: "features" },
-        { name: "📝 Task 목록 보기", value: "tasks" },
         {
           name: "🚀 다음 Task 작업 시작",
           value: "next",
@@ -268,10 +267,6 @@ async function runDashboardLoop() {
     switch (action) {
       case "features":
         await showFeatureList(features, tasks);
-        break;
-
-      case "tasks":
-        await showTaskList(tasks);
         break;
 
       case "next":

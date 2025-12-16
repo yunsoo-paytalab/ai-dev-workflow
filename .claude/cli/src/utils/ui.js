@@ -21,6 +21,8 @@ export function progressBar(current, total, width = 20) {
 export function statusBadge(status) {
   const badges = {
     pending: chalk.yellow('○ pending'),
+    not_started: chalk.gray('○ not_started'),
+    spec_done: chalk.cyan('◉ spec_done'),
     in_progress: chalk.blue('◐ in_progress'),
     done: chalk.green('✓ done'),
     completed: chalk.green('✓ completed'),

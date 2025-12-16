@@ -15,21 +15,60 @@
 
 ### 참조 문서 탐색
 
-**기본 참조 경로**: `.claude/docs/feature-list/`
+**Feature ID 패턴**: `^[A-Z]+(-[A-Z]+)*-\d+$`
 
-**파일 형식**: 각 파일의 첫 줄은 `# Feature ID: Feature 이름` 형식
+- 예: `AUTH-001`, `USER-MGMT-002`, `DASHBOARD-123`
 
 **탐색 로직**:
 
-1. `$ARGUMENTS`가 `@`로 시작하면 → 해당 파일을 직접 참조 문서로 사용
-2. 그 외의 경우, `.claude/docs/feature-list/` 폴더 내 모든 파일의 첫 줄을 읽음
-3. `$ARGUMENTS`와 매칭:
-   - Feature ID 일치 (예: `AUTH-001`)
-   - Feature 이름 일치 또는 포함 (예: `로그인 기능`)
-   - 부분 텍스트 매칭 (예: `로그인` → `로그인 기능` 매칭)
-4. **매칭 결과에 따른 분기**:
-   - ✅ 매칭 성공 → 해당 참조 문서를 기반으로 Phase 2 진행
-   - ❌ 매칭 실패 → `$ARGUMENTS`를 일반 텍스트로 처리하여 새 Feature로 Phase 2 진행
+1. **`$ARGUMENTS`가 `@`로 시작하면** → 해당 파일을 직접 참조 문서로 사용
+
+2. **Feature ID 패턴 감지 시** (예: `AUTH-001`):
+
+   ```bash
+   # Feature ID 추출
+   FEATURE_ID="$ARGUMENTS"  # 예: AUTH-001
+
+   # 기존 파일 경로 확인
+   RESEARCH_FILE=".claude/docs/research/${FEATURE_ID}-research.md"
+   PLAN_FILE=".claude/docs/plan/${FEATURE_ID}-plan.md"
+   ```
+
+   **분기 처리**:
+
+   - ✅ **research + plan 모두 존재**:
+
+     - 기존 파일을 읽어서 사용자에게 표시
+     - "이미 작성된 문서가 있습니다. 계속 진행하시겠어요?"
+     - 사용자 승인 시: 기존 내용 기반으로 업데이트/재검토
+     - 사용자 거부 시: 새로 시작
+
+   - ✅ **research만 존재**:
+
+     - research 파일 로드
+     - Phase 1 건너뛰고 Phase 3부터 시작 (plan 생성)
+     - "research 문서를 찾았습니다. 설계 단계부터 진행합니다."
+
+   - ⚠️ **plan만 존재** (비정상 상황):
+
+     - 경고 메시지 출력
+     - "plan 파일만 존재합니다. research 파일이 필요합니다."
+     - 사용자 확인: 새로 시작 또는 plan 기반으로 research 역생성
+
+   - ❌ **둘 다 없음**:
+     - `.claude/docs/feature-list/` 폴더에서 Feature ID 검색
+     - 매칭되면 해당 참조 문서 사용
+     - 매칭 실패 시 새 Feature로 처리
+
+3. **Feature ID 패턴이 아닌 경우** (예: `로그인 기능`):
+
+   - `.claude/docs/feature-list/` 폴더 내 모든 파일의 첫 줄을 읽음
+   - `$ARGUMENTS`와 매칭:
+     - Feature 이름 일치 또는 포함 (예: `로그인 기능`)
+     - 부분 텍스트 매칭 (예: `로그인` → `로그인 기능` 매칭)
+   - **매칭 결과**:
+     - ✅ 매칭 성공 → 해당 참조 문서를 기반으로 Phase 2 진행
+     - ❌ 매칭 실패 → `$ARGUMENTS`를 일반 텍스트로 처리하여 새 Feature로 Phase 2 진행
 
 ## 실행 프로세스
 
@@ -77,7 +116,7 @@ node .claude/hooks/memory-sync.cjs update-feature-status [FEATURE_ID] in_progres
 4. **기존 코드베이스 분석**: 재사용 가능 컴포넌트/패턴, 기술적 제약사항
 5. **데이터 연동 요구사항**: API, 상태 관리, 외부 서비스
 
-**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (섹션 1.1~1.5 작성)
+**출력:** `.claude/docs/research/[Feature ID]-research.md` (섹션 1.1~1.5 작성)
 
 ### Phase 2: Review & Confirm (검수 & 컨펌)
 
@@ -135,7 +174,9 @@ node .claude/hooks/memory-sync.cjs update-feature-status [FEATURE_ID] in_progres
 - **의사결정 필요 항목 정리**
 - **검증 방법 정의**
 
-**출력:** `.claude/docs/specs/[Feature ID]-spec.md` (섹션 2~4 추가)
+**입력:** `.claude/docs/research/[Feature ID]-research.md` (Phase 1의 Research 결과)
+
+**출력:** `.claude/docs/plan/[Feature ID]-plan.md` (섹션 2~4 작성)
 
 ### Phase 4: Review & Confirm (검수 & 컨펌)
 
@@ -185,8 +226,9 @@ node .claude/hooks/memory-sync.cjs update-feature-status [FEATURE_ID] spec_done
 
 ## 결과물
 
-- `.claude/docs/specs/[Feature ID]-spec.md` - 통합 기능 명세서 (Research + Design + Plan)
+- `.claude/docs/research/[Feature ID]-research.md` - 요구사항 분석 문서 (Phase 1)
+- `.claude/docs/plan/[Feature ID]-plan.md` - 기술 설계 및 구현 계획 문서 (Phase 3)
 
 ## 다음 단계
 
-기능 명세가 완료되면 `/workflow-implement .claude/docs/specs/[Feature ID]-spec.md`을 실행하여 구현을 시작합니다.
+기능 명세가 완료되면 `/workflow-implement [Feature ID]`를 실행하여 구현을 시작합니다.
