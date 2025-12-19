@@ -3,6 +3,7 @@ name: business-logic-mapper
 description: 핵심 비즈니스 로직 및 변경 빈도 분석
 tools: Read, Grep, Glob, Bash, Write
 model: opus
+version: 3.1.0
 ---
 
 # Business Logic Mapper

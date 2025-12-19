@@ -1,6 +1,12 @@
+---
+name: workflow-implement
+description: 특정 기능을 TDD 방식으로 구현하는 커맨드
+version: 3.1.0
+---
+
 # /workflow-implement $ARGUMENTS
 
-선택한 기능을 RPI 패턴과 TDD 방식으로 구현합니다.
+선택한 기능을 TDD 방식으로 구현하고 요구사항이 모두 반영되었는지 검증합니다.
 
 > ⚠️ **필수 선행 작업**: 이 워크플로우를 실행하기 전에 `/workflow-feature-spec $ARGUMENTS`을 먼저 완료해야 합니다.
 
@@ -8,11 +14,11 @@
 
 `$ARGUMENTS`는 다음 형태로 입력될 수 있습니다:
 
-| 입력 형태    | 예시                                     | 설명                       |
-| ------------ | ---------------------------------------- | -------------------------- |
-| 파일 참조    | `@.claude/docs/plan/AUTH-001-plan.md`    | 파일 직접 참조             |
-| Feature ID   | `AUTH-001`                               | Feature ID로 문서 검색     |
-| Feature 이름 | `로그인 기능`                            | Feature 이름으로 문서 검색 |
+| 입력 형태    | 예시                                  | 설명                       |
+| ------------ | ------------------------------------- | -------------------------- |
+| 파일 참조    | `@.claude/docs/plan/AUTH-001-plan.md` | 파일 직접 참조             |
+| Feature ID   | `AUTH-001`                            | Feature ID로 문서 검색     |
+| Feature 이름 | `로그인 기능`                         | Feature 이름으로 문서 검색 |
 
 ### 실행 모드 옵션
 

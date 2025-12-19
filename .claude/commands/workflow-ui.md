@@ -1,3 +1,9 @@
+---
+name: workflow-ui
+description: Figma 디자인을 기반으로 UI를 구현하는 커맨드
+version: 3.1.0
+---
+
 # /workflow-ui $ARGUMENTS
 
 Figma 디자인을 기반으로 UI 컴포넌트를 생성합니다.
@@ -15,12 +21,12 @@ Figma 디자인을 기반으로 UI 컴포넌트를 생성합니다.
 
 `$ARGUMENTS`는 다음 형태로 입력될 수 있습니다:
 
-| 입력 형태    | 예시                                     | 설명                       |
-| ------------ | ---------------------------------------- | -------------------------- |
-| 예약어       | `common`                                 | 공통 컴포넌트 확장 모드    |
-| 파일 참조    | `@.claude/docs/plan/AUTH-001-plan.md`    | 파일 직접 참조             |
-| Feature ID   | `AUTH-001`                               | Feature ID로 문서 검색     |
-| Feature 이름 | `로그인 기능`                            | Feature 이름으로 문서 검색 |
+| 입력 형태    | 예시                                  | 설명                       |
+| ------------ | ------------------------------------- | -------------------------- |
+| 예약어       | `common`                              | 공통 컴포넌트 확장 모드    |
+| 파일 참조    | `@.claude/docs/plan/AUTH-001-plan.md` | 파일 직접 참조             |
+| Feature ID   | `AUTH-001`                            | Feature ID로 문서 검색     |
+| Feature 이름 | `로그인 기능`                         | Feature 이름으로 문서 검색 |
 
 ### 참조 문서 탐색
 
@@ -38,14 +44,14 @@ Figma 디자인을 기반으로 UI 컴포넌트를 생성합니다.
 
 **결과에 따른 처리:**
 
-| 결과 타입          | 처리 방법                                                 |
-| ------------------ | --------------------------------------------------------- |
-| `keyword` (common) | 공통 컴포넌트 모드로 진행                                 |
-| `direct`           | 직접 참조된 파일로 UI 구현                                |
-| `feature-id`       | 해당 Feature의 research/plan 문서 로드 → UI 구현          |
-| `feature-name`     | 매칭된 Feature의 research/plan 문서 로드 → UI 구현        |
-| `fallback`         | `$ARGUMENTS`를 일반 텍스트로 처리하여 UI 구현             |
-| `error`            | (발생하지 않음, allowFallback=true)                       |
+| 결과 타입          | 처리 방법                                          |
+| ------------------ | -------------------------------------------------- |
+| `keyword` (common) | 공통 컴포넌트 모드로 진행                          |
+| `direct`           | 직접 참조된 파일로 UI 구현                         |
+| `feature-id`       | 해당 Feature의 research/plan 문서 로드 → UI 구현   |
+| `feature-name`     | 매칭된 Feature의 research/plan 문서 로드 → UI 구현 |
+| `fallback`         | `$ARGUMENTS`를 일반 텍스트로 처리하여 UI 구현      |
+| `error`            | (발생하지 않음, allowFallback=true)                |
 
 > ℹ️ **참고**: UI 구현은 workflow-feature-spec의 결과물(research, plan)을 기반으로 합니다.
 
@@ -78,14 +84,17 @@ Figma 디자인을 기반으로 UI 컴포넌트를 생성합니다.
 **처리 과정:**
 
 1. **Figma 정보 수집**
+
    - 사용자에게 Figma URL 또는 Node ID 요청
    - 대안: Figma Desktop에서 현재 선택된 요소 사용
 
 2. **디자인 컨텍스트 가져오기**
+
    - Figma MCP를 통해 디자인 정보 수집
    - 컴포넌트 구조 및 스타일 분석
 
 3. **기존 컴포넌트에 매핑**
+
    - Figma 요소 분석
    - 기존 디자인 시스템 컴포넌트와 매칭
    - 확장이 필요한 갭 식별

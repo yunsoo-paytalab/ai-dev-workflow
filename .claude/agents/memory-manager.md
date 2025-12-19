@@ -3,6 +3,7 @@ name: memory-manager
 description: 주요 결정사항을 memory.md에 기록하는 에이전트. 중요한 기술적 결정이나 아키텍처 결정이 있을 때 호출하세요. 진행 상황 업데이트는 자동으로 처리되므로 호출 불필요.
 tools: Read, Write, Edit
 model: haiku
+version: 3.1.0
 ---
 
 # Memory Manager Agent

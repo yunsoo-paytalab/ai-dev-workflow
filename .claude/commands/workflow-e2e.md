@@ -1,3 +1,9 @@
+---
+name: workflow-e2e
+description: E2E 테스트를 작성하고 실행하는 커맨드
+version: 3.1.0
+---
+
 # /workflow-e2e
 
 E2E 테스트를 작성하고 실행합니다.
@@ -104,9 +110,10 @@ npx playwright test [테스트파일]
 ### 참고: 메모리 자동 업데이트
 
 > 워크플로우 진행 상황은 **자동으로 기록**됩니다.
+>
 > - 워크플로우 완료 상태 → progress.json (자동)
 > - 체크리스트 업데이트 → memory.md (자동)
-> - 대화 기록 → sessions/*.md (자동)
+> - 대화 기록 → sessions/\*.md (자동)
 
 **테스트 리포트**는 `.claude/docs/e2e-test-report.md`에 작성하세요.
 

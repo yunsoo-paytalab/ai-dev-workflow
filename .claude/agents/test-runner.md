@@ -3,6 +3,7 @@ name: test-runner
 description: TDD의 Red-Green-Refactor 사이클을 관리하고 테스트를 실행하는 전문 에이전트. MUST BE USED - 구현 작업 시 반드시 이 에이전트를 먼저 호출하여 테스트를 작성해야 합니다. PROACTIVELY use this agent before any implementation.
 tools: Read, Write, Edit, Bash
 model: opus
+version: 3.1.0
 ---
 
 # TDD Test Runner Agent

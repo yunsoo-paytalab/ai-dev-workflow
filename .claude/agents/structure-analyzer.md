@@ -3,6 +3,7 @@ name: structure-analyzer
 description: 프로젝트 구조 및 아키텍처 빠른 분석
 tools: Read, Grep, Glob, Bash, Write
 model: haiku
+version: 3.1.0
 ---
 
 # Structure Analyzer

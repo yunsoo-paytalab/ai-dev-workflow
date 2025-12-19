@@ -1,3 +1,9 @@
+---
+name: workflow-feature-spec
+description: 특정 기능의 요구사항을 분석하고 구현 계획을 수립하는 커맨드
+version: 3.1.0
+---
+
 # /workflow-feature-spec $ARGUMENTS
 
 선택한 기능의 요구사항을 분석하고 구현 계획을 수립합니다.

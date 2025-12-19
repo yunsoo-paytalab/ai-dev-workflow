@@ -1,3 +1,9 @@
+---
+name: workflow-integrate
+description: 구현된 기능들을 통합하고 리팩토링하는 커맨드
+version: 3.1.0
+---
+
 # /workflow-integrate
 
 시스템을 통합하고 리팩토링합니다.

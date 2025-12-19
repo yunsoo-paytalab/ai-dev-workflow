@@ -2,6 +2,7 @@
 name: feature-detail-writer
 description: Feature 상세 문서 작성 에이전트
 tools: Read, Write, Glob, Bash
+version: 3.1.0
 ---
 
 # Feature Detail Writer Agent
@@ -201,7 +202,7 @@ type CalculateTotal = (items: Item[], discounts: Discount[]) => TotalResult;
    - Task 테이블 + 모든 Task 섹션 포함
    - 파일명: `{Feature ID}-{기능명}.md`
 
-5. **완료 보고**
+4. **완료 보고**
    - 작성한 Feature ID 목록 반환
    - 에러 발생 시 실패한 Feature ID 명시
 

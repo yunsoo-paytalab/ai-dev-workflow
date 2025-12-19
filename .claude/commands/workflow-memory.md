@@ -1,3 +1,9 @@
+---
+name: workflow-memory
+description: 프로젝트 전역 메모리를 관리하는 커맨드
+version: 3.1.0
+---
+
 # /workflow-memory
 
 프로젝트 메모리를 관리합니다. 중앙 저장소(`~/.claude-aidev-memory/`)를 사용하여 세션 간 컨텍스트를 유지합니다.

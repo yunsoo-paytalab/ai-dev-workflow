@@ -1,3 +1,9 @@
+---
+name: workflow-legacy-profile
+description: 브라운필드 프로젝트를 위하여 레거시 코드를 분석하고 위험 영역을 식별하는 커맨드
+version: 3.1.0
+---
+
 # /workflow-legacy-profile
 
 브라운필드 프로젝트를 위한 레거시 코드 분석 및 위험 영역 식별 워크플로우입니다.
@@ -91,6 +97,7 @@
 **사용자 승인 후:**
 
 **워크플로우 완료 처리** (Bash 실행):
+
 ```bash
 node .claude/hooks/memory-sync.cjs workflow-complete legacy-profile
 ```

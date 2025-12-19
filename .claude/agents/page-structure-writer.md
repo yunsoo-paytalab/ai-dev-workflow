@@ -3,6 +3,7 @@ name: page-structure-writer
 description: 페이지/라우팅 설계 및 구조 문서를 작성하는 전문 에이전트
 tools: Read, Write, Glob
 model: opus
+version: 3.1.0
 ---
 
 # Page Structure Writer Agent

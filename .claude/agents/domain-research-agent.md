@@ -3,6 +3,7 @@ name: domain-research-agent
 description: 프로젝트 도메인 분석을 위한 Research 전문 에이전트
 tools: Read, Grep, Glob, Task, Bash, Write
 model: opus
+version: 3.1.0
 ---
 
 # Domain Research Agent

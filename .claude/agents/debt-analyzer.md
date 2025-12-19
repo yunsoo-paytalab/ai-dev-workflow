@@ -3,6 +3,7 @@ name: debt-analyzer
 description: 기술 부채 및 코드 품질 분석
 tools: Read, Grep, Glob, Bash, Write
 model: haiku
+version: 3.1.0
 ---
 
 # Debt Analyzer

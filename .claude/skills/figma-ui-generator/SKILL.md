@@ -2,6 +2,7 @@
 name: figma-ui-generator
 description: 기존 디자인 시스템 컴포넌트를 사용하여 Figma 디자인에서 UI 코드를 생성합니다. Figma MCP와 통합하여 디자인을 가져오고 프로젝트의 컴포넌트 라이브러리에 매핑합니다.
 allowed-tools: mcp__figma_dev_mode_mcp_server__get_design_context, mcp__figma_dev_mode_mcp_server__get_variable_defs, mcp__figma_dev_mode_mcp_server__get_screenshot, Write, Read
+version: 3.0.0
 ---
 
 # Figma UI 생성기

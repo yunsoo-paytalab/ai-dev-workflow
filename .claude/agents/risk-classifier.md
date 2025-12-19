@@ -3,6 +3,7 @@ name: risk-classifier
 description: 위험도 분류 및 Danger/No-Reference Zones 정의
 tools: Read, Write
 model: haiku
+version: 3.1.0
 ---
 
 # Risk Classifier

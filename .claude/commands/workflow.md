@@ -1,3 +1,9 @@
+---
+name: workflow
+description: AI 개발 프로세스의 기본 커맨드
+version: 3.1.0
+---
+
 # AI 개발 워크플로우 명령어 가이드
 
 ## 개요

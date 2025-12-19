@@ -3,6 +3,7 @@ name: feature-research-agent
 description: Feature 요구사항 분석 및 코드베이스 탐색을 위한 Research 전문 에이전트
 tools: Read, Grep, Glob, Task, Bash, Write
 model: opus
+version: 3.1.0
 ---
 
 # Feature Research Agent

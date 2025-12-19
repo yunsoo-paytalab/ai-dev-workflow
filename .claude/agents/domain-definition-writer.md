@@ -3,6 +3,7 @@ name: domain-definition-writer
 description: 도메인 설계 및 정의 문서를 작성하는 전문 에이전트
 tools: Read, Write, Glob
 model: opus
+version: 3.1.0
 ---
 
 # Domain Definition Writer Agent

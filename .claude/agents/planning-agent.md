@@ -3,6 +3,7 @@ name: planning-agent
 description: Research 결과를 바탕으로 기술 설계와 구현 계획을 수립하는 Planning 전문 에이전트
 tools: Read, Grep, Glob, Bash, Write, Edit
 model: opus
+version: 3.1.0
 ---
 
 # Planning Agent

@@ -2,6 +2,7 @@
 name: dependency-analyzer
 description: 모듈 의존성 및 패키지 의존성 분석
 tools: Read, Grep, Glob, Bash, Write
+version: 3.1.0
 ---
 
 # Dependency Analyzer

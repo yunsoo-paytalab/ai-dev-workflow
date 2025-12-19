@@ -1,3 +1,9 @@
+---
+name: workflow-update
+description: 요구사항 변경 시 관련 문서를 자동으로 일괄 업데이트하는 커맨드
+version: 3.1.0
+---
+
 # /workflow-update $ARGUMENTS
 
 요구사항 변경 시 관련 문서를 자동으로 일괄 업데이트합니다.
@@ -8,11 +14,11 @@
 
 `$ARGUMENTS`는 다음 형태로 입력될 수 있습니다:
 
-| 입력 형태    | 예시                                             | 설명                       |
-| ------------ | ------------------------------------------------ | -------------------------- |
-| Feature ID   | `AUTH-001`                                       | Feature ID로 문서 검색     |
-| 파일 참조    | `@.claude/docs/feature-list/AUTH-001-login.md`   | 파일 직접 참조             |
-| Feature 이름 | `로그인 기능`                                    | Feature 이름으로 문서 검색 |
+| 입력 형태    | 예시                                           | 설명                       |
+| ------------ | ---------------------------------------------- | -------------------------- |
+| Feature ID   | `AUTH-001`                                     | Feature ID로 문서 검색     |
+| 파일 참조    | `@.claude/docs/feature-list/AUTH-001-login.md` | 파일 직접 참조             |
+| Feature 이름 | `로그인 기능`                                  | Feature 이름으로 문서 검색 |
 
 ---
 

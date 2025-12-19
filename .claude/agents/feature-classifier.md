@@ -3,6 +3,7 @@ name: feature-classifier
 description: Feature/Task 분류 및 리스트 작성 에이전트
 tools: Read, Write, Glob
 model: opus
+version: 3.1.0
 ---
 
 # Feature Classifier Agent
