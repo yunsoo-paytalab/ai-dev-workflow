@@ -6,7 +6,7 @@
 
 ```
 .claude/
-├── commands/          # 11개 워크플로우 커맨드
+├── commands/          # 12개 워크플로우 커맨드
 ├── agents/            # 17개 AI 에이전트
 ├── hooks/             # 자동화 스크립트
 ├── skills/            # 2개 스킬 (feature-resolver, figma-ui-generator)
@@ -22,10 +22,11 @@
                 ↓
 2. 설계 단계
    /workflow-domain-definition → 도메인 정의서, 기능 목록, 페이지 구조 생성
-   /workflow-task-point → 개발 공수 산정
+   /workflow-feature-detail    → Feature 상세 문서 생성 (전체 Feature 일괄)
+   /workflow-task-point        → 개발 공수 산정
                 ↓
 3. 기능별 개발 (반복)
-   /workflow-feature-spec [기능명]  → 요구사항 분석
+   /workflow-feature-spec [기능ID]  → 구현 분석 및 계획 (단일 Feature)
    /workflow-ui [기능명]            → UI 구현 (선택)
    /workflow-implement [기능명]     → TDD 방식 구현
                 ↓
@@ -41,7 +42,8 @@
 | `/workflow start`                 | 프로젝트 시작 및 상태 파악 |
 | `/workflow status`                | 현재 진행 상황 확인        |
 | `/workflow-domain-definition`     | 도메인 및 기능 목록 정의   |
-| `/workflow-feature-spec [기능명]` | 기능별 요구사항 분석       |
+| `/workflow-feature-detail`        | Feature 상세 문서 작성 (전체 일괄) |
+| `/workflow-feature-spec [기능ID]` | 구현 분석 및 계획 (단일 Feature)  |
 | `/workflow-implement [기능명]`    | TDD 방식 구현              |
 | `/workflow-ui [기능명]`           | UI 컴포넌트 개발           |
 | `/workflow-e2e`                   | E2E 테스트                 |
