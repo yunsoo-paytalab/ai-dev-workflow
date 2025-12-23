@@ -9,7 +9,7 @@
 ├── commands/          # 12개 워크플로우 커맨드
 ├── agents/            # 17개 AI 에이전트
 ├── hooks/             # 자동화 스크립트
-├── skills/            # 2개 스킬 (feature-resolver, figma-ui-generator)
+├── skills/            # 4개 스킬
 ├── docs/              # 생성되는 문서들
 └── settings.json      # Hook 설정
 ```
@@ -86,6 +86,15 @@
 
 - `test-runner` - TDD 사이클 관리
 - `memory-manager` - 진행 상황 기록
+
+## Skills
+
+| Skill | 설명 |
+| ----- | ---- |
+| `feature-resolver` | Feature ID/이름을 문서 경로로 해석 |
+| `figma-ui-generator` | Figma 디자인에서 UI 코드 생성 |
+| `writing-domain-docs` | 도메인 정의 워크플로우 결과 문서 작성 가이드 |
+| `writing-feature-docs` | Feature 관련 문서 작성 가이드 |
 
 ## 핵심 특징
 
