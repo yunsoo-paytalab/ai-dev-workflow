@@ -13,11 +13,14 @@ description: 도메인 정의 워크플로우의 결과 문서들을 작성합�
 
 ```
 Domain Definition Progress:
-- [ ] Step 1: 요구사항 분석 (domain-research)
-- [ ] Step 2: 도메인 설계 (domain-definition)
-- [ ] Step 3: 페이지 구조 설계 (page-structure)
-- [ ] Step 4: 유저 시나리오 작성 (user-scenarios)
-- [ ] Step 5: Feature 분류 (feature-list)
+- [ ] Phase 1: 요구사항 분석 (domain-research)
+- [ ] Phase 3-1 (병렬):
+  - [ ] 도메인 설계 (domain-definition)
+  - [ ] 페이지 구조 설계 (page-structure)
+- [ ] Phase 3-2 (병렬):
+  - [ ] Feature 분류 (feature-list)
+  - [ ] 유저 시나리오 작성 (user-scenarios)
+- [ ] Phase 4: 검토 및 Feature ↔ 시나리오 매핑 검증
 ```
 
 ## Document Types

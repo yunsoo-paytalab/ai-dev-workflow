@@ -7,7 +7,7 @@
 ```
 .claude/
 ├── commands/          # 12개 워크플로우 커맨드
-├── agents/            # 17개 AI 에이전트
+├── agents/            # 18개 AI 에이전트
 ├── hooks/             # 자동화 스크립트
 ├── skills/            # 4개 스킬
 ├── docs/              # 생성되는 문서들
@@ -21,7 +21,7 @@
    /workflow start → /workflow-legacy-profile (선택)
                 ↓
 2. 설계 단계
-   /workflow-domain-definition → 도메인 정의서, 기능 목록, 페이지 구조 생성
+   /workflow-domain-definition → 도메인 정의서, 기능 목록, 페이지 구조, 유저 시나리오 생성
    /workflow-feature-detail    → Feature 상세 문서 생성 (전체 Feature 일괄)
    /workflow-task-point        → 개발 공수 산정
                 ↓
@@ -80,6 +80,7 @@
 - `feature-classifier` - 기능 분류
 - `feature-detail-writer` - 기능 상세 문서
 - `page-structure-writer` - 페이지 구조 문서
+- `user-scenario-writer` - 유저 시나리오 문서
 - `document-updater` - 문서 일괄 업데이트
 
 ### 실행 계열

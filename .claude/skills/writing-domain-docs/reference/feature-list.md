@@ -116,13 +116,13 @@ graph TD
 
 ## 구현 순서 가이드
 
-> 같은 Phase 내 Feature는 병렬 작업 가능합니다.
+> 같은 Group 내 Feature는 병렬 작업 가능합니다.
 
-| Phase        | 우선순위 | Features               | 선행 조건    |
+| Group        | 우선순위 | Features               | 선행 조건    |
 | ------------ | -------- | ---------------------- | ------------ |
 | 1. 기반 구축 | High     | COMMON-001             | -            |
-| 2. 인증      | High     | AUTH-001, AUTH-002     | Phase 1 완료 |
-| 3. 핵심 기능 | High     | ORDER-001, PRODUCT-001 | Phase 2 완료 |
+| 2. 인증      | High     | AUTH-001, AUTH-002     | Group 1 완료 |
+| 3. 핵심 기능 | High     | ORDER-001, PRODUCT-001 | Group 2 완료 |
 
 ---
 
