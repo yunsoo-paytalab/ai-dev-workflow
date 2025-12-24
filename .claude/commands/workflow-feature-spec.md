@@ -1,7 +1,7 @@
 ---
 name: workflow-feature-spec
 description: 특정 기능의 요구사항을 분석하고 구현 계획을 수립하는 커맨드
-version: 3.1.0
+version: 3.2.0
 ---
 
 # /workflow-feature-spec $ARGUMENTS
@@ -12,12 +12,13 @@ version: 3.1.0
 
 `$ARGUMENTS`는 다음 형태로 입력될 수 있습니다:
 
-| 입력 형태    | 예시                                 | 설명                       |
-| ------------ | ------------------------------------ | -------------------------- |
-| 파일 참조    | `@.claude/docs/feature-list/auth.md` | 파일 직접 참조             |
-| Feature ID   | `AUTH-001`                           | Feature ID로 문서 검색     |
-| Feature 이름 | `로그인 기능`                        | Feature 이름으로 문서 검색 |
-| 단순 텍스트  | `사용자 인증`                        | 새 Feature로 처리          |
+| 입력 형태    | 예시                                 | 설명                                  |
+| ------------ | ------------------------------------ | ------------------------------------- |
+| **Group**    | `인증`, `기반 구축`                  | **Group 내 Feature들을 병렬 실행** ⭐ |
+| 파일 참조    | `@.claude/docs/feature-list/auth.md` | 파일 직접 참조                        |
+| Feature ID   | `AUTH-001`                           | Feature ID로 문서 검색                |
+| Feature 이름 | `로그인 기능`                        | Feature 이름으로 문서 검색            |
+| 단순 텍스트  | `사용자 인증`                        | 새 Feature로 처리                     |
 
 ### 참조 문서 탐색
 
@@ -29,6 +30,7 @@ version: 3.1.0
 > 파라미터:
 > - argument: $ARGUMENTS
 > - searchPaths: [".claude/docs/feature-list"]
+> - enableGroupSearch: true
 > - allowFallback: true
 > ```
 
@@ -36,10 +38,87 @@ version: 3.1.0
 
 | SKILL 결과     | 처리 방법                                                                       |
 | -------------- | ------------------------------------------------------------------------------- |
+| `group`        | **Group 병렬 실행 모드** → 아래 "Group 병렬 실행" 섹션 참조                     |
 | `feature-id`   | feature-list 파일 존재 → 로드 → Phase 0부터 시작 (기존 업데이트 또는 새로 작성) |
 | `feature-name` | 매칭된 feature-list 파일 로드 → Phase 0부터 시작                                |
 | `direct`       | 직접 참조된 feature-list 파일 로드 → Phase 0부터 시작                           |
 | `fallback`     | 새 Feature로 처리 → Phase 0부터 시작 (처음부터 작성)                            |
+
+### Group 병렬 실행
+
+`type: 'group'`인 경우, 해당 Group에 속한 모든 Feature에 대해 **병렬로** feature-spec 워크플로우를 실행합니다.
+
+**실행 방식:**
+
+```
+1. Group 정보 표시
+   - Group 이름, 번호, 우선순위
+   - 포함된 Feature 목록
+   - 선행 조건 (있는 경우)
+
+2. 선행 조건 확인
+   IF prerequisite != "-" THEN
+     사용자에게 선행 조건 충족 여부 확인
+
+3. Phase 1: Research 병렬 실행
+   FOR EACH featureId IN features DO (병렬)
+     Task 도구 사용:
+     - subagent_type: "feature-research-agent"
+   → 모든 Feature의 research 문서 생성 확인
+   → 실패한 Feature가 있으면 보고
+
+4. Phase 2: Research 결과 검토
+   → 생성된 research 문서 목록 표시
+   → 사용자에게 검토 요청
+   → 피드백 반영 (필요 시)
+
+5. Phase 3: Plan 병렬 실행
+   FOR EACH featureId IN features DO (병렬)
+     Task 도구 사용:
+     - subagent_type: "planning-agent"
+   → 모든 Feature의 plan 문서 생성 확인
+   → 실패한 Feature가 있으면 보고
+
+6. Phase 4: Plan 결과 검토
+   → 생성된 plan 문서 목록 표시
+   → 사용자에게 검토 요청
+   → 피드백 반영 (필요 시)
+```
+
+**예시:**
+
+```
+입력: /workflow-feature-spec 인증
+
+→ Group "인증" 발견 (Feature: AUTH-001, AUTH-002)
+
+[Phase 1: Research 병렬 실행]
+→ 병렬 실행:
+  - AUTH-001: feature-research-agent
+  - AUTH-002: feature-research-agent
+→ 결과:
+  - .claude/docs/research/AUTH-001-research.md ✅
+  - .claude/docs/research/AUTH-002-research.md ✅
+
+[Phase 2: Research 검토]
+→ 사용자 검토 대기...
+→ 승인 완료
+
+[Phase 3: Plan 병렬 실행]
+→ 병렬 실행:
+  - AUTH-001: planning-agent
+  - AUTH-002: planning-agent
+→ 결과:
+  - .claude/docs/plan/AUTH-001-plan.md ✅
+  - .claude/docs/plan/AUTH-002-plan.md ✅
+
+[Phase 4: Plan 검토]
+→ 사용자 검토 대기...
+→ 승인 완료
+```
+
+> ⚠️ **주의**: Group 병렬 실행 시 각 단계(Research/Plan)별로 사용자 검토를 진행합니다.
+> 검토 후 수정이 필요한 경우, 해당 Feature만 개별적으로 재실행할 수 있습니다.
 
 ## 실행 프로세스
 

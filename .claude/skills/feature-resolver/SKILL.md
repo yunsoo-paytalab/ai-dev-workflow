@@ -2,7 +2,7 @@
 name: feature-resolver
 description: Feature ID와 이름을 여러 워크플로우의 문서 경로로 해석합니다. Feature 문서(research, plan, spec) 검색, Feature 참조 해석, Feature 명세 탐색 시 사용하세요. Feature ID 패턴(AUTH-001), 직접 파일 참조(@file), Feature 이름 검색, 특수 키워드를 지원합니다.
 allowed-tools: Read, Grep, Glob
-version: 3.1.0
+version: 3.2.0
 ---
 
 # Feature Resolver
@@ -25,7 +25,8 @@ Feature ID 또는 Feature 이름으로 관련 문서를 찾고 로드하는 재�
   searchPaths: string[],      // 검색할 폴더 경로들
   requiredFiles?: string[],   // 필수 파일 타입 (예: ['research', 'plan'])
   allowFallback?: boolean,    // 매칭 실패 시 일반 텍스트로 처리 허용 (기본: false)
-  specialKeywords?: string[]  // 특수 키워드 (예: ['common'])
+  specialKeywords?: string[], // 특수 키워드 (예: ['common'])
+  enableGroupSearch?: boolean // Group 검색 활성화 (기본: false)
 }
 ```
 
@@ -40,6 +41,37 @@ Feature 문서를 다음 순서로 탐색합니다:
 ```
 IF argument IN specialKeywords THEN
   RETURN { type: 'keyword', keyword: argument }
+```
+
+#### 1.5. Group 검색 (enableGroupSearch가 true인 경우)
+
+```
+IF enableGroupSearch == true THEN
+  featureListPath = ".claude/docs/feature-list.md"
+
+  IF file EXISTS featureListPath THEN
+    content = readFile(featureListPath)
+
+    # "구현 순서 가이드" 섹션에서 Group 테이블 파싱
+    # 테이블 형식: | Group | 우선순위 | Features | 선행 조건 |
+
+    FOR EACH row IN groupTable DO
+      groupName = extractGroupName(row.Group)  # "1. 기반 구축" → "기반 구축"
+
+      IF argument == groupName OR
+         argument == row.Group OR
+         groupName CONTAINS argument THEN
+
+        features = parseFeatureIds(row.Features)  # "AUTH-001, AUTH-002" → ["AUTH-001", "AUTH-002"]
+
+        RETURN {
+          type: 'group',
+          groupName: groupName,
+          groupNumber: extractGroupNumber(row.Group),
+          features: features,
+          priority: row.우선순위,
+          prerequisite: row.선행조건
+        }
 ```
 
 #### 2. 직접 파일 참조 (`@` 접두사)
@@ -145,11 +177,17 @@ ELSE
 
 ```typescript
 {
-  type: 'keyword' | 'direct' | 'feature-id' | 'feature-name' | 'fallback' | 'error',
+  type: 'keyword' | 'group' | 'direct' | 'feature-id' | 'feature-name' | 'fallback' | 'error',
   featureId?: string,           // Feature ID (추출된 경우)
   featureName?: string,         // Feature 이름 (추출된 경우)
   keyword?: string,             // 특수 키워드 (type='keyword'인 경우)
   argument?: string,            // 원본 입력 (type='fallback'인 경우)
+  // Group 관련 필드 (type='group'인 경우)
+  groupName?: string,           // Group 이름 (예: "인증")
+  groupNumber?: number,         // Group 번호 (예: 2)
+  features?: string[],          // Group에 속한 Feature ID 목록
+  priority?: string,            // Group 우선순위
+  prerequisite?: string,        // 선행 조건
   files: [
     {
       type: string,             // 'research', 'plan', 'spec', 'direct'
@@ -162,288 +200,6 @@ ELSE
 }
 ```
 
-## Examples
+## Reference
 
-### 예시 1: 특수 키워드 (workflow-ui)
-
-**Input:**
-
-```typescript
-{
-  argument: "common",
-  searchPaths: [".claude/docs/research", ".claude/docs/plan"],
-  specialKeywords: ["common"],
-  allowFallback: true
-}
-```
-
-**Output:**
-
-```typescript
-{
-  type: "keyword",
-  keyword: "common",
-  files: []
-}
-```
-
-### 예시 2: Feature ID (workflow-feature-spec)
-
-**Input:**
-
-```typescript
-{
-  argument: "AUTH-001",
-  searchPaths: [".claude/docs/research", ".claude/docs/plan"],
-  allowFallback: true
-}
-```
-
-**Output:**
-
-```typescript
-{
-  type: "feature-id",
-  featureId: "AUTH-001",
-  files: [
-    { type: "research", path: ".claude/docs/research/AUTH-001-research.md", exists: true },
-    { type: "plan", path: ".claude/docs/plan/AUTH-001-plan.md", exists: true }
-  ]
-}
-```
-
-### 예시 3: 필수 파일 검증 (workflow-implement)
-
-**Input:**
-
-```typescript
-{
-  argument: "AUTH-001",
-  searchPaths: [".claude/docs/research", ".claude/docs/plan"],
-  requiredFiles: ["research", "plan"],
-  allowFallback: false
-}
-```
-
-**Case A - 모두 존재:**
-
-```typescript
-{
-  type: "feature-id",
-  featureId: "AUTH-001",
-  files: [
-    { type: "research", path: ".claude/docs/research/AUTH-001-research.md", exists: true },
-    { type: "plan", path: ".claude/docs/plan/AUTH-001-plan.md", exists: true }
-  ]
-}
-```
-
-**Case B - plan 누락:**
-
-```typescript
-{
-  type: "error",
-  featureId: "AUTH-001",
-  files: [
-    { type: "research", path: ".claude/docs/research/AUTH-001-research.md", exists: true },
-    { type: "plan", path: ".claude/docs/plan/AUTH-001-plan.md", exists: false }
-  ],
-  error: "필수 파일이 없습니다: plan",
-  suggestions: ["/workflow-feature-spec AUTH-001"]
-}
-```
-
-### 예시 4: Feature 이름으로 검색
-
-**Input:**
-
-```typescript
-{
-  argument: "로그인 기능",
-  searchPaths: [".claude/docs/plan"],
-  allowFallback: false
-}
-```
-
-**Output:**
-
-```typescript
-{
-  type: "feature-name",
-  featureId: "AUTH-001",
-  featureName: "로그인 기능",
-  files: [
-    { type: "plan", path: ".claude/docs/plan/AUTH-001-plan.md", exists: true }
-  ]
-}
-```
-
-### 예시 5: 직접 파일 참조
-
-**Input:**
-
-```typescript
-{
-  argument: "@.claude/docs/plan/AUTH-001-plan.md",
-  searchPaths: [".claude/docs/plan"],
-  allowFallback: false
-}
-```
-
-**Output:**
-
-```typescript
-{
-  type: "direct",
-  featureId: "AUTH-001",
-  files: [
-    { type: "direct", path: ".claude/docs/plan/AUTH-001-plan.md", exists: true }
-  ]
-}
-```
-
-## Implementation Reference
-
-### Feature ID 추출 정규식
-
-```regex
-Feature ID 패턴: ^[A-Z]+(-[A-Z]+)*-\d+$
-파일명에서 추출: ([A-Z]+(?:-[A-Z]+)*-\d+)
-첫 줄에서 추출: # Feature (?:Spec|Research|Plan): ([A-Z]+(?:-[A-Z]+)*-\d+)
-```
-
-### 부분 매칭 우선순위
-
-1. **완전 일치** (exact match)
-2. **시작 일치** (starts with)
-3. **포함 일치** (contains)
-
-### 파일 읽기 최적화
-
-- 첫 줄만 필요한 경우 전체 파일 읽지 않기
-- 병렬 파일 읽기로 성능 향상
-
-## Error Handling
-
-### 1. 파일 시스템 에러
-
-```typescript
-{
-  type: "error",
-  error: "파일을 읽을 수 없습니다: \${filePath}",
-  suggestions: ["파일 경로를 확인하세요"]
-}
-```
-
-### 2. 필수 파일 누락
-
-```typescript
-{
-  type: "error",
-  error: "필수 파일이 없습니다: \${missingFileTypes.join(', ')}",
-  suggestions: ["/workflow-feature-spec \${featureId}"]
-}
-```
-
-### 3. 매칭 실패
-
-```typescript
-// allowFallback == false인 경우
-{
-  type: "error",
-  error: "매칭되는 Feature를 찾을 수 없습니다: \${argument}",
-  suggestions: [
-    "/workflow-feature-spec \${argument}",
-    "Feature ID 형식을 확인하세요 (예: AUTH-001)"
-  ]
-}
-```
-
-## Workflow Integration
-
-### workflow-ui.md
-
-````markdown
-> 💡 **Feature Resolver SKILL 사용**
->
-> ```
-> 파라미터:
->
-> - searchPaths: [".claude/docs/research", ".claude/docs/plan"]
-> - specialKeywords: ["common"]
-> - allowFallback: true
-> ```
-
-결과에 따른 처리:
-
-- type: 'keyword' → 공통 컴포넌트 모드
-- type: 'direct' | 'feature-id' | 'feature-name' → 해당 research/plan 기반 UI 구현
-- type: 'fallback' → 일반 텍스트로 UI 구현
-````
-
-### workflow-feature-spec.md
-
-````markdown
-> 💡 **Feature Resolver SKILL 사용**
->
-> ```
-> 파라미터:
->
-> - searchPaths: [".claude/docs/research", ".claude/docs/plan"]
-> - allowFallback: true
-> ```
-
-결과에 따른 처리:
-
-- research + plan 모두 존재 → 기존 문서 업데이트 모드
-- research만 존재 → Phase 3부터 시작 (plan 생성)
-- plan만 존재 → 경고 + 사용자 확인
-- 둘 다 없음 → 새 Feature 생성
-- type: 'fallback' → 새 Feature 생성
-````
-
-### workflow-implement.md
-
-````markdown
-> 💡 **Feature Resolver SKILL 사용**
->
-> ```
-> 파라미터:
->
-> - searchPaths: [".claude/docs/research", ".claude/docs/plan"]
-> - requiredFiles: ["research", "plan"]
-> - allowFallback: false
-> ```
-
-결과에 따른 처리:
-
-- type: 'feature-id' && 모든 파일 존재 → 구현 진행
-- type: 'error' → 에러 메시지 표시 및 워크플로우 중단
-````
-
-### workflow-update.md
-
-````markdown
-> 💡 **Feature Resolver SKILL 사용**
->
-> ```
-> 파라미터:
->
-> - searchPaths: [".claude/docs/feature-list"]
-> - allowFallback: false
-> ```
-
-결과에 따른 처리:
-
-- type: 'feature-id' → Feature ID 확인 → 변경 내용 입력 요청
-- type: 'feature-name' → 매칭된 Feature 정보 표시 → 변경 내용 입력 요청
-- type: 'direct' → 파일에서 Feature ID 추출 → 변경 내용 입력 요청
-- type: 'error' → 에러 메시지 표시 → 워크플로우 중단
-````
-
-## Version History
-
-- **v1.0.0** (2025-12-16): 초기 버전 생성
-  - workflow-ui, workflow-feature-spec, workflow-implement, workflow-update 지원
-  - 5단계 탐색 로직 구현 (keyword → direct → feature-id → feature-name → fallback)
-  - 6가지 출력 타입 지원
+상세 예시, 에러 처리, 워크플로우 통합 정보는 [reference.md](reference.md) 참조
