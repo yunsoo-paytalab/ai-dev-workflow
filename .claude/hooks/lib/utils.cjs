@@ -927,6 +927,7 @@ function generateProgressMarkdown(memoryId) {
   const workflowLabels = {
     "legacy-profile": "레거시 프로파일링",
     "domain-definition": "도메인 정의",
+    "feature-detail": "Feature 상세 문서 작성",
     "task-point": "Task Point 산정",
   };
 

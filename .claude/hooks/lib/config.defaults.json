@@ -16,6 +16,7 @@
       "workflows": {
         "legacy-profile": { "status": "not_started", "startedAt": null, "completedAt": null },
         "domain-definition": { "status": "not_started", "startedAt": null, "completedAt": null },
+        "feature-detail": { "status": "not_started", "startedAt": null, "completedAt": null },
         "task-point": { "status": "not_started", "startedAt": null, "completedAt": null }
       },
       "custom": []
