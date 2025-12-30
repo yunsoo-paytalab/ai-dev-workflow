@@ -103,26 +103,47 @@ AUTH-001 사용자 인증 전체 (로그인 + 회원가입 + ...)
 graph TD
     COMMON[COMMON-001<br/>API 클라이언트] --> AUTH1[AUTH-001<br/>로그인]
     AUTH1 --> AUTH2[AUTH-002<br/>회원가입]
-    AUTH1 --> ORDER[ORDER-001]
-    AUTH1 --> PRODUCT[PRODUCT-001]
+    AUTH1 --> ORDER[ORDER-001<br/>주문조회]
+    AUTH2 --> PRODUCT[PRODUCT-001<br/>상품목록]
 
-    subgraph 병렬 가능
+    subgraph Group 3 - 병렬 가능
+        AUTH2
         ORDER
-        PRODUCT
     end
+
+    style AUTH1 fill:#ffcccc
+    style AUTH2 fill:#ccffcc
+    style ORDER fill:#ccffcc
 ```
 
 ---
 
 ## 구현 순서 가이드
 
-> 같은 Group 내 Feature는 병렬 작업 가능합니다.
+> 같은 Group 내 Feature는 `/workflow-implement-parallel`로 병렬 작업 가능합니다.
 
-| Group        | 우선순위 | Features               | 선행 조건    |
-| ------------ | -------- | ---------------------- | ------------ |
-| 1. 기반 구축 | High     | COMMON-001             | -            |
-| 2. 인증      | High     | AUTH-001, AUTH-002     | Group 1 완료 |
-| 3. 핵심 기능 | High     | ORDER-001, PRODUCT-001 | Group 2 완료 |
+### Group 분류 기준
+
+**필수 조건** (모두 만족해야 같은 Group):
+
+1. **의존성 조건**: 선행 Feature가 동일
+2. **충돌 회피 조건**: 같은 파일/모듈을 수정할 가능성이 낮음
+
+| 분리 필요 (다른 Group)       | 병합 가능 (같은 Group)  |
+| ---------------------------- | ----------------------- |
+| 같은 도메인 + 같은 자원 유형 | 다른 도메인             |
+| 예: 로그인 ↔ 회원가입        | 예: 주문조회 ↔ 상품목록 |
+
+### 구현 순서 테이블
+
+| Group          | 우선순위 | Features            | 선행 조건    |
+| -------------- | -------- | ------------------- | ------------ |
+| 1. 기반 구축   | High     | COMMON-001          | -            |
+| 2. 인증-로그인 | High     | AUTH-001            | Group 1 완료 |
+| 3. 인증-가입   | High     | AUTH-002, ORDER-001 | Group 2 완료 |
+| 4. 핵심 기능   | High     | PRODUCT-001         | Group 3 완료 |
+
+> ⚠️ AUTH-001과 AUTH-002는 같은 auth 자원을 수정하므로 분리
 
 ---
 
