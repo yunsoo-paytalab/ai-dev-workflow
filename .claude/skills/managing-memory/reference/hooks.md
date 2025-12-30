@@ -119,6 +119,61 @@ Hook은 `.claude/settings.json`에서 설정됩니다:
 }
 ```
 
+## 워크플로우 명령어
+
+커맨드에서 워크플로우 진행 상황을 기록할 때 사용합니다.
+
+### workflow-complete
+
+워크플로우 완료를 기록합니다. 사용자 승인 후 호출합니다.
+
+```bash
+node .claude/hooks/memory-sync.cjs workflow-complete [workflow-name]
+```
+
+**인자:**
+
+- `workflow-name`: 완료된 워크플로우 이름 (domain-definition, feature-detail, task-point, legacy-profile 등)
+
+**동작:**
+
+1. memory.md의 진행 상황 업데이트
+2. 워크플로우 완료 타임스탬프 기록
+3. 다음 단계 안내
+
+### sync-progress
+
+현재 프로젝트 상태를 메모리에 동기화합니다.
+
+```bash
+node .claude/hooks/memory-sync.cjs sync-progress
+```
+
+**동작:**
+
+1. .claude/docs/ 내 문서 존재 여부 확인
+2. progress.json 업데이트
+3. memory.md 진행 상황 섹션 갱신
+
+### update-feature-status
+
+특정 Feature의 상태를 업데이트합니다.
+
+```bash
+node .claude/hooks/memory-sync.cjs update-feature-status [featureId] [status]
+```
+
+**인자:**
+
+- `featureId`: Feature ID (예: AUTH-001)
+- `status`: 상태 값 (pending, in_progress, spec_done, implemented, tested)
+
+**동작:**
+
+1. progress.json에서 해당 Feature 상태 업데이트
+2. 전체 진행률 재계산
+3. memory.md 동기화
+
 ## 주의사항
 
 1. **자동 처리 우선** - 대부분의 경우 Hook이 자동으로 처리

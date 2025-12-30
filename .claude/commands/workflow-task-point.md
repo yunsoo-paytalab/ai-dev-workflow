@@ -41,9 +41,9 @@ Feature에 포인트를 산정하고 `feature-list.md`를 업데이트합니다.
 
 **승인 후:**
 
-```bash
-node .claude/hooks/memory-sync.cjs workflow-complete task-point
-```
+> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#workflow-complete`
+
+`workflow-complete task-point` 실행
 
 ## 결과물
 

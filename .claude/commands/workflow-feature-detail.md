@@ -40,15 +40,15 @@ mkdir -p .claude/docs/feature-list
 
 ### Phase 4: Progress 동기화
 
-```bash
-node .claude/hooks/memory-sync.cjs sync-progress
-```
+> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#sync-progress`
+
+`sync-progress` 실행
 
 ### Phase 5: 워크플로우 완료
 
-```bash
-node .claude/hooks/memory-sync.cjs workflow-complete feature-detail
-```
+> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#workflow-complete`
+
+`workflow-complete feature-detail` 실행
 
 ## 선택적 실행
 

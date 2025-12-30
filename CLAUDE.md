@@ -6,7 +6,7 @@
 
 ```
 .claude/
-├── commands/          # 12개 워크플로우 커맨드
+├── commands/          # 15개 워크플로우 커맨드
 ├── agents/            # 18개 AI 에이전트
 ├── hooks/             # 자동화 스크립트
 ├── skills/            # 4개 스킬
@@ -28,7 +28,12 @@
 3. 기능별 개발 (반복)
    /workflow-feature-spec [기능ID]  → 구현 분석 및 계획 (단일 Feature)
    /workflow-ui [기능명]            → UI 구현 (선택)
-   /workflow-implement [기능명]     → TDD 방식 구현
+   /workflow-implement [기능명]     → TDD 방식 구현 (단일)
+
+   # 또는 병렬 구현 (Git Worktree 활용)
+   /workflow-implement-parallel [Group]  → 병렬 TDD 구현
+   /workflow-implement-status [Group]    → 진행 상태 확인
+   /workflow-implement-merge [Group]     → main에 병합
                 ↓
 4. 완료 단계
    /workflow-integrate  → 통합 및 리팩토링
@@ -44,7 +49,10 @@
 | `/workflow-domain-definition`     | 도메인 및 기능 목록 정의   |
 | `/workflow-feature-detail`        | Feature 상세 문서 작성 (전체 일괄) |
 | `/workflow-feature-spec [기능ID]` | 구현 분석 및 계획 (단일 Feature)  |
-| `/workflow-implement [기능명]`    | TDD 방식 구현              |
+| `/workflow-implement [기능명]`    | TDD 방식 구현 (단일)       |
+| `/workflow-implement-parallel [Group]` | Git Worktree 병렬 구현 |
+| `/workflow-implement-status [Group]`   | 병렬 구현 상태 확인    |
+| `/workflow-implement-merge [Group]`    | 병렬 구현 병합         |
 | `/workflow-ui [기능명]`           | UI 컴포넌트 개발           |
 | `/workflow-e2e`                   | E2E 테스트                 |
 | `/workflow-integrate`             | 시스템 통합                |
@@ -105,6 +113,7 @@
 4. **자동 문서화**: 각 단계별 문서 자동 생성
 5. **레거시 지원**: 기존 프로젝트도 분석 후 적용 가능
 6. **위험도 관리**: 코드 영역별 위험도 분류 (Safe → Critical)
+7. **병렬 구현**: Git Worktree를 활용한 Group 단위 병렬 개발
 
 ## 명명 규칙
 
@@ -121,6 +130,7 @@
 - 기능 명세: `.claude/docs/specs/`
 - 기능 목록: `.claude/docs/feature-list/`
 - 레거시 분석: `.claude/docs/legacy-analysis/`
+- 병렬 작업 공간: `.worktrees/[Feature ID]/`
 
 ## 상세 문서
 

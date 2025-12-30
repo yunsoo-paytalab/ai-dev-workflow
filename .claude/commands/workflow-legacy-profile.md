@@ -53,9 +53,9 @@ version: 3.2.0
 
 **승인 후:**
 
-```bash
-node .claude/hooks/memory-sync.cjs workflow-complete legacy-profile
-```
+> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#workflow-complete`
+
+`workflow-complete legacy-profile` 실행
 
 ### (Optional) Phase 4: Refactoring Strategy
 

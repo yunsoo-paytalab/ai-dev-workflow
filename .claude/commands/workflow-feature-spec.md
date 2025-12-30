@@ -44,9 +44,9 @@ version: 3.2.0
 
 **시작 시:**
 
-```bash
-node .claude/hooks/memory-sync.cjs update-feature-status [FEATURE_ID] in_progress
-```
+> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#update-feature-status`
+
+`update-feature-status [FEATURE_ID] in_progress` 실행
 
 **Agent: feature-research-agent** → `.claude/docs/research/[Feature ID]-research.md`
 
@@ -74,9 +74,9 @@ node .claude/hooks/memory-sync.cjs update-feature-status [FEATURE_ID] in_progres
 
 **승인 후:**
 
-```bash
-node .claude/hooks/memory-sync.cjs update-feature-status [FEATURE_ID] spec_done
-```
+> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#update-feature-status`
+
+`update-feature-status [FEATURE_ID] spec_done` 실행
 
 ## 결과물
 

@@ -18,6 +18,7 @@ version: 3.2.0
 - Research 문서 (`.claude/docs/research/domain-research.md`)
 - 도메인 정의 문서 (`.claude/docs/domain-definition.md`)
 - Feature 목록 (`.claude/docs/feature-list.md`)
+- 유저 시나리오 (`.claude/docs/user-scenarios.md`)
 - 처리할 Feature ID 목록 (prompt에서 전달)
 
 ## 출력
@@ -38,6 +39,7 @@ version: 3.2.0
 
 - 기본 정보, 개요, 주요 요구사항
 - 데이터 연동, 관련 도메인 인터페이스
+- 관련 유저 시나리오 (user-scenarios.md에서 매핑)
 - Task 테이블 + 각 Task 상세
 
 **제외할 내용**:
