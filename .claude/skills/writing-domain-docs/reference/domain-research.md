@@ -23,13 +23,14 @@
 
 ### 포함하지 말아야 할 내용
 
-1. 엔티티/인터페이스 설계 - domain-definition-writer가 담당
-2. 페이지/라우팅 설계 - page-structure-writer가 담당
-3. Feature/Task 분류 - feature-classifier가 담당
+1. 신규 엔티티/인터페이스 설계 - domain-definition-writer가 담당
+2. 기존 인터페이스 수정/확장 제안 - domain-definition-writer가 담당
+3. 페이지/라우팅 설계 - page-structure-writer가 담당
+4. Feature/Task 분류 - feature-classifier가 담당
 
 ## 문서 구조
 
-```markdown
+````markdown
 # 도메인 분석
 
 ## 1. 요구사항 상세
@@ -76,13 +77,66 @@
 | -------------- | ---- | -------- |
 | `path/to/file` | 설명 | 참고사항 |
 
-## 4. 기술적 제약사항
+## 4. 기존 인터페이스 추출
+
+> ⚠️ 기존 코드에서 추출한 인터페이스 (신규 설계 X)
+
+### 4.1 요구사항별 관련 인터페이스
+
+#### [요구사항/기능명 1]
+
+| 파일                | 인터페이스명    | 용도                 |
+| ------------------- | --------------- | -------------------- |
+| `src/types/auth.ts` | `LoginRequest`  | 로그인 요청 파라미터 |
+| `src/types/auth.ts` | `LoginResponse` | 로그인 응답 데이터   |
+
+```typescript
+// src/types/auth.ts
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}
+```
+````
+
+#### [요구사항/기능명 2]
+
+...
+
+### 4.2 공통 인터페이스
+
+> 여러 기능에서 공유되는 핵심 타입
+
+| 파일                | 인터페이스명 | 사용처                |
+| ------------------- | ------------ | --------------------- |
+| `src/types/user.ts` | `User`       | 인증, 프로필, 설정 등 |
+
+```typescript
+// src/types/user.ts
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  // ...
+}
+```
+
+## 5. 기술적 제약사항
 
 - 제약 1
 - 제약 2
 
-## 5. 추가 조사 필요 사항
+## 6. 추가 조사 필요 사항
 
 - [ ] 불확실한 영역 1
 - [ ] 확인 필요 사항 2
+
+```
+
 ```

@@ -20,7 +20,14 @@ version: 3.2.0
 
 ### `/workflow help`
 
-사용 가능한 모든 명령어 표시
+**아래 섹션들을 순서대로 그대로 출력하세요:**
+
+1. "## 작업 명령어" 테이블 전체
+2. "## 병렬 구현 명령어 (Git Worktree)" 테이블과 설명 전체
+3. "## 특수 명령어" 테이블 전체
+4. "## 권장 작업 순서" 코드블록 전체
+
+요약하지 말고 원본 그대로 출력할 것.
 
 ### `/workflow reset`
 
@@ -35,9 +42,20 @@ version: 3.2.0
 | `/workflow-task-point`         | 개발 공수 산정                |
 | `/workflow-feature-spec $ARGS` | 요구사항 분석 및 구현 계획    |
 | `/workflow-ui $ARGS`           | Figma 기반 UI 구현            |
-| `/workflow-implement $ARGS`    | TDD 방식 구현                 |
+| `/workflow-implement $ARGS`    | TDD 방식 구현 (단일)          |
 | `/workflow-integrate`          | 통합 및 리팩토링              |
 | `/workflow-e2e`                | E2E 테스트                    |
+
+## 병렬 구현 명령어 (Git Worktree)
+
+| 명령어                               | 설명                          |
+| ------------------------------------ | ----------------------------- |
+| `/workflow-implement-parallel $ARGS` | Group 단위 병렬 TDD 구현 시작 |
+| `/workflow-implement-status $ARGS`   | 병렬 구현 진행 상태 확인      |
+| `/workflow-implement-merge $ARGS`    | 완료된 Worktree를 main에 병합 |
+
+> **병렬 구현**: Git Worktree를 활용하여 동일 Group의 여러 Feature를 동시에 개발합니다.
+> 각 Feature는 독립된 브랜치와 작업 공간(`.worktrees/[Feature-ID]/`)에서 진행됩니다.
 
 ## 특수 명령어
 
@@ -58,16 +76,23 @@ version: 3.2.0
 ## 권장 작업 순서
 
 ```
+0. /workflow-memory init [메모리 ID]
 1. /workflow-legacy-profile     (브라운필드 시)
 2. /workflow-domain-definition
 3. /workflow-feature-detail
 4. /workflow-task-point
 5. 각 Feature마다:
-   - /workflow-feature-spec [ID]
-   - /workflow-ui [ID] (필요 시)
-   - /workflow-implement [ID]
+   - /workflow-feature-spec [Feature ID]
+   - /workflow-ui [Feature ID] (필요 시)
+   - /workflow-implement [Feature ID]
+
+   또는 병렬 구현 (Group 단위):
+   - /workflow-implement-parallel [Group]
+   - /workflow-implement-status [Group]  (진행 확인)
+   - /workflow-implement-merge [Group]   (완료 후 병합)
 6. /workflow-integrate
 7. /workflow-e2e
+8. /workflow-memory remove [메모리 ID]
 ```
 
 ## 파일 구조

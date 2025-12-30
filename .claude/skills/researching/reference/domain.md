@@ -32,11 +32,51 @@
 - 요구사항과 관련된 파일과 모듈 추적
 - 해당 영역의 데이터 흐름 파악
 
+### 4. 기존 인터페이스 추출 (신규 설계 X)
+
+> ⚠️ **기존 코드 분석만** - 새로운 인터페이스 설계는 domain-definition-writer가 담당
+
+**추출 대상:**
+
+- `interface`, `type` 선언 (TypeScript)
+- API Request/Response 타입
+- 엔티티/모델 정의
+- Enum, 상수 타입
+
+**검색 전략:**
+
+```bash
+# 인터페이스/타입 정의 검색
+Grep: "^(export )?(interface|type) " --include="*.ts,*.tsx"
+
+# API 관련 타입 검색
+Grep: "(Request|Response|Params|Payload)" --include="*.ts"
+
+# 엔티티/모델 검색
+Grep: "(Entity|Model|Schema)" --include="*.ts"
+```
+
+**추출 시 포함할 정보:**
+
+| 항목      | 내용                                           |
+| --------- | ---------------------------------------------- |
+| 파일 경로 | 인터페이스가 정의된 파일                       |
+| 이름      | 인터페이스/타입 이름                           |
+| 용도      | 요구사항의 어떤 기능과 관련되는지              |
+| 코드      | 인터페이스 정의 코드 (필드 및 타입 포함)       |
+
+**주의사항:**
+
+- 요구사항과 **관련 있는** 인터페이스만 추출
+- 내부 유틸리티 타입, 라이브러리 타입은 제외
+- 추출만 하고, 수정/확장 제안은 하지 않음
+
 ## 포함하지 말아야 할 내용
 
-1. **엔티티/인터페이스 설계** - domain-definition-writer가 담당
-2. **페이지/라우팅 설계** - page-structure-writer가 담당
-3. **Feature/Task 분류** - feature-classifier가 담당
+1. **신규 엔티티/인터페이스 설계** - domain-definition-writer가 담당
+2. **기존 인터페이스 수정/확장 제안** - domain-definition-writer가 담당
+3. **페이지/라우팅 설계** - page-structure-writer가 담당
+4. **Feature/Task 분류** - feature-classifier가 담당
 
 ## 실행 프로세스
 
