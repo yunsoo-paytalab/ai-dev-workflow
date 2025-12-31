@@ -49,21 +49,9 @@ version: 3.2.0
 사용자 검토:
 
 - 도메인 경계, Feature/Task 분류 적절성
-- 유저 시나리오 ↔ Feature 매핑 커버리지
+- 유저 시나리오 흐름 완성도
 
 **승인 후:**
-
-### Phase 4.5: Feature 매핑 업데이트
-
-> ⚠️ **필수 단계** - Phase 3-2 병렬 실행으로 인해 user-scenarios.md의 Feature 매핑이 TBD 상태
-
-**작업 내용:**
-
-1. `.claude/docs/feature-list.md`에서 Feature ID 목록 확인
-2. `.claude/docs/user-scenarios.md`의 Feature 매핑 업데이트:
-   - 시나리오 목록 테이블의 `관련 Feature` 컬럼
-   - 각 시나리오 상세의 `Feature 매핑` 테이블
-   - 커버리지 검증 섹션의 `Feature별 시나리오 매핑` 테이블
 
 > 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#workflow-complete`
 

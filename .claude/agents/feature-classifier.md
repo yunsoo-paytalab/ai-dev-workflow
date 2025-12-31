@@ -30,8 +30,22 @@ Research 결과를 바탕으로 Feature/Task를 분류하고 구조화된 리스
 
 > 📚 **상세 기준**: `reference/feature-list.md` → "Group 분류 기준" 섹션 참조
 
+**Group = 동시에 병렬 작업이 가능한 Feature들의 집합**
+
 - 같은 Group 내 Feature는 `/workflow-implement-parallel`로 병렬 작업 가능
-- **필수 조건**: 의존성 동일 + 충돌 회피
+- **필수 조건** (모두 만족해야 같은 Group):
+  1. **동일 선행 조건**: 같은 Group 완료 후 시작 가능
+  2. **상호 독립**: Feature 간 A→B 의존성 없음
+  3. **충돌 회피**: 다른 파일/컴포넌트 수정
+
+**⚠️ 다른 Group으로 분리 필수**:
+
+- A→B 의존 관계 (예: CMN-001 → CMN-002)
+- 같은 컴포넌트/패널 수정 (예: 상세조회 → 상태변경)
+- 같은 도메인 + 같은 자원 (예: 로그인 → 회원가입)
+
+**❌ 잘못된 예**: `Group: CMN-001, CMN-002` (CMN-002가 CMN-001에 의존!)
+**✅ 올바른 예**: `Group 1: CMN-001` → `Group 2: CMN-002`
 
 ### ID 명명 규칙
 
