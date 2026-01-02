@@ -1,7 +1,7 @@
 ---
 name: figma-ui-generator
 description: 기존 디자인 시스템 컴포넌트를 사용하여 Figma 디자인에서 UI 코드를 생성합니다.
-allowed-tools: mcp__figma-dev-mode-mcp-server__get_design_context, mcp__figma-dev-mode-mcp-server__get_metadata, mcp__figma-dev-mode-mcp-server__get_screenshot, Write, Read, Bash
+allowed-tools: mcp__figma-dev-mode-mcp-server__get_design_context, mcp__figma-dev-mode-mcp-server__get_metadata, Write, Read, Bash
 version: 3.2.0
 ---
 
@@ -115,6 +115,5 @@ Read(".claude/docs/design-system-mapping/{프로젝트}.md")
 | -------------------- | ------------------- | ------------------------- |
 | `get_design_context` | 코드 + variant 정보 | 메인 도구, 파일 저장 지원 |
 | `get_metadata`       | 인스턴스명 확인     | 큰 노드에서 실패 가능     |
-| `get_screenshot`     | 시각적 확인         | 디자인 검증용             |
 
-> 💡 `get_screenshot`: Figma MCP가 호출을 권장하지만, 매핑 작업에서는 **선택적**임 (data-name으로 충분)
+> ⚠️ `get_screenshot`은 사용하지 않음 - `get_design_context`의 코드와 data-name으로 충분
