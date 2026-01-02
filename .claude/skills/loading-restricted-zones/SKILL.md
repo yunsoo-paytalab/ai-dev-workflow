@@ -1,3 +1,9 @@
+---
+name: loading-restricted-zones
+description: 제한 영역(Danger Zones + No-Reference Zones)을 로드하고 적용하는 가이드입니다.
+version: 3.2.0
+---
+
 # Loading Restricted Zones Skill
 
 제한 영역(Danger Zones + No-Reference Zones)을 로드하고 적용하는 가이드입니다.

@@ -1,6 +1,7 @@
 ---
 name: writing-legacy-analysis
 description: 레거시 코드 분석 결과 문서들을 작성합니다. structure, dependency, debt, business-logic, danger-zones, risk 문서 작성 시 사용하세요.
+version: 3.2.0
 ---
 
 # Writing Legacy Analysis Docs

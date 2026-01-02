@@ -1,6 +1,7 @@
 ---
 name: analyzing-legacy
 description: 레거시 코드베이스를 분석하는 전략 가이드입니다. 4개 분석 에이전트(structure, dependency, debt, business-logic)가 병렬로 작업할 때 사용하세요.
+version: 3.2.0
 ---
 
 # Analyzing Legacy

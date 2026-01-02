@@ -1,6 +1,7 @@
 ---
 name: managing-memory
 description: 프로젝트 메모리(memory.md)를 관리하는 전략 가이드입니다. memory-manager 에이전트 작업 시, 또는 메모리 관련 훅 스크립트 실행 시 사용하세요.
+version: 3.2.0
 ---
 
 # Managing Memory

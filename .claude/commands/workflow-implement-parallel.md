@@ -1,7 +1,7 @@
 ---
 name: workflow-implement-parallel
 description: Group 단위로 여러 Feature를 Git Worktree를 활용하여 병렬로 구현하는 커맨드
-version: 1.0.0
+version: 3.2.0
 ---
 
 # /workflow-implement-parallel $ARGUMENTS

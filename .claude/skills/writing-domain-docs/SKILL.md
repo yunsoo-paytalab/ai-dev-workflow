@@ -1,6 +1,7 @@
 ---
 name: writing-domain-docs
 description: 도메인 정의 워크플로우의 결과 문서들을 작성합니다. domain-research, domain-definition, feature-list, page-structure, user-scenarios 문서 작성 시 사용하세요.
+version: 3.2.0
 ---
 
 # Writing Domain Docs

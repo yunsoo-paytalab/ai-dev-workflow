@@ -1,6 +1,7 @@
 ---
 name: writing-feature-docs
 description: Feature 관련 문서들을 작성합니다. feature-detail(상세 문서), feature-research(구현 분석), feature-plan(구현 계획) 작성 시 사용하세요.
+version: 3.2.0
 ---
 
 # Writing Feature Docs

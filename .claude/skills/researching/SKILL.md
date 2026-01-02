@@ -1,6 +1,7 @@
 ---
 name: researching
 description: 도메인 분석 및 Feature 분석을 위한 Research 수행 전략 가이드입니다. domain-research, feature-research 작업 시 사용하세요.
+version: 3.2.0
 ---
 
 # Researching

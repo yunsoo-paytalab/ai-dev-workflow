@@ -1,6 +1,7 @@
 ---
 name: estimating-points
 description: Feature 포인트를 산정하는 전략 가이드입니다. task-point-estimator 에이전트 작업 시 사용하세요.
+version: 3.2.0
 ---
 
 # Estimating Points

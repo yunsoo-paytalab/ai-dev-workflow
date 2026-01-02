@@ -1,7 +1,7 @@
 ---
 name: workflow-implement-merge
 description: 병렬 구현이 완료된 Worktree들을 main 브랜치에 병합하는 커맨드
-version: 1.0.0
+version: 3.2.0
 ---
 
 # /workflow-implement-merge $ARGUMENTS
