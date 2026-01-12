@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/memory-sync.cjs user-input"
+            "command": "d=$PWD; while [ \"$d\" != \"/\" ] && [ ! -f \"$d/.claude/hooks/memory-sync.cjs\" ]; do d=$(dirname \"$d\"); done; [ -f \"$d/.claude/hooks/memory-sync.cjs\" ] && node \"$d/.claude/hooks/memory-sync.cjs\" user-input || true"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/memory-sync.cjs assistant-response"
+            "command": "d=$PWD; while [ \"$d\" != \"/\" ] && [ ! -f \"$d/.claude/hooks/memory-sync.cjs\" ]; do d=$(dirname \"$d\"); done; [ -f \"$d/.claude/hooks/memory-sync.cjs\" ] && node \"$d/.claude/hooks/memory-sync.cjs\" assistant-response || true"
           }
         ]
       }
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/memory-sync.cjs end"
+            "command": "d=$PWD; while [ \"$d\" != \"/\" ] && [ ! -f \"$d/.claude/hooks/memory-sync.cjs\" ]; do d=$(dirname \"$d\"); done; [ -f \"$d/.claude/hooks/memory-sync.cjs\" ] && node \"$d/.claude/hooks/memory-sync.cjs\" end || true"
           }
         ]
       }
@@ -39,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/memory-sync.cjs compact"
+            "command": "d=$PWD; while [ \"$d\" != \"/\" ] && [ ! -f \"$d/.claude/hooks/memory-sync.cjs\" ]; do d=$(dirname \"$d\"); done; [ -f \"$d/.claude/hooks/memory-sync.cjs\" ] && node \"$d/.claude/hooks/memory-sync.cjs\" compact || true"
           }
         ]
       }

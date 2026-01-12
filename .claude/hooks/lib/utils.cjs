@@ -17,11 +17,13 @@ const HOME = process.env.HOME || process.env.USERPROFILE;
 const CENTRAL_STORE = path.join(HOME, ".claude-aidev-memory");
 
 /**
- * 프로젝트 루트 경로 (.claude 폴더가 있는 디렉토리)
- * 현재 디렉토리에서 시작하여 .claude 폴더를 찾을 때까지 상위로 탐색
+ * 특정 경로에서 시작하여 .claude 폴더가 있는 프로젝트 루트 찾기
+ * 모노레포 하위 디렉토리에서도 상위의 .claude 폴더를 찾을 수 있음
+ * @param {string} startPath - 탐색 시작 경로
+ * @returns {string|null} 프로젝트 루트 경로 또는 null
  */
-function getProjectRoot() {
-  let currentDir = process.cwd();
+function getProjectRootFromPath(startPath) {
+  let currentDir = startPath;
 
   // .claude 폴더를 찾을 때까지 상위로 탐색
   while (currentDir !== path.parse(currentDir).root) {
@@ -32,8 +34,17 @@ function getProjectRoot() {
     currentDir = path.dirname(currentDir);
   }
 
+  return null;
+}
+
+/**
+ * 프로젝트 루트 경로 (.claude 폴더가 있는 디렉토리)
+ * 현재 디렉토리에서 시작하여 .claude 폴더를 찾을 때까지 상위로 탐색
+ */
+function getProjectRoot() {
+  const root = getProjectRootFromPath(process.cwd());
   // .claude 폴더를 찾지 못하면 현재 작업 디렉토리 반환 (fallback)
-  return process.cwd();
+  return root || process.cwd();
 }
 
 /**
@@ -159,14 +170,22 @@ function getMemoryId() {
 
 /**
  * 특정 프로젝트 경로에서 메모리 ID 가져오기
+ * 모노레포 하위 디렉토리에서도 상위의 .claude 폴더를 탐색하여 메모리 ID를 찾음
  */
 function getMemoryIdFromPath(projectPath) {
   if (!projectPath) {
     return getMemoryId();
   }
+
+  // 주어진 경로에서 시작하여 .claude 폴더가 있는 프로젝트 루트 찾기
+  const projectRoot = getProjectRootFromPath(projectPath);
+  if (!projectRoot) {
+    return null;
+  }
+
   try {
     const memoryRefPath = path.join(
-      projectPath,
+      projectRoot,
       ".claude",
       "docs",
       "memory",
@@ -1076,10 +1095,14 @@ function syncProgressToMemory(memoryId) {
 
 /**
  * feature-list.md 파싱하여 progress.json 업데이트
+ * 모노레포 하위 디렉토리에서도 상위의 .claude 폴더를 탐색
  */
 function parseFeatureListToProgress(memoryId, projectPath) {
+  // 주어진 경로에서 시작하여 .claude 폴더가 있는 프로젝트 루트 찾기
+  const projectRoot = getProjectRootFromPath(projectPath) || projectPath;
+
   const featureListPath = path.join(
-    projectPath,
+    projectRoot,
     ".claude",
     "docs",
     "feature-list.md"
@@ -1137,7 +1160,7 @@ function parseFeatureListToProgress(memoryId, projectPath) {
 
   // 개별 Feature 상세 파일에서 Task 파싱
   const featureListDir = path.join(
-    projectPath,
+    projectRoot,
     ".claude",
     "docs",
     "feature-list"
@@ -1190,10 +1213,14 @@ function parseFeatureListToProgress(memoryId, projectPath) {
 
 /**
  * domain-definition.md 파싱하여 progress.json 업데이트
+ * 모노레포 하위 디렉토리에서도 상위의 .claude 폴더를 탐색
  */
 function parseDomainDefinitionToProgress(memoryId, projectPath) {
+  // 주어진 경로에서 시작하여 .claude 폴더가 있는 프로젝트 루트 찾기
+  const projectRoot = getProjectRootFromPath(projectPath) || projectPath;
+
   const domainDefPath = path.join(
-    projectPath,
+    projectRoot,
     ".claude",
     "docs",
     "domain-definition.md"
@@ -1269,6 +1296,7 @@ module.exports = {
 
   // 경로 함수
   getProjectRoot,
+  getProjectRootFromPath,
   getLocalMemoryDir,
   getMemoryRefFile,
   getLocalMemoryFile,
