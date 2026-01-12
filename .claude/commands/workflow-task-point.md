@@ -1,7 +1,7 @@
 ---
 name: workflow-task-point
 description: Feature별로 피보나치 수열 기반의 포인트를 산정하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-task-point
@@ -41,9 +41,9 @@ Feature에 포인트를 산정하고 `feature-list.md`를 업데이트합니다.
 
 **승인 후:**
 
-> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#workflow-complete`
-
-`workflow-complete task-point` 실행
+```
+/workflow-memory complete task-point
+```
 
 ## 결과물
 

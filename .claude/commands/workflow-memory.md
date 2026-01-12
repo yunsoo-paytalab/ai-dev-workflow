@@ -1,7 +1,7 @@
 ---
 name: workflow-memory
 description: 프로젝트 전역 메모리를 관리하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-memory
@@ -49,6 +49,15 @@ version: 3.2.0
 
 - meta.json, progress.json, memory.md 업데이트
 - index.json lastAccess 갱신
+
+### `/workflow-memory complete [workflow-name]`
+
+특정 워크플로우를 완료로 표시
+
+- `workflow-name`: 완료할 워크플로우 이름
+  - `domain-definition`, `feature-detail`, `task-point`, `legacy-profile` 등
+- progress.json에 워크플로우 완료 상태 기록
+- memory.md 진행 상황 섹션 업데이트
 
 ### `/workflow-memory remove [id]`
 

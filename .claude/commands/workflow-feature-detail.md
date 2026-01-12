@@ -1,7 +1,7 @@
 ---
 name: workflow-feature-detail
 description: Feature 목록의 모든 Feature에 대해 상세 문서를 일괄 작성하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-feature-detail
@@ -38,17 +38,11 @@ mkdir -p .claude/docs/feature-list
 - `.claude/docs/feature-list.md`에 상세 문서 링크 추가
 - 모든 Feature 문서 존재 여부 검증
 
-### Phase 4: Progress 동기화
+### Phase 4: 워크플로우 완료
 
-> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#sync-progress`
-
-`sync-progress` 실행
-
-### Phase 5: 워크플로우 완료
-
-> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#workflow-complete`
-
-`workflow-complete feature-detail` 실행
+```
+/workflow-memory complete feature-detail
+```
 
 ## 선택적 실행
 

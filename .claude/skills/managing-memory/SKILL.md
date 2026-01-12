@@ -1,7 +1,7 @@
 ---
 name: managing-memory
 description: 프로젝트 메모리(memory.md)를 관리하는 전략 가이드입니다. memory-manager 에이전트 작업 시, 또는 메모리 관련 훅 스크립트 실행 시 사용하세요.
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Managing Memory
@@ -69,23 +69,26 @@ memory.md의 "핵심 결정사항" 테이블에 행 추가:
 | 2024-01-16 | JWT 인증 방식 채택 | 팀 표준, 확장성 |
 ```
 
-### 훅 스크립트 실행
+### 메모리 관리 명령어
 
 ```bash
 # 메모리 초기화
-node .claude/hooks/memory-init.cjs
+/workflow-memory init [id]
 
-# 메모리 동기화
-node .claude/hooks/memory-sync.cjs [message]
+# 메모리 상태 동기화
+/workflow-memory update
 
 # 메모리 상태 확인
-node .claude/hooks/memory-status.cjs
+/workflow-memory status
 
 # 메모리 목록
-node .claude/hooks/memory-list.cjs
+/workflow-memory list
 
 # 메모리 전환
-node .claude/hooks/memory-switch.cjs [project-id]
+/workflow-memory switch [project-id]
+
+# 워크플로우 완료
+/workflow-memory complete [workflow-name]
 ```
 
 ## Output Format

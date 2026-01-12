@@ -231,7 +231,7 @@ function createSymlink(target, linkPath) {
                                   ↓
 ┌─────────────────────────────────────────────────────────────────────┐
 │                      워크플로우 완료                                 │
-│  (자동: SessionEnd / 수동: workflow-complete 호출)                   │
+│  (자동: SessionEnd / 수동: /workflow-memory complete 호출)           │
 │  • completeWorkflow(): progress.json 워크플로우 상태 = "done"        │
 │  • parseFeatureListToProgress(): feature-list.md 파싱               │
 │  • parseDomainDefinitionToProgress(): domain-definition.md 파싱     │

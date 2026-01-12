@@ -1,7 +1,7 @@
 ---
 name: workflow-domain-definition
 description: 프로젝트의 도메인을 정의하고 기능 목록을 작성하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-domain-definition
@@ -53,15 +53,9 @@ version: 3.2.0
 
 **승인 후:**
 
-> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#workflow-complete`
-
-`workflow-complete domain-definition` 실행
-
-### Phase 5: Progress 동기화
-
-> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#sync-progress`
-
-`sync-progress` 실행
+```
+/workflow-memory complete domain-definition
+```
 
 ## 다음 단계
 

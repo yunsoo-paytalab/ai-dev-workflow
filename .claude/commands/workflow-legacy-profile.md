@@ -1,7 +1,7 @@
 ---
 name: workflow-legacy-profile
 description: 브라운필드 프로젝트를 위하여 레거시 코드를 분석하고 위험 영역을 식별하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-legacy-profile
@@ -53,9 +53,9 @@ version: 3.2.0
 
 **승인 후:**
 
-> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#workflow-complete`
-
-`workflow-complete legacy-profile` 실행
+```
+/workflow-memory complete legacy-profile
+```
 
 ### (Optional) Phase 4: Refactoring Strategy
 
