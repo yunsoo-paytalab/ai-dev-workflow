@@ -46,13 +46,9 @@ version: 3.2.0
 
 ### Phase 1: 사용자 선택
 
-```
-병합 옵션을 선택하세요:
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md` (다중 선택형)
 
-  1. 완료된 것만 병합 (AUTH-001, AUTH-002)
-  2. 모두 완료될 때까지 대기
-  3. 취소
-```
+**선택지:** ✅ 완료된 것만 병합 | ⏳ 모두 완료 대기 | 💬 직접 입력
 
 ### Phase 2: 순차 병합
 
@@ -148,12 +144,11 @@ cd ../..
 충돌 파일:
   - src/api/auth.ts
   - src/types/auth.ts
-
-선택:
-  1. 이 Feature 스킵하고 나머지 계속
-  2. 병합 중단 (이미 완료된 것은 유지)
-  3. 수동 해결 모드 (가이드 제공)
 ```
+
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md` (다중 선택형)
+
+**선택지:** ⏭️ 스킵 후 계속 | ⏸️ 병합 중단 | 🔧 수동 해결 | 💬 직접 입력
 
 ## 옵션
 

@@ -45,13 +45,15 @@ version: 3.2.1
 
 ### Phase 3: Safety Rules Definition
 
-사용자 검토:
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+
+검토 항목:
 
 - AI가 제안한 danger-zones/no-reference-zones 검토
 - 추가 위험 영역 지정
 - **restricted-zones.json 최종 확정**
 
-**승인 후:**
+**승인 시:**
 
 ```
 /workflow-memory complete legacy-profile

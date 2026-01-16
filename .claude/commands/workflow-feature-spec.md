@@ -52,7 +52,9 @@ version: 3.2.0
 
 ### Phase 2: Review & Confirm
 
-사용자 검토:
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+
+검토 항목:
 
 - 요구사항 분석 정확성
 - API 문서 URL 확인 (필요 시)
@@ -66,13 +68,15 @@ version: 3.2.0
 
 ### Phase 4: Review & Confirm
 
-사용자 검토:
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+
+검토 항목:
 
 - 기술 설계 타당성
 - Implementation Groups 구성 적절성
 - 의사결정 항목 확인
 
-**승인 후:**
+**승인 시:**
 
 > 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#update-feature-status`
 

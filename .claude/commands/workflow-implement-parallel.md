@@ -151,12 +151,11 @@ Task 에이전트 × N (N = Feature 수)
 현재 진행 중: Group "인증"
   - AUTH-001: in_progress
   - AUTH-002: completed
-
-선택:
-  1. 기존 작업 계속
-  2. 기존 작업 중단 후 새로 시작
-  3. 취소
 ```
+
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md` (다중 선택형)
+
+**선택지:** ▶️ 기존 작업 계속 | 🔄 새로 시작 | 💬 직접 입력
 
 ## 결과물
 

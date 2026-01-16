@@ -368,9 +368,10 @@ function handleUserInput() {
       ensureDir(sessionsDir);
 
       const branch = getCurrentBranchFromPath(projectCwd);
+      const safeBranch = branch ? branch.replace(/\//g, "-") : "unknown";
       const dateStr = getDateString();
       const hash = generateShortHash();
-      const sessionFileName = `${dateStr}_${branch}_${hash}.md`;
+      const sessionFileName = `${dateStr}_${safeBranch}_${hash}.md`;
       const sessionFilePath = path.join(sessionsDir, sessionFileName);
 
       const sessionContent = `# 세션: ${dateStr} ${branch}

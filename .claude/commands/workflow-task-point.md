@@ -34,12 +34,14 @@ Feature에 포인트를 산정하고 `feature-list.md`를 업데이트합니다.
 
 ### Phase 3: Review & Confirm
 
-사용자 검토:
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+
+검토 항목:
 
 - 포인트 검토 및 조정
 - 13pt 이상 Feature 분할 필요 여부
 
-**승인 후:**
+**승인 시:**
 
 ```
 /workflow-memory complete task-point

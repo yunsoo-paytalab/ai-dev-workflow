@@ -38,6 +38,12 @@ version: 3.2.0
 
 ## 사용자 결정 포인트
 
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+
+각 Phase 완료 후 Review & Confirm 실행
+
+결정 항목:
+
 - 리팩토링 범위 승인
 - 충돌 해결 방식 결정
 - 최적화 수준 선택

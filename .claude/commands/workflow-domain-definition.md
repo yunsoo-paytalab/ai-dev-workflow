@@ -22,7 +22,11 @@ version: 3.2.1
 
 ### Phase 2: Review & Confirm
 
-사용자 검토: Research 결과 정확성, 추가/누락 사항 확인
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+
+검토 항목: Research 결과 정확성, 추가/누락 사항 확인
+
+**승인 시:** Phase 3로 진행
 
 ### Phase 3: Design & Documentation
 
@@ -46,12 +50,14 @@ version: 3.2.1
 
 ### Phase 4: Review & Confirm
 
-사용자 검토:
+> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+
+검토 항목:
 
 - 도메인 경계, Feature/Task 분류 적절성
 - 유저 시나리오 흐름 완성도
 
-**승인 후:**
+**승인 시:**
 
 ```
 /workflow-memory complete domain-definition
