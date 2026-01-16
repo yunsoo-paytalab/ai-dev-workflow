@@ -4,7 +4,7 @@ description: Research 결과를 바탕으로 기술 설계와 구현 계획을 �
 tools: Read, Grep, Glob, Bash, Write, Edit
 model: opus
 skills: planning, writing-feature-docs
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Planning Agent

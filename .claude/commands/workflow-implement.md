@@ -1,7 +1,7 @@
 ---
 name: workflow-implement
 description: 특정 기능을 TDD 방식으로 구현하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-implement $ARGUMENTS

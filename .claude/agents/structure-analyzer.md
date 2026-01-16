@@ -4,7 +4,7 @@ description: 프로젝트 구조 및 아키텍처 빠른 분석
 tools: Read, Grep, Glob, Bash, Write
 model: haiku
 skills: analyzing-legacy, writing-legacy-analysis
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Structure Analyzer

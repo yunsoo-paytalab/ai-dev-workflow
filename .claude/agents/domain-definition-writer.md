@@ -4,7 +4,7 @@ description: 도메인 설계 및 정의 문서를 작성하는 전문 에이전
 tools: Read, Write, Glob
 model: opus
 skills: writing-domain-docs
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Domain Definition Writer Agent

@@ -1,7 +1,7 @@
 ---
 name: running-tdd
 description: TDD의 Red-Green-Refactor 사이클을 관리하는 전략 가이드입니다. test-runner 에이전트 작업 시 사용하세요.
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Running TDD

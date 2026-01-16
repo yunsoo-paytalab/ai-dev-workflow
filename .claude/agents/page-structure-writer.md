@@ -4,7 +4,7 @@ description: 페이지/라우팅 설계 및 구조 문서를 작성하는 전문
 tools: Read, Write, Glob
 model: opus
 skills: writing-domain-docs
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Page Structure Writer Agent

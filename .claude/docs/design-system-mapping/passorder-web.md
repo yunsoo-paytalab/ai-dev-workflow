@@ -1,8 +1,8 @@
-# Platform Web 디자인시스템 컴포넌트 매핑
+# Passorder Web 디자인시스템 컴포넌트 매핑
 
 ## 개요
 
-- **Figma 프로젝트**: Paytalab Design System
+- **Figma 프로젝트**: Passorder Web Design System
 - **코드베이스**: `passorder-web/packages/ui`
 
 ### 컴포넌트 import 방식
@@ -29,7 +29,7 @@ import { Button } from "@common/ui";
 | -                                                          | Indicator        | `@ui/components/indicator`             | [Figma](https://www.figma.com/design/SeC3olrbhdTtceR29U3L5z/?node-id=5241-1865&m=dev)   |
 | `InformationBox`                                           | InfoBox          | `@ui/components/info-box`              | [Figma](https://www.figma.com/design/SeC3olrbhdTtceR29U3L5z/?node-id=19778-1872)        |
 | `Landing Scaffold`                                         | LandingScaffold  | `@ui/components/landing-scaffold`      | [Figma](https://www.figma.com/design/SeC3olrbhdTtceR29U3L5z/?node-id=21537-459&m=dev)   |
-| `List` → [Variant 참조](#list)                             | List             | `@ui/components/list`                  | [Figma](https://www.figma.com/design/SeC3olrbhdTtceR29U3L5z/?node-id=21768-5911&m=dev)  |
+| `List`                                                     | List             | `@ui/components/list`                  | [Figma](https://www.figma.com/design/SeC3olrbhdTtceR29U3L5z/?node-id=21768-5911&m=dev)  |
 | `Marker`, `Marker Set`, `MakerIcon`                        | Marker           | `@ui/components/marker`                | [Figma](https://www.figma.com/design/SeC3olrbhdTtceR29U3L5z/?node-id=19826-6736&m=dev)  |
 | -                                                          | MultiInputField  | `@ui/components/multi-input-field`     | [Figma](https://www.figma.com/design/SeC3olrbhdTtceR29U3L5z/?node-id=1-6641&m=dev)      |
 | `Snackbar`                                                 | Snackbar         | `@ui/components/notification/snackbar` | [Figma](https://www.figma.com/design/SeC3olrbhdTtceR29U3L5z/?node-id=19729-16861&m=dev) |
@@ -69,43 +69,6 @@ import { Button } from "@common/ui";
 | ------------- | ---------------------------- | -------------------------- |
 | `TextBadge`   | `<TextBadge>`                | 기본 텍스트 배지           |
 | `Menu badge`  | `<TextBadge leftIcon={...}>` | 좌측 아이콘 포함 메뉴 배지 |
-
-### List
-
-리스트 아이템 컴포넌트입니다. Compound Component 패턴으로 구성되어 있습니다.
-
-- **인스턴스명**: `List`
-- **Variant 속성**: Figma Properties 패널에서 확인
-
-**Figma Properties 패널 속성:**
-
-| Property           | 값                   | 코드 매핑                                   |
-| ------------------ | -------------------- | ------------------------------------------- |
-| `Left Area`        | `True`               | `<List.Left>` 사용                          |
-| `Left Area Type`   | `Selection Controls` | `<List.Left>` + Checkbox/Radio              |
-|                    | `Image`              | `<List.Left>` + `<Image>` (썸네일)          |
-|                    | `Icon`               | `<List.Left>` + Icon 컴포넌트               |
-| `Right Area`       | `True`               | `<List.Right>` 사용                         |
-| `Right Area Type`  | `Icon Button`        | `<List.Right>` + `<IconButton>`             |
-|                    | `Fill Button`        | `<List.Right>` + `<FillButton>`             |
-|                    | `Ghost Button`       | `<List.Right>` + `<GhostButton>`            |
-|                    | `Selection Controls` | `<List.Right>` + Checkbox/Radio/Switch      |
-|                    | `Badge`              | `<List.Right>` + `<Badge>`                  |
-|                    | `Text`               | `<List.Right>` + 텍스트                     |
-| `Line`             | `One`                | `<List.Title>` 만 사용                      |
-|                    | `Two`                | `<List.Title>` + `<List.Description>`       |
-|                    | `Three`              | `<List.Title>` + `<List.Description>` (3줄) |
-| `Description Icon` | `True`               | Description에 아이콘 포함                   |
-
-**Title/Description Props:**
-
-| Props               | 값                                 |
-| ------------------- | ---------------------------------- |
-| `TitleSize`         | `h3`, `b1`, `b2`                   |
-| `TitleWeight`       | `bold`, `extrabold`                |
-| `DescriptionSize`   | `b2`, `b3`, `c1`                   |
-| `DescriptionWeight` | `regular`, `bold`                  |
-| `DescriptionColor`  | `gray-600`, `gray-700`, `gray-800` |
 
 ### SelectionControl
 

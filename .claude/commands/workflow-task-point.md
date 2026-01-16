@@ -34,12 +34,16 @@ Feature에 포인트를 산정하고 `feature-list.md`를 업데이트합니다.
 
 ### Phase 3: Review & Confirm
 
+> 📋 **전제조건**: Phase 2 완료
+
 > 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
 
 검토 항목:
 
 - 포인트 검토 및 조정
 - 13pt 이상 Feature 분할 필요 여부
+
+**선택지:** ✅ 승인 | 💬 직접 입력
 
 **승인 시:**
 

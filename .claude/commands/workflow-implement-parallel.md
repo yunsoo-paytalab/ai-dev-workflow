@@ -1,7 +1,7 @@
 ---
 name: workflow-implement-parallel
 description: Group 단위로 여러 Feature를 Git Worktree를 활용하여 병렬로 구현하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-implement-parallel $ARGUMENTS
@@ -32,10 +32,13 @@ version: 3.2.0
 
 ```
 1. feature-resolver로 Group 해석
-2. Group 내 Feature 목록 추출
+2. Group 내 Feature 목록 추출 → features 배열에 저장
+   예: features = ["AUTH-001", "AUTH-002", "AUTH-003"]
 3. 각 Feature의 plan 파일 존재 여부 확인
    - 누락 시 에러 + /workflow-feature-spec 안내
 ```
+
+> ⚠️ **이후 모든 Phase에서는 이 `features` 배열에 포함된 Feature들만 처리합니다.**
 
 ### Phase 1: Worktree 환경 준비
 
@@ -51,13 +54,13 @@ echo ".worktrees/" >> .gitignore
 
 #### 1.2 Worktree 생성
 
-각 Feature별로:
+`features` 배열의 각 Feature에 대해:
 
 ```bash
 git worktree add .worktrees/[Feature ID] -b worktree/[Feature ID]
 ```
 
-예시:
+예시 (features = ["AUTH-001", "AUTH-002", "AUTH-003"]인 경우):
 
 ```bash
 git worktree add .worktrees/AUTH-001 -b worktree/AUTH-001
@@ -66,6 +69,8 @@ git worktree add .worktrees/AUTH-003 -b worktree/AUTH-003
 ```
 
 #### 1.3 상태 기록 (memory.md)
+
+`features` 배열의 Feature들만 기록:
 
 ```markdown
 ## Parallel Implementation: [Group 이름]
@@ -82,8 +87,11 @@ Started: [시작 시간]
 ### Phase 2: 병렬 구현 실행
 
 > ⚠️ **필수**: Task 에이전트로 병렬 실행
+>
+> ⚠️ **중요**: Phase 0에서 추출한 **해당 Group의 Feature 목록**에 대해서만 실행합니다.
+> 다른 Group이나 feature-list.md의 전체 Feature에 대해 실행하지 마세요.
 
-각 Feature에 대해 **test-runner 에이전트**를 병렬로 실행:
+Phase 0에서 추출한 `features` 배열의 각 항목에 대해서만 **test-runner 에이전트**를 병렬로 실행:
 
 ```
 Task 에이전트 × N (N = Feature 수)

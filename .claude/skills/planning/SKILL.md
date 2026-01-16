@@ -1,7 +1,7 @@
 ---
 name: planning
 description: Research 결과를 바탕으로 기술 설계와 구현 계획을 수립하는 전략 가이드입니다. planning-agent 작업 시 사용하세요.
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Planning

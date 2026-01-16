@@ -3,7 +3,7 @@ name: impact-analyzer
 description: 요구사항 변경 시 영향받는 문서와 파일을 분석하는 전문 에이전트
 tools: Read, Grep, Glob, Bash
 model: opus
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Impact Analyzer Agent

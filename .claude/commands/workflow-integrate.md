@@ -1,7 +1,7 @@
 ---
 name: workflow-integrate
 description: 구현된 기능들을 통합하고 리팩토링하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-integrate
@@ -18,6 +18,8 @@ version: 3.2.0
 
 ### Phase 2: 통합
 
+> 📋 **전제조건**: Phase 1 승인 완료
+
 - 기능 간 연결 구현
 - 공통 인터페이스 정의
 - 데이터 흐름 통합
@@ -25,11 +27,15 @@ version: 3.2.0
 
 ### Phase 3: 충돌 해결
 
+> 📋 **전제조건**: Phase 2 승인 완료
+
 - 충돌 감지 및 분석
 - 일관성 문제 해결
 - 네이밍 및 구조 표준화
 
 ### Phase 4: 최적화
+
+> 📋 **전제조건**: Phase 3 승인 완료
 
 - 중복 코드 제거
 - 성능 병목 개선

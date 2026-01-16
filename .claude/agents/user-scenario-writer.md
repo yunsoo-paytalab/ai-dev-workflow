@@ -4,7 +4,7 @@ description: 설계 검증용 유저 시나리오 문서를 작성하는 전문 
 tools: Read, Write, Glob
 model: opus
 skills: writing-domain-docs
-version: 3.2.0
+version: 3.2.1
 ---
 
 # User Scenario Writer Agent
@@ -18,7 +18,6 @@ Feature 목록과 페이지 구조를 바탕으로 유저 시나리오 문서를
 - Research 결과 (`.claude/docs/research/domain-research.md`)
 - 도메인 설계 결과 (`.claude/docs/domain-definition.md`)
 - 페이지 구조 (`.claude/docs/page-structure.md`)
-
 
 ## 출력
 

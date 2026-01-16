@@ -64,7 +64,7 @@
 
 ```json
 {
-  "version": "2.1.0",
+  "version": "3.2.1",
   "lastUpdated": "2024-01-16T10:00:00Z",
   "danger_zones": {
     "critical": [

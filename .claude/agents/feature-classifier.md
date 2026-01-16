@@ -4,7 +4,7 @@ description: Feature/Task 분류 및 리스트 작성 에이전트
 tools: Read, Write, Glob
 model: opus
 skills: writing-domain-docs
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Feature Classifier Agent

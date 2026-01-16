@@ -2,7 +2,7 @@
 name: feature-resolver
 description: Feature ID와 이름을 여러 워크플로우의 문서 경로로 해석합니다. Feature 문서(research, plan, spec) 검색, Feature 참조 해석, Feature 명세 탐색 시 사용하세요. Feature ID 패턴(AUTH-001), 직접 파일 참조(@file), Feature 이름 검색, 특수 키워드를 지원합니다.
 allowed-tools: Read, Grep, Glob
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Feature Resolver

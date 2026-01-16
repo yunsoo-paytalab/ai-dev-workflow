@@ -4,7 +4,7 @@ description: 프로젝트 도메인 분석을 위한 Research 전문 에이전�
 tools: Read, Grep, Glob, Task, Bash, Write
 model: opus
 skills: researching, writing-domain-docs
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Domain Research Agent

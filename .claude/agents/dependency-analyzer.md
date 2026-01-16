@@ -4,7 +4,7 @@ description: 모듈 의존성 및 패키지 의존성 분석
 tools: Read, Grep, Glob, Bash, Write
 model: haiku
 skills: analyzing-legacy, writing-legacy-analysis
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Dependency Analyzer

@@ -4,7 +4,7 @@ description: Feature 요구사항 분석 및 코드베이스 탐색을 위한 Re
 tools: Read, Grep, Glob, Task, Bash, Write
 model: opus
 skills: researching, writing-feature-docs
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Feature Research Agent

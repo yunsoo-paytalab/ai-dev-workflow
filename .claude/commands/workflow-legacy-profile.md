@@ -45,6 +45,8 @@ version: 3.2.1
 
 ### Phase 3: Safety Rules Definition
 
+> 📋 **전제조건**: Phase 2 완료
+
 > 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
 
 검토 항목:
@@ -52,6 +54,8 @@ version: 3.2.1
 - AI가 제안한 danger-zones/no-reference-zones 검토
 - 추가 위험 영역 지정
 - **restricted-zones.json 최종 확정**
+
+**선택지:** ✅ 승인 | 💬 직접 입력
 
 **승인 시:**
 

@@ -3,7 +3,7 @@ name: document-updater
 description: 문서를 일괄 업데이트하는 전문 에이전트 (격리된 컨텍스트에서 실행)
 tools: Read, Edit, Write, Bash
 model: opus
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Document Updater Agent

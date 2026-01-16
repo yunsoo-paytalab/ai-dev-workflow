@@ -4,7 +4,7 @@ description: 위험도 분류 및 Danger/No-Reference Zones 정의
 tools: Read, Write
 model: haiku
 skills: writing-legacy-analysis
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Risk Classifier

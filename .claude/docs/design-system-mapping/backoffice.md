@@ -2,13 +2,13 @@
 
 ## 개요
 
--   **Figma 프로젝트**: Admin - CRM - Design System
--   **코드베이스**: `backoffice-central/packages/common-ui`
+- **Figma 프로젝트**: Admin - CRM - Design System
+- **코드베이스**: `backoffice-central/packages/common-ui`
 
 ### 컴포넌트 import 방식
 
 ```typescript
-import { Button, Dialog, Dropdown } from '@common/ui';
+import { Button, Dialog, Dropdown } from "@common/ui";
 ```
 
 ## 컴포넌트 목록

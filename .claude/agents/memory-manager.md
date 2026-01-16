@@ -4,7 +4,7 @@ description: 주요 결정사항을 memory.md에 기록하는 에이전트. 중�
 tools: Read, Write, Edit
 model: haiku
 skills: managing-memory
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Memory Manager Agent

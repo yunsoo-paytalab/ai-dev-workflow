@@ -4,7 +4,7 @@ description: TDD의 Red-Green-Refactor 사이클을 관리하고 테스트를 �
 tools: Read, Write, Edit, Bash
 model: opus
 skills: running-tdd
-version: 3.2.0
+version: 3.2.1
 ---
 
 # TDD Test Runner Agent

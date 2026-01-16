@@ -4,7 +4,7 @@ description: 핵심 비즈니스 로직 및 변경 빈도 분석
 tools: Read, Grep, Glob, Bash, Write
 model: opus
 skills: analyzing-legacy, writing-legacy-analysis
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Business Logic Mapper

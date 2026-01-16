@@ -1,7 +1,7 @@
 ---
 name: workflow
 description: AI 개발 프로세스의 기본 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # AI 개발 워크플로우

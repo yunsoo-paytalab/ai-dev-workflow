@@ -1,7 +1,7 @@
 ---
 name: workflow-feature-spec
 description: 특정 기능의 요구사항을 분석하고 구현 계획을 수립하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-feature-spec $ARGUMENTS
@@ -46,7 +46,7 @@ version: 3.2.0
 
 > 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#update-feature-status`
 
-`update-feature-status [FEATURE_ID] in_progress` 실행
+`update-feature-status [FEATURE_ID] in_progress` 실행 후 feature-research를 수행
 
 **Agent: feature-research-agent** → `.claude/docs/research/[Feature ID]-research.md`
 
@@ -62,11 +62,15 @@ version: 3.2.0
 
 ### Phase 3: Design & Planning
 
+> 📋 **전제조건**: Phase 2 승인 완료
+
 **Agent: planning-agent** → `.claude/docs/plan/[Feature ID]-plan.md`
 
 > ⚠️ **Implementation Groups 작성 필수** (4-6개 그룹, 각 그룹 3-7개 task)
 
 ### Phase 4: Review & Confirm
+
+> 📋 **전제조건**: Phase 3 완료
 
 > 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
 

@@ -1,7 +1,7 @@
 ---
 name: workflow-ui
 description: Figma 디자인을 기반으로 UI를 구현하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-ui $1 $2

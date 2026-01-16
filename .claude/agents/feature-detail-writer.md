@@ -4,7 +4,7 @@ description: Feature 상세 문서 작성 에이전트
 tools: Read, Write, Glob, Bash
 model: opus
 skills: writing-feature-docs
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Feature Detail Writer Agent

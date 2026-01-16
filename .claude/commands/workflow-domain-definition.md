@@ -26,9 +26,9 @@ version: 3.2.1
 
 검토 항목: Research 결과 정확성, 추가/누락 사항 확인
 
-**승인 시:** Phase 3로 진행
-
 ### Phase 3: Design & Documentation
+
+> 📋 **전제조건**: Phase 2 승인 완료
 
 #### Phase 3-1: 병렬 실행
 
@@ -49,6 +49,8 @@ version: 3.2.1
 | user-scenario-writer | `.claude/docs/user-scenarios.md` |
 
 ### Phase 4: Review & Confirm
+
+> 📋 **전제조건**: Phase 3 완료
 
 > 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
 

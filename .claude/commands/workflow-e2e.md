@@ -1,7 +1,7 @@
 ---
 name: workflow-e2e
 description: E2E 테스트를 작성하고 실행하는 커맨드
-version: 3.2.0
+version: 3.2.1
 ---
 
 # /workflow-e2e
@@ -22,6 +22,8 @@ E2E 테스트를 작성하고 실행합니다.
 
 ### Phase 2: 깡통 TC 작성
 
+> 📋 **전제조건**: Phase 1 승인 완료
+
 - describe/it 구조만 작성 (구현 없음)
 - 설명문은 **한글**로 작성
 
@@ -36,6 +38,8 @@ describe("주문 플로우", () => {
 > 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
 
 ### Phase 3: 실제 Flow 검증 (Playwright MCP)
+
+> 📋 **전제조건**: Phase 2 승인 완료
 
 - 브라우저에서 실제 Flow 수행
 - ✅ 성공 → Phase 4
