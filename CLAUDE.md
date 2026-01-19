@@ -7,9 +7,9 @@
 ```
 .claude/
 ├── commands/          # 15개 워크플로우 커맨드
-├── agents/            # 18개 AI 에이전트
+├── agents/            # 7개 AI 에이전트
 ├── hooks/             # 자동화 스크립트
-├── skills/            # 4개 스킬
+├── skills/            # 9개 스킬
 ├── docs/              # 생성되는 문서들
 └── settings.json      # Hook 설정
 ```
@@ -63,47 +63,29 @@
 
 ## AI 에이전트
 
-### Research 계열
-
-- `feature-research-agent` - Feature 요구사항 분석
-- `domain-research-agent` - 도메인 분석
-
-### Planning 계열
-
-- `planning-agent` - 구현 계획 수립
-- `task-point-estimator` - 포인트 산정
-
-### 분석 계열
-
-- `structure-analyzer` - 프로젝트 구조 분석
-- `dependency-analyzer` - 의존성 분석
-- `impact-analyzer` - 변경 영향도 분석
-- `debt-analyzer` - 기술 부채 분석
-- `business-logic-mapper` - 비즈니스 로직 매핑
-- `risk-classifier` - 위험도 분류
-
-### 문서 작성 계열
-
-- `domain-definition-writer` - 도메인 정의서
-- `feature-classifier` - 기능 분류
-- `feature-detail-writer` - 기능 상세 문서
-- `page-structure-writer` - 페이지 구조 문서
-- `user-scenario-writer` - 유저 시나리오 문서
-- `document-updater` - 문서 일괄 업데이트
-
-### 실행 계열
-
-- `test-runner` - TDD 사이클 관리
-- `memory-manager` - 진행 상황 기록
+| 에이전트 | 모델 | 설명 |
+| -------- | ---- | ---- |
+| `domain-research-agent` | opus | 도메인 분석 |
+| `feature-research-agent` | opus | Feature 요구사항 분석 |
+| `planning-agent` | opus | 구현 계획 수립 |
+| `domain-docs-writer` | sonnet | 도메인 문서 작성 (통합) |
+| `feature-detail-writer` | haiku | Feature 상세 문서 |
+| `document-updater` | sonnet | 문서 일괄 업데이트 |
+| `task-point-estimator` | haiku | 포인트 산정 |
 
 ## Skills
 
 | Skill | 설명 |
 | ----- | ---- |
+| `researching` | Research 전략 가이드 |
+| `planning` | Implementation Plan 작성 가이드 |
+| `running-tdd` | TDD 사이클 관리 |
+| `legacy-analysis` | 레거시 분석 및 문서 작성 |
+| `writing-docs` | 도메인/Feature 문서 작성 가이드 |
 | `feature-resolver` | Feature ID/이름을 문서 경로로 해석 |
 | `figma-ui-generator` | Figma 디자인에서 UI 코드 생성 |
-| `writing-domain-docs` | 도메인 정의 워크플로우 결과 문서 작성 가이드 |
-| `writing-feature-docs` | Feature 관련 문서 작성 가이드 |
+| `managing-memory` | 프로젝트 메모리 관리 |
+| `loading-restricted-zones` | 제한 영역 로드 및 적용 |
 
 ## 핵심 특징
 

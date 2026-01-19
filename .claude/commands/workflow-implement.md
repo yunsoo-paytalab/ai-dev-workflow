@@ -49,9 +49,7 @@ feature-resolver 스킬을 사용하여 인자를 해석합니다.
 
 #### 1.2 TDD Cycle
 
-> ⚠️ **필수**: test-runner 에이전트 먼저 호출
-
-test-runner 에이전트를 사용하여 TDD 사이클을 진행합니다:
+running-tdd 스킬의 가이드라인에 따라 TDD 사이클을 진행합니다:
 
 - 🔴 Red: 실패하는 테스트 작성
 - 🟢 Green: 테스트 통과하는 최소 구현

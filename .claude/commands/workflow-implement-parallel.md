@@ -91,7 +91,7 @@ Started: [시작 시간]
 > ⚠️ **중요**: Phase 0에서 추출한 **해당 Group의 Feature 목록**에 대해서만 실행합니다.
 > 다른 Group이나 feature-list.md의 전체 Feature에 대해 실행하지 마세요.
 
-Phase 0에서 추출한 `features` 배열의 각 항목에 대해서만 **test-runner 에이전트**를 병렬로 실행:
+Phase 0에서 추출한 `features` 배열의 각 항목에 대해 **Task 에이전트**(running-tdd 스킬 적용)를 병렬로 실행:
 
 ```
 Task 에이전트 × N (N = Feature 수)
@@ -108,7 +108,7 @@ Task 에이전트 × N (N = Feature 수)
 
 #### 에이전트 실행 지침
 
-각 Task 에이전트는 다음을 수행:
+각 Task 에이전트는 running-tdd 스킬 가이드라인에 따라 다음을 수행:
 
 1. 해당 worktree 디렉토리로 이동
 2. Plan 파일의 Implementation Groups 순차 실행

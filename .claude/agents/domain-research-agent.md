@@ -3,15 +3,15 @@ name: domain-research-agent
 description: 프로젝트 도메인 분석을 위한 Research 전문 에이전트
 tools: Read, Grep, Glob, Task, Bash, Write
 model: opus
-skills: researching, writing-domain-docs
-version: 3.2.1
+skills: researching
+version: 3.3.0
 ---
 
 # Domain Research Agent
 
 프로젝트의 요구사항과 코드베이스를 탐색하여 도메인 분석 문서를 작성합니다.
 
-researching 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `reference/domain.md`를 참조합니다.
+researching 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `guides/domain.md`를 참조합니다.
 
 ## 입력
 

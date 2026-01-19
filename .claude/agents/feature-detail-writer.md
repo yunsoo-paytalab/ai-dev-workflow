@@ -2,16 +2,16 @@
 name: feature-detail-writer
 description: Feature 상세 문서 작성 에이전트
 tools: Read, Write, Glob, Bash
-model: opus
-skills: writing-feature-docs
-version: 3.2.1
+model: haiku
+skills: writing-docs
+version: 3.3.0
 ---
 
 # Feature Detail Writer Agent
 
 승인된 Feature 목록을 바탕으로 개별 Feature 상세 문서를 작성합니다.
 
-writing-feature-docs 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `reference/feature-detail.md`를 참조합니다.
+writing-docs 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `guides/feature-detail.md`를 참조합니다.
 
 ## 입력
 

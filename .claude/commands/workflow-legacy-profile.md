@@ -1,7 +1,7 @@
 ---
 name: workflow-legacy-profile
 description: 브라운필드 프로젝트를 위하여 레거시 코드를 분석하고 위험 영역을 식별하는 커맨드
-version: 3.2.1
+version: 3.3.0
 ---
 
 # /workflow-legacy-profile
@@ -12,20 +12,24 @@ version: 3.2.1
 
 ## 실행 프로세스
 
-### Phase 1: Parallel Deep Analysis (병렬 심층 분석)
+### Phase 1: Deep Analysis (심층 분석)
 
-다음 4개 에이전트를 동시에 실행합니다:
+legacy-analysis 스킬을 사용하여 리드 에이전트가 직접 분석을 수행합니다.
 
-- structure-analyzer 에이전트 → `.claude/docs/legacy-analysis/structure-overview.md`
-- dependency-analyzer 에이전트 → `.claude/docs/legacy-analysis/dependency-graph.md`
-- debt-analyzer 에이전트 → `.claude/docs/legacy-analysis/technical-debt.md`
-- business-logic-mapper 에이전트 → `.claude/docs/legacy-analysis/core-business-logic.md`
+분석 유형별 가이드:
+
+| 분석 유형 | 가이드 | 출력 문서 |
+|-----------|--------|-----------|
+| Structure | `guides/structure.md` | `structure-overview.md` |
+| Dependency | `guides/dependency.md` | `dependency-graph.md` |
+| Debt | `guides/debt.md` | `technical-debt.md` |
+| Business Logic | `guides/business-logic.md` | `core-business-logic.md` |
 
 ### Phase 2: Risk Classification (위험도 분류)
 
 > Phase 1 완료 후 순차 실행
 
-risk-classifier 에이전트를 사용하여 위험도를 분류합니다.
+legacy-analysis 스킬의 `guides/risk.md`를 참조하여 위험도를 분류합니다.
 
 출력:
 

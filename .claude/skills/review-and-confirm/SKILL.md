@@ -1,6 +1,7 @@
 ---
 name: review-and-confirm
 description: 사용자 검토 및 승인 프로세스를 표준화하는 스킬입니다. 워크플로우의 Review & Confirm 단계에서 사용하세요.
+model: haiku
 version: 3.2.1
 ---
 

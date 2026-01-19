@@ -1,6 +1,7 @@
 ---
 name: running-tdd
-description: TDD의 Red-Green-Refactor 사이클을 관리하는 전략 가이드입니다. test-runner 에이전트 작업 시 사용하세요.
+description: TDD의 Red-Green-Refactor 사이클을 관리하는 전략 가이드입니다. 구현 작업 시 이 스킬의 가이드라인을 따라 테스트를 먼저 작성하세요.
+model: sonnet
 version: 3.2.1
 ---
 
@@ -20,9 +21,9 @@ Test-Driven Development 사이클을 관리하는 전략 가이드입니다.
 
 | Phase       | 목표                   | 가이드                                                     |
 | ----------- | ---------------------- | ---------------------------------------------------------- |
-| 🔴 Red      | 실패하는 테스트 작성   | [reference/red-phase.md](reference/red-phase.md)           |
-| 🟢 Green    | 최소한의 구현으로 통과 | [reference/green-phase.md](reference/green-phase.md)       |
-| 🔵 Refactor | 코드 품질 개선         | [reference/refactor-phase.md](reference/refactor-phase.md) |
+| 🔴 Red      | 실패하는 테스트 작성   | [guides/red-phase.md](guides/red-phase.md)           |
+| 🟢 Green    | 최소한의 구현으로 통과 | [guides/green-phase.md](guides/green-phase.md)       |
+| 🔵 Refactor | 코드 품질 개선         | [guides/refactor-phase.md](guides/refactor-phase.md) |
 
 ## Test Priority
 

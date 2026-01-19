@@ -3,7 +3,7 @@ name: feature-research-agent
 description: Feature 요구사항 분석 및 코드베이스 탐색을 위한 Research 전문 에이전트
 tools: Read, Grep, Glob, Task, Bash, Write
 model: opus
-skills: researching, writing-feature-docs
+skills: researching
 version: 3.2.1
 ---
 
@@ -11,7 +11,7 @@ version: 3.2.1
 
 단일 Feature의 요구사항을 분석하고 코드베이스를 탐색합니다.
 
-researching 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `reference/feature.md`를 참조합니다.
+researching 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `guides/feature.md`를 참조합니다.
 
 ## 입력
 

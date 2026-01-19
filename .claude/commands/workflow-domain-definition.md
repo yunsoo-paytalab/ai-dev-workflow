@@ -1,7 +1,7 @@
 ---
 name: workflow-domain-definition
 description: 프로젝트의 도메인을 정의하고 기능 목록을 작성하는 커맨드
-version: 3.2.1
+version: 3.3.0
 ---
 
 # /workflow-domain-definition
@@ -30,19 +30,12 @@ review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 > 📋 **전제조건**: Phase 2 승인 완료
 
-#### Phase 3-1: 병렬 실행
+domain-docs-writer 에이전트를 사용하여 다음 문서들을 순차적으로 작성합니다:
 
-다음 2개 에이전트를 동시에 실행합니다:
-
-- domain-definition-writer 에이전트 → `.claude/docs/domain-definition.md`
-- page-structure-writer 에이전트 → `.claude/docs/page-structure.md`
-
-#### Phase 3-2: 병렬 실행 (Phase 3-1 완료 후)
-
-다음 2개 에이전트를 동시에 실행합니다:
-
-- feature-classifier 에이전트 → `.claude/docs/feature-list.md`
-- user-scenario-writer 에이전트 → `.claude/docs/user-scenarios.md`
+1. `.claude/docs/domain/domain-definition.md` (도메인 정의)
+2. `.claude/docs/domain/page-structure.md` (페이지 구조)
+3. `.claude/docs/domain/feature-list.md` (Feature 목록)
+4. `.claude/docs/domain/user-scenarios.md` (유저 시나리오)
 
 ### Phase 4: Review & Confirm
 
@@ -72,7 +65,7 @@ review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 | 파일                                       | 설명              |
 | ------------------------------------------ | ----------------- |
 | `.claude/docs/research/domain-research.md` | 도메인 분석       |
-| `.claude/docs/domain-definition.md`        | 도메인 정의       |
-| `.claude/docs/feature-list.md`             | Feature/Task 목록 |
-| `.claude/docs/page-structure.md`           | 페이지 구조       |
-| `.claude/docs/user-scenarios.md`           | 유저 시나리오     |
+| `.claude/docs/domain/domain-definition.md` | 도메인 정의       |
+| `.claude/docs/domain/feature-list.md`      | Feature/Task 목록 |
+| `.claude/docs/domain/page-structure.md`    | 페이지 구조       |
+| `.claude/docs/domain/user-scenarios.md`    | 유저 시나리오     |

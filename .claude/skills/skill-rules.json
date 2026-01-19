@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "skills": {
     "review-and-confirm": {
       "type": "guardrail",
@@ -45,7 +45,7 @@
       "type": "domain",
       "priority": "high",
       "enforcement": "suggest",
-      "description": "Feature ID/이름을 문서 경로로 해석",
+      "description": "Feature ID/이름/@파일참조를 .claude/docs/ 문서 경로로 해석",
       "triggers": {
         "keywords": [
           "Feature ID",
@@ -66,7 +66,7 @@
       "type": "guardrail",
       "priority": "high",
       "enforcement": "suggest",
-      "description": "제한 영역(Danger/No-Reference Zones) 로드",
+      "description": "제한 영역(Danger/No-Reference Zones) 로드 및 적용",
       "triggers": {
         "keywords": [
           "Restricted Zones",
@@ -85,7 +85,7 @@
       "type": "domain",
       "priority": "medium",
       "enforcement": "suggest",
-      "description": "프로젝트 메모리 관리",
+      "description": "memory.md에 주요 결정사항 기록. 리드 에이전트가 직접 사용",
       "triggers": {
         "keywords": [
           "memory.md",
@@ -94,6 +94,92 @@
         ],
         "workflowPatterns": [
           "/workflow-memory"
+        ]
+      }
+    },
+    "researching": {
+      "type": "domain",
+      "priority": "high",
+      "enforcement": "suggest",
+      "description": "domain-research, feature-research 작업을 위한 Research 전략",
+      "triggers": {
+        "keywords": [
+          "research",
+          "분석",
+          "요구사항"
+        ],
+        "workflowPatterns": [
+          "/workflow-domain-definition",
+          "/workflow-feature-spec"
+        ]
+      }
+    },
+    "planning": {
+      "type": "domain",
+      "priority": "high",
+      "enforcement": "suggest",
+      "description": "feature-plan.md 작성. Implementation Groups 4-6개, 그룹당 3-7 tasks",
+      "triggers": {
+        "keywords": [
+          "plan",
+          "계획",
+          "설계"
+        ],
+        "workflowPatterns": [
+          "/workflow-feature-spec"
+        ]
+      }
+    },
+    "running-tdd": {
+      "type": "domain",
+      "priority": "high",
+      "enforcement": "suggest",
+      "description": "Red → Green → Refactor 사이클 관리. AAA 패턴, 한글 describe/it",
+      "triggers": {
+        "keywords": [
+          "TDD",
+          "테스트",
+          "Red-Green"
+        ],
+        "workflowPatterns": [
+          "/workflow-implement",
+          "/workflow-implement-parallel"
+        ]
+      }
+    },
+    "legacy-analysis": {
+      "type": "domain",
+      "priority": "medium",
+      "enforcement": "suggest",
+      "description": "레거시 코드 분석 및 결과 문서 작성. 리드가 직접 분석 수행",
+      "triggers": {
+        "keywords": [
+          "legacy",
+          "레거시",
+          "분석"
+        ],
+        "workflowPatterns": [
+          "/workflow-legacy-profile"
+        ]
+      }
+    },
+    "writing-docs": {
+      "type": "domain",
+      "priority": "medium",
+      "enforcement": "suggest",
+      "description": "도메인 정의 및 Feature 상세 문서 작성 가이드",
+      "triggers": {
+        "keywords": [
+          "도메인 정의",
+          "페이지 구조",
+          "유저 시나리오",
+          "Feature 목록",
+          "Feature 상세",
+          "feature-detail"
+        ],
+        "workflowPatterns": [
+          "/workflow-domain-definition",
+          "/workflow-feature-detail"
         ]
       }
     }
