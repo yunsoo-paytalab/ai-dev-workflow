@@ -14,20 +14,18 @@ version: 3.2.1
 
 ### Phase 1: Parallel Deep Analysis (병렬 심층 분석)
 
-⚡ **4개 Agent 동시 실행:**
+다음 4개 에이전트를 동시에 실행합니다:
 
-| Agent                 | 출력                                                  |
-| --------------------- | ----------------------------------------------------- |
-| structure-analyzer    | `.claude/docs/legacy-analysis/structure-overview.md`  |
-| dependency-analyzer   | `.claude/docs/legacy-analysis/dependency-graph.md`    |
-| debt-analyzer         | `.claude/docs/legacy-analysis/technical-debt.md`      |
-| business-logic-mapper | `.claude/docs/legacy-analysis/core-business-logic.md` |
+- structure-analyzer 에이전트 → `.claude/docs/legacy-analysis/structure-overview.md`
+- dependency-analyzer 에이전트 → `.claude/docs/legacy-analysis/dependency-graph.md`
+- debt-analyzer 에이전트 → `.claude/docs/legacy-analysis/technical-debt.md`
+- business-logic-mapper 에이전트 → `.claude/docs/legacy-analysis/core-business-logic.md`
 
 ### Phase 2: Risk Classification (위험도 분류)
 
 > Phase 1 완료 후 순차 실행
 
-**Agent: risk-classifier**
+risk-classifier 에이전트를 사용하여 위험도를 분류합니다.
 
 출력:
 
@@ -47,7 +45,7 @@ version: 3.2.1
 
 > 📋 **전제조건**: Phase 2 완료
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 검토 항목:
 
@@ -65,7 +63,7 @@ version: 3.2.1
 
 ### (Optional) Phase 4: Refactoring Strategy
 
-**Agent: planning-agent** → `.claude/docs/legacy-analysis/refactoring-strategy.md`
+planning-agent 에이전트를 사용하여 리팩토링 전략을 수립하고, 결과를 `.claude/docs/legacy-analysis/refactoring-strategy.md`에 저장합니다.
 
 - 위험도별 접근 전략
 - 점진적 개선 로드맵

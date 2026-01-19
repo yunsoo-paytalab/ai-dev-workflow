@@ -52,7 +52,7 @@ version: 3.2.1
 ```markdown
 ### Phase N: Review & Confirm
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 검토 항목:
 

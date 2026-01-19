@@ -12,7 +12,7 @@ version: 3.2.1
 
 ## 인자 처리
 
-> 💡 **Skill**: `@.claude/skills/feature-resolver/SKILL.md` (enableGroupSearch: true)
+feature-resolver 스킬(enableGroupSearch: true)을 사용하여 인자를 해석합니다.
 
 | 입력 형태  | 예시      | 설명                    |
 | ---------- | --------- | ----------------------- |
@@ -161,7 +161,7 @@ Task 에이전트 × N (N = Feature 수)
   - AUTH-002: completed
 ```
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md` (다중 선택형)
+review-and-confirm 스킬(다중 선택형)을 사용하여 사용자 선택을 받습니다.
 
 **선택지:** ▶️ 기존 작업 계속 | 🔄 새로 시작 | 💬 직접 입력
 

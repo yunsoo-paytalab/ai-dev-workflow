@@ -18,7 +18,7 @@ E2E 테스트를 작성하고 실행합니다.
 - Critical Path 및 우선순위 확인
 - Happy path, 예외 상황 포함
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 ### Phase 2: 깡통 TC 작성
 
@@ -35,7 +35,7 @@ describe("주문 플로우", () => {
 });
 ```
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 ### Phase 3: 실제 Flow 검증 (Playwright MCP)
 

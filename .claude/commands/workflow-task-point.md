@@ -18,7 +18,7 @@ Feature에 포인트를 산정하고 `feature-list.md`를 업데이트합니다.
 
 ### Phase 1: Feature 분석 & 포인트 산정
 
-**Agent: task-point-estimator**
+task-point-estimator 에이전트를 사용하여 다음을 수행합니다:
 
 - Feature 목록 및 세부 문서 분석
 - 복잡도/불확실성 파악
@@ -26,7 +26,7 @@ Feature에 포인트를 산정하고 `feature-list.md`를 업데이트합니다.
 
 ### Phase 2: 문서 업데이트
 
-**Agent: task-point-estimator**
+task-point-estimator 에이전트를 사용하여 다음을 수행합니다:
 
 - Feature 요약 테이블에 포인트 컬럼 추가
 - Task 상세 섹션에 포인트 표시
@@ -36,7 +36,7 @@ Feature에 포인트를 산정하고 `feature-list.md`를 업데이트합니다.
 
 > 📋 **전제조건**: Phase 2 완료
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 검토 항목:
 

@@ -11,7 +11,7 @@ version: 3.2.1
 
 Research 결과를 바탕으로 Feature/Task를 분류하고 구조화된 리스트를 작성합니다.
 
-> 📚 **참조**: `writing-domain-docs` skill → `reference/feature-list.md`
+writing-domain-docs 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `reference/feature-list.md`를 참조합니다.
 
 ## 입력
 

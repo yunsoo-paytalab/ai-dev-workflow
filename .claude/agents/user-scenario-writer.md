@@ -2,7 +2,7 @@
 name: user-scenario-writer
 description: 설계 검증용 유저 시나리오 문서를 작성하는 전문 에이전트
 tools: Read, Write, Glob
-model: opus
+model: sonnet
 skills: writing-domain-docs
 version: 3.2.1
 ---
@@ -11,7 +11,7 @@ version: 3.2.1
 
 Feature 목록과 페이지 구조를 바탕으로 유저 시나리오 문서를 작성합니다.
 
-> 📚 **참조**: `writing-domain-docs` skill → `reference/user-scenarios.md`
+writing-domain-docs 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `reference/user-scenarios.md`를 참조합니다.
 
 ## 입력
 

@@ -7,6 +7,21 @@
           {
             "type": "command",
             "command": "d=$PWD; while [ \"$d\" != \"/\" ] && [ ! -f \"$d/.claude/hooks/memory-sync.cjs\" ]; do d=$(dirname \"$d\"); done; [ -f \"$d/.claude/hooks/memory-sync.cjs\" ] && node \"$d/.claude/hooks/memory-sync.cjs\" user-input || true"
+          },
+          {
+            "type": "command",
+            "command": "d=$PWD; while [ \"$d\" != \"/\" ] && [ ! -f \"$d/.claude/hooks/skill-activator.cjs\" ]; do d=$(dirname \"$d\"); done; [ -f \"$d/.claude/hooks/skill-activator.cjs\" ] && node \"$d/.claude/hooks/skill-activator.cjs\" || true"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "d=$PWD; while [ \"$d\" != \"/\" ] && [ ! -f \"$d/.claude/hooks/skill-activator.cjs\" ]; do d=$(dirname \"$d\"); done; [ -f \"$d/.claude/hooks/skill-activator.cjs\" ] && node \"$d/.claude/hooks/skill-activator.cjs\" || true"
           }
         ]
       }

@@ -10,7 +10,7 @@ version: 3.2.1
 
 ## 인자 처리
 
-> 💡 **Skill**: `@.claude/skills/feature-resolver/SKILL.md`
+feature-resolver 스킬을 사용하여 인자를 해석합니다.
 
 | 입력 형태    | 예시                                 | 설명                              |
 | ------------ | ------------------------------------ | --------------------------------- |
@@ -36,7 +36,7 @@ version: 3.2.1
 
 ### Phase 0: Restricted Zones Loading
 
-> 💡 **Skill**: `@.claude/skills/loading-restricted-zones/SKILL.md`
+loading-restricted-zones 스킬을 사용하여 제한 영역을 로드합니다.
 
 ### Phase 1: Research (분석)
 
@@ -44,15 +44,13 @@ version: 3.2.1
 
 **시작 시:**
 
-> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#update-feature-status`
+managing-memory 스킬의 `update-feature-status` 훅을 사용하여 `update-feature-status [FEATURE_ID] in_progress` 실행 후 feature-research를 수행
 
-`update-feature-status [FEATURE_ID] in_progress` 실행 후 feature-research를 수행
-
-**Agent: feature-research-agent** → `.claude/docs/research/[Feature ID]-research.md`
+feature-research-agent 에이전트를 사용하여 요구사항을 분석하고, 결과를 `.claude/docs/research/[Feature ID]-research.md`에 저장합니다.
 
 ### Phase 2: Review & Confirm
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 검토 항목:
 
@@ -64,7 +62,7 @@ version: 3.2.1
 
 > 📋 **전제조건**: Phase 2 승인 완료
 
-**Agent: planning-agent** → `.claude/docs/plan/[Feature ID]-plan.md`
+planning-agent 에이전트를 사용하여 기술 설계 및 구현 계획을 수립하고, 결과를 `.claude/docs/plan/[Feature ID]-plan.md`에 저장합니다.
 
 > ⚠️ **Implementation Groups 작성 필수** (4-6개 그룹, 각 그룹 3-7개 task)
 
@@ -72,7 +70,7 @@ version: 3.2.1
 
 > 📋 **전제조건**: Phase 3 완료
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 검토 항목:
 
@@ -82,9 +80,7 @@ version: 3.2.1
 
 **승인 시:**
 
-> 💡 **Skill**: `@.claude/skills/managing-memory/SKILL.md` → `reference/hooks.md#update-feature-status`
-
-`update-feature-status [FEATURE_ID] spec_done` 실행
+managing-memory 스킬의 `update-feature-status` 훅을 사용하여 `update-feature-status [FEATURE_ID] spec_done` 실행
 
 ## 결과물
 

@@ -11,7 +11,7 @@ version: 3.2.1
 
 승인된 Feature 목록을 바탕으로 개별 Feature 상세 문서를 작성합니다.
 
-> 📚 **참조**: `writing-feature-docs` skill → `reference/feature-detail.md`
+writing-feature-docs 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `reference/feature-detail.md`를 참조합니다.
 
 ## 입력
 

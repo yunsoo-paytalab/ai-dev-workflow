@@ -12,7 +12,7 @@ version: 3.2.1
 
 ## 인자 처리
 
-> 💡 **Skill**: `@.claude/skills/feature-resolver/SKILL.md` (enableGroupSearch: true)
+feature-resolver 스킬(enableGroupSearch: true)을 사용하여 인자를 해석합니다.
 
 | 입력 형태  | 예시      | 설명                   |
 | ---------- | --------- | ---------------------- |
@@ -46,7 +46,7 @@ version: 3.2.1
 
 ### Phase 1: 사용자 선택
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md` (다중 선택형)
+review-and-confirm 스킬(다중 선택형)을 사용하여 사용자 선택을 받습니다.
 
 **선택지:** ✅ 완료된 것만 병합 | ⏳ 모두 완료 대기 | 💬 직접 입력
 
@@ -148,7 +148,7 @@ cd ../..
   - src/types/auth.ts
 ```
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md` (다중 선택형)
+review-and-confirm 스킬(다중 선택형)을 사용하여 사용자 선택을 받습니다.
 
 **선택지:** ⏭️ 스킵 후 계속 | ⏸️ 병합 중단 | 🔧 수동 해결 | 💬 직접 입력
 

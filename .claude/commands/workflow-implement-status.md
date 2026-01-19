@@ -10,7 +10,7 @@ version: 3.2.1
 
 ## 인자 처리
 
-> 💡 **Skill**: `@.claude/skills/feature-resolver/SKILL.md` (enableGroupSearch: true)
+feature-resolver 스킬(enableGroupSearch: true)을 사용하여 인자를 해석합니다.
 
 | 입력 형태  | 예시      | 설명                      |
 | ---------- | --------- | ------------------------- |

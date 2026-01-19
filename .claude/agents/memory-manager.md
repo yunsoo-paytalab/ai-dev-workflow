@@ -11,7 +11,7 @@ version: 3.2.1
 
 주요 결정사항을 memory.md에 기록합니다.
 
-> 📚 **참조**: `managing-memory` skill
+managing-memory 스킬의 가이드라인에 따라 작업합니다.
 
 ## 호출 시점
 

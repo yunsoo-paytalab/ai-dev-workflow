@@ -11,7 +11,7 @@ version: 3.2.1
 
 Research 결과와 기존 코드를 분석하여 기술 설계와 Implementation Plan을 수립합니다.
 
-> 📚 **참조**: `planning` skill, `writing-feature-docs` skill → `reference/feature-plan.md`
+planning 스킬과 writing-feature-docs 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `reference/feature-plan.md`를 참조합니다.
 
 ## 입력
 

@@ -12,17 +12,17 @@ version: 3.2.1
 
 ### Phase 0: Restricted Zones Loading
 
-> 💡 **Skill**: `@.claude/skills/loading-restricted-zones/SKILL.md`
+loading-restricted-zones 스킬을 사용하여 제한 영역을 로드합니다.
 
 ### Phase 1: Research (분석)
 
 > ⚠️ 제한 영역 준수 | **설계 금지** - 분석만 수행
 
-**Agent: domain-research-agent** → `.claude/docs/research/domain-research.md`
+domain-research-agent 에이전트를 사용하여 도메인을 분석하고, 결과를 `.claude/docs/research/domain-research.md`에 저장합니다.
 
 ### Phase 2: Review & Confirm
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 검토 항목: Research 결과 정확성, 추가/누락 사항 확인
 
@@ -32,27 +32,23 @@ version: 3.2.1
 
 #### Phase 3-1: 병렬 실행
 
-⚡ **2개 Agent 동시 실행:**
+다음 2개 에이전트를 동시에 실행합니다:
 
-| Agent                    | 출력                                |
-| ------------------------ | ----------------------------------- |
-| domain-definition-writer | `.claude/docs/domain-definition.md` |
-| page-structure-writer    | `.claude/docs/page-structure.md`    |
+- domain-definition-writer 에이전트 → `.claude/docs/domain-definition.md`
+- page-structure-writer 에이전트 → `.claude/docs/page-structure.md`
 
 #### Phase 3-2: 병렬 실행 (Phase 3-1 완료 후)
 
-⚡ **2개 Agent 동시 실행:**
+다음 2개 에이전트를 동시에 실행합니다:
 
-| Agent                | 출력                             |
-| -------------------- | -------------------------------- |
-| feature-classifier   | `.claude/docs/feature-list.md`   |
-| user-scenario-writer | `.claude/docs/user-scenarios.md` |
+- feature-classifier 에이전트 → `.claude/docs/feature-list.md`
+- user-scenario-writer 에이전트 → `.claude/docs/user-scenarios.md`
 
 ### Phase 4: Review & Confirm
 
 > 📋 **전제조건**: Phase 3 완료
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
+review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 검토 항목:
 

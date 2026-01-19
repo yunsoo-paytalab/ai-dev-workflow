@@ -44,9 +44,7 @@ version: 3.2.1
 
 ## 사용자 결정 포인트
 
-> 💡 **Skill**: `@.claude/skills/review-and-confirm/SKILL.md`
-
-각 Phase 완료 후 Review & Confirm 실행
+review-and-confirm 스킬을 사용하여 각 Phase 완료 후 사용자 검토를 진행합니다.
 
 결정 항목:
 

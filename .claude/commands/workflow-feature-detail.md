@@ -31,7 +31,7 @@ Feature 목록을 기반으로 각 Feature의 상세 문서를 작성합니다.
 mkdir -p .claude/docs/feature-list
 ```
 
-**Agent: feature-detail-writer** (배치별 병렬 호출)
+feature-detail-writer 에이전트를 배치별로 병렬 호출하여 상세 문서를 작성합니다.
 
 ### Phase 3: 링크 업데이트
 

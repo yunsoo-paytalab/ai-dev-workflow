@@ -1,0 +1,101 @@
+{
+  "version": "1.0",
+  "skills": {
+    "review-and-confirm": {
+      "type": "guardrail",
+      "priority": "critical",
+      "enforcement": "inject",
+      "description": "사용자 검토 및 승인 프로세스 표준화",
+      "triggers": {
+        "keywords": [
+          "Review & Confirm",
+          "사용자 검토",
+          "승인",
+          "검토 항목",
+          "선택지"
+        ],
+        "intentPatterns": [
+          "Phase.*Review",
+          "Review.*Confirm",
+          "검토.*진행",
+          "승인.*요청"
+        ],
+        "workflowPatterns": [
+          "/workflow-feature-spec",
+          "/workflow-domain-definition",
+          "/workflow-implement",
+          "/workflow-e2e",
+          "/workflow-task-point",
+          "/workflow-integrate",
+          "/workflow-legacy-profile",
+          "/workflow-update",
+          "/workflow-implement-parallel",
+          "/workflow-implement-merge"
+        ]
+      },
+      "rules": [
+        "🚨 CRITICAL - 반드시 준수:",
+        "1. 승인 = 선택지에서 '승인' 옵션을 명시적으로 선택한 경우만",
+        "2. 그 외 모든 입력 → 요청 처리 후 선택지 재표시",
+        "3. 다음 Phase에 '전제조건: 승인 완료'가 있으면 승인 없이 절대 진행 불가",
+        "4. 사용자가 선택지에서 직접 선택하기 전까지 Phase 전환 금지"
+      ]
+    },
+    "feature-resolver": {
+      "type": "domain",
+      "priority": "high",
+      "enforcement": "suggest",
+      "description": "Feature ID/이름을 문서 경로로 해석",
+      "triggers": {
+        "keywords": [
+          "Feature ID",
+          "기능ID",
+          "AUTH-",
+          "ASSET-",
+          "-001",
+          "-002"
+        ],
+        "intentPatterns": [
+          "Feature.*찾",
+          "기능.*검색",
+          "\\w+-\\d{3}"
+        ]
+      }
+    },
+    "loading-restricted-zones": {
+      "type": "guardrail",
+      "priority": "high",
+      "enforcement": "suggest",
+      "description": "제한 영역(Danger/No-Reference Zones) 로드",
+      "triggers": {
+        "keywords": [
+          "Restricted Zones",
+          "Danger Zones",
+          "위험 영역",
+          "제한 영역"
+        ],
+        "workflowPatterns": [
+          "/workflow-feature-spec",
+          "/workflow-domain-definition",
+          "/workflow-implement"
+        ]
+      }
+    },
+    "managing-memory": {
+      "type": "domain",
+      "priority": "medium",
+      "enforcement": "suggest",
+      "description": "프로젝트 메모리 관리",
+      "triggers": {
+        "keywords": [
+          "memory.md",
+          "메모리",
+          "진행 상황"
+        ],
+        "workflowPatterns": [
+          "/workflow-memory"
+        ]
+      }
+    }
+  }
+}

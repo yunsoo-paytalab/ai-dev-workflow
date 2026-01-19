@@ -11,7 +11,7 @@ version: 3.2.1
 
 4개 분석 결과를 종합하여 Danger Zones와 No-Reference Zones를 분류합니다.
 
-> 📚 **참조**: `writing-legacy-analysis` skill → `reference/danger-zones.md`, `reference/risk.md`
+writing-legacy-analysis 스킬의 가이드라인에 따라 작업합니다. 문서 형식은 `reference/danger-zones.md`, `reference/risk.md`를 참조합니다.
 
 ## 입력 (필수)
 
