@@ -47,17 +47,104 @@ feature-resolver 스킬을 사용하여 인자를 해석합니다.
 
 그룹 정보 및 Task 목록 표시
 
-#### 1.2 TDD Cycle
+#### 1.2 구현 전 준비
 
-running-tdd 스킬의 가이드라인에 따라 TDD 사이클을 진행합니다:
+**1. Plan 문서 재확인**
 
-- 🔴 Red: 실패하는 테스트 작성
-- 🟢 Green: 테스트 통과하는 최소 구현
-- 🔵 Refactor: 코드 개선
+Read `.claude/docs/plan/[Feature ID]-plan.md`에서 현재 그룹의 섹션 찾기
+
+**2. 구현 세부사항 추출**
+
+Plan 문서에서 다음 정보 추출:
+- 수정할 파일 목록
+- **필요한 import 목록** (Plan 문서에 명시됨)
+- 정의할 타입 목록
+- 구현할 함수/컴포넌트 목록
+- 의존성
+
+**3. 파일별 수정 계획 수립**
+
+각 파일의 섹션별(import, 타입, 함수) 수정사항 파악:
+
+```
+예시:
+파일: src/entities/cart/api/cart-api.ts
+[Import 섹션] → Plan 문서에서 이미 파악됨
+  - axios from 'axios'
+  - { CartFilter, CartList } from '../model/types'
+[함수 섹션]
+  - getCartList 완전한 구현
+```
 
 #### 1.3 그룹 구현
 
-타입/API/로직/UI/상태관리 구현
+**1.3.1 핵심 비즈니스 로직 (TDD 적용)**
+
+**TDD 적용 대상:**
+- 핵심 계산 로직 (할인, 총액 계산 등)
+- 검증 로직 (유효성 검사, 권한 체크 등)
+- 복잡한 데이터 변환 로직
+- 주요 이벤트 핸들링
+
+**TDD 제외 대상:**
+- 타입 정의 (type, interface)
+- 단순 CRUD API 호출
+- UI 레이아웃 컴포넌트
+- 단순 상태 변수
+
+**프로세스:**
+
+핵심 로직이 있는 경우:
+
+```markdown
+**Skill 도구를 사용하여 `running-tdd` 스킬을 호출하세요.**
+```
+
+> running-tdd 스킬이 🔴 Red → 🟢 Green → 🔵 Refactor 사이클을 진행합니다.
+
+**1.3.2 일반 구현 (타입/API/UI)**
+
+TDD가 필요 없는 부분을 직접 구현:
+
+**파일 수정 최적화 원칙:**
+
+> 📋 **중요**: 같은 섹션을 여러 번 Edit하지 말 것
+
+**올바른 패턴:**
+
+```typescript
+// 1. Plan 문서에서 필요한 import 파악
+Read .claude/docs/plan/[Feature ID]-plan.md
+
+// 2. 대상 파일 읽기
+Read src/entities/cart/api/cart-api.ts
+
+// 3. 섹션별 Edit (파일당 2-4회)
+Edit 1: import 섹션 완성
+  → Plan 문서에서 파악한 모든 import를 한번에
+
+Edit 2: 타입 섹션 완성 (필요시)
+  → 필요한 모든 타입을 한번에
+
+Edit 3: 함수/컴포넌트 섹션 완성
+  → 완전한 구현을 한번에
+```
+
+**잘못된 패턴:**
+
+```typescript
+// ❌ 같은 섹션을 여러 번 수정
+Edit 1: import axios 추가
+Edit 2: 함수 작성
+Edit 3: import CartFilter 추가  // 처음에 한번에!
+Edit 4: import apiClient 추가   // 처음에 한번에!
+Edit 5: 함수 수정
+```
+
+**효과:**
+- 파일당 Edit: 13회 → 2-4회 (70-85% 절감)
+- 세션당 토큰: 70% 절감
+- 비용: $21/세션 절감
 
 #### 1.4 그룹 검증
 

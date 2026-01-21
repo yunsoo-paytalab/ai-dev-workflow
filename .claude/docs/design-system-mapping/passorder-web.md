@@ -1,3 +1,9 @@
+---
+name: passorder-web-design-system-mapping
+description: Passorder Web 디자인시스템과 코드베이스 컴포넌트 매핑 문서
+version: 3.2.1
+---
+
 # Passorder Web 디자인시스템 컴포넌트 매핑
 
 ## 개요

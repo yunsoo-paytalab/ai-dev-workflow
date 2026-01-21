@@ -15,12 +15,12 @@ estimating-points 스킬의 가이드라인에 따라 작업합니다.
 
 ## 입력
 
-- Feature 목록 (`.claude/docs/feature-list.md`)
+- Feature 목록 (`.claude/docs/domain/feature-list.md`)
 - Feature 상세 문서 (`.claude/docs/feature-list/*.md`)
 
 ## 출력
 
-**`.claude/docs/feature-list.md`** 업데이트 (포인트 컬럼 추가)
+**`.claude/docs/domain/feature-list.md`** 업데이트 (포인트 컬럼 추가)
 
 ## 핵심 원칙
 

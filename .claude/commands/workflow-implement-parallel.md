@@ -22,7 +22,7 @@ feature-resolver 스킬(enableGroupSearch: true)을 사용하여 인자를 해�
 
 ## 필수 참조 문서
 
-- `.claude/docs/feature-list.md` (Group 정보)
+- `.claude/docs/domain/feature-list.md` (Group 정보)
 - `.claude/docs/plan/[Feature ID]-plan.md` (각 Feature 구현 계획)
 - `.claude/docs/research/[Feature ID]-research.md` (각 Feature 요구사항)
 
@@ -108,13 +108,59 @@ Task 에이전트 × N (N = Feature 수)
 
 #### 에이전트 실행 지침
 
-각 Task 에이전트는 running-tdd 스킬 가이드라인에 따라 다음을 수행:
+각 Task 에이전트는 다음을 수행:
 
-1. 해당 worktree 디렉토리로 이동
-2. Plan 파일의 Implementation Groups 순차 실행
-3. 각 그룹마다 TDD Cycle (🔴 Red → 🟢 Green → 🔵 Refactor)
-4. 그룹 완료 시 커밋
-5. 모든 그룹 완료 시 memory.md 상태 업데이트
+**1. 환경 설정**
+   - 해당 worktree 디렉토리로 이동
+   - Plan 파일 읽기
+
+**2. 각 Implementation Group 구현**
+
+**2.1 구현 전 준비**
+   - Plan 문서에서 현재 그룹 섹션 찾기
+   - 구현 세부사항 추출:
+     - 수정할 파일 목록
+     - **필요한 import 목록** (Plan 문서에 명시됨)
+     - 정의할 타입/함수 목록
+
+**2.2 핵심 비즈니스 로직 (TDD 적용)**
+
+TDD 적용 대상:
+- 핵심 계산 로직 (할인, 총액 계산 등)
+- 검증 로직 (유효성 검사, 권한 체크 등)
+- 복잡한 데이터 변환 로직
+
+핵심 로직이 있는 경우:
+
+```markdown
+**Skill 도구를 사용하여 `running-tdd` 스킬을 호출하세요.**
+```
+
+**2.3 일반 구현 (타입/API/UI)**
+
+파일 수정 최적화 원칙:
+
+> 📋 **중요**: 같은 섹션을 여러 번 Edit하지 말 것
+
+```typescript
+// 1. Plan 문서에서 필요한 import 파악
+Read .claude/docs/plan/[Feature ID]-plan.md
+
+// 2. 대상 파일 읽기
+Read src/entities/cart/api.ts
+
+// 3. 섹션별 Edit (파일당 2-4회)
+Edit 1: import 섹션 완성 (Plan에서 파악한 모든 import 한번에)
+Edit 2: 타입 섹션 완성
+Edit 3: 함수/컴포넌트 섹션 완성
+```
+
+**2.4 그룹 완료**
+   - Lint/Type-check/Test 검증
+   - 그룹 커밋
+
+**3. 완료 처리**
+   - 모든 그룹 완료 시 memory.md 상태 업데이트
 
 ### Phase 3: 완료 처리
 

@@ -1,3 +1,9 @@
+---
+name: legacy-analysis-risk-zones-guide
+description: No-Reference Zones 및 restricted-zones.json 작성 가이드
+version: 3.2.1
+---
+
 # No-Reference Zones & restricted-zones.json 작성 가이드
 
 ## No-Reference Zones 분류

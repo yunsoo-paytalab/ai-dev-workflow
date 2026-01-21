@@ -1,3 +1,9 @@
+---
+name: legacy-analysis-commands-guide
+description: 레거시 코드 분석을 위한 명령어 가이드
+version: 3.2.1
+---
+
 # 레거시 분석 명령어
 
 ## 공통 분석 명령어

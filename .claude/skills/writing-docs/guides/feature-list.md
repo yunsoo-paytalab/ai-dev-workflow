@@ -1,3 +1,9 @@
+---
+name: writing-docs-feature-list-guide
+description: Feature List 문서 작성 가이드
+version: 3.2.1
+---
+
 # Feature List 문서 작성 가이드
 
 ## 핵심 원칙
@@ -65,56 +71,34 @@ AUTH-001 사용자 인증 전체 (로그인 + 회원가입 + ...)
 - **medium**: 주요 기능, 일반적인 구현
 - **low**: 부가 기능, 선택적 구현
 
+## 구현 상태 필터링
+
+⚠️ **중요: 신규 개발이 필요한 기능만 포함**
+
+`domain-research.md`의 구현 상태를 기반으로:
+
+**feature-list에 포함할 것:**
+- `신규`: 구현되지 않아 처음부터 개발 필요
+- `부분`: 일부 구현되어 있으나 추가 작업 필요
+- `수정`: 구현되어 있으나 요구사항에 맞게 수정 필요
+
+**feature-list에서 제외할 것:**
+- `완료`: 이미 구현되어 있으며 추가 작업 불필요
+
+**이유:**
+
+feature-list는 앞으로 진행할 개발 작업의 계획입니다. 이미 완료된 기능을 포함하면 혼란을 야기하고 프로젝트 규모를 잘못 산정하게 됩니다.
+
 ## 주의사항
 
 - **상세 문서는 작성하지 않음** (feature-detail-writer가 담당)
 - 사용자 검토를 위한 **간략한 리스트**만 생성
 - Feature/Task 분류의 **적절성**에 집중
+- **개발 작업이 필요한 기능만 포함**
 
 ## 문서 구조
 
-````markdown
-# Feature 목록
-
-## 개요
-
-[프로젝트의 주요 기능에 대한 간략한 설명]
-
-- **총 Feature 수**: N개
-- **총 Task 수**: N개
-- **도메인 수**: N개
-
----
-
-## Feature 요약
-
-### AUTH: 인증 (N features, N tasks)
-
-| ID       | Feature명     | 설명                     | Tasks | 우선순위 |
-| -------- | ------------- | ------------------------ | ----- | -------- |
-| AUTH-001 | 로그인 기능   | 사용자 인증 및 세션 관리 | 4     | High     |
-| AUTH-002 | 회원가입 기능 | 신규 사용자 등록         | 5     | High     |
-
----
-
-## Feature 의존성
-
-```mermaid
-graph TD
-    COMMON[COMMON-001<br/>API 클라이언트] --> AUTH1[AUTH-001<br/>로그인]
-    AUTH1 --> AUTH2[AUTH-002<br/>회원가입]
-    AUTH1 --> ORDER[ORDER-001<br/>주문조회]
-    AUTH2 --> PRODUCT[PRODUCT-001<br/>상품목록]
-
-    subgraph Group 3 - 병렬 가능
-        AUTH2
-        ORDER
-    end
-
-    style AUTH1 fill:#ffcccc
-    style AUTH2 fill:#ccffcc
-    style ORDER fill:#ccffcc
-```
+`templates/feature-list.md` 참조
 
 ---
 

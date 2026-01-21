@@ -1,3 +1,9 @@
+---
+name: estimating-points-1pt-guide
+description: 1 포인트 Feature 산정 기준 가이드
+version: 3.2.1
+---
+
 # 1pt Feature 기준
 
 ## 정의

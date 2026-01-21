@@ -1,3 +1,9 @@
+---
+name: backoffice-design-system-mapping
+description: Backoffice Common UI 디자인시스템과 코드베이스 컴포넌트 매핑 문서
+version: 3.2.1
+---
+
 # Backoffice Common UI 디자인시스템 컴포넌트 매핑
 
 ## 개요

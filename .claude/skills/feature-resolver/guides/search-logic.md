@@ -1,3 +1,9 @@
+---
+name: feature-resolver-search-logic-guide
+description: Feature ID 및 이름 해석을 위한 탐색 로직 가이드
+version: 3.2.1
+---
+
 # Feature Resolver 탐색 로직
 
 ## 1. 특수 키워드 확인
@@ -11,7 +17,7 @@ IF argument IN specialKeywords THEN
 
 ```
 IF enableGroupSearch == true THEN
-  featureListPath = ".claude/docs/feature-list.md"
+  featureListPath = ".claude/docs/domain/feature-list.md"
 
   IF file EXISTS featureListPath THEN
     content = readFile(featureListPath)

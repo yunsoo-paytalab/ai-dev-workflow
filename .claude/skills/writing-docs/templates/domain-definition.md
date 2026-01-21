@@ -1,3 +1,9 @@
+---
+name: writing-docs-domain-definition-template
+description: Domain Definition 문서 작성을 위한 구조 템플릿
+version: 3.2.1
+---
+
 # Domain Definition 문서 구조 템플릿
 
 ```markdown

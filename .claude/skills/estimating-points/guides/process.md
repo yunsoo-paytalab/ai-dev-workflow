@@ -1,3 +1,9 @@
+---
+name: estimating-points-process-guide
+description: Feature 포인트 산정 프로세스 가이드
+version: 3.2.1
+---
+
 # 포인트 산정 프로세스
 
 ## Absolute Rules
@@ -20,7 +26,7 @@
 ## Execution Process
 
 1. **Feature 목록 읽기**
-   - `.claude/docs/feature-list.md` 분석
+   - `.claude/docs/domain/feature-list.md` 분석
    - 전체 Feature/Task 구조 파악
 
 2. **Feature 상세 문서 읽기**

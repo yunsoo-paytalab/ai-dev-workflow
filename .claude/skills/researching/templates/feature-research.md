@@ -1,3 +1,9 @@
+---
+name: researching-feature-research-template
+description: Feature Research 문서 작성을 위한 구조 템플릿
+version: 3.2.1
+---
+
 # Feature Research 문서 구조 템플릿
 
 ```markdown

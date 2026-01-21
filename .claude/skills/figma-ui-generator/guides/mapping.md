@@ -1,3 +1,9 @@
+---
+name: figma-ui-generator-mapping-guide
+description: Figma 디자인 컴포넌트와 코드베이스 매핑 가이드
+version: 3.2.1
+---
+
 # 컴포넌트 매핑 가이드
 
 ## 컴포넌트 교체 예시

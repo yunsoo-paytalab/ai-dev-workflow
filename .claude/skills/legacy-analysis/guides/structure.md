@@ -1,3 +1,9 @@
+---
+name: legacy-analysis-structure-guide
+description: 레거시 코드의 구조 개요(Structure Overview) 문서 작성 가이드
+version: 3.2.1
+---
+
 # Structure Overview 문서 작성 가이드
 
 ## 핵심 원칙

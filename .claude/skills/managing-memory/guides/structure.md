@@ -1,3 +1,9 @@
+---
+name: managing-memory-structure-guide
+description: Memory.md 파일 구조 및 작성 가이드
+version: 3.2.1
+---
+
 # Memory.md 구조 가이드
 
 ## 파일 위치

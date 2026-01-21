@@ -1,3 +1,9 @@
+---
+name: estimating-points-13pt-plus-guide
+description: 13+ 포인트 Feature 산정 기준 가이드
+version: 3.2.1
+---
+
 # 13pt+ Feature 기준
 
 ## 정의

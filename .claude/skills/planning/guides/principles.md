@@ -1,3 +1,9 @@
+---
+name: planning-principles-guide
+description: 구현 계획 수립을 위한 핵심 원칙 가이드
+version: 3.2.1
+---
+
 # Planning 원칙
 
 ## 1. 그룹화

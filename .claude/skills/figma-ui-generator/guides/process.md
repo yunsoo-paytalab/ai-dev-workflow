@@ -1,3 +1,9 @@
+---
+name: figma-ui-generator-process-guide
+description: Figma 디자인에서 UI 코드 생성 프로세스 가이드
+version: 3.2.1
+---
+
 # Figma UI 생성 프로세스
 
 ## 1. 디자인 정보 수집

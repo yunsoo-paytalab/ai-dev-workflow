@@ -1,3 +1,9 @@
+---
+name: managing-memory-commands-guide
+description: 프로젝트 메모리 관리 명령어 가이드
+version: 3.2.1
+---
+
 # 메모리 관리 명령어
 
 ## 메모리 경로 확인

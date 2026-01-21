@@ -11,7 +11,7 @@ Feature에 포인트를 산정하고 `feature-list.md`를 업데이트합니다.
 ## 선행 조건
 
 - `/workflow-domain-definition` 완료
-- `.claude/docs/feature-list.md` 존재
+- `.claude/docs/domain/feature-list.md` 존재
 - `.claude/docs/feature-list/*.md` 세부 파일 존재
 
 ## 실행 프로세스
@@ -53,4 +53,4 @@ review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 ## 결과물
 
-- `.claude/docs/feature-list.md` (포인트 컬럼 업데이트)
+- `.claude/docs/domain/feature-list.md` (포인트 컬럼 업데이트)

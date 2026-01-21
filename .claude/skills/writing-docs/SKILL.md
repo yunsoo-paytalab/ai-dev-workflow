@@ -2,7 +2,7 @@
 name: writing-docs
 description: 도메인 정의 및 Feature 상세 문서 작성 가이드. domain-definition, feature-list, page-structure, user-scenarios, feature-detail 문서 작성 시 사용.
 model: sonnet
-version: 3.3.0
+version: 3.2.1
 ---
 
 # Writing Docs

@@ -1,3 +1,9 @@
+---
+name: managing-memory-recording-guide
+description: 프로젝트 주요 결정사항 기록 가이드
+version: 3.2.1
+---
+
 # 결정사항 기록 가이드
 
 ## 기록 프로세스

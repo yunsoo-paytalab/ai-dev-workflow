@@ -29,8 +29,8 @@ Feature 단위의 복잡도와 불확실성을 기반으로 포인트를 산정�
 
 ## Input / Output
 
-- **Input**: `.claude/docs/feature-list.md`, `.claude/docs/feature-list/*.md`
-- **Output**: `.claude/docs/feature-list.md` 업데이트 (포인트 컬럼 추가)
+- **Input**: `.claude/docs/domain/feature-list.md`, `.claude/docs/feature-list/*.md`
+- **Output**: `.claude/docs/domain/feature-list.md` 업데이트 (포인트 컬럼 추가)
 
 ## Reference
 

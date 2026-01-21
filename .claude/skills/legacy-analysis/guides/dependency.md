@@ -1,3 +1,9 @@
+---
+name: legacy-analysis-dependency-graph-guide
+description: 레거시 코드의 의존성 그래프(Dependency Graph) 문서 작성 가이드
+version: 3.2.1
+---
+
 # Dependency Graph 문서 작성 가이드
 
 ## 핵심 원칙

@@ -89,7 +89,7 @@ aidev list -t  # Task 목록
 ## 요구사항
 
 - Node.js 18+
-- `.claude/docs/feature-list.md` 파일이 존재해야 함
+- `.claude/docs/domain/feature-list.md` 파일이 존재해야 함
 
 ## feature-list.md 형식
 

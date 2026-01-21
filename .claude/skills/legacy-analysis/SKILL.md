@@ -2,7 +2,7 @@
 name: legacy-analysis
 description: 레거시 코드베이스 분석 및 결과 문서 작성 가이드. /workflow-legacy-profile에서 사용.
 model: sonnet
-version: 3.3.0
+version: 3.2.1
 ---
 
 # Legacy Analysis

@@ -2,7 +2,7 @@
 name: managing-memory
 description: 프로젝트 메모리(memory.md)를 관리하는 전략 가이드. 주요 결정사항 기록 시 사용.
 model: haiku
-version: 3.3.0
+version: 3.2.1
 ---
 
 # Managing Memory

@@ -1,3 +1,9 @@
+---
+name: legacy-analysis-danger-zones-guide
+description: 레거시 코드의 위험 영역(Danger Zones) 문서 작성 가이드
+version: 3.2.1
+---
+
 # Danger Zones 문서 작성 가이드
 
 ## 핵심 원칙

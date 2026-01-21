@@ -1,3 +1,9 @@
+---
+name: managing-memory-hooks-guide
+description: 메모리 자동화를 위한 Hook 스크립트 가이드
+version: 3.2.1
+---
+
 # 메모리 Hook 스크립트 가이드
 
 ## 개요

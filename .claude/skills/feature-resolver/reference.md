@@ -1,3 +1,9 @@
+---
+name: feature-resolver-reference
+description: Feature Resolver 스킬 동작 예시 및 참고 자료
+version: 3.2.1
+---
+
 # Feature Resolver Reference
 
 SKILL 동작에 대한 상세 예시와 참고 자료입니다.

@@ -1,7 +1,7 @@
 ---
 name: workflow-domain-definition
 description: 프로젝트의 도메인을 정의하고 기능 목록을 작성하는 커맨드
-version: 3.3.0
+version: 3.2.1
 ---
 
 # /workflow-domain-definition
@@ -26,7 +26,7 @@ review-and-confirm 스킬을 사용하여 사용자 검토를 진행합니다.
 
 검토 항목: Research 결과 정확성, 추가/누락 사항 확인
 
-### Phase 3: Design & Documentation
+### Phase 3: Design (전체 문서 작성)
 
 > 📋 **전제조건**: Phase 2 승인 완료
 

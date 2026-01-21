@@ -4,7 +4,7 @@ description: 도메인 정의 단계의 모든 문서를 작성하는 통합 에
 tools: Read, Write, Glob
 model: sonnet
 skills: writing-docs
-version: 3.3.0
+version: 3.2.1
 ---
 
 # Domain Docs Writer Agent
